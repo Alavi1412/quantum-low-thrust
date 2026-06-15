@@ -48,10 +48,10 @@ runs, and commands used for the paper evidence. A machine-readable SHA-256
 manifest is written to `data/results/artifact_manifest.json`.
 
 Historical experiment metadata may contain `git_head: null` because those runs
-predated the first commit. The repository now has commits; the current manifest
-records the HEAD available before the integration commit and file-level hashes
-for the working tree at manifest generation time. The manifest intentionally
-does not include an entry for itself.
+predated the first commit. The refreshed manifest records 486 tracked files,
+with evidence commit `adfca3e` as the manifest `git_head` and manifest refresh
+commit `519d331` containing the manifest update. The manifest intentionally does
+not include an entry for itself.
 
 ## Main Commands
 
@@ -94,6 +94,21 @@ For the cardinality-prior phase-shift benchmark:
 .\.venv\Scripts\python scripts\run_experiment.py --config configs\q1_phase_shift_cardinality.yaml
 ```
 
+For the 30-seed main-method cardinality-prior package:
+
+```powershell
+py -3.11 scripts\run_experiment.py --config configs\q1_phase_shift_cardinality_30seed.yaml
+py -3.11 scripts\run_main_method_statistics.py --config configs\q1_phase_shift_cardinality_30seed.yaml
+```
+
+This package writes `data/results/phase_shift_cardinality_30seed/*`,
+`tables/phase_shift_cardinality_30seed/*`, and
+`figures/phase_shift_cardinality_30seed/*`. It contains 210 rows
+(30 seeds x 7 methods). The high-duty classical methods and surrogate-QUBO
+simulated annealing succeed in all 30 seeds, but paired selected-worst-error
+comparisons favor the all-windows continuous baseline. It does not support a
+quantum-advantage or QAOA-superiority claim.
+
 For the QAOA depth ablation:
 
 ```powershell
@@ -102,7 +117,7 @@ For the QAOA depth ablation:
 
 This 30-seed package writes `data/results/qaoa_depth_ablation_30seed/*`,
 `tables/qaoa_depth_ablation_30seed/*`, and
-`figures/qaoa_depth_ablation_30seed/*`. It is the main QAOA statistical result:
+`figures/qaoa_depth_ablation_30seed/*`. It is the QAOA-depth statistical result:
 optimized `p=2` QAOA improves over random-angle QAOA and is competitive with
 surrogate-QUBO simulated annealing, but paired tests do not support a superiority
 or quantum-advantage claim. The older `qaoa_depth_ablation` artifacts are kept
@@ -149,6 +164,22 @@ The continuation-extension suite writes
 `tables/continuation_extension_suite/*`, and
 `figures/continuation_extension_suite/*`. This is a direct multiple-shooting
 continuation baseline, not a QUBO, QAOA, quantum, or discrete-sampler result.
+
+For the constant-control Hermite-Simpson continuation baseline/probe:
+
+```powershell
+py -3.11 scripts\run_hermite_simpson_continuation.py --resume
+```
+
+The Hermite-Simpson package writes
+`data/results/hermite_simpson_continuation_baseline/*`, nominal-control
+sidecars under `data/results/hermite_simpson_continuation_baseline/controls/`,
+`tables/hermite_simpson_continuation_baseline/*`, and
+`figures/hermite_simpson_continuation_baseline/*`. It is a continuous-backend
+diagnostic with persisted nominal-control warm starts and trajectory-stacking
+semantics, not a QUBO, QAOA, quantum, or discrete-sampler result. The
+`hs_hard_p04_amax02_warm_from_p03` row is a lower-thrust catalog halo phase-shift
+stress probe, not the unresolved hard NRHO-like catalog benchmark.
 
 For the cardinality ablation:
 

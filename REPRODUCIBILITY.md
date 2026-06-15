@@ -13,11 +13,10 @@ not a flight-ready trajectory design tool.
   artifact runs used the global Python 3.11.9 interpreter.
 - The repository now has commits. Some historical experiment metadata record
   `git_head: null` because those runs predated the first commit. For the current
-  snapshot, use git history together with `data/results/artifact_manifest.json`,
-  which records the HEAD available before the integration commit and file-level
-  hashes for the working tree at manifest generation time. The manifest
-  intentionally has no self-entry, so it cannot record the commit that contains
-  itself.
+  snapshot, use git history together with `data/results/artifact_manifest.json`.
+  The refreshed manifest records 486 tracked files, with evidence commit
+  `adfca3e` as the manifest `git_head` and manifest refresh commit `519d331`
+  containing the manifest update. The manifest intentionally has no self-entry.
 
 ## Quick Verification
 
@@ -44,7 +43,9 @@ regenerated; use the recorded artifacts for normal verification.
 | Robust-margin suite | `python scripts/run_robust_margin_suite.py --resume` | `configs/robust_margin_suite.yaml`, `data/source_states.json` | `data/results/robust_margin_suite/*`, `figures/robust_margin_suite/*`, `tables/robust_margin_suite/*` | Expensive if regenerated; recorded rows include selected-branch thrust-margin and all one-segment outage branch diagnostics. |
 | Continuation-extension suite | `py -3.11 scripts\run_continuation_margin_suite.py --config configs/continuation_extension_suite.yaml --resume` | `configs/continuation_extension_suite.yaml`, `data/source_states.json`, persisted nominal-control sidecars for warm rows | `data/results/continuation_extension_suite/*`, `data/results/continuation_extension_suite/controls/*`, `figures/continuation_extension_suite/*`, `tables/continuation_extension_suite/*` | Expensive if regenerated; continuous-backend direct multiple-shooting continuation baseline, not a quantum or discrete-sampler run. |
 | Direct-collocation baseline | `python scripts/run_direct_collocation_baseline.py --config configs/direct_collocation_baseline.yaml` | `configs/direct_collocation_baseline.yaml`, `src/qlt/direct_collocation.py`, `data/source_states.json` | `data/results/direct_collocation_baseline/*`, `figures/direct_collocation_baseline/*`, `tables/direct_collocation_baseline/*` | Expensive if regenerated; use recorded artifacts for short verification. |
-| QAOA depth ablation, 30-seed statistics | `python scripts/run_qaoa_depth_ablation.py --config configs/qaoa_depth_ablation_30seed.yaml --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation_30seed.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation_30seed/*`, `figures/qaoa_depth_ablation_30seed/*`, `tables/qaoa_depth_ablation_30seed/*` | Expensive; recorded runtime is 3301.5 s. Main QAOA statistical package; no superiority or quantum-advantage claim. |
+| Constant-control Hermite-Simpson continuation baseline/probe | `py -3.11 scripts\run_hermite_simpson_continuation.py --resume` | `configs/hermite_simpson_continuation_baseline.yaml`, `data/source_states.json`, persisted nominal-control sidecars for warm rows | `data/results/hermite_simpson_continuation_baseline/*`, `data/results/hermite_simpson_continuation_baseline/controls/*`, `figures/hermite_simpson_continuation_baseline/*`, `tables/hermite_simpson_continuation_baseline/*` | Expensive if regenerated; continuous-backend diagnostic with constant segment controls and no independent midpoint controls. Not quantum/discrete evidence. |
+| Phase-shift cardinality main-method 30-seed package | `py -3.11 scripts\run_experiment.py --config configs\q1_phase_shift_cardinality_30seed.yaml` and `py -3.11 scripts\run_main_method_statistics.py --config configs\q1_phase_shift_cardinality_30seed.yaml` | `configs/q1_phase_shift_cardinality_30seed.yaml`, `data/source_states.json` | `data/results/phase_shift_cardinality_30seed/*`, `figures/phase_shift_cardinality_30seed/*`, `tables/phase_shift_cardinality_30seed/*` | Expensive to regenerate the raw run; statistics generation is short. 210 rows = 30 seeds x 7 methods; no quantum-advantage or QAOA-superiority claim. |
+| QAOA depth ablation, 30-seed statistics | `python scripts/run_qaoa_depth_ablation.py --config configs/qaoa_depth_ablation_30seed.yaml --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation_30seed.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation_30seed/*`, `figures/qaoa_depth_ablation_30seed/*`, `tables/qaoa_depth_ablation_30seed/*` | Expensive; recorded runtime is 3301.5 s. QAOA-depth statistical package; no superiority or quantum-advantage claim. |
 | Cardinality ablation | `python scripts/run_cardinality_ablation.py` | `configs/q1_phase_shift_cardinality.yaml` | `data/results/phase_shift_cardinality_ablation/*`, `figures/phase_shift_cardinality_ablation/*`, `tables/phase_shift_cardinality_ablation/*` | Expensive; recorded runtime is 2069.8 s. |
 | Teacher feasible benchmark | `python scripts/run_experiment.py --config configs/q1_teacher_feasible.yaml` | `configs/q1_teacher_feasible.yaml`, teacher target metadata in run output | `data/results/teacher_feasible/*`, `figures/teacher_feasible/*`, `tables/teacher_feasible/*` | Moderate; teacher controls are diagnostic and disclosed in metadata. |
 | Feasibility sweep | `python scripts/run_feasibility_sweep.py --config configs/q1_candidate.yaml --resume --max-cases 0` | `configs/q1_candidate.yaml` | `data/results/feasibility_sweep.csv`, `data/results/feasibility_metadata.json`, `tables/feasibility_table.tex` | Resume-only command is short; full sweep can be expensive. |
@@ -77,6 +78,20 @@ regenerated; use the recorded artifacts for normal verification.
   `data/results/direct_collocation_baseline/*`,
   `tables/direct_collocation_baseline/*`, and
   `figures/direct_collocation_baseline/*`.
+- Constant-control Hermite-Simpson continuation baseline/probe:
+  `data/results/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_metadata.json`,
+  `data/results/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline.csv`,
+  `data/results/hermite_simpson_continuation_baseline/controls/*`,
+  `tables/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_table.tex`,
+  and `figures/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline.*`.
+- Duty-cycle-prior 30-seed main-method statistics:
+  `data/results/phase_shift_cardinality_30seed/raw_results.csv`,
+  `data/results/phase_shift_cardinality_30seed/success_intervals.csv`,
+  `data/results/phase_shift_cardinality_30seed/paired_comparisons.csv`,
+  `data/results/phase_shift_cardinality_30seed/main_method_statistics_metadata.json`,
+  `tables/phase_shift_cardinality_30seed/results_table.tex`,
+  `tables/phase_shift_cardinality_30seed/main_method_statistics_table.tex`,
+  and `figures/phase_shift_cardinality_30seed/main_method_statistics_summary.*`.
 - QAOA depth 30-seed statistical interpretation limits:
   `data/results/qaoa_depth_ablation_30seed/metadata.json`,
   `data/results/qaoa_depth_ablation_30seed/success_intervals.csv`,
@@ -103,7 +118,7 @@ regenerated; use the recorded artifacts for normal verification.
 
 Legacy 10-seed QAOA-depth artifacts remain under `data/results/qaoa_depth_ablation/`,
 `tables/qaoa_depth_ablation/`, and `figures/qaoa_depth_ablation/`, but they are
-not the main QAOA statistical evidence for the manuscript.
+not the current 30-seed QAOA-depth evidence for the manuscript.
 
 ## Integrity Manifest
 
