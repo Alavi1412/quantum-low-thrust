@@ -1,0 +1,13 @@
+\begin{tabular}{lllllllll}
+\toprule
+method & success & wilson\_95\_ci & delta\_success\_vs\_all\_windows\_continuous & mean\_error\_delta\_vs\_all\_windows\_continuous & sign\_p\_vs\_all\_windows\_continuous & delta\_success\_vs\_surrogate\_qubo\_sa & mean\_error\_delta\_vs\_surrogate\_qubo\_sa & sign\_p\_vs\_surrogate\_qubo\_sa \\
+\midrule
+random & 11/30 & [0.22, 0.54] & -0.63 & +0.0595 [+0.0533, +0.0659] & 0.0000 & -0.63 & +0.0264 [+0.0201, +0.0328] & 0.0001 \\
+cross\_entropy & 30/30 & [0.89, 1.00] & +0.00 & +0.0333 [+0.0327, +0.0337] & 0.0000 & +0.00 & +0.0002 [-0.0006, +0.0009] & 0.6291 \\
+genetic & 30/30 & [0.89, 1.00] & +0.00 & +0.0325 [+0.0318, +0.0331] & 0.0000 & +0.00 & -0.0006 [-0.0015, +0.0002] & 0.3323 \\
+true\_sa & 30/30 & [0.89, 1.00] & +0.00 & +0.0334 [+0.0329, +0.0338] & 0.0000 & +0.00 & +0.0003 [-0.0004, +0.0010] & 0.8238 \\
+surrogate\_qubo\_sa & 30/30 & [0.89, 1.00] & +0.00 & +0.0331 [+0.0326, +0.0335] & 0.0000 &  &  &  \\
+qaoa\_statevector & 13/30 & [0.27, 0.61] & -0.57 & +0.0484 [+0.0422, +0.0544] & 0.0000 & -0.57 & +0.0153 [+0.0090, +0.0214] & 0.1849 \\
+all\_windows\_continuous & 30/30 & [0.89, 1.00] &  &  &  & +0.00 & -0.0331 [-0.0335, -0.0326] & 0.0000 \\
+\bottomrule
+\end{tabular}

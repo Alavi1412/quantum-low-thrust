@@ -1,0 +1,58 @@
+[
+  {
+    "method": "random",
+    "runs": 30,
+    "successes": 11,
+    "success_rate": 0.36666666666666664,
+    "success_rate_wilson95_lower": 0.21873920806100708,
+    "success_rate_wilson95_upper": 0.5448643634520511
+  },
+  {
+    "method": "cross_entropy",
+    "runs": 30,
+    "successes": 30,
+    "success_rate": 1.0,
+    "success_rate_wilson95_lower": 0.8864866068260312,
+    "success_rate_wilson95_upper": 0.9999999999999999
+  },
+  {
+    "method": "genetic",
+    "runs": 30,
+    "successes": 30,
+    "success_rate": 1.0,
+    "success_rate_wilson95_lower": 0.8864866068260312,
+    "success_rate_wilson95_upper": 0.9999999999999999
+  },
+  {
+    "method": "true_sa",
+    "runs": 30,
+    "successes": 30,
+    "success_rate": 1.0,
+    "success_rate_wilson95_lower": 0.8864866068260312,
+    "success_rate_wilson95_upper": 0.9999999999999999
+  },
+  {
+    "method": "surrogate_qubo_sa",
+    "runs": 30,
+    "successes": 30,
+    "success_rate": 1.0,
+    "success_rate_wilson95_lower": 0.8864866068260312,
+    "success_rate_wilson95_upper": 0.9999999999999999
+  },
+  {
+    "method": "qaoa_statevector",
+    "runs": 30,
+    "successes": 13,
+    "success_rate": 0.43333333333333335,
+    "success_rate_wilson95_lower": 0.2737748557646652,
+    "success_rate_wilson95_upper": 0.6080269299918639
+  },
+  {
+    "method": "all_windows_continuous",
+    "runs": 30,
+    "successes": 30,
+    "success_rate": 1.0,
+    "success_rate_wilson95_lower": 0.8864866068260312,
+    "success_rate_wilson95_upper": 0.9999999999999999
+  }
+]

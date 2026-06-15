@@ -1,0 +1,284 @@
+{
+  "command": "scripts\\run_main_method_statistics.py --config configs\\q1_phase_shift_cardinality_30seed.yaml",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3",
+    "pyyaml": "6.0.3"
+  },
+  "git_head": "1f920b8c7187b4b6de35271587cbbccad4efcb40",
+  "git_status_short": "M src/qlt/direct_collocation.py\n M tests/test_smoke.py\n?? configs/hermite_simpson_continuation_baseline.yaml\n?? configs/q1_phase_shift_cardinality_30seed.yaml\n?? data/results/hermite_simpson_continuation_baseline/\n?? data/results/phase_shift_cardinality_30seed/\n?? figures/hermite_simpson_continuation_baseline/\n?? figures/phase_shift_cardinality_30seed/\n?? scripts/run_hermite_simpson_continuation.py\n?? scripts/run_main_method_statistics.py\n?? tables/hermite_simpson_continuation_baseline/\n?? tables/phase_shift_cardinality_30seed/\n?? tests/test_hermite_simpson_continuation.py",
+  "tracked_file_count": 386,
+  "untracked_file_count": 100,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 89,
+  "project_manifest_total_bytes": 2630256,
+  "project_manifest_hash": "b0ea2ab6e7d2d940a49abeb9038bc406c309b1de410654e34a3a3db06ba11c8c",
+  "config": "configs\\q1_phase_shift_cardinality_30seed.yaml",
+  "raw_results_csv": "data\\results\\phase_shift_cardinality_30seed\\raw_results.csv",
+  "raw_results_validation": {
+    "expected_seed_count": 30,
+    "seed_count": 30,
+    "seeds_in_data": [
+      11,
+      23,
+      37,
+      41,
+      53,
+      67,
+      79,
+      83,
+      97,
+      101,
+      107,
+      109,
+      113,
+      127,
+      131,
+      137,
+      139,
+      149,
+      151,
+      157,
+      163,
+      167,
+      173,
+      179,
+      181,
+      191,
+      193,
+      197,
+      199,
+      211
+    ],
+    "expected_methods": [
+      "random",
+      "cross_entropy",
+      "genetic",
+      "true_sa",
+      "surrogate_qubo_sa",
+      "qaoa_statevector",
+      "all_windows_continuous"
+    ],
+    "methods_covered": [
+      "random",
+      "cross_entropy",
+      "genetic",
+      "true_sa",
+      "surrogate_qubo_sa",
+      "qaoa_statevector",
+      "all_windows_continuous"
+    ],
+    "row_count": 210
+  },
+  "seeds_in_data": [
+    11,
+    23,
+    37,
+    41,
+    53,
+    67,
+    79,
+    83,
+    97,
+    101,
+    107,
+    109,
+    113,
+    127,
+    131,
+    137,
+    139,
+    149,
+    151,
+    157,
+    163,
+    167,
+    173,
+    179,
+    181,
+    191,
+    193,
+    197,
+    199,
+    211
+  ],
+  "seed_count": 30,
+  "methods_covered": [
+    "random",
+    "cross_entropy",
+    "genetic",
+    "true_sa",
+    "surrogate_qubo_sa",
+    "qaoa_statevector",
+    "all_windows_continuous"
+  ],
+  "comparison_baselines": [
+    "all_windows_continuous",
+    "surrogate_qubo_sa"
+  ],
+  "comparisons": {
+    "all_windows_continuous": {
+      "random": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": -0.6333333333333333,
+        "selected_worst_error_diff_mean": 0.059480571084965926,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          0.05326986507465706,
+          0.06589405994350821
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 1.862645149230957e-09
+      },
+      "cross_entropy": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": 0.0,
+        "selected_worst_error_diff_mean": 0.033260417185048526,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          0.03265749042311487,
+          0.03373886138937154
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 1.862645149230957e-09
+      },
+      "genetic": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": 0.0,
+        "selected_worst_error_diff_mean": 0.03249989307571837,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          0.031818448190287105,
+          0.033097624246103054
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 1.862645149230957e-09
+      },
+      "true_sa": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": 0.0,
+        "selected_worst_error_diff_mean": 0.033378366603564746,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          0.0328944308147835,
+          0.033750772721760476
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 1.862645149230957e-09
+      },
+      "surrogate_qubo_sa": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": 0.0,
+        "selected_worst_error_diff_mean": 0.03309901929710229,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          0.03259818134264027,
+          0.033537467234653076
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 1.862645149230957e-09
+      },
+      "qaoa_statevector": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": -0.5666666666666667,
+        "selected_worst_error_diff_mean": 0.048398427339084914,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          0.04220021489827174,
+          0.05441368722244975
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 1.862645149230957e-09
+      }
+    },
+    "surrogate_qubo_sa": {
+      "random": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": -0.6333333333333333,
+        "selected_worst_error_diff_mean": 0.026381551787863642,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          0.02012893887293327,
+          0.03278922561121681
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 5.947612226009369e-05
+      },
+      "cross_entropy": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": 0.0,
+        "selected_worst_error_diff_mean": 0.0001613978879462329,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          -0.0006207862493654025,
+          0.000915314489129015
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 0.629058837890625
+      },
+      "genetic": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": 0.0,
+        "selected_worst_error_diff_mean": -0.0005991262213839082,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          -0.0014554648291161235,
+          0.0002104476578296442
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 0.332305908203125
+      },
+      "true_sa": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": 0.0,
+        "selected_worst_error_diff_mean": 0.0002793473064624634,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          -0.00044655872938998467,
+          0.0009922260862368461
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 0.8238029479980469
+      },
+      "qaoa_statevector": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": -0.5666666666666667,
+        "selected_worst_error_diff_mean": 0.015299408041982624,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          0.009035470549941929,
+          0.021375174872401346
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 0.1849333420395851
+      },
+      "all_windows_continuous": {
+        "paired_seeds": 30,
+        "paired_success_delta_mean": 0.0,
+        "selected_worst_error_diff_mean": -0.03309901929710229,
+        "selected_worst_error_diff_mean_bootstrap95": [
+          -0.033537467234653076,
+          -0.03259818134264027
+        ],
+        "selected_worst_error_sign_test_p_two_sided": 1.862645149230957e-09
+      }
+    }
+  },
+  "formal_statistics": {
+    "success_interval": "Wilson 95% confidence interval for the binomial refinement success rate per method.",
+    "paired_success_delta": "Per-seed method success minus baseline success; +1 favors the method, -1 favors the baseline.",
+    "paired_selected_worst_error_diff": "Per-seed method refined_selected_worst_error minus baseline refined_selected_worst_error; negative values favor the method.",
+    "comparison_baselines": [
+      "all_windows_continuous",
+      "surrogate_qubo_sa"
+    ],
+    "selected_worst_error_sign_test": "Two-sided exact sign test after excluding exact ties (|diff| <= 1e-12).",
+    "bootstrap_ci": {
+      "samples": 20000,
+      "seed": 20260615,
+      "confidence": 0.95
+    }
+  },
+  "statistical_artifacts": {
+    "success_intervals_csv": "data\\results\\phase_shift_cardinality_30seed\\success_intervals.csv",
+    "success_intervals_json": "data\\results\\phase_shift_cardinality_30seed\\success_intervals.json",
+    "paired_success_deltas_csv": "data\\results\\phase_shift_cardinality_30seed\\paired_success_deltas.csv",
+    "paired_comparisons_csv": "data\\results\\phase_shift_cardinality_30seed\\paired_comparisons.csv",
+    "paired_comparisons_json": "data\\results\\phase_shift_cardinality_30seed\\paired_comparisons.json",
+    "statistics_table_tex": "tables\\phase_shift_cardinality_30seed\\main_method_statistics_table.tex"
+  },
+  "runtime_seconds": 2.639266800004407,
+  "interpretation_limits": [
+    "This is a controlled CR3BP benchmark; not flight-ready trajectory optimization.",
+    "QUBO/QAOA methods share 96 training evaluations; classical methods receive equal total true-objective budget.",
+    "Paired error differences are method minus baseline; negative values favor the method.",
+    "This package does not claim quantum advantage.",
+    "Statistical significance is assessed by the exact two-sided sign test without parametric distributional assumptions."
+  ]
+}

@@ -3260,3 +3260,90 @@ def test_catalog_feasibility_envelope_multiple_shooting_selected_semantics():
     assert "selected_outages=0" not in row["all_mask_diagnostic_semantics"]
     assert "selected masks use optimized recovery branches" in row["all_mask_diagnostic_semantics"]
     assert "unselected masks use masked nominal controls only" in row["all_mask_diagnostic_semantics"]
+
+
+def test_main_method_statistics_writes_formal_statistical_artifacts(tmp_path):
+    module = load_script_module(
+        "run_main_method_statistics_test",
+        ROOT / "scripts" / "run_main_method_statistics.py",
+    )
+    raw = pd.DataFrame(
+        [
+            # all_windows_continuous (baseline 1)
+            {"seed": 1, "method": "all_windows_continuous", "refinement_success": True,  "refined_selected_worst_error": 0.12},
+            {"seed": 2, "method": "all_windows_continuous", "refinement_success": True,  "refined_selected_worst_error": 0.14},
+            {"seed": 3, "method": "all_windows_continuous", "refinement_success": False, "refined_selected_worst_error": 0.30},
+            # surrogate_qubo_sa (baseline 2)
+            {"seed": 1, "method": "surrogate_qubo_sa", "refinement_success": True,  "refined_selected_worst_error": 0.10},
+            {"seed": 2, "method": "surrogate_qubo_sa", "refinement_success": True,  "refined_selected_worst_error": 0.20},
+            {"seed": 3, "method": "surrogate_qubo_sa", "refinement_success": False, "refined_selected_worst_error": 0.28},
+            # true_sa (tested method)
+            {"seed": 1, "method": "true_sa", "refinement_success": True,  "refined_selected_worst_error": 0.09},
+            {"seed": 2, "method": "true_sa", "refinement_success": True,  "refined_selected_worst_error": 0.18},
+            {"seed": 3, "method": "true_sa", "refinement_success": True,  "refined_selected_worst_error": 0.31},
+        ]
+    )
+    results_dir = tmp_path / "results"
+    tables_dir = tmp_path / "tables"
+    results_dir.mkdir()
+    tables_dir.mkdir()
+
+    artifacts = module.write_statistical_artifacts(raw, results_dir, tables_dir)
+
+    # --- success intervals ---
+    success = artifacts["success_intervals"]
+    true_sa_row = success.loc[success["method"] == "true_sa"].iloc[0]
+    assert true_sa_row["successes"] == 3
+    assert true_sa_row["runs"] == 3
+    assert 0.0 < true_sa_row["success_rate_wilson95_lower"] < 1.0
+    assert true_sa_row["success_rate_wilson95_upper"] == 1.0
+
+    # --- paired comparisons ---
+    comparisons = artifacts["paired_comparisons"]
+
+    # true_sa vs surrogate_qubo_sa
+    vs_sa = comparisons[
+        (comparisons["baseline_method"] == "surrogate_qubo_sa")
+        & (comparisons["method"] == "true_sa")
+    ].iloc[0]
+    assert vs_sa["paired_seeds"] == 3
+    # true_sa wins on error in seeds 1 and 2 (0.09<0.10, 0.18<0.20), loses in seed 3
+    assert vs_sa["selected_worst_error_method_wins"] == 2
+    assert vs_sa["selected_worst_error_method_losses"] == 1
+    assert np.isfinite(vs_sa["selected_worst_error_sign_test_p_two_sided"])
+
+    # true_sa vs all_windows_continuous
+    vs_aw = comparisons[
+        (comparisons["baseline_method"] == "all_windows_continuous")
+        & (comparisons["method"] == "true_sa")
+    ].iloc[0]
+    assert vs_aw["paired_seeds"] == 3
+
+    # --- deltas frame ---
+    deltas = artifacts["paired_success_deltas"]
+    assert len(deltas[deltas["baseline_method"] == "surrogate_qubo_sa"]) > 0
+    assert len(deltas[deltas["baseline_method"] == "all_windows_continuous"]) > 0
+
+    # --- files written ---
+    assert (results_dir / "success_intervals.csv").exists()
+    assert (results_dir / "success_intervals.json").exists()
+    assert (results_dir / "paired_success_deltas.csv").exists()
+    assert (results_dir / "paired_comparisons.csv").exists()
+    assert (results_dir / "paired_comparisons.json").exists()
+    assert (tables_dir / "main_method_statistics_table.tex").exists()
+
+
+def test_main_method_statistics_30seed_config_has_correct_seeds_and_subdir():
+    config = yaml.safe_load(
+        (ROOT / "configs" / "q1_phase_shift_cardinality_30seed.yaml").read_text(encoding="utf-8")
+    )
+    expected_seeds = [
+        11, 23, 37, 41, 53, 67, 79, 83, 97, 101,
+        107, 109, 113, 127, 131, 137, 139, 149, 151, 157,
+        163, 167, 173, 179, 181, 191, 193, 197, 199, 211,
+    ]
+    assert config["experiments"]["seeds"] == expected_seeds
+    assert config["run"]["output_subdir"] == "phase_shift_cardinality_30seed"
+    assert int(config["benchmark"]["segments"]) == 12
+    assert config["benchmark"]["target_mode"] == "catalog_halo_phase_shift"
+    assert abs(float(config["objective"]["target_active_fraction"]) - 11.0 / 12.0) < 1e-12

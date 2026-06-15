@@ -1,0 +1,10 @@
+\begin{tabular}{llllllllllllllll}
+\toprule
+Case ID & Group & Phase time & Warm start & Segments & Outage masks & Max nfev & Method & Nominal error & Selected worst error & All-mask worst error & Optimizer success & DC success & nfev & Runtime (s) & Meets thresholds \\
+\midrule
+hs\_phase\_p03\_cold & Phase continuation (single outage) & 0.3000 & cold & 8 & 3/8 & 50 & hermite\_simpson & 0.0376 & 0.0287 & 0.0901 & False & True & 50 & 145.1586 & True \\
+hs\_phase\_p02\_warm\_from\_p03 & Phase continuation (single outage) & 0.2000 & from 0.3 & 8 & 3/8 & 80 & hermite\_simpson & 0.1069 & 0.1208 & 0.1791 & False & False & 80 & 249.4395 & False \\
+hs\_phase\_p04\_warm\_from\_p03 & Phase continuation (single outage) & 0.4000 & from 0.3 & 8 & 3/8 & 80 & hermite\_simpson & 0.0179 & 0.0128 & 0.0628 & True & True & 7 & 25.1659 & True \\
+hs\_hard\_p04\_amax02\_warm\_from\_p03 & Hard catalog stress probe & 0.4000 & from 0.3 & 8 & 3/8 & 60 & hermite\_simpson & 0.0183 & 0.0176 & 0.0439 & True & True & 24 & 74.8323 & True \\
+\bottomrule
+\end{tabular}

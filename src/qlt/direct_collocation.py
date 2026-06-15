@@ -259,12 +259,34 @@ def initial_guess(
     cfg: ObjectiveConfig,
     selected_masks: np.ndarray,
     *,
+    nominal_control_guess: np.ndarray | None = None,
+    selected_branch_control_guesses: list[np.ndarray] | None = None,
     node_initialization: str = "blend",
     node_initialization_blend: float = 0.35,
 ) -> tuple[DirectCollocationLayout, np.ndarray]:
+    """Build the direct-collocation decision vector.
+
+    Optional warm starts mirror :mod:`qlt.multiple_shooting`:
+
+    - ``nominal_control_guess`` is a full ``(n_segments, 3)`` acceleration
+      schedule, Euclidean projected to ``||u_i|| <= amax``.
+    - ``selected_branch_control_guesses`` is an optional list of full-length
+      ``(n_segments, 3)`` schedules whose post-outage tail seeds each selected
+      branch's recovery controls.
+
+    When omitted the historical feedback-rollout guess is used unchanged.
+    """
     layout = DirectCollocationLayout(cfg, selected_masks)
     schedule = np.ones(cfg.n_segments, dtype=int)
-    nominal_controls = feedback_controls_for_schedule(schedule, state0, target, cfg)
+    if nominal_control_guess is None:
+        nominal_controls = feedback_controls_for_schedule(schedule, state0, target, cfg)
+    else:
+        nominal_controls = np.asarray(nominal_control_guess, dtype=float)
+        if nominal_controls.shape != (cfg.n_segments, 3):
+            raise ValueError(
+                f"nominal_control_guess shape {nominal_controls.shape} does not match {(cfg.n_segments, 3)}"
+            )
+        nominal_controls = project_controls_to_ball(nominal_controls, cfg.amax)
     _, rollout_nodes = propagate_piecewise_controls(state0, nominal_controls, cfg.mu, cfg.tf, cfg.substeps, return_nodes=True)
     assert rollout_nodes is not None
     linear_nodes = _linear_nodes(state0, target, cfg.n_segments + 1)
@@ -279,13 +301,25 @@ def initial_guess(
     else:
         raise ValueError("node_initialization must be one of rollout, linear, blend")
 
+    branch_guesses = list(selected_branch_control_guesses or [])
+    for guess in branch_guesses:
+        guess_arr = np.asarray(guess, dtype=float)
+        if guess_arr.shape != (cfg.n_segments, 3):
+            raise ValueError(
+                f"selected_branch_control_guess shape {guess_arr.shape} does not match {(cfg.n_segments, 3)}"
+            )
+
     chunks = [nominal_nodes.reshape(-1), nominal_controls.reshape(-1)]
     h = float(cfg.tf) / float(cfg.n_segments)
-    for mask, start in zip(np.asarray(selected_masks, dtype=float), layout.starts):
+    for branch_index, (mask, start) in enumerate(zip(np.asarray(selected_masks, dtype=float), layout.starts)):
         prefix_controls = nominal_controls[:start] * mask[:start, None]
         branch_start = propagate_prefix(state0, prefix_controls, cfg.mu, h, cfg.substeps)
         branch_nodes = _linear_nodes(branch_start, target, cfg.n_segments - start + 1)
-        branch_controls = nominal_controls[start:].copy()
+        if branch_index < len(branch_guesses):
+            branch_full = project_controls_to_ball(np.asarray(branch_guesses[branch_index], dtype=float), cfg.amax)
+            branch_controls = branch_full[start:].copy()
+        else:
+            branch_controls = nominal_controls[start:].copy()
         chunks.append(branch_nodes.reshape(-1))
         chunks.append(branch_controls.reshape(-1))
     return layout, np.concatenate(chunks)
@@ -450,6 +484,9 @@ def run_direct_collocation_baseline(
     max_nfev: int,
     min_recovery_segments: int = 1,
     collocation_config: dict | None = None,
+    nominal_control_guess: np.ndarray | None = None,
+    selected_branch_control_guesses: list[np.ndarray] | None = None,
+    warm_start_info: dict | None = None,
 ) -> dict:
     start = time.perf_counter()
     collocation_config = dict(collocation_config or {})
@@ -473,6 +510,8 @@ def run_direct_collocation_baseline(
         target,
         cfg,
         selected_masks,
+        nominal_control_guess=nominal_control_guess,
+        selected_branch_control_guesses=selected_branch_control_guesses,
         node_initialization=str(collocation_config.get("node_initialization", "blend")),
         node_initialization_blend=float(collocation_config.get("node_initialization_blend", 0.35)),
     )
@@ -529,4 +568,5 @@ def run_direct_collocation_baseline(
         "runtime_seconds": float(time.perf_counter() - start),
         "selected_outage_indices": selected.astype(int).tolist(),
         "weights": problem.weights.as_dict(),
+        "warm_start_info": dict(warm_start_info or {}),
     }

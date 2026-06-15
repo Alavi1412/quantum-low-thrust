@@ -1,0 +1,13 @@
+\begin{tabular}{llllrrrrr}
+\toprule
+Method & Schedule repair & Refined schedule & Refined schedule source & Nominal fuel & Mean recovery fuel & Max recovery fuel & Refinement nfev & Recovery success \\
+\midrule
+random & identity & mixed & original solver candidate schedule & 0.0833 & 0.0750 & 0.0750 & 25.0000 & 0.3667 \\
+cross\_entropy & identity & mixed & original solver candidate schedule & 0.0917 & 0.0833 & 0.0833 & 20.0000 & 1.0000 \\
+genetic & identity & mixed & original solver candidate schedule & 0.0917 & 0.0833 & 0.0833 & 35.0000 & 1.0000 \\
+true\_sa & identity & mixed & original solver candidate schedule & 0.0917 & 0.0833 & 0.0833 & 20.0000 & 1.0000 \\
+surrogate\_qubo\_sa & identity & mixed & original solver candidate schedule & 0.0917 & 0.0833 & 0.0833 & 20.0000 & 1.0000 \\
+qaoa\_statevector & identity & mixed & original solver candidate schedule & 0.0833 & 0.0750 & 0.0750 & 23.5000 & 0.4333 \\
+all\_windows\_continuous & identity & 111111111111 & original solver candidate schedule & 0.1000 & 0.0917 & 0.0917 & 19.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}

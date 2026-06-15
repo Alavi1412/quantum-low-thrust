@@ -1,0 +1,93 @@
+run:
+  label: hermite_simpson_continuation_baseline
+  output_subdir: hermite_simpson_continuation_baseline
+  evidence_level: "continuous-backend Hermite-Simpson direct-collocation continuation baseline/probe with persisted nominal-control warm starts and trajectory stacking; non-teacher catalog halo phase-shift targets; not a quantum/discrete result"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: catalog_halo_phase_shift
+  transfer_time: 0.5
+  phase_time: 0.3
+  segments: 8
+  substeps_per_segment: 4
+  amax: 0.3
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1]
+direct_collocation:
+  method: hermite_simpson
+  node_initialization: blend
+  node_initialization_blend: 0.35
+  xtol: 1.0e-5
+  ftol: 1.0e-5
+  gtol: 1.0e-5
+  weights:
+    initial: 10.0
+    defect: 1.0
+    terminal: 5.0
+    branch_start: 8.0
+    branch_defect: 1.0
+    branch_terminal: 5.0
+    control: 0.01
+    smooth: 0.012
+suite:
+  runtime_budget_seconds: 2400
+  selected_outages: 3
+  min_recovery_segments: 1
+  groups:
+    phase_continuation_single:
+      purpose: "one-segment outage selected-branch continuation at N=8; warm rows reuse the cold p=0.3 persisted nominal controls (trajectory stacking)"
+      outage_lengths: [1]
+      cases:
+        - case_id: hs_phase_p03_cold
+          phase_time: 0.3
+          transfer_time: 0.5
+          amax: 0.3
+          segments: 8
+          selected_outages: 3
+          max_nfev: 50
+          warm_start_kind: cold
+        - case_id: hs_phase_p02_warm_from_p03
+          phase_time: 0.2
+          transfer_time: 0.5
+          amax: 0.3
+          segments: 8
+          selected_outages: 3
+          max_nfev: 80
+          warm_start_kind: nominal_controls
+          warm_start_from_case_id: hs_phase_p03_cold
+        - case_id: hs_phase_p04_warm_from_p03
+          phase_time: 0.4
+          transfer_time: 0.5
+          amax: 0.3
+          segments: 8
+          selected_outages: 3
+          max_nfev: 80
+          warm_start_kind: nominal_controls
+          warm_start_from_case_id: hs_phase_p03_cold
+    hard_catalog_probe:
+      purpose: "hard-catalog stress probe at tighter amax warm-started from the cold p=0.3 row; failed/negative diagnostics are preserved honestly and not extrapolated"
+      outage_lengths: [1]
+      cases:
+        - case_id: hs_hard_p04_amax02_warm_from_p03
+          phase_time: 0.4
+          transfer_time: 0.5
+          amax: 0.2
+          segments: 8
+          selected_outages: 3
+          max_nfev: 60
+          warm_start_kind: nominal_controls
+          warm_start_from_case_id: hs_phase_p03_cold
