@@ -44,12 +44,12 @@ regenerated; use the recorded artifacts for normal verification.
 | Robust-margin suite | `python scripts/run_robust_margin_suite.py --resume` | `configs/robust_margin_suite.yaml`, `data/source_states.json` | `data/results/robust_margin_suite/*`, `figures/robust_margin_suite/*`, `tables/robust_margin_suite/*` | Expensive if regenerated; recorded rows include selected-branch thrust-margin and all one-segment outage branch diagnostics. |
 | Continuation-extension suite | `py -3.11 scripts\run_continuation_margin_suite.py --config configs/continuation_extension_suite.yaml --resume` | `configs/continuation_extension_suite.yaml`, `data/source_states.json`, persisted nominal-control sidecars for warm rows | `data/results/continuation_extension_suite/*`, `data/results/continuation_extension_suite/controls/*`, `figures/continuation_extension_suite/*`, `tables/continuation_extension_suite/*` | Expensive if regenerated; continuous-backend direct multiple-shooting continuation baseline, not a quantum or discrete-sampler run. |
 | Direct-collocation baseline | `python scripts/run_direct_collocation_baseline.py --config configs/direct_collocation_baseline.yaml` | `configs/direct_collocation_baseline.yaml`, `src/qlt/direct_collocation.py`, `data/source_states.json` | `data/results/direct_collocation_baseline/*`, `figures/direct_collocation_baseline/*`, `tables/direct_collocation_baseline/*` | Expensive if regenerated; use recorded artifacts for short verification. |
-| QAOA depth ablation | `python scripts/run_qaoa_depth_ablation.py --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation/*`, `figures/qaoa_depth_ablation/*`, `tables/qaoa_depth_ablation/*` | Expensive; recorded runtime is 1291.5 s. |
+| QAOA depth ablation, 30-seed statistics | `python scripts/run_qaoa_depth_ablation.py --config configs/qaoa_depth_ablation_30seed.yaml --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation_30seed.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation_30seed/*`, `figures/qaoa_depth_ablation_30seed/*`, `tables/qaoa_depth_ablation_30seed/*` | Expensive; recorded runtime is 3301.5 s. Main QAOA statistical package; no superiority or quantum-advantage claim. |
 | Cardinality ablation | `python scripts/run_cardinality_ablation.py` | `configs/q1_phase_shift_cardinality.yaml` | `data/results/phase_shift_cardinality_ablation/*`, `figures/phase_shift_cardinality_ablation/*`, `tables/phase_shift_cardinality_ablation/*` | Expensive; recorded runtime is 2069.8 s. |
 | Teacher feasible benchmark | `python scripts/run_experiment.py --config configs/q1_teacher_feasible.yaml` | `configs/q1_teacher_feasible.yaml`, teacher target metadata in run output | `data/results/teacher_feasible/*`, `figures/teacher_feasible/*`, `tables/teacher_feasible/*` | Moderate; teacher controls are diagnostic and disclosed in metadata. |
 | Feasibility sweep | `python scripts/run_feasibility_sweep.py --config configs/q1_candidate.yaml --resume --max-cases 0` | `configs/q1_candidate.yaml` | `data/results/feasibility_sweep.csv`, `data/results/feasibility_metadata.json`, `tables/feasibility_table.tex` | Resume-only command is short; full sweep can be expensive. |
 | Catalog targeted feasibility | `python scripts/run_feasibility_sweep.py --config configs/catalog_targeted_feasibility.yaml --transfer-times 4.0 --amax 0.3 --segments 14 --max-nfev 250 --multistart --random-starts 3 --include-bang-bang --min-recovery-segments 4 --state-residual-weight 1.25 --robust-residual-weight 1.15 --fuel-residual-weight 0.01 --smooth-residual-weight 0.006 --control-regularization 0.006 --max-cases 1` | `configs/catalog_targeted_feasibility.yaml`, `data/source_states.json` | `data/results/catalog_targeted_feasibility/*`, `figures/catalog_targeted_feasibility/*`, `tables/catalog_targeted_feasibility/*` | Expensive if expanded beyond the single recorded case. |
-| Catalog feasibility envelope | `python scripts/run_catalog_feasibility_envelope.py --config configs/catalog_feasibility_envelope.yaml --resume` | `configs/catalog_feasibility_envelope.yaml`, `data/source_states.json` | `data/results/catalog_feasibility_envelope/*`, `figures/catalog_feasibility_envelope/*`, `tables/catalog_feasibility_envelope/*` | Expensive if regenerated; high-thrust positive row is nominal-only and not robust hard-catalog evidence. |
+| Selected-outage hard-catalog envelope | `python scripts/run_catalog_feasibility_envelope.py --config configs/hard_catalog_selected_outage_envelope.yaml --resume` | `configs/hard_catalog_selected_outage_envelope.yaml`, `data/source_states.json` | `data/results/hard_catalog_selected_outage_envelope/*`, `figures/hard_catalog_selected_outage_envelope/*`, `tables/hard_catalog_selected_outage_envelope/*` | Expensive if regenerated; negative robustness probe. Selected recovery errors are small for chosen masks, but nominal thresholds fail, optimizer/backend success is false, and all-mask diagnostics remain high. |
 | Multiple-shooting feasibility | `python scripts/run_multiple_shooting_feasibility.py --config configs/q1_candidate.yaml --resume --max-cases 0` | `configs/q1_candidate.yaml` | `data/results/multiple_shooting_feasibility.csv`, `data/results/multiple_shooting_feasibility_metadata.json`, `figures/multiple_shooting_feasibility.*`, `tables/multiple_shooting_feasibility_table.tex` | Resume-only command is short; full case recorded 294.7 s. |
 | Catalog collocation feasibility | `python scripts/run_catalog_collocation_feasibility.py --resume --max-cases 0` | catalog collocation settings encoded by the script and metadata | `data/results/catalog_collocation_feasibility/*`, `figures/catalog_collocation_feasibility/*`, `tables/catalog_collocation_feasibility/*` | Resume-only command is short; full collocation search is expensive and currently has no feasible case. |
 
@@ -77,10 +77,14 @@ regenerated; use the recorded artifacts for normal verification.
   `data/results/direct_collocation_baseline/*`,
   `tables/direct_collocation_baseline/*`, and
   `figures/direct_collocation_baseline/*`.
-- QAOA depth interpretation limits:
-  `data/results/qaoa_depth_ablation/metadata.json`,
-  `tables/qaoa_depth_ablation/qaoa_depth_ablation_table.tex`, and
-  `figures/qaoa_depth_ablation/qaoa_depth_ablation_summary.*`.
+- QAOA depth 30-seed statistical interpretation limits:
+  `data/results/qaoa_depth_ablation_30seed/metadata.json`,
+  `data/results/qaoa_depth_ablation_30seed/success_intervals.csv`,
+  `data/results/qaoa_depth_ablation_30seed/paired_comparisons.csv`,
+  `data/results/qaoa_depth_ablation_30seed/raw_results.csv`,
+  `tables/qaoa_depth_ablation_30seed/qaoa_depth_ablation_table.tex`,
+  `tables/qaoa_depth_ablation_30seed/qaoa_depth_ablation_statistics_table.tex`,
+  and `figures/qaoa_depth_ablation_30seed/qaoa_depth_ablation_summary.*`.
 - Cardinality and high-duty availability analysis:
   `data/results/phase_shift_cardinality_ablation/metadata.json` and
   `tables/phase_shift_cardinality_ablation/*`.
@@ -91,11 +95,15 @@ regenerated; use the recorded artifacts for normal verification.
   `data/results/feasibility_metadata.json`,
   `data/results/catalog_targeted_feasibility/feasibility_metadata.json`, and
   `data/results/catalog_collocation_feasibility/multiple_shooting_feasibility_metadata.json`.
-- Catalog feasibility-envelope nominal-only hard-catalog diagnostics:
-  `data/results/catalog_feasibility_envelope/catalog_feasibility_envelope_metadata.json`,
-  `data/results/catalog_feasibility_envelope/catalog_feasibility_envelope.csv`,
-  `tables/catalog_feasibility_envelope/catalog_feasibility_envelope_table.tex`,
-  and `figures/catalog_feasibility_envelope/catalog_feasibility_envelope.*`.
+- Selected-outage hard-catalog negative robustness probe:
+  `data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_metadata.json`,
+  `data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.csv`,
+  `tables/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_table.tex`,
+  and `figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.*`.
+
+Legacy 10-seed QAOA-depth artifacts remain under `data/results/qaoa_depth_ablation/`,
+`tables/qaoa_depth_ablation/`, and `figures/qaoa_depth_ablation/`, but they are
+not the main QAOA statistical evidence for the manuscript.
 
 ## Integrity Manifest
 

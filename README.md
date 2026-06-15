@@ -97,8 +97,16 @@ For the cardinality-prior phase-shift benchmark:
 For the QAOA depth ablation:
 
 ```powershell
-.\.venv\Scripts\python scripts\run_qaoa_depth_ablation.py --angle-restarts 1 --maxiter 10
+.\.venv\Scripts\python scripts\run_qaoa_depth_ablation.py --config configs\qaoa_depth_ablation_30seed.yaml --angle-restarts 1 --maxiter 10
 ```
+
+This 30-seed package writes `data/results/qaoa_depth_ablation_30seed/*`,
+`tables/qaoa_depth_ablation_30seed/*`, and
+`figures/qaoa_depth_ablation_30seed/*`. It is the main QAOA statistical result:
+optimized `p=2` QAOA improves over random-angle QAOA and is competitive with
+surrogate-QUBO simulated annealing, but paired tests do not support a superiority
+or quantum-advantage claim. The older `qaoa_depth_ablation` artifacts are kept
+as legacy 10-seed outputs.
 
 For the bounded non-teacher phase suite:
 
@@ -115,18 +123,19 @@ For the robust-margin suite:
 The robust-margin suite writes `data/results/robust_margin_suite/*`,
 `tables/robust_margin_suite/*`, and `figures/robust_margin_suite/*`.
 
-For the catalog feasibility-envelope diagnostics:
+For the selected-outage hard-catalog feasibility-envelope diagnostics:
 
 ```powershell
-py -3.11 scripts\run_catalog_feasibility_envelope.py --config configs\catalog_feasibility_envelope.yaml --resume
+py -3.11 scripts\run_catalog_feasibility_envelope.py --config configs\hard_catalog_selected_outage_envelope.yaml --resume
 ```
 
-The catalog feasibility-envelope package writes
-`data/results/catalog_feasibility_envelope/*`,
-`tables/catalog_feasibility_envelope/*`, and
-`figures/catalog_feasibility_envelope/*`. Its high-thrust positive row is
-nominal-only; all-mask values are diagnostics under masked nominal controls,
-not hard-catalog robustness evidence.
+The selected-outage hard-catalog package writes
+`data/results/hard_catalog_selected_outage_envelope/*`,
+`tables/hard_catalog_selected_outage_envelope/*`, and
+`figures/hard_catalog_selected_outage_envelope/*`. It is negative robustness
+evidence: selected recovery branch errors are small for the chosen masks, but
+the nominal trajectory fails, optimizer/backend success is false at the
+evaluation cap, and all-mask diagnostics remain high.
 
 For the continuation-extension continuous-backend baseline:
 

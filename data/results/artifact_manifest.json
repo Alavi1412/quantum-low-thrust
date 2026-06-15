@@ -1,19 +1,19 @@
 {
   "manifest_version": 1,
-  "generated_utc": "2026-06-15T08:55:30Z",
+  "generated_utc": "2026-06-15T10:52:09Z",
   "note": "Scoped artifact manifest for paper reproducibility; excludes .venv, caches, logs, and bulk generated intermediates.",
-  "git_head": "ddda2b2266a3ff5ee503bac77751f7a38561f643",
+  "git_head": "d35b01967849e5e12c320e5676dd95813f4a6d9d",
   "git_status_note": "git_head records the current HEAD before the integration commit; file hashes and byte counts reflect the working tree at generated_utc.",
   "files": [
     {
       "path": "README.md",
-      "sha256": "4876d7e628bd162e19784eb79c2f40e0306613ec78ecdc4306854af479a09742",
-      "bytes": 6568
+      "sha256": "c511a64c3f99a705ca69cce25ab9cdb27105aff0072725322a00d20c9791fe49",
+      "bytes": 7219
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "169a70cfc8e30d01b3490c8d93c6de059e1ab05c59e4a09bce74ec5b307d1a58",
-      "bytes": 10659
+      "sha256": "87ee5854faace30dec5aad23a4b6d5648f3c22ec623bea4612a330ae4144ee15",
+      "bytes": 11555
     },
     {
       "path": "requirements.txt",
@@ -32,8 +32,8 @@
     },
     {
       "path": "paper/main.tex",
-      "sha256": "2469f0123e286c5d900343706f2790bea020112b7fc0d7127aa498a2d618312f",
-      "bytes": 73814
+      "sha256": "8271c4f3d6f26e886a4ee9115290ba3863230109314fe7da6f8ac14976059c71",
+      "bytes": 76497
     },
     {
       "path": "paper/references.bib",
@@ -42,8 +42,8 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "f59ad94d140661d1125078e5efd4452cce687b37f8423b568b2a086a3b8fa90a",
-      "bytes": 469363
+      "sha256": "31921b9bdfd5b96d3694f3bc64dd9a156af8b66886a26752da75e41b56d9ce6e",
+      "bytes": 499665
     },
     {
       "path": "data/source_states.json",
@@ -52,8 +52,8 @@
     },
     {
       "path": "tests/test_smoke.py",
-      "sha256": "ce41750ce62421f14c8aeba0c001fe292b6f551249c3e4c9070e5f8b3c1ecfbe",
-      "bytes": 125857
+      "sha256": "0119207446bbbd097f6594ef77f9c0f2442d026b3d8f26648b3c3c3e3e28a98e",
+      "bytes": 132755
     },
     {
       "path": "src/qlt/__init__.py",
@@ -117,8 +117,8 @@
     },
     {
       "path": "scripts/run_qaoa_depth_ablation.py",
-      "sha256": "82cd90cbe9fa78d54518173a1214954b8766e476d4eb33edc6694eb7dd26f918",
-      "bytes": 15729
+      "sha256": "bdc0d0f06a970f467ca694d8aff3658d8905dde773e83f33a39b33eb2f8e972b",
+      "bytes": 29202
     },
     {
       "path": "scripts/run_cardinality_ablation.py",
@@ -567,8 +567,8 @@
     },
     {
       "path": "src/qlt/direct_collocation.py",
-      "sha256": "3c0621d893a5274be07ae17f6b4870d36b0ff40e5805eea0b15da0126060e05d",
-      "bytes": 22595
+      "sha256": "a18204c472112dc6c165b236be914f02e7f522dc76bf8162092659c916349430",
+      "bytes": 22851
     },
     {
       "path": "scripts/run_direct_collocation_baseline.py",
@@ -702,8 +702,8 @@
     },
     {
       "path": "scripts/run_catalog_feasibility_envelope.py",
-      "sha256": "cd98a6c89fcccffd915032d645c4503d7d15c7291be294dfe74842a236a4a2bc",
-      "bytes": 24851
+      "sha256": "0496ea7f24c5cd337168fed41cc8d7c5158bb7f31f1c564ebb1d3c847772ac25",
+      "bytes": 28731
     },
     {
       "path": "configs/catalog_feasibility_envelope.yaml",
@@ -717,22 +717,22 @@
     },
     {
       "path": "data/results/catalog_feasibility_envelope/catalog_feasibility_envelope.csv",
-      "sha256": "1056a665d2424dbdb65eae0985232f0f5c59ef467265f5f496cb19d790dc9bd7",
-      "bytes": 7337
+      "sha256": "6057187eb704c9dbf1cf793c42c5c0c50789bbab1bac2195f626381850cca31f",
+      "bytes": 7257
     },
     {
       "path": "data/results/catalog_feasibility_envelope/catalog_feasibility_envelope_metadata.json",
-      "sha256": "137d9b1390a762b37feb8de8d21fa6c9c0f14dab9c3ab44ee8be034c0f6e2de6",
-      "bytes": 16731
+      "sha256": "234670ad91bdf091c5d449ada49ecd66b4f7ebc91740cba1842b4dbf34399601",
+      "bytes": 17283
     },
     {
       "path": "tables/catalog_feasibility_envelope/catalog_feasibility_envelope_table.tex",
-      "sha256": "2ae32705a7876e955692df2d001a8f328df2a4259d4c396e6be3574a2438931c",
+      "sha256": "61eab0bd9326a284342d35a325272e534332253aafb9fc8b1e3f625f42c558ab",
       "bytes": 716
     },
     {
       "path": "figures/catalog_feasibility_envelope/catalog_feasibility_envelope.pdf",
-      "sha256": "f5eb66a8b637a78bf9ca18d138762a9ac9790c24b9c05d053df02f35d4e3787d",
+      "sha256": "024d1ab22a454667cca7a4e4a47b15ee5427c375cb5c2cd583e2725302f83d24",
       "bytes": 16735
     },
     {
@@ -789,6 +789,111 @@
       "path": "figures/continuation_extension_suite/continuation_margin_suite.png",
       "sha256": "772cbd4cbc899582e7ee96a6f0019025639c3f419d59b17066f806a13a85d2f0",
       "bytes": 94873
+    },
+    {
+      "path": "configs/hard_catalog_selected_outage_envelope.yaml",
+      "sha256": "54b4a80c64e6a78532932d3cdc4e5beaf2e05ff0cc401599807e9813b57dd12f",
+      "bytes": 2481
+    },
+    {
+      "path": "data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.csv",
+      "sha256": "66d9e7cda69cd1a1bbefae8e903fa83c32b32830c06eb7d52acc43db7ae0d769",
+      "bytes": 6792
+    },
+    {
+      "path": "data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_metadata.json",
+      "sha256": "72c17b0e168e6353a1707dc395c4517568be902a5b6cfa1642775f66c72547be",
+      "bytes": 16354
+    },
+    {
+      "path": "tables/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_table.tex",
+      "sha256": "79e468d6991d1f1ef0862e50a5d2fe9b740f782ba8ef25185d00f6c0d252b7aa",
+      "bytes": 713
+    },
+    {
+      "path": "figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.pdf",
+      "sha256": "6171e023dc78561c6295975b36a38c81975d6489ecfe0ce8b00f3034ed4b507a",
+      "bytes": 16081
+    },
+    {
+      "path": "figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.png",
+      "sha256": "1fbb4071a06ce03cf9c0434f17218b54dc2a4bc62015d73fe538074d7f0a7631",
+      "bytes": 63907
+    },
+    {
+      "path": "configs/qaoa_depth_ablation_30seed.yaml",
+      "sha256": "4170e1360220843a782fac8b730adca6fe8f59a370d65ab80254f18136eac243",
+      "bytes": 783
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/metadata.json",
+      "sha256": "d3d999cb40cf8a54f236e4272aa4e702852810abe10715e42967b288d6d50d67",
+      "bytes": 4687
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/summary.csv",
+      "sha256": "dbaa5458ba8a67fea182f5dc59c3864d49701fbc538d673fa3731945424c0929",
+      "bytes": 5742
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/summary.json",
+      "sha256": "182dbfba5741c4b8b894afc1fc495cb3c269c8b494391107f424795b9a45f63a",
+      "bytes": 14783
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/success_intervals.csv",
+      "sha256": "4f4474c07b30ad943ad831ecc8ff28770c19c756d3530a77ecdfd7f94cd17a40",
+      "bytes": 469
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/success_intervals.json",
+      "sha256": "464785fc3b0a056ede6b4fae22dcbb090459b3a1eb34a282ccbf672109970c3b",
+      "bytes": 1160
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/paired_comparisons.csv",
+      "sha256": "7a8ef7b7c6ebdebf7eb600ef78d45e2917dbecb92e0e4405931ec5e2282fb9e1",
+      "bytes": 1820
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/paired_comparisons.json",
+      "sha256": "19dc04ec6fefffe7660c9e4af3b8604daa77a84640e10b6a697ee4dc0e91eea7",
+      "bytes": 5737
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/paired_success_deltas.csv",
+      "sha256": "05481902ad36abf1429eca1938f517e62352f1c3a87dfbb8c8a9d600e9eae3bd",
+      "bytes": 19859
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/raw_results.csv",
+      "sha256": "27a052a1606424b80067dbdd81ded74d07a83ea8d92d4ffe8554de0e419526db",
+      "bytes": 367772
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_diagnostics.csv",
+      "sha256": "a766f83ea6768eaf82e0bbe88339a8592b330f040f71f6fef6af47b90f6aef12",
+      "bytes": 4579
+    },
+    {
+      "path": "tables/qaoa_depth_ablation_30seed/qaoa_depth_ablation_table.tex",
+      "sha256": "277be9517498a11b8ba759faf808a77cf875330cb77b3fcb975538180ef80289",
+      "bytes": 795
+    },
+    {
+      "path": "tables/qaoa_depth_ablation_30seed/qaoa_depth_ablation_statistics_table.tex",
+      "sha256": "858ce40094d8d59a9c29e60f55d3e9222625b48787b453a39076c364abbc6b18",
+      "bytes": 820
+    },
+    {
+      "path": "figures/qaoa_depth_ablation_30seed/qaoa_depth_ablation_summary.pdf",
+      "sha256": "7be9bb0c7ef9062353661cf005ecb8fac371b4e3bb6d2ede5a603be1764e3632",
+      "bytes": 14442
+    },
+    {
+      "path": "figures/qaoa_depth_ablation_30seed/qaoa_depth_ablation_summary.png",
+      "sha256": "b9709c29c4571046220870db5f7463ab8a482c2b89ec85b8a4747b1c7c083653",
+      "bytes": 102875
     }
   ]
 }
