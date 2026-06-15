@@ -1,0 +1,13 @@
+\begin{tabular}{llllllllrrrrrrrrrrr}
+\toprule
+Benchmark & Method & Schedule repair & Refined schedule source & Comparison group & Solver best schedule & Refine candidate schedule & Refined schedule & Refined nominal error & Selected recovery worst error & All-mask diagnostic worst error & Solver best active fraction & Active target penalty & Refine candidate active fraction & Refined active fraction & Solver true evals & Shared QUBO train evals & Total true evals & Refine success \\
+\midrule
+catalog\_halo\_phase\_shift & random & identity & original solver candidate schedule & method\_comparison & mixed & mixed & mixed & 0.0954 & 0.1214 & 0.1313 & 0.8333 & 0.0833 & 0.8333 & 0.8333 & 120.0000 & 0.0000 & 120.0000 & 0.2000 \\
+catalog\_halo\_phase\_shift & cross\_entropy & identity & original solver candidate schedule & method\_comparison & mixed & mixed & mixed & 0.0690 & 0.0941 & 0.1018 & 0.9167 & 0.0000 & 0.9167 & 0.9167 & 120.0000 & 0.0000 & 120.0000 & 1.0000 \\
+catalog\_halo\_phase\_shift & genetic & identity & original solver candidate schedule & method\_comparison & mixed & mixed & mixed & 0.0675 & 0.0926 & 0.1020 & 0.9167 & 0.0000 & 0.9167 & 0.9167 & 120.0000 & 0.0000 & 120.0000 & 1.0000 \\
+catalog\_halo\_phase\_shift & true\_sa & identity & original solver candidate schedule & method\_comparison & mixed & mixed & mixed & 0.0690 & 0.0941 & 0.1018 & 0.9167 & 0.0000 & 0.9167 & 0.9167 & 120.0000 & 0.0000 & 120.0000 & 1.0000 \\
+catalog\_halo\_phase\_shift & surrogate\_qubo\_sa & identity & original solver candidate schedule & method\_comparison & mixed & mixed & mixed & 0.0690 & 0.0941 & 0.1018 & 0.9167 & 0.0000 & 0.9167 & 0.9167 & 24.0000 & 96.0000 & 120.0000 & 1.0000 \\
+catalog\_halo\_phase\_shift & qaoa\_statevector & identity & original solver candidate schedule & method\_comparison & mixed & mixed & mixed & 0.0942 & 0.1201 & 0.1292 & 0.8333 & 0.0833 & 0.8333 & 0.8333 & 24.0000 & 96.0000 & 120.0000 & 0.4000 \\
+catalog\_halo\_phase\_shift & all\_windows\_continuous & identity & original solver candidate schedule & method\_comparison & 111111111111 & 111111111111 & 111111111111 & 0.0386 & 0.0601 & 0.0690 & 1.0000 & 0.0833 & 1.0000 & 1.0000 & 19.0000 & 0.0000 & 19.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}

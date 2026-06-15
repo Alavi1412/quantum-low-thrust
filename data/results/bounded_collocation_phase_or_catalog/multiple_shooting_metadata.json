@@ -1,0 +1,902 @@
+{
+  "command": "scripts/run_bounded_collocation_benchmark.py --resume --segments 12 --selected-outages 1 --min-recovery-segments 1 --max-nfev 40",
+  "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.3",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3",
+    "pyyaml": "6.0.3",
+    "pytest": "9.0.2"
+  },
+  "config": {
+    "base": {
+      "run": {
+        "label": "bounded_collocation_phase_or_catalog",
+        "output_subdir": "bounded_collocation_phase_or_catalog",
+        "evidence_level": "compact bounded projected direct multiple-shooting benchmark; primary target is catalog halo phase shift, not teacher generated"
+      },
+      "benchmark": {
+        "mu": 0.01215058560962404,
+        "target_mode": "catalog_halo_phase_shift",
+        "transfer_time": 0.5,
+        "phase_time": 0.3,
+        "segments": 12,
+        "substeps_per_segment": 4,
+        "amax": 0.2,
+        "steering": {
+          "kr": 0.75,
+          "kv": 1.45
+        }
+      },
+      "objective": {
+        "position_scale": 1.0,
+        "velocity_scale": 0.35,
+        "weights": {
+          "nominal": 1.0,
+          "robust_worst": 0.85,
+          "robust_degradation": 0.55,
+          "active_fraction": 0.08,
+          "smoothness": 0.04
+        },
+        "thresholds": {
+          "nominal_success": 0.09,
+          "robust_success": 0.17
+        }
+      },
+      "outages": {
+        "block_lengths": [
+          1
+        ]
+      },
+      "experiments": {
+        "seeds": [
+          11
+        ],
+        "solver_true_budget": 12,
+        "equal_total_budget": true,
+        "qubo_train_samples": 12,
+        "qubo_validation_fraction": 0.25,
+        "top_refine_per_method": 1,
+        "save_top_schedules": 3
+      },
+      "solvers": {
+        "random": {
+          "samples": 12
+        },
+        "cem": {
+          "iterations": 2,
+          "batch_size": 6,
+          "elite_fraction": 0.33,
+          "smoothing": 0.65
+        },
+        "genetic": {
+          "population": 8,
+          "generations": 1,
+          "elite": 2,
+          "mutation_rate": 0.1
+        },
+        "true_sa": {
+          "steps": 12,
+          "temp0": 0.25,
+          "temp_min": 0.01
+        },
+        "surrogate_sa": {
+          "steps": 80,
+          "candidates_to_evaluate": 12,
+          "temp0": 0.35,
+          "temp_min": 0.004
+        },
+        "qaoa": {
+          "p": 1,
+          "angle_trials": 4,
+          "sample_count": 40,
+          "candidates_to_evaluate": 12
+        }
+      },
+      "baselines": {
+        "all_windows_continuous": {
+          "enabled": true
+        }
+      },
+      "refinement": {
+        "mode": "multiple_shooting_branch_recovery",
+        "solver_mode": "bounded_projected_multiple_shooting",
+        "max_nfev": 80,
+        "selected_outages": 12,
+        "outage_selection_min_recovery_segments": 0,
+        "node_initialization": "linear",
+        "node_initialization_blend": 0.5,
+        "nominal_first_homotopy": false,
+        "nominal_first_nfev": 40,
+        "state_residual_weight": 1.0,
+        "robust_residual_weight": 0.75,
+        "fuel_residual_weight": 0.018,
+        "smooth_residual_weight": 0.012,
+        "control_regularization": 0.01
+      }
+    },
+    "effective_cases": [
+      {
+        "case_index": 0,
+        "case": {
+          "transfer_time": 0.5,
+          "amax": 0.2,
+          "segments": 12,
+          "max_nfev": 20
+        },
+        "config": {
+          "run": {
+            "label": "bounded_collocation_phase_or_catalog",
+            "output_subdir": "bounded_collocation_phase_or_catalog",
+            "evidence_level": "compact bounded projected direct multiple-shooting benchmark; primary target is catalog halo phase shift, not teacher generated"
+          },
+          "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_halo_phase_shift",
+            "transfer_time": 0.5,
+            "phase_time": 0.3,
+            "segments": 12,
+            "substeps_per_segment": 4,
+            "amax": 0.2,
+            "steering": {
+              "kr": 0.75,
+              "kv": 1.45
+            }
+          },
+          "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+              "nominal": 1.0,
+              "robust_worst": 0.85,
+              "robust_degradation": 0.55,
+              "active_fraction": 0.08,
+              "smoothness": 0.04
+            },
+            "thresholds": {
+              "nominal_success": 0.09,
+              "robust_success": 0.17
+            }
+          },
+          "outages": {
+            "block_lengths": [
+              1
+            ]
+          },
+          "experiments": {
+            "seeds": [
+              11
+            ],
+            "solver_true_budget": 12,
+            "equal_total_budget": true,
+            "qubo_train_samples": 12,
+            "qubo_validation_fraction": 0.25,
+            "top_refine_per_method": 1,
+            "save_top_schedules": 3
+          },
+          "solvers": {
+            "random": {
+              "samples": 12
+            },
+            "cem": {
+              "iterations": 2,
+              "batch_size": 6,
+              "elite_fraction": 0.33,
+              "smoothing": 0.65
+            },
+            "genetic": {
+              "population": 8,
+              "generations": 1,
+              "elite": 2,
+              "mutation_rate": 0.1
+            },
+            "true_sa": {
+              "steps": 12,
+              "temp0": 0.25,
+              "temp_min": 0.01
+            },
+            "surrogate_sa": {
+              "steps": 80,
+              "candidates_to_evaluate": 12,
+              "temp0": 0.35,
+              "temp_min": 0.004
+            },
+            "qaoa": {
+              "p": 1,
+              "angle_trials": 4,
+              "sample_count": 40,
+              "candidates_to_evaluate": 12
+            }
+          },
+          "baselines": {
+            "all_windows_continuous": {
+              "enabled": true
+            }
+          },
+          "refinement": {
+            "mode": "multiple_shooting_branch_recovery",
+            "solver_mode": "bounded_projected_multiple_shooting",
+            "max_nfev": 20,
+            "selected_outages": 12,
+            "outage_selection_min_recovery_segments": 0,
+            "node_initialization": "linear",
+            "node_initialization_blend": 0.5,
+            "nominal_first_homotopy": false,
+            "nominal_first_nfev": 0,
+            "state_residual_weight": 1.0,
+            "robust_residual_weight": 0.75,
+            "fuel_residual_weight": 0.018,
+            "smooth_residual_weight": 0.012,
+            "control_regularization": 0.01,
+            "multiple_shooting_residual_weights": {
+              "initial_weight": 10.0,
+              "defect_weight": 1.0,
+              "terminal_weight": 4.0,
+              "branch_terminal_weight": 4.0,
+              "branch_start_weight": 5.0,
+              "control_weight": 0.01,
+              "smooth_weight": 0.012
+            },
+            "warm_start_refinement": false,
+            "warm_start_nfev": 30
+          }
+        }
+      },
+      {
+        "case_index": 1,
+        "case": {
+          "transfer_time": 0.5,
+          "amax": 0.2,
+          "segments": 8,
+          "max_nfev": 30
+        },
+        "config": {
+          "run": {
+            "label": "bounded_collocation_phase_or_catalog",
+            "output_subdir": "bounded_collocation_phase_or_catalog",
+            "evidence_level": "compact bounded projected direct multiple-shooting benchmark; primary target is catalog halo phase shift, not teacher generated"
+          },
+          "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_halo_phase_shift",
+            "transfer_time": 0.5,
+            "phase_time": 0.3,
+            "segments": 8,
+            "substeps_per_segment": 4,
+            "amax": 0.2,
+            "steering": {
+              "kr": 0.75,
+              "kv": 1.45
+            }
+          },
+          "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+              "nominal": 1.0,
+              "robust_worst": 0.85,
+              "robust_degradation": 0.55,
+              "active_fraction": 0.08,
+              "smoothness": 0.04
+            },
+            "thresholds": {
+              "nominal_success": 0.09,
+              "robust_success": 0.17
+            }
+          },
+          "outages": {
+            "block_lengths": [
+              1
+            ]
+          },
+          "experiments": {
+            "seeds": [
+              11
+            ],
+            "solver_true_budget": 12,
+            "equal_total_budget": true,
+            "qubo_train_samples": 12,
+            "qubo_validation_fraction": 0.25,
+            "top_refine_per_method": 1,
+            "save_top_schedules": 3
+          },
+          "solvers": {
+            "random": {
+              "samples": 12
+            },
+            "cem": {
+              "iterations": 2,
+              "batch_size": 6,
+              "elite_fraction": 0.33,
+              "smoothing": 0.65
+            },
+            "genetic": {
+              "population": 8,
+              "generations": 1,
+              "elite": 2,
+              "mutation_rate": 0.1
+            },
+            "true_sa": {
+              "steps": 12,
+              "temp0": 0.25,
+              "temp_min": 0.01
+            },
+            "surrogate_sa": {
+              "steps": 80,
+              "candidates_to_evaluate": 12,
+              "temp0": 0.35,
+              "temp_min": 0.004
+            },
+            "qaoa": {
+              "p": 1,
+              "angle_trials": 4,
+              "sample_count": 40,
+              "candidates_to_evaluate": 12
+            }
+          },
+          "baselines": {
+            "all_windows_continuous": {
+              "enabled": true
+            }
+          },
+          "refinement": {
+            "mode": "multiple_shooting_branch_recovery",
+            "solver_mode": "bounded_projected_multiple_shooting",
+            "max_nfev": 30,
+            "selected_outages": 8,
+            "outage_selection_min_recovery_segments": 0,
+            "node_initialization": "linear",
+            "node_initialization_blend": 0.5,
+            "nominal_first_homotopy": false,
+            "nominal_first_nfev": 0,
+            "state_residual_weight": 1.0,
+            "robust_residual_weight": 0.75,
+            "fuel_residual_weight": 0.018,
+            "smooth_residual_weight": 0.012,
+            "control_regularization": 0.01,
+            "multiple_shooting_residual_weights": {
+              "initial_weight": 10.0,
+              "defect_weight": 1.0,
+              "terminal_weight": 4.0,
+              "branch_terminal_weight": 4.0,
+              "branch_start_weight": 5.0,
+              "control_weight": 0.01,
+              "smooth_weight": 0.012
+            },
+            "warm_start_refinement": false,
+            "warm_start_nfev": 30
+          }
+        }
+      },
+      {
+        "case_index": 2,
+        "case": {
+          "transfer_time": 0.5,
+          "amax": 0.2,
+          "segments": 12,
+          "max_nfev": 40
+        },
+        "config": {
+          "run": {
+            "label": "bounded_collocation_phase_or_catalog",
+            "output_subdir": "bounded_collocation_phase_or_catalog",
+            "evidence_level": "compact bounded projected direct multiple-shooting benchmark; primary target is catalog halo phase shift, not teacher generated"
+          },
+          "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_halo_phase_shift",
+            "transfer_time": 0.5,
+            "phase_time": 0.3,
+            "segments": 12,
+            "substeps_per_segment": 4,
+            "amax": 0.2,
+            "steering": {
+              "kr": 0.75,
+              "kv": 1.45
+            }
+          },
+          "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+              "nominal": 1.0,
+              "robust_worst": 0.85,
+              "robust_degradation": 0.55,
+              "active_fraction": 0.08,
+              "smoothness": 0.04
+            },
+            "thresholds": {
+              "nominal_success": 0.09,
+              "robust_success": 0.17
+            }
+          },
+          "outages": {
+            "block_lengths": [
+              1
+            ]
+          },
+          "experiments": {
+            "seeds": [
+              11
+            ],
+            "solver_true_budget": 12,
+            "equal_total_budget": true,
+            "qubo_train_samples": 12,
+            "qubo_validation_fraction": 0.25,
+            "top_refine_per_method": 1,
+            "save_top_schedules": 3
+          },
+          "solvers": {
+            "random": {
+              "samples": 12
+            },
+            "cem": {
+              "iterations": 2,
+              "batch_size": 6,
+              "elite_fraction": 0.33,
+              "smoothing": 0.65
+            },
+            "genetic": {
+              "population": 8,
+              "generations": 1,
+              "elite": 2,
+              "mutation_rate": 0.1
+            },
+            "true_sa": {
+              "steps": 12,
+              "temp0": 0.25,
+              "temp_min": 0.01
+            },
+            "surrogate_sa": {
+              "steps": 80,
+              "candidates_to_evaluate": 12,
+              "temp0": 0.35,
+              "temp_min": 0.004
+            },
+            "qaoa": {
+              "p": 1,
+              "angle_trials": 4,
+              "sample_count": 40,
+              "candidates_to_evaluate": 12
+            }
+          },
+          "baselines": {
+            "all_windows_continuous": {
+              "enabled": true
+            }
+          },
+          "refinement": {
+            "mode": "multiple_shooting_branch_recovery",
+            "solver_mode": "bounded_projected_multiple_shooting",
+            "max_nfev": 40,
+            "selected_outages": 1,
+            "outage_selection_min_recovery_segments": 1,
+            "node_initialization": "linear",
+            "node_initialization_blend": 0.5,
+            "nominal_first_homotopy": false,
+            "nominal_first_nfev": 0,
+            "state_residual_weight": 1.0,
+            "robust_residual_weight": 0.75,
+            "fuel_residual_weight": 0.018,
+            "smooth_residual_weight": 0.012,
+            "control_regularization": 0.01,
+            "multiple_shooting_residual_weights": {
+              "initial_weight": 10.0,
+              "defect_weight": 1.0,
+              "terminal_weight": 4.0,
+              "branch_terminal_weight": 4.0,
+              "branch_start_weight": 5.0,
+              "control_weight": 0.01,
+              "smooth_weight": 0.012
+            },
+            "warm_start_refinement": false,
+            "warm_start_nfev": 30
+          }
+        }
+      }
+    ]
+  },
+  "git_head": null,
+  "git_status_short": "?? .gitignore\n?? README.md\n?? configs/\n?? data/\n?? figures/\n?? logs/\n?? paper/\n?? requirements.txt\n?? scripts/\n?? src/\n?? tables/\n?? tests/",
+  "tracked_file_count": 0,
+  "untracked_file_count": 248,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 56,
+  "project_manifest_total_bytes": 1151249,
+  "project_manifest_hash": "678c03a0bcbc70c6401824872bb216daabec4f4dbdffd03f4ed8759e74de800d",
+  "multiple_shooting_rows": 3,
+  "multiple_shooting_output": "\\\\nas\\Projects\\Papers\\quantum-low-thrust\\data\\results\\bounded_collocation_phase_or_catalog\\multiple_shooting_feasibility.csv",
+  "threshold_rule": "meets_thresholds requires nominal_error <= nominal_success and selected_recovery_worst_error <= robust_success",
+  "mask_semantics": "selected_recovery_worst_error/selected_worst_error evaluate only the selected outage masks optimized with branch recovery; all_outage_worst_error/all_mask_worst_error evaluate every outage mask as a diagnostic. worst_error and selected_worst_error are retained as backwards-compatible aliases for selected_recovery_worst_error in the multiple-shooting baseline result.",
+  "control_bound": "bounded_projected_multiple_shooting projects every nominal and branch-recovery acceleration vector to ||u_i|| <= amax inside the residual before RK4 propagation, fuel/smoothness residuals, evaluation propagation, and reporting",
+  "bounded_controls_in_residual": true,
+  "max_control_bound_violation": 5.551115123125783e-17,
+  "node_initialization": "rollout preserves the historical feedback-rollout node seed; linear seeds state nodes by interpolation from the branch start to the hard target; blend linearly combines rollout and linear nodes before optimization.",
+  "effective_cases": [
+    {
+      "case_index": 0,
+      "case": {
+        "transfer_time": 0.5,
+        "amax": 0.2,
+        "segments": 12,
+        "max_nfev": 20
+      },
+      "config": {
+        "run": {
+          "label": "bounded_collocation_phase_or_catalog",
+          "output_subdir": "bounded_collocation_phase_or_catalog",
+          "evidence_level": "compact bounded projected direct multiple-shooting benchmark; primary target is catalog halo phase shift, not teacher generated"
+        },
+        "benchmark": {
+          "mu": 0.01215058560962404,
+          "target_mode": "catalog_halo_phase_shift",
+          "transfer_time": 0.5,
+          "phase_time": 0.3,
+          "segments": 12,
+          "substeps_per_segment": 4,
+          "amax": 0.2,
+          "steering": {
+            "kr": 0.75,
+            "kv": 1.45
+          }
+        },
+        "objective": {
+          "position_scale": 1.0,
+          "velocity_scale": 0.35,
+          "weights": {
+            "nominal": 1.0,
+            "robust_worst": 0.85,
+            "robust_degradation": 0.55,
+            "active_fraction": 0.08,
+            "smoothness": 0.04
+          },
+          "thresholds": {
+            "nominal_success": 0.09,
+            "robust_success": 0.17
+          }
+        },
+        "outages": {
+          "block_lengths": [
+            1
+          ]
+        },
+        "experiments": {
+          "seeds": [
+            11
+          ],
+          "solver_true_budget": 12,
+          "equal_total_budget": true,
+          "qubo_train_samples": 12,
+          "qubo_validation_fraction": 0.25,
+          "top_refine_per_method": 1,
+          "save_top_schedules": 3
+        },
+        "solvers": {
+          "random": {
+            "samples": 12
+          },
+          "cem": {
+            "iterations": 2,
+            "batch_size": 6,
+            "elite_fraction": 0.33,
+            "smoothing": 0.65
+          },
+          "genetic": {
+            "population": 8,
+            "generations": 1,
+            "elite": 2,
+            "mutation_rate": 0.1
+          },
+          "true_sa": {
+            "steps": 12,
+            "temp0": 0.25,
+            "temp_min": 0.01
+          },
+          "surrogate_sa": {
+            "steps": 80,
+            "candidates_to_evaluate": 12,
+            "temp0": 0.35,
+            "temp_min": 0.004
+          },
+          "qaoa": {
+            "p": 1,
+            "angle_trials": 4,
+            "sample_count": 40,
+            "candidates_to_evaluate": 12
+          }
+        },
+        "baselines": {
+          "all_windows_continuous": {
+            "enabled": true
+          }
+        },
+        "refinement": {
+          "mode": "multiple_shooting_branch_recovery",
+          "solver_mode": "bounded_projected_multiple_shooting",
+          "max_nfev": 20,
+          "selected_outages": 12,
+          "outage_selection_min_recovery_segments": 0,
+          "node_initialization": "linear",
+          "node_initialization_blend": 0.5,
+          "nominal_first_homotopy": false,
+          "nominal_first_nfev": 0,
+          "state_residual_weight": 1.0,
+          "robust_residual_weight": 0.75,
+          "fuel_residual_weight": 0.018,
+          "smooth_residual_weight": 0.012,
+          "control_regularization": 0.01,
+          "multiple_shooting_residual_weights": {
+            "initial_weight": 10.0,
+            "defect_weight": 1.0,
+            "terminal_weight": 4.0,
+            "branch_terminal_weight": 4.0,
+            "branch_start_weight": 5.0,
+            "control_weight": 0.01,
+            "smooth_weight": 0.012
+          },
+          "warm_start_refinement": false,
+          "warm_start_nfev": 30
+        }
+      }
+    },
+    {
+      "case_index": 1,
+      "case": {
+        "transfer_time": 0.5,
+        "amax": 0.2,
+        "segments": 8,
+        "max_nfev": 30
+      },
+      "config": {
+        "run": {
+          "label": "bounded_collocation_phase_or_catalog",
+          "output_subdir": "bounded_collocation_phase_or_catalog",
+          "evidence_level": "compact bounded projected direct multiple-shooting benchmark; primary target is catalog halo phase shift, not teacher generated"
+        },
+        "benchmark": {
+          "mu": 0.01215058560962404,
+          "target_mode": "catalog_halo_phase_shift",
+          "transfer_time": 0.5,
+          "phase_time": 0.3,
+          "segments": 8,
+          "substeps_per_segment": 4,
+          "amax": 0.2,
+          "steering": {
+            "kr": 0.75,
+            "kv": 1.45
+          }
+        },
+        "objective": {
+          "position_scale": 1.0,
+          "velocity_scale": 0.35,
+          "weights": {
+            "nominal": 1.0,
+            "robust_worst": 0.85,
+            "robust_degradation": 0.55,
+            "active_fraction": 0.08,
+            "smoothness": 0.04
+          },
+          "thresholds": {
+            "nominal_success": 0.09,
+            "robust_success": 0.17
+          }
+        },
+        "outages": {
+          "block_lengths": [
+            1
+          ]
+        },
+        "experiments": {
+          "seeds": [
+            11
+          ],
+          "solver_true_budget": 12,
+          "equal_total_budget": true,
+          "qubo_train_samples": 12,
+          "qubo_validation_fraction": 0.25,
+          "top_refine_per_method": 1,
+          "save_top_schedules": 3
+        },
+        "solvers": {
+          "random": {
+            "samples": 12
+          },
+          "cem": {
+            "iterations": 2,
+            "batch_size": 6,
+            "elite_fraction": 0.33,
+            "smoothing": 0.65
+          },
+          "genetic": {
+            "population": 8,
+            "generations": 1,
+            "elite": 2,
+            "mutation_rate": 0.1
+          },
+          "true_sa": {
+            "steps": 12,
+            "temp0": 0.25,
+            "temp_min": 0.01
+          },
+          "surrogate_sa": {
+            "steps": 80,
+            "candidates_to_evaluate": 12,
+            "temp0": 0.35,
+            "temp_min": 0.004
+          },
+          "qaoa": {
+            "p": 1,
+            "angle_trials": 4,
+            "sample_count": 40,
+            "candidates_to_evaluate": 12
+          }
+        },
+        "baselines": {
+          "all_windows_continuous": {
+            "enabled": true
+          }
+        },
+        "refinement": {
+          "mode": "multiple_shooting_branch_recovery",
+          "solver_mode": "bounded_projected_multiple_shooting",
+          "max_nfev": 30,
+          "selected_outages": 8,
+          "outage_selection_min_recovery_segments": 0,
+          "node_initialization": "linear",
+          "node_initialization_blend": 0.5,
+          "nominal_first_homotopy": false,
+          "nominal_first_nfev": 0,
+          "state_residual_weight": 1.0,
+          "robust_residual_weight": 0.75,
+          "fuel_residual_weight": 0.018,
+          "smooth_residual_weight": 0.012,
+          "control_regularization": 0.01,
+          "multiple_shooting_residual_weights": {
+            "initial_weight": 10.0,
+            "defect_weight": 1.0,
+            "terminal_weight": 4.0,
+            "branch_terminal_weight": 4.0,
+            "branch_start_weight": 5.0,
+            "control_weight": 0.01,
+            "smooth_weight": 0.012
+          },
+          "warm_start_refinement": false,
+          "warm_start_nfev": 30
+        }
+      }
+    },
+    {
+      "case_index": 2,
+      "case": {
+        "transfer_time": 0.5,
+        "amax": 0.2,
+        "segments": 12,
+        "max_nfev": 40
+      },
+      "config": {
+        "run": {
+          "label": "bounded_collocation_phase_or_catalog",
+          "output_subdir": "bounded_collocation_phase_or_catalog",
+          "evidence_level": "compact bounded projected direct multiple-shooting benchmark; primary target is catalog halo phase shift, not teacher generated"
+        },
+        "benchmark": {
+          "mu": 0.01215058560962404,
+          "target_mode": "catalog_halo_phase_shift",
+          "transfer_time": 0.5,
+          "phase_time": 0.3,
+          "segments": 12,
+          "substeps_per_segment": 4,
+          "amax": 0.2,
+          "steering": {
+            "kr": 0.75,
+            "kv": 1.45
+          }
+        },
+        "objective": {
+          "position_scale": 1.0,
+          "velocity_scale": 0.35,
+          "weights": {
+            "nominal": 1.0,
+            "robust_worst": 0.85,
+            "robust_degradation": 0.55,
+            "active_fraction": 0.08,
+            "smoothness": 0.04
+          },
+          "thresholds": {
+            "nominal_success": 0.09,
+            "robust_success": 0.17
+          }
+        },
+        "outages": {
+          "block_lengths": [
+            1
+          ]
+        },
+        "experiments": {
+          "seeds": [
+            11
+          ],
+          "solver_true_budget": 12,
+          "equal_total_budget": true,
+          "qubo_train_samples": 12,
+          "qubo_validation_fraction": 0.25,
+          "top_refine_per_method": 1,
+          "save_top_schedules": 3
+        },
+        "solvers": {
+          "random": {
+            "samples": 12
+          },
+          "cem": {
+            "iterations": 2,
+            "batch_size": 6,
+            "elite_fraction": 0.33,
+            "smoothing": 0.65
+          },
+          "genetic": {
+            "population": 8,
+            "generations": 1,
+            "elite": 2,
+            "mutation_rate": 0.1
+          },
+          "true_sa": {
+            "steps": 12,
+            "temp0": 0.25,
+            "temp_min": 0.01
+          },
+          "surrogate_sa": {
+            "steps": 80,
+            "candidates_to_evaluate": 12,
+            "temp0": 0.35,
+            "temp_min": 0.004
+          },
+          "qaoa": {
+            "p": 1,
+            "angle_trials": 4,
+            "sample_count": 40,
+            "candidates_to_evaluate": 12
+          }
+        },
+        "baselines": {
+          "all_windows_continuous": {
+            "enabled": true
+          }
+        },
+        "refinement": {
+          "mode": "multiple_shooting_branch_recovery",
+          "solver_mode": "bounded_projected_multiple_shooting",
+          "max_nfev": 40,
+          "selected_outages": 1,
+          "outage_selection_min_recovery_segments": 1,
+          "node_initialization": "linear",
+          "node_initialization_blend": 0.5,
+          "nominal_first_homotopy": false,
+          "nominal_first_nfev": 0,
+          "state_residual_weight": 1.0,
+          "robust_residual_weight": 0.75,
+          "fuel_residual_weight": 0.018,
+          "smooth_residual_weight": 0.012,
+          "control_regularization": 0.01,
+          "multiple_shooting_residual_weights": {
+            "initial_weight": 10.0,
+            "defect_weight": 1.0,
+            "terminal_weight": 4.0,
+            "branch_terminal_weight": 4.0,
+            "branch_start_weight": 5.0,
+            "control_weight": 0.01,
+            "smooth_weight": 0.012
+          },
+          "warm_start_refinement": false,
+          "warm_start_nfev": 30
+        }
+      }
+    }
+  ]
+}

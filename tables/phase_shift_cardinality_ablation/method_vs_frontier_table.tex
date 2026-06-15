@@ -1,0 +1,12 @@
+\begin{tabular}{lrrrrrrrrrrl}
+\toprule
+method & runs & one\_coast\_runs & one\_coast\_success\_runs & one\_coast\_frontier\_runs & near\_best\_selected\_runs & median\_method\_selected\_worst\_error & median\_method\_nominal\_fuel & median\_exhaustive\_selected\_worst\_error & median\_exhaustive\_nominal\_fuel & median\_selected\_gap\_to\_best\_one\_coast & dominant\_one\_coast\_schedules \\
+\midrule
+surrogate\_qubo\_sa & 10 & 10 & 10 & 0 & 0 & 0.0941 & 0.0917 & 0.0941 & 0.0917 & 0.0108 & 011111111111:7; 101111111111:3 \\
+cross\_entropy & 10 & 10 & 10 & 0 & 1 & 0.0941 & 0.0917 & 0.0941 & 0.0917 & 0.0108 & 011111111111:6; 110111111111:2; 111110111111:1; 111011111111:1 \\
+genetic & 10 & 10 & 10 & 0 & 1 & 0.0926 & 0.0917 & 0.0926 & 0.0917 & 0.0093 & 101111111111:5; 110111111111:3; 011111111111:1; 111101111111:1 \\
+true\_sa & 10 & 10 & 10 & 0 & 0 & 0.0941 & 0.0917 & 0.0941 & 0.0917 & 0.0108 & 011111111111:6; 101111111111:4 \\
+qaoa\_statevector & 10 & 4 & 4 & 1 & 2 & 0.0887 & 0.0917 & 0.0887 & 0.0917 & 0.0054 & 111011111111:2; 111101111111:1; 111111111110:1 \\
+random & 10 & 1 & 1 & 0 & 0 & 0.0926 & 0.0917 & 0.0926 & 0.0917 & 0.0093 & 101111111111:1 \\
+\bottomrule
+\end{tabular}

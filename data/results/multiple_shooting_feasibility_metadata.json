@@ -1,0 +1,66 @@
+{
+  "command": "Z:\\Papers\\quantum-low-thrust\\scripts\\run_multiple_shooting_feasibility.py --config configs/q1_candidate.yaml --resume --max-cases 0",
+  "case_count": 1,
+  "feasible_case_count": 0,
+  "thresholds": {
+    "nominal_success": 0.09,
+    "selected_recovery_success": 0.17
+  },
+  "targeted_cases": {
+    "transfer_time": [
+      4.0
+    ],
+    "amax": [
+      0.2
+    ],
+    "segments": [
+      14
+    ],
+    "max_nfev": [
+      120
+    ]
+  },
+  "best_cases": [
+    {
+      "transfer_time": 4.0,
+      "amax": 0.2,
+      "segments": 14,
+      "max_nfev": 120,
+      "substeps_per_segment": 7,
+      "selected_outages": 3,
+      "schedule": 11111111111111,
+      "base_nominal_error": 22.27449049867309,
+      "base_worst_error": 23.84278654212506,
+      "nominal_error": 0.9786729540627932,
+      "selected_recovery_worst_error": 1.7105306400949696,
+      "selected_worst_error": 1.7105306400949696,
+      "all_outage_worst_error": 12.347263834454363,
+      "all_mask_worst_error": 12.347263834454363,
+      "nominal_threshold": 0.09,
+      "selected_recovery_threshold": 0.17,
+      "selected_worst_threshold": 0.17,
+      "meets_nominal_threshold": false,
+      "meets_selected_recovery_threshold": false,
+      "meets_selected_worst_threshold": false,
+      "meets_thresholds": false,
+      "optimizer_success": false,
+      "multiple_shooting_success": false,
+      "cost": 1.089762931465877,
+      "optimality": 66.23481498895181,
+      "nfev": 120,
+      "runtime_seconds": 294.6898873000173,
+      "control_max_norm": 0.2,
+      "accepted_candidate": "unknown",
+      "warm_start_refinement_nfev": 0,
+      "warm_start_nominal_error": null,
+      "warm_start_selected_worst_error": null,
+      "nominal_fuel": 0.8000000000000002,
+      "recovery_fuel_mean": 0.7047619047619049,
+      "recovery_fuel_max": 0.742857142857143,
+      "selected_outage_indices": "[15, 2, 22]",
+      "selected_outage_errors": "[0.6730344635917566, 1.3146252878761444, 1.7105306400949696]",
+      "all_outage_errors": "[0.8990231199909519, 2.157420093690948, 0.6730344635917566, 0.4126730292780853, 1.5527907239213545, 1.4508914892519018, 0.5871426384960062, 2.087285654186953, 2.5530772649690516, 2.1359784045146997, 1.688511690445563, 1.193425557501765, 1.670066310136938, 1.0514559488744122, 12.347263834454363, 1.3146252878761444, 2.047120179516664, 2.0698648136280755, 1.461866253496121, 1.369498237196826, 0.9591612154465836, 1.3641157327304252, 1.7105306400949696, 2.0052638288658144, 1.370030118821003, 1.9122544986357253, 1.7157632780285654]",
+      "message": "The maximum number of function evaluations is exceeded."
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "command": "Z:\\Papers\\quantum-low-thrust\\scripts\\run_multiple_shooting_feasibility.py --config configs/q1_candidate.yaml --resume --max-cases 0",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3",
+    "pyyaml": "6.0.3",
+    "pytest": "8.2.0"
+  },
+  "config": {
+    "run": {
+      "label": "q1_multiple_shooting_feasibility",
+      "evidence_level": "calibrated replicated branch-recovery experiment; equal-total-budget schedule search accounting; success thresholds inherited from prior benchmark, not relaxed"
+    },
+    "benchmark": {
+      "mu": 0.01215058560962404,
+      "transfer_time": 4.0,
+      "segments": 14,
+      "substeps_per_segment": 7,
+      "amax": 0.2,
+      "steering": {
+        "kr": 0.75,
+        "kv": 1.45
+      }
+    },
+    "objective": {
+      "position_scale": 1.0,
+      "velocity_scale": 0.35,
+      "weights": {
+        "nominal": 1.0,
+        "robust_worst": 0.85,
+        "robust_degradation": 0.55,
+        "active_fraction": 0.08,
+        "smoothness": 0.04
+      },
+      "thresholds": {
+        "nominal_success": 0.09,
+        "robust_success": 0.17
+      }
+    },
+    "outages": {
+      "block_lengths": [
+        1,
+        2
+      ]
+    },
+    "experiments": {
+      "seeds": [
+        11,
+        23,
+        37
+      ],
+      "solver_true_budget": 48,
+      "equal_total_budget": true,
+      "qubo_train_samples": 72,
+      "qubo_validation_fraction": 0.25,
+      "top_refine_per_method": 1,
+      "save_top_schedules": 5
+    },
+    "solvers": {
+      "random": {
+        "samples": 48
+      },
+      "cem": {
+        "iterations": 8,
+        "batch_size": 12,
+        "elite_fraction": 0.25,
+        "smoothing": 0.65
+      },
+      "genetic": {
+        "population": 20,
+        "generations": 6,
+        "elite": 4,
+        "mutation_rate": 0.08
+      },
+      "true_sa": {
+        "steps": 48,
+        "temp0": 0.25,
+        "temp_min": 0.01
+      },
+      "surrogate_sa": {
+        "steps": 420,
+        "candidates_to_evaluate": 48,
+        "temp0": 0.35,
+        "temp_min": 0.004
+      },
+      "qaoa": {
+        "p": 1,
+        "angle_trials": 14,
+        "sample_count": 240,
+        "candidates_to_evaluate": 48
+      }
+    },
+    "baselines": {
+      "all_windows_continuous": {
+        "enabled": true
+      }
+    },
+    "refinement": {
+      "mode": "multiple_shooting_branch_recovery",
+      "max_nfev": 120,
+      "selected_outages": 3,
+      "outage_selection_min_recovery_segments": 4,
+      "state_residual_weight": 1.0,
+      "robust_residual_weight": 0.75,
+      "fuel_residual_weight": 0.02,
+      "smooth_residual_weight": 0.015,
+      "control_regularization": 0.012
+    }
+  },
+  "git_head": null,
+  "git_status_short": null,
+  "tracked_file_count": null,
+  "untracked_file_count": null,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 40,
+  "project_manifest_total_bytes": 552132,
+  "project_manifest_hash": "cde4a2d3f5e91ec21a059e542ba1044fb2d8676e0fdd594ac99f1d6bd047732b",
+  "multiple_shooting_rows": 1,
+  "multiple_shooting_output": "Z:\\Papers\\quantum-low-thrust\\data\\results\\multiple_shooting_feasibility.csv",
+  "threshold_rule": "meets_thresholds requires nominal_error <= nominal_success and selected_recovery_worst_error <= robust_success",
+  "mask_semantics": "selected_recovery_worst_error/selected_worst_error evaluate only the selected outage masks optimized with branch recovery; all_outage_worst_error/all_mask_worst_error evaluate every outage mask as a diagnostic. worst_error and selected_worst_error are retained as backwards-compatible aliases for selected_recovery_worst_error in the multiple-shooting baseline result.",
+  "control_bound": "all reported nominal and branch recovery controls are projected to ||u_i|| <= amax before propagation and reporting"
+}

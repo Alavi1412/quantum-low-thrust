@@ -1,0 +1,82 @@
+run:
+  label: bounded_collocation_phase_or_catalog
+  output_subdir: bounded_collocation_phase_or_catalog
+  evidence_level: "compact bounded projected direct multiple-shooting benchmark; primary target is catalog halo phase shift, not teacher generated"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: catalog_halo_phase_shift
+  transfer_time: 0.5
+  phase_time: 0.3
+  segments: 12
+  substeps_per_segment: 4
+  amax: 0.2
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1]
+experiments:
+  seeds: [11]
+  solver_true_budget: 12
+  equal_total_budget: true
+  qubo_train_samples: 12
+  qubo_validation_fraction: 0.25
+  top_refine_per_method: 1
+  save_top_schedules: 3
+solvers:
+  random:
+    samples: 12
+  cem:
+    iterations: 2
+    batch_size: 6
+    elite_fraction: 0.33
+    smoothing: 0.65
+  genetic:
+    population: 8
+    generations: 1
+    elite: 2
+    mutation_rate: 0.10
+  true_sa:
+    steps: 12
+    temp0: 0.25
+    temp_min: 0.01
+  surrogate_sa:
+    steps: 80
+    candidates_to_evaluate: 12
+    temp0: 0.35
+    temp_min: 0.004
+  qaoa:
+    p: 1
+    angle_trials: 4
+    sample_count: 40
+    candidates_to_evaluate: 12
+baselines:
+  all_windows_continuous:
+    enabled: true
+refinement:
+  mode: multiple_shooting_branch_recovery
+  solver_mode: bounded_projected_multiple_shooting
+  max_nfev: 80
+  selected_outages: 12
+  outage_selection_min_recovery_segments: 0
+  node_initialization: linear
+  node_initialization_blend: 0.5
+  nominal_first_homotopy: false
+  nominal_first_nfev: 40
+  state_residual_weight: 1.0
+  robust_residual_weight: 0.75
+  fuel_residual_weight: 0.018
+  smooth_residual_weight: 0.012
+  control_regularization: 0.010

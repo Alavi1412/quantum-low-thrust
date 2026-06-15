@@ -1,0 +1,79 @@
+# Reproducibility and Artifact Manifest
+
+This package captures the current paper artifacts for the normalized Earth-Moon
+CR3BP low-thrust initialization benchmark. It is a research benchmark package,
+not a flight-ready trajectory design tool.
+
+## Provenance Snapshot
+
+- Verified runs recorded Python `3.11.9 (MSC v.1938 64 bit AMD64)` on Windows.
+- The verified package versions are pinned in `requirements-lock.txt`.
+- A project-local `.venv` is recommended. During this packaging pass, local venv
+  creation on the NAS workspace was reported to stall, while the recorded
+  artifact runs used the global Python 3.11.9 interpreter.
+- The repository currently has no committed snapshot: metadata files record
+  `git_head: null` because all files were untracked at run time. Use
+  `data/results/artifact_manifest.json` as the file-level integrity manifest
+  until a git commit is made.
+
+## Quick Verification
+
+```powershell
+python -m pip install -r requirements-lock.txt
+python -m pytest tests
+```
+
+The smoke tests are the intended short verification path. Do not rerun the long
+experiments unless the paper artifacts need to be regenerated.
+
+## Artifact Map
+
+| Evidence family | Command | Key inputs | Key outputs | Runtime note |
+| --- | --- | --- | --- | --- |
+| Paper PDF | `latexmk -pdf paper/main.tex` or equivalent local LaTeX build | `paper/main.tex`, `paper/references.bib`, generated `tables/`, `figures/` | `paper/main.pdf` | Build time depends on local TeX install; not an experiment. |
+| Smoke tests | `python -m pytest tests` | `tests/test_smoke.py`, `src/qlt/*`, `configs/smoke.yaml` | pytest pass/fail output | Short. |
+| Phase-shift benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift.yaml` | `configs/q1_phase_shift.yaml`, `data/source_states.json` | `data/results/phase_shift/*`, `figures/phase_shift/*`, `tables/phase_shift/*` | Moderate; metadata records package versions but no total runtime field. |
+| Phase-shift cardinality benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift_cardinality.yaml` | `configs/q1_phase_shift_cardinality.yaml`, `data/source_states.json` | `data/results/phase_shift_cardinality/*`, `figures/phase_shift_cardinality/*`, `tables/phase_shift_cardinality/*` | Moderate to expensive; 10 seeds with branch recovery. |
+| Bounded phase suite | `python scripts/run_bounded_phase_suite.py --resume` | `configs/bounded_phase_suite.yaml`, `data/source_states.json` | `data/results/bounded_phase_suite/bounded_phase_suite.csv`, `figures/bounded_phase_suite/*`, `tables/bounded_phase_suite/*` | Expensive; configured runtime budget is 600 s, with recorded cases from about 13 s to 367 s. |
+| Direct-collocation baseline | `python scripts/run_direct_collocation_baseline.py --config configs/direct_collocation_baseline.yaml` | `configs/direct_collocation_baseline.yaml`, `src/qlt/direct_collocation.py`, `data/source_states.json` | `data/results/direct_collocation_baseline/*`, `figures/direct_collocation_baseline/*`, `tables/direct_collocation_baseline/*` | Expensive if regenerated; use recorded artifacts for short verification. |
+| QAOA depth ablation | `python scripts/run_qaoa_depth_ablation.py --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation/*`, `figures/qaoa_depth_ablation/*`, `tables/qaoa_depth_ablation/*` | Expensive; recorded runtime is 1291.5 s. |
+| Cardinality ablation | `python scripts/run_cardinality_ablation.py` | `configs/q1_phase_shift_cardinality.yaml` | `data/results/phase_shift_cardinality_ablation/*`, `figures/phase_shift_cardinality_ablation/*`, `tables/phase_shift_cardinality_ablation/*` | Expensive; recorded runtime is 2069.8 s. |
+| Teacher feasible benchmark | `python scripts/run_experiment.py --config configs/q1_teacher_feasible.yaml` | `configs/q1_teacher_feasible.yaml`, teacher target metadata in run output | `data/results/teacher_feasible/*`, `figures/teacher_feasible/*`, `tables/teacher_feasible/*` | Moderate; teacher controls are diagnostic and disclosed in metadata. |
+| Feasibility sweep | `python scripts/run_feasibility_sweep.py --config configs/q1_candidate.yaml --resume --max-cases 0` | `configs/q1_candidate.yaml` | `data/results/feasibility_sweep.csv`, `data/results/feasibility_metadata.json`, `tables/feasibility_table.tex` | Resume-only command is short; full sweep can be expensive. |
+| Catalog targeted feasibility | `python scripts/run_feasibility_sweep.py --config configs/catalog_targeted_feasibility.yaml --transfer-times 4.0 --amax 0.3 --segments 14 --max-nfev 250 --multistart --random-starts 3 --include-bang-bang --min-recovery-segments 4 --state-residual-weight 1.25 --robust-residual-weight 1.15 --fuel-residual-weight 0.01 --smooth-residual-weight 0.006 --control-regularization 0.006 --max-cases 1` | `configs/catalog_targeted_feasibility.yaml`, `data/source_states.json` | `data/results/catalog_targeted_feasibility/*`, `figures/catalog_targeted_feasibility/*`, `tables/catalog_targeted_feasibility/*` | Expensive if expanded beyond the single recorded case. |
+| Multiple-shooting feasibility | `python scripts/run_multiple_shooting_feasibility.py --config configs/q1_candidate.yaml --resume --max-cases 0` | `configs/q1_candidate.yaml` | `data/results/multiple_shooting_feasibility.csv`, `data/results/multiple_shooting_feasibility_metadata.json`, `figures/multiple_shooting_feasibility.*`, `tables/multiple_shooting_feasibility_table.tex` | Resume-only command is short; full case recorded 294.7 s. |
+| Catalog collocation feasibility | `python scripts/run_catalog_collocation_feasibility.py --resume --max-cases 0` | catalog collocation settings encoded by the script and metadata | `data/results/catalog_collocation_feasibility/*`, `figures/catalog_collocation_feasibility/*`, `tables/catalog_collocation_feasibility/*` | Resume-only command is short; full collocation search is expensive and currently has no feasible case. |
+
+## Claim-to-Artifact Trace
+
+- Controlled benchmark framing and limitations: `paper/main.tex`, `README.md`,
+  `data/results/*/run_metadata.json`, and this file.
+- Non-teacher catalog phase-shift results: `data/results/phase_shift/*` and
+  `data/results/phase_shift_cardinality/*`.
+- Bounded projected multiple-shooting feasibility claims:
+  `data/results/bounded_phase_suite/bounded_phase_suite_metadata.json` and
+  `tables/bounded_phase_suite/bounded_phase_suite_table.tex`.
+- Direct-collocation baseline comparison:
+  `data/results/direct_collocation_baseline/*`,
+  `tables/direct_collocation_baseline/*`, and
+  `figures/direct_collocation_baseline/*`.
+- QAOA depth interpretation limits:
+  `data/results/qaoa_depth_ablation/metadata.json`,
+  `tables/qaoa_depth_ablation/qaoa_depth_ablation_table.tex`, and
+  `figures/qaoa_depth_ablation/qaoa_depth_ablation_summary.*`.
+- Cardinality and high-duty availability analysis:
+  `data/results/phase_shift_cardinality_ablation/metadata.json` and
+  `tables/phase_shift_cardinality_ablation/*`.
+- Teacher feasibility and oracle diagnostic disclosure:
+  `data/results/teacher_feasible/run_metadata.json` and
+  `tables/teacher_feasible/*`.
+- Feasibility and catalog collocation caveats:
+  `data/results/feasibility_metadata.json`,
+  `data/results/catalog_targeted_feasibility/feasibility_metadata.json`, and
+  `data/results/catalog_collocation_feasibility/multiple_shooting_feasibility_metadata.json`.
+
+## Integrity Manifest
+
+`data/results/artifact_manifest.json` records scoped SHA-256 hashes for key
+source, configuration, manuscript, result, table, and figure files. It excludes
+`.venv`, caches, logs, and exhaustive generated intermediates.

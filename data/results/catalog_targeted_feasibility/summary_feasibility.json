@@ -1,0 +1,62 @@
+{
+  "command": "\\\\nas\\Projects\\Papers\\quantum-low-thrust\\scripts\\run_feasibility_sweep.py --config configs/catalog_targeted_feasibility.yaml --transfer-times 4.0 --amax 0.3 --segments 14 --max-nfev 250 --multistart --random-starts 3 --include-bang-bang --min-recovery-segments 4 --state-residual-weight 1.25 --robust-residual-weight 1.15 --fuel-residual-weight 0.01 --smooth-residual-weight 0.006 --control-regularization 0.006 --max-cases 1",
+  "case_count": 1,
+  "feasible_case_count": 0,
+  "thresholds": {
+    "nominal_success": 0.09,
+    "selected_recovery_success": 0.17
+  },
+  "grid": {
+    "transfer_time": [
+      4.0
+    ],
+    "amax": [
+      0.3
+    ],
+    "segments": [
+      14
+    ],
+    "max_nfev": [
+      250
+    ]
+  },
+  "best_cases": [
+    {
+      "transfer_time": 4.0,
+      "amax": 0.3,
+      "segments": 14,
+      "max_nfev": 250,
+      "substeps_per_segment": 7,
+      "selected_outages": 3,
+      "multistart_enabled": true,
+      "random_starts": 3,
+      "schedule": "11111111111111",
+      "base_nominal_error": 1.0331142972159248,
+      "base_worst_error": 97.42000056771097,
+      "nominal_error": 0.3055271665933484,
+      "selected_recovery_worst_error": 1.3512868763921428,
+      "selected_worst_error": 1.3512868763921428,
+      "all_outage_worst_error": 5.444921179007518,
+      "all_mask_worst_error": 5.444921179007518,
+      "nominal_threshold": 0.09,
+      "selected_recovery_threshold": 0.17,
+      "selected_worst_threshold": 0.17,
+      "meets_nominal_threshold": false,
+      "meets_selected_recovery_threshold": false,
+      "meets_selected_worst_threshold": false,
+      "meets_thresholds": false,
+      "optimizer_success": true,
+      "refinement_success": false,
+      "best_initial_guess": "zero",
+      "cost": 1.4247976829258202,
+      "nfev": 92,
+      "best_attempt_nfev": 15,
+      "runtime_seconds": 389.44136120000076,
+      "control_max_norm": 0.0017309215845507824,
+      "selected_outage_indices": "[5, 14, 9]",
+      "selected_outage_errors": "[0.3535120922615526, 1.3512868763921428, 0.3057277291930307]",
+      "all_outage_errors": "[2.4534571609067166, 1.6061837910606873, 4.446043040648562, 5.444921179007518, 0.2902020470142777, 0.3535120922615526, 0.42404629416217815, 0.3678627391950145, 0.3092187195080441, 0.3057277291930307, 0.3055707586142145, 0.30553256321371164, 0.30552803794478, 0.3055270001823214, 1.3512868763921428, 1.2243427487931688, 4.050279091785353, 5.0674524536932255, 0.31245120647218316, 0.43829356313605294, 0.460613565774735, 0.37122068841309, 0.3094160346136907, 0.3057637101780239, 0.30557615663789134, 0.30553343483787926, 0.3055278717650211]",
+      "message": "`xtol` termination condition is satisfied."
+    }
+  ]
+}

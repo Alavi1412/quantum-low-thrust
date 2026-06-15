@@ -1,0 +1,58 @@
+{
+  "command": "scripts\\run_cardinality_ablation.py",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3",
+    "pyyaml": "6.0.3"
+  },
+  "git_head": null,
+  "git_status_short": "?? .gitignore\n?? README.md\n?? configs/\n?? data/\n?? figures/\n?? logs/\n?? paper/\n?? requirements.txt\n?? scripts/\n?? src/\n?? tables/\n?? tests/",
+  "tracked_file_count": 0,
+  "untracked_file_count": 232,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 54,
+  "project_manifest_total_bytes": 938052,
+  "project_manifest_hash": "f138aa40ea652103dee70d1c1acd8358ac666ff24dd3a4ca993e01ee7365b10a",
+  "config_path": "configs\\q1_phase_shift_cardinality.yaml",
+  "config_sha256": "8ae0cfbb5f27d6dbb24fe09ebc44ca6ee8167c9b09e9fdd3f41b1d5a74bacceb",
+  "target_mode": "catalog_halo_phase_shift",
+  "thresholds": {
+    "nominal_success": 0.09,
+    "robust_success": 0.17
+  },
+  "n_segments": 12,
+  "target_active_fraction": 0.9166666666666666,
+  "refinement_mode": "branch_recovery",
+  "base_max_nfev": 35,
+  "k10_mode": "full",
+  "k10_schedule_count": 66,
+  "k10_total_possible": 66,
+  "k10_runtime_compromise": null,
+  "one_coast_schedule_count": 12,
+  "all_windows_schedule_count": 1,
+  "fuel_sweep_weights": [
+    0.018,
+    0.03,
+    0.05,
+    0.08,
+    0.12,
+    0.2
+  ],
+  "near_frontier_definition": "one-coast selected worst error within 0.005 of the best feasible one-coast selected worst error",
+  "fuel_target": 0.091667,
+  "all_windows_fuel_sweep_meets_fuel_target_and_thresholds": true,
+  "runtime_seconds": 2069.7672034999996,
+  "interpretation_limits": [
+    "Branch-recovery success uses the selected outage subset; all-mask worst error is reported as a diagnostic.",
+    "The high-duty enumeration changes only binary availability; continuous controls are re-optimized from the same configured refinement model.",
+    "The method-vs-frontier comparison maps existing method schedules to the exhaustive one-coast refinement table and does not rerun the discrete optimizers."
+  ]
+}

@@ -1,0 +1,15 @@
+\begin{tabular}{lllrrrrrrrr}
+\toprule
+Benchmark & Method & Comparison group & Refined nominal error & Selected recovery worst error & All-mask diagnostic worst error & Active fraction & Solver true evals & Shared QUBO train evals & Total true evals & Refine success \\
+\midrule
+teacher\_controlled & random & method\_comparison & 0.0115 & 0.0137 & 1.1009 & 0.3750 & 52.0000 & 0.0000 & 52.0000 & 0.6667 \\
+teacher\_controlled & cross\_entropy & method\_comparison & 0.0381 & 0.2626 & 0.7695 & 0.3750 & 56.0000 & 0.0000 & 56.0000 & 0.3333 \\
+teacher\_controlled & genetic & method\_comparison & 0.0213 & 0.5602 & 0.8393 & 0.3125 & 52.0000 & 0.0000 & 52.0000 & 0.0000 \\
+teacher\_controlled & true\_sa & method\_comparison & 0.6349 & 0.9638 & 16.4017 & 0.6250 & 52.0000 & 0.0000 & 52.0000 & 0.0000 \\
+teacher\_controlled & surrogate\_qubo\_sa & method\_comparison & 0.0263 & 0.2162 & 0.8145 & 0.3750 & 20.0000 & 32.0000 & 52.0000 & 0.3333 \\
+teacher\_controlled & qaoa\_statevector & method\_comparison & 0.2495 & 0.2496 & 1.0213 & 0.3125 & 20.0000 & 32.0000 & 52.0000 & 0.3333 \\
+teacher\_controlled & all\_windows\_continuous & method\_comparison & 6.3495 & 8.4578 & 17.8387 & 1.0000 & 3.0000 & 0.0000 & 3.0000 & 0.0000 \\
+teacher\_controlled & teacher\_seeded\_schedule & method\_comparison & 1.2183 & 0.9547 & 1.7652 & 0.4375 & 30.0000 & 0.0000 & 30.0000 & 0.0000 \\
+teacher\_controlled & teacher\_controls\_oracle\_diagnostic & oracle\_diagnostic & 0.0067 & 0.0080 & 1.1910 & 0.4375 & 7.0000 & 0.0000 & 7.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}

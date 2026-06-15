@@ -1,0 +1,95 @@
+run:
+  label: q1_teacher_feasible
+  output_subdir: teacher_feasible
+  evidence_level: "controlled feasible teacher-generated benchmark; runtime-calibrated 3-seed equal-total-budget schedule search accounting; thresholds retained at 0.09 nominal and 0.17 selected robust recovery"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: teacher_controlled
+  transfer_time: 4.0
+  segments: 16
+  substeps_per_segment: 7
+  amax: 0.065
+  teacher:
+    control_law: deterministic_sinusoidal_rotating_frame_v1
+    active_windows: [5, 6, 7, 8, 10, 12, 14]
+    amax_fraction: 0.60
+    out_of_plane_fraction: 0.22
+    phase_offset: 0.35
+    seed: null
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1, 2]
+experiments:
+  seeds: [11, 23, 37]
+  solver_true_budget: 20
+  equal_total_budget: true
+  qubo_train_samples: 32
+  qubo_validation_fraction: 0.25
+  top_refine_per_method: 1
+  save_top_schedules: 5
+solvers:
+  random:
+    samples: 20
+  cem:
+    iterations: 5
+    batch_size: 8
+    elite_fraction: 0.30
+    smoothing: 0.65
+  genetic:
+    population: 12
+    generations: 3
+    elite: 4
+    mutation_rate: 0.10
+  true_sa:
+    steps: 20
+    temp0: 0.25
+    temp_min: 0.01
+  surrogate_sa:
+    steps: 220
+    candidates_to_evaluate: 20
+    temp0: 0.35
+    temp_min: 0.004
+  qaoa:
+    p: 1
+    angle_trials: 12
+    sample_count: 160
+    candidates_to_evaluate: 20
+baselines:
+  all_windows_continuous:
+    enabled: true
+  teacher_seeded:
+    enabled: true
+  teacher_controls_oracle:
+    enabled: true
+refinement:
+  mode: branch_recovery
+  max_nfev: 30
+  selected_outages: 2
+  outage_selection_min_recovery_segments: 3
+  state_residual_weight: 1.0
+  robust_residual_weight: 0.75
+  fuel_residual_weight: 0.018
+  smooth_residual_weight: 0.012
+  control_regularization: 0.010
+  multistart:
+    enabled: false
+    include_feedback: true
+    include_zero: false
+    include_bang_bang: false
+    random_starts: 0
+    low_amplitude_fraction: 0.45
+    seed: 20260614

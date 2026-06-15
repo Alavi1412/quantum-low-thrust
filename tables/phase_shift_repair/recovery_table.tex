@@ -1,0 +1,13 @@
+\begin{tabular}{llllrrrrr}
+\toprule
+Method & Schedule repair & Refined schedule & Refined schedule source & Nominal fuel & Mean recovery fuel & Max recovery fuel & Refinement nfev & Recovery success \\
+\midrule
+random & prefix\_to\_last\_active & 11111111 & heuristic dense-availability envelope: set every window through the last active solver window to available, preserving later zeros & 0.1000 & 0.0875 & 0.0875 & 30.0000 & 1.0000 \\
+cross\_entropy & prefix\_to\_last\_active & 11111111 & heuristic dense-availability envelope: set every window through the last active solver window to available, preserving later zeros & 0.1000 & 0.0875 & 0.0875 & 30.0000 & 1.0000 \\
+genetic & prefix\_to\_last\_active & 11111111 & heuristic dense-availability envelope: set every window through the last active solver window to available, preserving later zeros & 0.1000 & 0.0875 & 0.0875 & 30.0000 & 1.0000 \\
+true\_sa & prefix\_to\_last\_active & 11111111 & heuristic dense-availability envelope: set every window through the last active solver window to available, preserving later zeros & 0.1000 & 0.0875 & 0.0875 & 30.0000 & 1.0000 \\
+surrogate\_qubo\_sa & prefix\_to\_last\_active & 11111111 & heuristic dense-availability envelope: set every window through the last active solver window to available, preserving later zeros & 0.1000 & 0.0875 & 0.0875 & 30.0000 & 1.0000 \\
+qaoa\_statevector & prefix\_to\_last\_active & 11111111 & heuristic dense-availability envelope: set every window through the last active solver window to available, preserving later zeros & 0.1000 & 0.0875 & 0.0875 & 30.0000 & 1.0000 \\
+all\_windows\_continuous & identity & 11111111 & original solver candidate schedule & 0.1000 & 0.0875 & 0.0875 & 30.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}

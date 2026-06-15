@@ -1,0 +1,61 @@
+run:
+  label: direct_collocation_baseline
+  output_subdir: direct_collocation_baseline
+  evidence_level: "compact non-teacher bounded projected trapezoidal direct-collocation phase-shift suite"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: catalog_halo_phase_shift
+  transfer_time: 0.5
+  phase_time: 0.3
+  segments: 12
+  substeps_per_segment: 4
+  amax: 0.2
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1]
+direct_collocation:
+  method: trapezoidal
+  max_nfev: 30
+  selected_outages: 1
+  min_recovery_segments: 1
+  node_initialization: blend
+  node_initialization_blend: 0.35
+  xtol: 1.0e-5
+  ftol: 1.0e-5
+  gtol: 1.0e-5
+  weights:
+    initial: 10.0
+    defect: 1.0
+    terminal: 5.0
+    branch_start: 8.0
+    branch_defect: 1.0
+    branch_terminal: 5.0
+    control: 0.01
+    smooth: 0.012
+suite:
+  phase_times: [0.2, 0.3, 0.4]
+  transfer_times: [0.5]
+  amax: [0.2]
+  segments: [12]
+  max_nfev: [30]
+  selected_outages: [1]
+  min_recovery_segments: 1
+  runtime_budget_seconds: 120
+  diagnostics:
+    include_all_outage_selected: true
+    phase_times: [0.3]
+    run_if_elapsed_fraction_below: 0.05

@@ -1,0 +1,609 @@
+{
+    "manifest_version":  1,
+    "generated_utc":  "2026-06-15T03:44:46Z",
+    "note":  "Scoped artifact manifest for paper reproducibility; excludes .venv, caches, logs, and bulk generated intermediates.",
+    "git_head":  null,
+    "git_status_note":  "Current metadata records git_head null because the workspace files were untracked at run time.",
+    "files":  [
+                  {
+                      "path":  "README.md",
+                      "sha256":  "b4998397613edbec3e2b9acb5088dcb58420779025cb226e3ed8c3e52c7678f7",
+                      "bytes":  4726
+                  },
+                  {
+                      "path":  "REPRODUCIBILITY.md",
+                      "sha256":  "bd50667ad7b11ace0fa6fb5cf14071c5537845b4522602e03e232fc6155986ab",
+                      "bytes":  7679
+                  },
+                  {
+                      "path":  "requirements.txt",
+                      "sha256":  "67babbe8c076985d1c6f3ec679d890fbabba2106ceedbc199b294b3c1bdc01f9",
+                      "bytes":  76
+                  },
+                  {
+                      "path":  "requirements-lock.txt",
+                      "sha256":  "c199d455b46c1d22cf3b2f812cd312acc492b9616a74f51b1d2047d0a75c88cb",
+                      "bytes":  514
+                  },
+                  {
+                      "path":  ".gitignore",
+                      "sha256":  "e13f0b6107f0cfdaf911d96862bdaf7a39f3a6e741eac0291e0b3772315437c7",
+                      "bytes":  45
+                  },
+                  {
+                      "path":  "paper/main.tex",
+                      "sha256":  "21aff4189255e4d054b0361e3434149d6b68b83c227617b97029b681b4bed67c",
+                      "bytes":  64028
+                  },
+                  {
+                      "path":  "paper/references.bib",
+                      "sha256":  "11ed79dcf87a93f93ee1972bd1854f197309f2aad4fdc8c92a26ad5b84f5274b",
+                      "bytes":  4666
+                  },
+                  {
+                      "path":  "paper/main.pdf",
+                      "sha256":  "66e13f005218e58889d8893dfe9422af7aed990e46af7f20183b12b0156bd43e",
+                      "bytes":  456697
+                  },
+                  {
+                      "path":  "data/source_states.json",
+                      "sha256":  "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf",
+                      "bytes":  1203
+                  },
+                  {
+                      "path":  "tests/test_smoke.py",
+                      "sha256":  "b5b7a6f3d8bd440e0c859438ae36351044cabf8212b2759c971c7ce5f9ae6e0f",
+                      "bytes":  87998
+                  },
+                  {
+                      "path":  "src/qlt/__init__.py",
+                      "sha256":  "513e1660d27ca58bfd6792f1e89fadf8db6935a7592aa77f68eb6e1daf1fb0d6",
+                      "bytes":  197
+                  },
+                  {
+                      "path":  "src/qlt/cr3bp.py",
+                      "sha256":  "65fd1a4092a206e2af1c2ededbba0473f3d201281aa95ab9a0b20eec2d29a175",
+                      "bytes":  11154
+                  },
+                  {
+                      "path":  "src/qlt/experiment.py",
+                      "sha256":  "bbcdb98313889ddaf5f99bbf37c1b504d4815c08ec5737ee33fe8e9b21e58a09",
+                      "bytes":  28450
+                  },
+                  {
+                      "path":  "src/qlt/feasibility.py",
+                      "sha256":  "a69caeb5243e8046fc8027d09e3c01373e47e8a4bb3b646d287bf2e9f2431f5f",
+                      "bytes":  18753
+                  },
+                  {
+                      "path":  "src/qlt/multiple_shooting.py",
+                      "sha256":  "55fedb32be48cb36787755c858e36711084178eeada3f6ce1541a1d08b996868",
+                      "bytes":  67641
+                  },
+                  {
+                      "path":  "src/qlt/objective.py",
+                      "sha256":  "295744aac6c00bd0cc3e869c0da3dee91c03c0c51486c6509e18fc9d11786cbd",
+                      "bytes":  4691
+                  },
+                  {
+                      "path":  "src/qlt/refinement.py",
+                      "sha256":  "2d1485f9c3f9c380b6cbd456f4b3e7b95054e1f1364c0fb06861e48844c64435",
+                      "bytes":  23219
+                  },
+                  {
+                      "path":  "src/qlt/reporting.py",
+                      "sha256":  "062924350b3a9b15e9a78a607cdaabdb4984be239cbe5df5070507eb20a1e4e7",
+                      "bytes":  15425
+                  },
+                  {
+                      "path":  "src/qlt/solvers.py",
+                      "sha256":  "ba93930badbf32d61c872c45d21b3286b38b93ae2d2a4ded0fbc4408e0127c38",
+                      "bytes":  13748
+                  },
+                  {
+                      "path":  "src/qlt/surrogate.py",
+                      "sha256":  "bf9eca7b9186058421f9c29ddbd13bccba82f41149699d0d5f70349a8e730d86",
+                      "bytes":  6090
+                  },
+                  {
+                      "path":  "scripts/run_experiment.py",
+                      "sha256":  "c254123690d71ae857b157369803fe14b99eee17c42eab65e6e0dee295a98efc",
+                      "bytes":  227
+                  },
+                  {
+                      "path":  "scripts/run_bounded_phase_suite.py",
+                      "sha256":  "9c9512dd7e3da4056cbe25a8c5811d1657ca3605be7127423d1a657f46375918",
+                      "bytes":  25629
+                  },
+                  {
+                      "path":  "scripts/run_qaoa_depth_ablation.py",
+                      "sha256":  "82cd90cbe9fa78d54518173a1214954b8766e476d4eb33edc6694eb7dd26f918",
+                      "bytes":  15729
+                  },
+                  {
+                      "path":  "scripts/run_cardinality_ablation.py",
+                      "sha256":  "37f23cf7fb8ed36fc8332d44b61a6db30e499c9d6c3b43ded81d8be4592bd588",
+                      "bytes":  25381
+                  },
+                  {
+                      "path":  "scripts/run_feasibility_sweep.py",
+                      "sha256":  "fb607d1af34b4844ba2da9c82c0ff8b67193e4e8bc8a27da447a9945124d3cb3",
+                      "bytes":  228
+                  },
+                  {
+                      "path":  "scripts/run_multiple_shooting_feasibility.py",
+                      "sha256":  "ebafaf71e2234cf59600ef1f2d6af11f729ef4de81e65e6b442c7be1cbcf82c8",
+                      "bytes":  234
+                  },
+                  {
+                      "path":  "scripts/run_catalog_collocation_feasibility.py",
+                      "sha256":  "73b37abacf256166cb45ae23652c2bdff70cb9fb67af6e7d1081ccc67a872533",
+                      "bytes":  722
+                  },
+                  {
+                      "path":  "scripts/generate_tables.py",
+                      "sha256":  "4c3fc77451e7b2abab6476a1fa54f2613835b98b6d955b681890b34d9b4c3588",
+                      "bytes":  1491
+                  },
+                  {
+                      "path":  "scripts/plot_results.py",
+                      "sha256":  "ddaac2d55889a4dce74ca85a4f3108d99a800003fa2d8448b03fd691a68ce7fa",
+                      "bytes":  1695
+                  },
+                  {
+                      "path":  "configs/default.yaml",
+                      "sha256":  "cd0af8f0698205a40d01641f097075a44e6f72ddf3f19f189b74800f6bf23990",
+                      "bytes":  1370
+                  },
+                  {
+                      "path":  "configs/smoke.yaml",
+                      "sha256":  "b25ceb8cd6768155e15522ec1137d1ee4de2e8746f5ef98b67ba500f5118ce07",
+                      "bytes":  1487
+                  },
+                  {
+                      "path":  "configs/q1_candidate.yaml",
+                      "sha256":  "d8c610b5636c6af1cec15aaa06f0ce1a5fc6a1530e8f01105c740fba9e757923",
+                      "bytes":  1635
+                  },
+                  {
+                      "path":  "configs/q1_teacher_feasible.yaml",
+                      "sha256":  "084eb3dce47dd8deb4d37d5d032fbff6e0cc712a6f6b572370ac3224085a2662",
+                      "bytes":  2203
+                  },
+                  {
+                      "path":  "configs/q1_phase_shift.yaml",
+                      "sha256":  "2a0282b2e2f9d18206bb9d48fc6a43a04553d1f1fde43b7e5fe0f63925185cbd",
+                      "bytes":  1917
+                  },
+                  {
+                      "path":  "configs/q1_phase_shift_cardinality.yaml",
+                      "sha256":  "8ae0cfbb5f27d6dbb24fe09ebc44ca6ee8167c9b09e9fdd3f41b1d5a74bacceb",
+                      "bytes":  2099
+                  },
+                  {
+                      "path":  "configs/qaoa_depth_ablation.yaml",
+                      "sha256":  "006f7eb4dd7135e94749cec238cb515fcda9583446af6531c52042140eded01f",
+                      "bytes":  660
+                  },
+                  {
+                      "path":  "configs/bounded_phase_suite.yaml",
+                      "sha256":  "515283040812319aa7ebff22f87fee5c92d308179314653e666558b766497403",
+                      "bytes":  2209
+                  },
+                  {
+                      "path":  "configs/catalog_targeted_feasibility.yaml",
+                      "sha256":  "46832f2d7a8505837728ba97bdf752a046ad5c4c3287a767e38c5c9d6ed88ffa",
+                      "bytes":  1943
+                  },
+                  {
+                      "path":  "configs/catalog_collocation_feasibility.yaml",
+                      "sha256":  "834f8e2b474fb64678cca51f019c4c07a1c78e38737cfcd001fcb0b64797e973",
+                      "bytes":  1867
+                  },
+                  {
+                      "path":  "data/results/phase_shift/run_metadata.json",
+                      "sha256":  "56ed146fb2f3a1c0efea54795b15127b31a5c0b04d569fa530ce4a0639764a83",
+                      "bytes":  6036
+                  },
+                  {
+                      "path":  "data/results/phase_shift/summary.json",
+                      "sha256":  "0bbca71a412f831689bea02ae1593ff9de0326ad5b06cc292202dd5e312d9c97",
+                      "bytes":  12620
+                  },
+                  {
+                      "path":  "data/results/phase_shift/summary.csv",
+                      "sha256":  "2b4035c5d3434c2172acd75b0524e3b4a56e59b48f8d530ad4d661504686aee5",
+                      "bytes":  4387
+                  },
+                  {
+                      "path":  "data/results/phase_shift/raw_results.csv",
+                      "sha256":  "c646e8ba65a011c77aefff83a27bdff59e6917b8e60590e6aabbe4f9568d1fb1",
+                      "bytes":  43637
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality/run_metadata.json",
+                      "sha256":  "2e0830a872a92d15c265b72f580ad315d0aed62465cdb9740cd8b6219a0f31d7",
+                      "bytes":  7049
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality/summary.json",
+                      "sha256":  "01718e4f9c25c2abe7c658df88a72c4c047370d39c52fc0cbb33a581bb8d57d0",
+                      "bytes":  18640
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality/summary.csv",
+                      "sha256":  "193dc19089c85a072bbcc58f7155b789a698e3139745699f8f243fdd5fa6475b",
+                      "bytes":  7190
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality/raw_results.csv",
+                      "sha256":  "b06312d4785cbb9ce4cb0de8e6c4705289e75b68b682e6452d0ae70be8702b39",
+                      "bytes":  165829
+                  },
+                  {
+                      "path":  "data/results/qaoa_depth_ablation/metadata.json",
+                      "sha256":  "e7b5c94fac79698351084e8a0573583d9d3f57d0701d000f1cc673287a36dbb4",
+                      "bytes":  2604
+                  },
+                  {
+                      "path":  "data/results/qaoa_depth_ablation/summary.json",
+                      "sha256":  "2780cba3a93863f2568dd714c791b02eeee3c37974fceadfbd317be5972da5b1",
+                      "bytes":  14515
+                  },
+                  {
+                      "path":  "data/results/qaoa_depth_ablation/summary.csv",
+                      "sha256":  "02ec795554b0751f7f1551ea359efac950b6d6606c304f72b4876bcd0ffdd944",
+                      "bytes":  5474
+                  },
+                  {
+                      "path":  "data/results/qaoa_depth_ablation/raw_results.csv",
+                      "sha256":  "39679d13efe69c4bcb534c36d665eb0b369793c745815c871e28c426dd904fb7",
+                      "bytes":  122597
+                  },
+                  {
+                      "path":  "data/results/bounded_phase_suite/bounded_phase_suite_metadata.json",
+                      "sha256":  "5ffa5f563c58355efda317bf1feca9f464edeea17d3272528728164d1f3e8bee",
+                      "bytes":  15132
+                  },
+                  {
+                      "path":  "data/results/bounded_phase_suite/bounded_phase_suite.csv",
+                      "sha256":  "90b33de93398aa49a10b70ad044f2fe7359f59ef4e136f53a3d90b8548d502e4",
+                      "bytes":  5854
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality_ablation/metadata.json",
+                      "sha256":  "f1507097d05dad3787eec04ecc3ee4913c2575e0a370058dda1de546df482114",
+                      "bytes":  2256
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality_ablation/cardinality_summary.csv",
+                      "sha256":  "d5ad2bccb29dbe2399f1292244745f1aa730e4ff8646d793176aa06914da2e3b",
+                      "bytes":  868
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality_ablation/cardinality_refinements.csv",
+                      "sha256":  "d34baf36afc8ed1cd854960c2cf9ec1ecfdffdee7e39bbb8ce199d9079ea745b",
+                      "bytes":  44433
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality_ablation/fuel_sweep.csv",
+                      "sha256":  "1a8438bcb41fa0331e45b1a209a824f0b83cedc605c885a974e16f46dc65e07c",
+                      "bytes":  3766
+                  },
+                  {
+                      "path":  "data/results/phase_shift_cardinality_ablation/method_vs_frontier.csv",
+                      "sha256":  "c12b77e9d90987f75f90c3ea1b801fc86ad0a29a91f3cc93f16de14731dcebba",
+                      "bytes":  1294
+                  },
+                  {
+                      "path":  "data/results/teacher_feasible/run_metadata.json",
+                      "sha256":  "a65b2fe55cb3f4f3a73e7967efcf91bd8c29d7b4055c47d3724931200b5405cf",
+                      "bytes":  8773
+                  },
+                  {
+                      "path":  "data/results/teacher_feasible/summary.json",
+                      "sha256":  "672c31ba046611a2d67d40d90c9748ff162638add40e7376b3142cb330423e82",
+                      "bytes":  16811
+                  },
+                  {
+                      "path":  "data/results/teacher_feasible/summary.csv",
+                      "sha256":  "ee9ca0ebdb1db677d76f629870436be2ff88b891307d4427dc56d2cba3b842b5",
+                      "bytes":  5985
+                  },
+                  {
+                      "path":  "data/results/teacher_feasible/raw_results.csv",
+                      "sha256":  "62de3e3fc2ed07d444cebc76b06cb25004d2281528259c3f32b010b4da62e5c4",
+                      "bytes":  84364
+                  },
+                  {
+                      "path":  "data/results/feasibility_metadata.json",
+                      "sha256":  "e3fab7e16093284c5b9a274295e5d1ba006dcd1ee037f1c15347b06cb2618bd3",
+                      "bytes":  3883
+                  },
+                  {
+                      "path":  "data/results/feasibility_sweep.csv",
+                      "sha256":  "2a066ae2d92af5e4f63ca3581f9a8e98740be7d5225190796d4cb920372ab395",
+                      "bytes":  8305
+                  },
+                  {
+                      "path":  "data/results/multiple_shooting_feasibility_metadata.json",
+                      "sha256":  "d1ef2e17c9de933e43e19d90aa2c3d29f6f1cb9b4c744d4828274a05aa932fcc",
+                      "bytes":  2701
+                  },
+                  {
+                      "path":  "data/results/multiple_shooting_feasibility.csv",
+                      "sha256":  "fe453173dec463abfa45fd3e22db35314eda5748ebdfba3c46e0a81c8e2168ce",
+                      "bytes":  1745
+                  },
+                  {
+                      "path":  "data/results/catalog_targeted_feasibility/feasibility_metadata.json",
+                      "sha256":  "16df18748eac60f1ebbc2fe9de4521accf350de79378478748007aa13a811379",
+                      "bytes":  4639
+                  },
+                  {
+                      "path":  "data/results/catalog_targeted_feasibility/feasibility_sweep.csv",
+                      "sha256":  "27ca804355b12a819e6ab6673e882ae6a9cd5ef35e599d93755c191cde45e3e0",
+                      "bytes":  1583
+                  },
+                  {
+                      "path":  "data/results/catalog_targeted_feasibility/summary_feasibility.json",
+                      "sha256":  "30759d05c7d5f9e77de2afca26e429c96bb664be1465dc163d14b75eb89c93f5",
+                      "bytes":  2776
+                  },
+                  {
+                      "path":  "data/results/catalog_collocation_feasibility/multiple_shooting_feasibility_metadata.json",
+                      "sha256":  "eb87cc03c09b5bc8d0fc9960a7b2dc9662d2a53598a1fd1d2a67b39db71352fc",
+                      "bytes":  16340
+                  },
+                  {
+                      "path":  "data/results/catalog_collocation_feasibility/multiple_shooting_feasibility.csv",
+                      "sha256":  "7706745a42a1b137cedbbcdf7e169af0ba22b270e9e328a1e0902c5b5343a426",
+                      "bytes":  7955
+                  },
+                  {
+                      "path":  "data/results/catalog_collocation_feasibility/multiple_shooting_metadata.json",
+                      "sha256":  "fe4239017f92bef64b0ffb5b12b6cc32a8da0dffa6ac584458f15d934d026b1d",
+                      "bytes":  51808
+                  },
+                  {
+                      "path":  "tables/phase_shift/results_table.tex",
+                      "sha256":  "cdc812a8d3414464d1cb80259574014a25e1dccbd5a52358e7da7c5218cfc77c",
+                      "bytes":  1317
+                  },
+                  {
+                      "path":  "tables/phase_shift/recovery_table.tex",
+                      "sha256":  "758f999c714fb5ea809a8a9e609124302fb7c50b5e10a2d2c2d3ec3ec2105107",
+                      "bytes":  629
+                  },
+                  {
+                      "path":  "tables/phase_shift/ablation_table.tex",
+                      "sha256":  "0daae9a3bbc1874c933d2b09682c8b14ae3a1cd11d3b2316350fbce23536795d",
+                      "bytes":  894
+                  },
+                  {
+                      "path":  "tables/phase_shift_cardinality/results_table.tex",
+                      "sha256":  "4615ad96155c51b14b2a85c917b4be7edfff34699e522d4a04e817f509bac9e3",
+                      "bytes":  2260
+                  },
+                  {
+                      "path":  "tables/phase_shift_cardinality/recovery_table.tex",
+                      "sha256":  "0980dd33c29c3c6bf553e53e24e1ccca67cc99cc4c7c6125119461b2fc7a2112",
+                      "bytes":  1094
+                  },
+                  {
+                      "path":  "tables/phase_shift_cardinality/ablation_table.tex",
+                      "sha256":  "487f24a0f763bc852c821d230bc5c4e6ed84a47443b0fdf25ff6f3e3bb7bae2b",
+                      "bytes":  1450
+                  },
+                  {
+                      "path":  "tables/qaoa_depth_ablation/qaoa_depth_ablation_table.tex",
+                      "sha256":  "ea357464719e6f525961ab10c13a3fca513a4b8809db4c71de9544368b20d2d1",
+                      "bytes":  795
+                  },
+                  {
+                      "path":  "tables/bounded_phase_suite/bounded_phase_suite_table.tex",
+                      "sha256":  "446c6b8a9079163d88259662ab24a9f3e44780c67f280139235d44f4affd4cfc",
+                      "bytes":  816
+                  },
+                  {
+                      "path":  "tables/phase_shift_cardinality_ablation/one_coast_table.tex",
+                      "sha256":  "acfe51508a21209aac072d2988cb7499adbaf70bebb76d3d8ff34ec2d6781af3",
+                      "bytes":  1216
+                  },
+                  {
+                      "path":  "tables/phase_shift_cardinality_ablation/method_vs_frontier_table.tex",
+                      "sha256":  "17cad10f93944c09d4e5dbaaeb685f2cc0b43500c0804ad717c9b88bc169de6a",
+                      "bytes":  1191
+                  },
+                  {
+                      "path":  "tables/phase_shift_cardinality_ablation/high_duty_table.tex",
+                      "sha256":  "64772d15be806cb1a4d4ba8e98f85c40bc19b3ef6128c982ba45f1e4de514be8",
+                      "bytes":  815
+                  },
+                  {
+                      "path":  "tables/phase_shift_cardinality_ablation/fuel_pareto_table.tex",
+                      "sha256":  "e0761736e2db51300a577f320dc3ec33607d861f90eabaf513a75229ca64d194",
+                      "bytes":  672
+                  },
+                  {
+                      "path":  "tables/teacher_feasible/results_table.tex",
+                      "sha256":  "0900df8aeaf4a7553bda9df658b80779997dc19cd2e0d759ecb29e6d48ae0b64",
+                      "bytes":  1565
+                  },
+                  {
+                      "path":  "tables/teacher_feasible/recovery_table.tex",
+                      "sha256":  "0f61b26d4fa4e4b79f46b1c5603a3c5282f0accf1454f978cb18061b4795deda",
+                      "bytes":  791
+                  },
+                  {
+                      "path":  "tables/teacher_feasible/ablation_table.tex",
+                      "sha256":  "63145f085a27b55d4f960a9467fdd5ca4480b40408fd70eee06060931ea2348e",
+                      "bytes":  678
+                  },
+                  {
+                      "path":  "tables/feasibility_table.tex",
+                      "sha256":  "4b2ba9e8474b5e381396f25695a766bbf963ac41c7f915da958f8d7ed98802b6",
+                      "bytes":  998
+                  },
+                  {
+                      "path":  "tables/multiple_shooting_feasibility_table.tex",
+                      "sha256":  "36d113604022db1e5370e2c92ab1bbfc28dc899d3982de16d49a0b887f8aedbb",
+                      "bytes":  332
+                  },
+                  {
+                      "path":  "tables/catalog_targeted_feasibility/feasibility_table.tex",
+                      "sha256":  "d5e60f63df962f59320b2a42720673796d397738b1527cb87c95ad8f6eba1e60",
+                      "bytes":  351
+                  },
+                  {
+                      "path":  "tables/catalog_collocation_feasibility/multiple_shooting_feasibility_table.tex",
+                      "sha256":  "876ed1e013fc82dd1411d5be5ddb2f56c70f412ca168da4d4594f0f94fd72d69",
+                      "bytes":  874
+                  },
+                  {
+                      "path":  "figures/phase_shift/method_comparison.pdf",
+                      "sha256":  "d4c187ddfa379ce198de8c744fdadb03d09eedac370e7d9610b8c594fa2f9d33",
+                      "bytes":  13118
+                  },
+                  {
+                      "path":  "figures/phase_shift/trajectory_example.pdf",
+                      "sha256":  "4d34591c2d6264c9afd782119268cfa41f57526c87804118249b71f8314ca1ad",
+                      "bytes":  17723
+                  },
+                  {
+                      "path":  "figures/phase_shift/refinement_success.pdf",
+                      "sha256":  "ef80b8b26af1d472a851a0b70e029177c5c3a321c8b517452cd2bd32b59fa499",
+                      "bytes":  12926
+                  },
+                  {
+                      "path":  "figures/phase_shift/recovery_fuel.pdf",
+                      "sha256":  "953e1d64d9a05949eccab34d76c081f642ad85013f1704c98358087c96fcdc92",
+                      "bytes":  13621
+                  },
+                  {
+                      "path":  "figures/phase_shift/qubo_fit.pdf",
+                      "sha256":  "29666612651d0fe76d190e25f753ed52affb990148ed16c2b5e033f51a974aba",
+                      "bytes":  17425
+                  },
+                  {
+                      "path":  "figures/phase_shift_cardinality/method_comparison.pdf",
+                      "sha256":  "85c5cc929ac90c80ba78dd0c121599c5630ca9ae8cc05a882dbf9e5867678822",
+                      "bytes":  13128
+                  },
+                  {
+                      "path":  "figures/phase_shift_cardinality/trajectory_example.pdf",
+                      "sha256":  "2e94e3ccf7e019f1b8f66747e3f8c0f118ab53b78f154afd554cb25f5ec5b8fb",
+                      "bytes":  18102
+                  },
+                  {
+                      "path":  "figures/phase_shift_cardinality/refinement_success.pdf",
+                      "sha256":  "f46007485f4fe23878bd541f7d3fecd9be63292f0254e14272570bd40ce21ee8",
+                      "bytes":  12944
+                  },
+                  {
+                      "path":  "figures/phase_shift_cardinality/recovery_fuel.pdf",
+                      "sha256":  "a10ca69fe61821eec8ce237db70492039b46e105bb70eed09211e0624d4a927d",
+                      "bytes":  13620
+                  },
+                  {
+                      "path":  "figures/phase_shift_cardinality/qubo_fit.pdf",
+                      "sha256":  "cce4581a01634ff25fb25c2c89cf210b13c94b4f6def019e763d1b153cdad9cc",
+                      "bytes":  23274
+                  },
+                  {
+                      "path":  "figures/qaoa_depth_ablation/qaoa_depth_ablation_summary.pdf",
+                      "sha256":  "599076cb50e3920fe4d192d1ffea0e4658aa789ab76590cff668b9d4273eba16",
+                      "bytes":  14255
+                  },
+                  {
+                      "path":  "figures/bounded_phase_suite/bounded_phase_suite.pdf",
+                      "sha256":  "b3cf5d5fa8d3bc1378359686c3dc517e5713934cb152c324c386ddae2619645a",
+                      "bytes":  14563
+                  },
+                  {
+                      "path":  "figures/phase_shift_cardinality_ablation/fuel_error_pareto.pdf",
+                      "sha256":  "d88b240036a0e5ebe6913500f18f25254d97ddb1542a9e75bf0dbed6f1dbdb99",
+                      "bytes":  18046
+                  },
+                  {
+                      "path":  "figures/teacher_feasible/method_comparison.pdf",
+                      "sha256":  "10c7e34a1f3af776fcea8aca5744bad2b089eab02e6a5b7da3af74280ce40a4a",
+                      "bytes":  14002
+                  },
+                  {
+                      "path":  "figures/teacher_feasible/trajectory_example.pdf",
+                      "sha256":  "da51c25b5831be5a4d44ddf38117b55440e6d1b7ce769d97f569c7eae0772597",
+                      "bytes":  16378
+                  },
+                  {
+                      "path":  "figures/teacher_feasible/refinement_success.pdf",
+                      "sha256":  "cf5d9e183970d400b256b846cf262dab589d5cf2c095d4fb83eab05a80dc3f34",
+                      "bytes":  13288
+                  },
+                  {
+                      "path":  "figures/teacher_feasible/recovery_fuel.pdf",
+                      "sha256":  "187a294632cf33bb92da6701e2f74b13367bd2584c6a30903b52018cb7ce7ad7",
+                      "bytes":  13239
+                  },
+                  {
+                      "path":  "figures/teacher_feasible/qubo_fit.pdf",
+                      "sha256":  "52c7ca7207550bbb1a54cdc37e941a3d4427892e7f03b9d71e85bedabbf9af78",
+                      "bytes":  14494
+                  },
+                  {
+                      "path":  "figures/multiple_shooting_feasibility.pdf",
+                      "sha256":  "b4820976f3428298307366665db7a75059a6337115695b04f016dbe03c476d70",
+                      "bytes":  14257
+                  },
+                  {
+                      "path":  "figures/catalog_targeted_feasibility/feasibility_heatmap.pdf",
+                      "sha256":  "258cc9c0c742dd17f1e363b6dbea8e1e3a9d82b66fc09e4b16d64890323cce3f",
+                      "bytes":  16309
+                  },
+                  {
+                      "path":  "figures/catalog_collocation_feasibility/multiple_shooting_feasibility.pdf",
+                      "sha256":  "da8f9d5df8453ddf46381a5314839f5b38cf655dfd3067225ed58264fff93085",
+                      "bytes":  15154
+                  },
+                  {
+                      "path":  "src/qlt/direct_collocation.py",
+                      "sha256":  "66d3e7285418367d70df23467816893961ec11f05f038d979f7957b7ca82d6cb",
+                      "bytes":  20096
+                  },
+                  {
+                      "path":  "scripts/run_direct_collocation_baseline.py",
+                      "sha256":  "a22b53537cfa1e66823883b1d31a1902e67f7558443bd519da28b6609722018a",
+                      "bytes":  24639
+                  },
+                  {
+                      "path":  "configs/direct_collocation_baseline.yaml",
+                      "sha256":  "171b027e5c54cefb0fbec2597882bbc9013df55e6c4ec224a09c50e9ef13424c",
+                      "bytes":  1369
+                  },
+                  {
+                      "path":  "data/results/direct_collocation_baseline/direct_collocation_baseline.csv",
+                      "sha256":  "b1f9b4c10daba731fbf5f7074e7b9b213a804d51a9f74fc0c6bd356898c2443d",
+                      "bytes":  6007
+                  },
+                  {
+                      "path":  "data/results/direct_collocation_baseline/direct_collocation_baseline_metadata.json",
+                      "sha256":  "dacdd04704f6a8108213a5f557eb2db3bceda88397772560f693e5639e52b89a",
+                      "bytes":  13600
+                  },
+                  {
+                      "path":  "tables/direct_collocation_baseline/direct_collocation_baseline_table.tex",
+                      "sha256":  "894c2bfb98e4c757dac63cd39b3b1a145037d68f1f4d3772a8be67cdb9b7825f",
+                      "bytes":  673
+                  },
+                  {
+                      "path":  "figures/direct_collocation_baseline/direct_collocation_baseline.pdf",
+                      "sha256":  "eeba5980f32f1653b65668bed7b80e5389b89765dbf6f1b89f60324d1217d245",
+                      "bytes":  14128
+                  },
+                  {
+                      "path":  "figures/direct_collocation_baseline/direct_collocation_baseline.png",
+                      "sha256":  "c394791174b15b29fac9350b80f011c46ad334859a0734921bff63a2819c60ff",
+                      "bytes":  124244
+                  }
+              ]
+}

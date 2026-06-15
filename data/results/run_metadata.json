@@ -1,0 +1,129 @@
+{
+  "command": "scripts\\run_experiment.py --config configs\\q1_candidate.yaml",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3",
+    "pyyaml": "6.0.3",
+    "pytest": "8.2.0"
+  },
+  "config": {
+    "run": {
+      "label": "q1_candidate_branch_recovery",
+      "evidence_level": "calibrated replicated branch-recovery experiment; equal-total-budget schedule search accounting; success thresholds inherited from prior benchmark, not relaxed"
+    },
+    "benchmark": {
+      "mu": 0.01215058560962404,
+      "transfer_time": 3.0,
+      "segments": 14,
+      "substeps_per_segment": 7,
+      "amax": 0.065,
+      "steering": {
+        "kr": 0.75,
+        "kv": 1.45
+      }
+    },
+    "objective": {
+      "position_scale": 1.0,
+      "velocity_scale": 0.35,
+      "weights": {
+        "nominal": 1.0,
+        "robust_worst": 0.85,
+        "robust_degradation": 0.55,
+        "active_fraction": 0.08,
+        "smoothness": 0.04
+      },
+      "thresholds": {
+        "nominal_success": 0.09,
+        "robust_success": 0.17
+      }
+    },
+    "outages": {
+      "block_lengths": [
+        1,
+        2
+      ]
+    },
+    "experiments": {
+      "seeds": [
+        11,
+        23,
+        37
+      ],
+      "solver_true_budget": 48,
+      "equal_total_budget": true,
+      "qubo_train_samples": 72,
+      "qubo_validation_fraction": 0.25,
+      "top_refine_per_method": 1,
+      "save_top_schedules": 5
+    },
+    "solvers": {
+      "random": {
+        "samples": 48
+      },
+      "cem": {
+        "iterations": 8,
+        "batch_size": 12,
+        "elite_fraction": 0.25,
+        "smoothing": 0.65
+      },
+      "genetic": {
+        "population": 20,
+        "generations": 6,
+        "elite": 4,
+        "mutation_rate": 0.08
+      },
+      "true_sa": {
+        "steps": 48,
+        "temp0": 0.25,
+        "temp_min": 0.01
+      },
+      "surrogate_sa": {
+        "steps": 420,
+        "candidates_to_evaluate": 48,
+        "temp0": 0.35,
+        "temp_min": 0.004
+      },
+      "qaoa": {
+        "p": 1,
+        "angle_trials": 14,
+        "sample_count": 240,
+        "candidates_to_evaluate": 48
+      }
+    },
+    "baselines": {
+      "all_windows_continuous": {
+        "enabled": true
+      }
+    },
+    "refinement": {
+      "mode": "branch_recovery",
+      "max_nfev": 90,
+      "selected_outages": 3,
+      "outage_selection_min_recovery_segments": 4,
+      "state_residual_weight": 1.0,
+      "robust_residual_weight": 0.75,
+      "fuel_residual_weight": 0.02,
+      "smooth_residual_weight": 0.015,
+      "control_regularization": 0.012
+    }
+  },
+  "git_head": null,
+  "target_state": [
+    0.8161288914220528,
+    0.00134041974192034,
+    0.0,
+    0.002121687296212371,
+    0.5076445346730357,
+    0.0
+  ],
+  "target_state_generation": "ballistic propagation of target_dro_seed for transfer_time",
+  "refinement_mode": "branch_recovery",
+  "refinement_description": "single_sequence optimizes one open-loop control sequence; branch_recovery optimizes nominal controls plus selected-outage-specific post-outage recovery controls",
+  "control_bound": "refined piecewise-constant acceleration vectors are projected to the Euclidean ball ||u_i|| <= amax before propagation and persistence; component-wise optimizer bounds remain only as finite-variable guards",
+  "true_evaluation_accounting": "true_evaluations equals total_true_evaluations_including_training; solver_true_evaluations excludes shared QUBO training; shared_qubo_training_evaluations is charged to surrogate_qubo_sa and qaoa_statevector; all_windows_continuous reports optimizer nfev as solver_true_evaluations because it has no discrete schedule-search stage",
+  "claims_limit": "controlled normalized CR3BP initialization benchmark; not flight-ready trajectory optimization"
+}

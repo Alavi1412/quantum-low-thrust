@@ -1,0 +1,70 @@
+benchmark:
+  mu: 0.01215058560962404
+  transfer_time: 2.7
+  segments: 16
+  substeps_per_segment: 8
+  amax: 0.055
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1, 2]
+experiments:
+  seeds: [11, 23, 37]
+  solver_true_budget: 72
+  equal_total_budget: false
+  qubo_train_samples: 220
+  qubo_validation_fraction: 0.25
+  top_refine_per_method: 2
+  save_top_schedules: 5
+solvers:
+  random:
+    samples: 72
+  cem:
+    iterations: 6
+    batch_size: 12
+    elite_fraction: 0.25
+    smoothing: 0.65
+  genetic:
+    population: 18
+    generations: 4
+    elite: 4
+    mutation_rate: 0.08
+  true_sa:
+    steps: 72
+    temp0: 0.25
+    temp_min: 0.01
+  surrogate_sa:
+    steps: 700
+    candidates_to_evaluate: 72
+    temp0: 0.35
+    temp_min: 0.004
+  qaoa:
+    p: 1
+    angle_trials: 20
+    sample_count: 420
+    candidates_to_evaluate: 72
+baselines:
+  all_windows_continuous:
+    enabled: true
+refinement:
+  mode: branch_recovery
+  max_nfev: 110
+  selected_outages: 4
+  state_residual_weight: 1.0
+  robust_residual_weight: 0.7
+  fuel_residual_weight: 0.025
+  smooth_residual_weight: 0.02
+  control_regularization: 0.015
