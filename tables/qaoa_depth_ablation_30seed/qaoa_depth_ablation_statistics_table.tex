@@ -1,0 +1,11 @@
+\begin{tabular}{lllllllll}
+\toprule
+method & success & wilson\_95\_ci & delta\_success\_vs\_sa & mean\_error\_delta\_vs\_sa & sign\_p\_vs\_sa & delta\_success\_vs\_random\_qaoa & mean\_error\_delta\_vs\_random\_qaoa & sign\_p\_vs\_random\_qaoa \\
+\midrule
+surrogate\_qubo\_sa & 28/30 & [0.79, 0.98] &  &  &  &  &  &  \\
+exact\_qubo\_top24 & 28/30 & [0.79, 0.98] & +0.00 & +0.0006 [-0.0026, +0.0039] & 0.3323 &  &  &  \\
+qaoa\_random\_p1 & 15/30 & [0.33, 0.67] & -0.43 & +0.0119 [+0.0053, +0.0184] & 0.5716 &  &  &  \\
+qaoa\_optimized\_p1 & 21/30 & [0.52, 0.83] & -0.23 & +0.0048 [-0.0012, +0.0109] & 1.0000 & +0.20 & -0.0072 [-0.0141, -0.0001] & 0.3616 \\
+qaoa\_optimized\_p2 & 29/30 & [0.83, 0.99] & +0.03 & -0.0006 [-0.0039, +0.0024] & 0.4545 & +0.47 & -0.0125 [-0.0188, -0.0060] & 0.2478 \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,42 @@
+[
+  {
+    "method": "surrogate_qubo_sa",
+    "runs": 30,
+    "successes": 28,
+    "success_rate": 0.9333333333333333,
+    "success_rate_wilson95_lower": 0.7867654163738308,
+    "success_rate_wilson95_upper": 0.9815229762087295
+  },
+  {
+    "method": "exact_qubo_top24",
+    "runs": 30,
+    "successes": 28,
+    "success_rate": 0.9333333333333333,
+    "success_rate_wilson95_lower": 0.7867654163738308,
+    "success_rate_wilson95_upper": 0.9815229762087295
+  },
+  {
+    "method": "qaoa_random_p1",
+    "runs": 30,
+    "successes": 15,
+    "success_rate": 0.5,
+    "success_rate_wilson95_lower": 0.33154125640533766,
+    "success_rate_wilson95_upper": 0.6684587435946623
+  },
+  {
+    "method": "qaoa_optimized_p1",
+    "runs": 30,
+    "successes": 21,
+    "success_rate": 0.7,
+    "success_rate_wilson95_lower": 0.5212421254128504,
+    "success_rate_wilson95_upper": 0.8333525173175619
+  },
+  {
+    "method": "qaoa_optimized_p2",
+    "runs": 30,
+    "successes": 29,
+    "success_rate": 0.9666666666666667,
+    "success_rate_wilson95_lower": 0.8332960900859082,
+    "success_rate_wilson95_upper": 0.9940914096183874
+  }
+]

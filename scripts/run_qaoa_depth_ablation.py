@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import math
 import sys
 import time
 from pathlib import Path
@@ -34,6 +35,10 @@ from qlt.surrogate import QuboModel, all_bitstrings
 DEFAULT_CONFIG = Path("configs/qaoa_depth_ablation.yaml")
 QUBO_TRAINING_EVALUATIONS = 96
 SOLVER_TRUE_EVALUATIONS = 24
+WILSON_Z_95 = 1.959963984540054
+STATISTICS_BOOTSTRAP_SAMPLES = 20000
+STATISTICS_RNG_SEED = 20260615
+LOWER_ERROR_IS_BETTER_METRIC = "refined_selected_worst_error"
 
 
 def _resolve(path: Path) -> Path:
@@ -66,6 +71,11 @@ def clean_outputs(results_dir: Path, figures_dir: Path, tables_dir: Path) -> Non
             "summary.json",
             "qubo_diagnostics.csv",
             "metadata.json",
+            "success_intervals.csv",
+            "success_intervals.json",
+            "paired_success_deltas.csv",
+            "paired_comparisons.csv",
+            "paired_comparisons.json",
             "qubo_coefficients_seed*.json",
             "qubo_fit_seed*.csv",
         ],
@@ -75,6 +85,7 @@ def clean_outputs(results_dir: Path, figures_dir: Path, tables_dir: Path) -> Non
         ],
         tables_dir: [
             "qaoa_depth_ablation_table.tex",
+            "qaoa_depth_ablation_statistics_table.tex",
         ],
     }
     for directory, names in patterns.items():
@@ -258,12 +269,246 @@ def write_latex(summary: pd.DataFrame, tables_dir: Path) -> None:
     )
 
 
-def plot_summary(summary: pd.DataFrame, figures_dir: Path) -> None:
+def _success_as_bool(values: pd.Series) -> pd.Series:
+    if values.dtype == bool:
+        return values.astype(bool)
+    return values.map(lambda value: str(value).strip().lower() in {"true", "1", "yes"})
+
+
+def wilson_interval(successes: int, runs: int, z: float = WILSON_Z_95) -> tuple[float, float]:
+    if runs <= 0:
+        return (float("nan"), float("nan"))
+    phat = successes / runs
+    denominator = 1.0 + z**2 / runs
+    center = (phat + z**2 / (2.0 * runs)) / denominator
+    half_width = z * math.sqrt((phat * (1.0 - phat) / runs) + (z**2 / (4.0 * runs**2))) / denominator
+    return (max(0.0, center - half_width), min(1.0, center + half_width))
+
+
+def exact_sign_test_pvalue(differences: np.ndarray, tolerance: float = 1e-12) -> tuple[int, int, int, float]:
+    finite = np.asarray(differences, dtype=float)
+    finite = finite[np.isfinite(finite)]
+    wins = int(np.sum(finite < -tolerance))
+    losses = int(np.sum(finite > tolerance))
+    ties = int(finite.size - wins - losses)
+    trials = wins + losses
+    if trials == 0:
+        return wins, losses, ties, 1.0
+    smaller = min(wins, losses)
+    tail = sum(math.comb(trials, index) for index in range(smaller + 1)) / (2.0**trials)
+    return wins, losses, ties, float(min(1.0, 2.0 * tail))
+
+
+def bootstrap_ci(
+    values: np.ndarray,
+    *,
+    statistic: str,
+    samples: int = STATISTICS_BOOTSTRAP_SAMPLES,
+    seed: int = STATISTICS_RNG_SEED,
+) -> tuple[float, float]:
+    finite = np.asarray(values, dtype=float)
+    finite = finite[np.isfinite(finite)]
+    if finite.size == 0:
+        return (float("nan"), float("nan"))
+    if finite.size == 1:
+        value = float(finite[0])
+        return (value, value)
+    rng = np.random.default_rng(seed)
+    indices = rng.integers(0, finite.size, size=(int(samples), finite.size))
+    resampled = finite[indices]
+    if statistic == "mean":
+        estimates = np.mean(resampled, axis=1)
+    elif statistic == "median":
+        estimates = np.median(resampled, axis=1)
+    else:
+        raise ValueError(f"unsupported bootstrap statistic: {statistic}")
+    lower, upper = np.quantile(estimates, [0.025, 0.975])
+    return (float(lower), float(upper))
+
+
+def success_intervals(raw: pd.DataFrame) -> pd.DataFrame:
+    rows = []
+    for method, group in raw.groupby("method", sort=False):
+        successes = int(_success_as_bool(group["refinement_success"]).sum())
+        runs = int(group["seed"].nunique())
+        lower, upper = wilson_interval(successes, runs)
+        rows.append(
+            {
+                "method": method,
+                "runs": runs,
+                "successes": successes,
+                "success_rate": successes / runs if runs else float("nan"),
+                "success_rate_wilson95_lower": lower,
+                "success_rate_wilson95_upper": upper,
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def paired_statistics(raw: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    rows = raw.copy()
+    rows["refinement_success_bool"] = _success_as_bool(rows["refinement_success"])
+    baselines = ["surrogate_qubo_sa", "qaoa_random_p1"]
+    delta_rows: list[dict] = []
+    comparison_rows: list[dict] = []
+    available_methods = list(dict.fromkeys(rows["method"].astype(str).to_list()))
+    for baseline in baselines:
+        if baseline not in available_methods:
+            continue
+        if baseline == "qaoa_random_p1":
+            methods = [method for method in available_methods if method.startswith("qaoa_optimized")]
+        else:
+            methods = [method for method in available_methods if method != baseline]
+        baseline_rows = rows[rows["method"] == baseline][
+            ["seed", "refinement_success_bool", LOWER_ERROR_IS_BETTER_METRIC]
+        ].rename(
+            columns={
+                "refinement_success_bool": "baseline_success",
+                LOWER_ERROR_IS_BETTER_METRIC: "baseline_selected_worst_error",
+            }
+        )
+        for method in methods:
+            method_rows = rows[rows["method"] == method][
+                ["seed", "refinement_success_bool", LOWER_ERROR_IS_BETTER_METRIC]
+            ].rename(
+                columns={
+                    "refinement_success_bool": "method_success",
+                    LOWER_ERROR_IS_BETTER_METRIC: "method_selected_worst_error",
+                }
+            )
+            paired = method_rows.merge(baseline_rows, on="seed", how="inner").sort_values("seed")
+            if paired.empty:
+                continue
+            paired["success_delta"] = paired["method_success"].astype(int) - paired["baseline_success"].astype(int)
+            paired["selected_worst_error_diff"] = (
+                paired["method_selected_worst_error"].astype(float) - paired["baseline_selected_worst_error"].astype(float)
+            )
+            for row in paired.itertuples(index=False):
+                delta_rows.append(
+                    {
+                        "baseline_method": baseline,
+                        "method": method,
+                        "seed": int(row.seed),
+                        "baseline_success": bool(row.baseline_success),
+                        "method_success": bool(row.method_success),
+                        "success_delta": int(row.success_delta),
+                        "baseline_selected_worst_error": float(row.baseline_selected_worst_error),
+                        "method_selected_worst_error": float(row.method_selected_worst_error),
+                        "selected_worst_error_diff": float(row.selected_worst_error_diff),
+                    }
+                )
+            diffs = paired["selected_worst_error_diff"].to_numpy(dtype=float)
+            wins, losses, ties, pvalue = exact_sign_test_pvalue(diffs)
+            mean_lower, mean_upper = bootstrap_ci(diffs, statistic="mean")
+            median_lower, median_upper = bootstrap_ci(diffs, statistic="median")
+            comparison_rows.append(
+                {
+                    "baseline_method": baseline,
+                    "method": method,
+                    "paired_seeds": int(paired["seed"].nunique()),
+                    "baseline_successes": int(paired["baseline_success"].sum()),
+                    "method_successes": int(paired["method_success"].sum()),
+                    "paired_success_delta_mean": float(paired["success_delta"].mean()),
+                    "paired_success_delta_sum": int(paired["success_delta"].sum()),
+                    "selected_worst_error_diff_mean": float(np.mean(diffs)),
+                    "selected_worst_error_diff_mean_bootstrap95_lower": mean_lower,
+                    "selected_worst_error_diff_mean_bootstrap95_upper": mean_upper,
+                    "selected_worst_error_diff_median": float(np.median(diffs)),
+                    "selected_worst_error_diff_median_bootstrap95_lower": median_lower,
+                    "selected_worst_error_diff_median_bootstrap95_upper": median_upper,
+                    "selected_worst_error_diff_negative_favors_method": True,
+                    "selected_worst_error_method_wins": wins,
+                    "selected_worst_error_method_losses": losses,
+                    "selected_worst_error_ties": ties,
+                    "selected_worst_error_sign_test_p_two_sided": pvalue,
+                }
+            )
+    return pd.DataFrame(delta_rows), pd.DataFrame(comparison_rows)
+
+
+def write_statistics_latex(success: pd.DataFrame, comparisons: pd.DataFrame, tables_dir: Path) -> None:
+    tables_dir.mkdir(parents=True, exist_ok=True)
+    rows = []
+    surrogate = comparisons[comparisons["baseline_method"] == "surrogate_qubo_sa"]
+    qaoa_random = comparisons[comparisons["baseline_method"] == "qaoa_random_p1"]
+    for row in success.itertuples(index=False):
+        method = str(row.method)
+        vs_sa = surrogate[surrogate["method"] == method]
+        vs_random = qaoa_random[qaoa_random["method"] == method]
+        table_row = {
+            "method": method,
+            "success": f"{int(row.successes)}/{int(row.runs)}",
+            "wilson_95_ci": f"[{row.success_rate_wilson95_lower:.2f}, {row.success_rate_wilson95_upper:.2f}]",
+            "delta_success_vs_sa": "",
+            "mean_error_delta_vs_sa": "",
+            "sign_p_vs_sa": "",
+            "delta_success_vs_random_qaoa": "",
+            "mean_error_delta_vs_random_qaoa": "",
+            "sign_p_vs_random_qaoa": "",
+        }
+        if len(vs_sa):
+            cmp_row = vs_sa.iloc[0]
+            table_row["delta_success_vs_sa"] = f"{cmp_row['paired_success_delta_mean']:+.2f}"
+            table_row["mean_error_delta_vs_sa"] = (
+                f"{cmp_row['selected_worst_error_diff_mean']:+.4f} "
+                f"[{cmp_row['selected_worst_error_diff_mean_bootstrap95_lower']:+.4f}, "
+                f"{cmp_row['selected_worst_error_diff_mean_bootstrap95_upper']:+.4f}]"
+            )
+            table_row["sign_p_vs_sa"] = f"{cmp_row['selected_worst_error_sign_test_p_two_sided']:.4f}"
+        if len(vs_random):
+            cmp_row = vs_random.iloc[0]
+            table_row["delta_success_vs_random_qaoa"] = f"{cmp_row['paired_success_delta_mean']:+.2f}"
+            table_row["mean_error_delta_vs_random_qaoa"] = (
+                f"{cmp_row['selected_worst_error_diff_mean']:+.4f} "
+                f"[{cmp_row['selected_worst_error_diff_mean_bootstrap95_lower']:+.4f}, "
+                f"{cmp_row['selected_worst_error_diff_mean_bootstrap95_upper']:+.4f}]"
+            )
+            table_row["sign_p_vs_random_qaoa"] = f"{cmp_row['selected_worst_error_sign_test_p_two_sided']:.4f}"
+        rows.append(table_row)
+    pd.DataFrame(rows).to_latex(
+        tables_dir / "qaoa_depth_ablation_statistics_table.tex",
+        index=False,
+        escape=True,
+    )
+
+
+def write_statistical_artifacts(raw: pd.DataFrame, results_dir: Path, tables_dir: Path) -> dict:
+    success = success_intervals(raw)
+    deltas, comparisons = paired_statistics(raw)
+    success.to_csv(results_dir / "success_intervals.csv", index=False)
+    deltas.to_csv(results_dir / "paired_success_deltas.csv", index=False)
+    comparisons.to_csv(results_dir / "paired_comparisons.csv", index=False)
+    write_json(results_dir / "success_intervals.json", success.to_dict(orient="records"))
+    write_json(results_dir / "paired_comparisons.json", comparisons.to_dict(orient="records"))
+    write_statistics_latex(success, comparisons, tables_dir)
+    return {
+        "success_intervals": success,
+        "paired_success_deltas": deltas,
+        "paired_comparisons": comparisons,
+    }
+
+
+def plot_summary(summary: pd.DataFrame, figures_dir: Path, success: pd.DataFrame | None = None) -> None:
     figures_dir.mkdir(parents=True, exist_ok=True)
     labels = summary["method"].astype(str).to_list()
     x = np.arange(len(summary))
     fig, axes = plt.subplots(1, 3, figsize=(12.4, 4.0))
-    axes[0].bar(x, summary["refinement_success_rate"])
+    success_rates = summary["refinement_success_rate"].to_numpy(dtype=float)
+    yerr = None
+    if success is not None and len(success):
+        interval_lookup = success.set_index("method")
+        lower = []
+        upper = []
+        for method, rate in zip(labels, success_rates):
+            if method in interval_lookup.index:
+                interval = interval_lookup.loc[method]
+                lower.append(max(0.0, rate - float(interval["success_rate_wilson95_lower"])))
+                upper.append(max(0.0, float(interval["success_rate_wilson95_upper"]) - rate))
+            else:
+                lower.append(0.0)
+                upper.append(0.0)
+        yerr = np.vstack([lower, upper])
+    axes[0].bar(x, success_rates, yerr=yerr, capsize=3)
     axes[0].set_ylim(0.0, 1.0)
     axes[0].set_ylabel("Success rate")
     axes[1].bar(x, summary["refined_selected_worst_error_median"])
@@ -332,8 +577,9 @@ def run_ablation(args: argparse.Namespace) -> dict:
     qubo_diag.to_csv(results_dir / "qubo_diagnostics.csv", index=False)
     write_json(results_dir / "summary.json", summary.to_dict(orient="records"))
     write_latex(summary, tables_dir)
+    statistics = write_statistical_artifacts(raw, results_dir, tables_dir)
     if not args.no_figure:
-        plot_summary(summary, figures_dir)
+        plot_summary(summary, figures_dir, statistics["success_intervals"])
 
     random_row = summary[summary["method"] == "qaoa_random_p1"]
     comparisons = {}
@@ -362,11 +608,35 @@ def run_ablation(args: argparse.Namespace) -> dict:
         "solver_true_candidate_evaluations_per_method_seed": SOLVER_TRUE_EVALUATIONS,
         "qaoa_variants": ablation_config["qaoa_variants"],
         "comparisons_vs_qaoa_random_p1": comparisons,
+        "formal_statistics": {
+            "success_interval": "Wilson 95% confidence interval for the binomial refinement success rate per method.",
+            "paired_success_delta": "Per-seed method success minus baseline success; +1 favors the method, -1 favors the baseline.",
+            "paired_selected_worst_error_diff": (
+                "Per-seed method refined_selected_worst_error minus baseline refined_selected_worst_error; "
+                "negative values favor the method."
+            ),
+            "paired_comparison_baselines": ["surrogate_qubo_sa", "qaoa_random_p1"],
+            "selected_worst_error_sign_test": "Two-sided exact sign test after excluding exact ties.",
+            "bootstrap_ci": {
+                "samples": STATISTICS_BOOTSTRAP_SAMPLES,
+                "seed": STATISTICS_RNG_SEED,
+                "confidence": 0.95,
+            },
+        },
+        "statistical_artifacts": {
+            "success_intervals_csv": str((results_dir / "success_intervals.csv").relative_to(ROOT)),
+            "success_intervals_json": str((results_dir / "success_intervals.json").relative_to(ROOT)),
+            "paired_success_deltas_csv": str((results_dir / "paired_success_deltas.csv").relative_to(ROOT)),
+            "paired_comparisons_csv": str((results_dir / "paired_comparisons.csv").relative_to(ROOT)),
+            "paired_comparisons_json": str((results_dir / "paired_comparisons.json").relative_to(ROOT)),
+            "statistics_table_tex": str((tables_dir / "qaoa_depth_ablation_statistics_table.tex").relative_to(ROOT)),
+        },
         "runtime_seconds": float(time.perf_counter() - start),
         "interpretation_limits": [
             "The optimized-angle QAOA variants optimize expected surrogate QUBO energy only.",
             "All QUBO-derived methods receive the same 96 shared QUBO training evaluations and 24 post-QUBO true candidate evaluations per seed.",
             "This ablation does not claim quantum advantage.",
+            "Paired error differences are method minus baseline; negative values favor the method.",
         ],
     }
     write_json(results_dir / "metadata.json", metadata)

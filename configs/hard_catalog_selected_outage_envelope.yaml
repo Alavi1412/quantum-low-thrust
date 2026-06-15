@@ -1,0 +1,88 @@
+run:
+  label: hard_catalog_selected_outage_envelope
+  output_subdir: hard_catalog_selected_outage_envelope
+  evidence_level: "hard catalog-DRO continuous-backend selected-outage robustness envelope; selected branches are not universal robustness over all outage masks"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: catalog_dro_phase
+  transfer_time: 4.0
+  segments: 14
+  substeps_per_segment: 7
+  amax: 1.0
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1, 2]
+multiple_shooting:
+  residual_weights:
+    initial: 10.0
+    defect: 1.0
+    terminal: 4.0
+    branch_terminal: 4.0
+    branch_start: 5.0
+    control: 0.01
+    smooth: 0.01
+direct_collocation:
+  method: trapezoidal
+  node_initialization: linear
+  node_initialization_blend: 0.5
+  xtol: 1.0e-5
+  ftol: 1.0e-5
+  gtol: 1.0e-5
+  weights:
+    initial: 10.0
+    defect: 1.0
+    terminal: 5.0
+    branch_start: 8.0
+    branch_defect: 1.0
+    branch_terminal: 5.0
+    control: 0.01
+    smooth: 0.01
+envelope:
+  cases:
+    - case_id: multiple_shooting_high_thrust_selected_1
+      backend: multiple_shooting
+      purpose: "High-thrust hard-catalog selected-outage probe with one optimized missed-thrust recovery branch."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      selected_outages: 1
+      max_nfev: 180
+      min_recovery_segments: 4
+      node_initialization: linear
+      node_initialization_blend: 0.5
+    - case_id: multiple_shooting_high_thrust_selected_3
+      backend: multiple_shooting
+      purpose: "High-thrust hard-catalog selected-outage probe with three optimized missed-thrust recovery branches."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      selected_outages: 3
+      max_nfev: 180
+      min_recovery_segments: 4
+      node_initialization: linear
+      node_initialization_blend: 0.5
+    - case_id: multiple_shooting_mid_thrust_selected_1
+      backend: multiple_shooting
+      purpose: "Reduced-thrust hard-catalog selected-outage probe with one optimized missed-thrust recovery branch."
+      transfer_time: 4.0
+      amax: 0.7
+      segments: 14
+      selected_outages: 1
+      max_nfev: 180
+      min_recovery_segments: 4
+      node_initialization: linear
+      node_initialization_blend: 0.5

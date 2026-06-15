@@ -2810,6 +2810,57 @@ def test_optimized_qaoa_true_candidate_evaluation_count_is_bounded():
     assert result.best_metrics["qaoa_angle_optimizer"] == "scipy_minimize"
 
 
+def test_qaoa_depth_ablation_writes_formal_statistical_artifacts(tmp_path):
+    module = load_script_module(
+        "run_qaoa_depth_ablation_statistics_test",
+        ROOT / "scripts" / "run_qaoa_depth_ablation.py",
+    )
+    raw = pd.DataFrame(
+        [
+            {"seed": 1, "method": "surrogate_qubo_sa", "refinement_success": True, "refined_selected_worst_error": 0.10},
+            {"seed": 2, "method": "surrogate_qubo_sa", "refinement_success": True, "refined_selected_worst_error": 0.20},
+            {"seed": 3, "method": "surrogate_qubo_sa", "refinement_success": False, "refined_selected_worst_error": 0.30},
+            {"seed": 1, "method": "qaoa_random_p1", "refinement_success": False, "refined_selected_worst_error": 0.20},
+            {"seed": 2, "method": "qaoa_random_p1", "refinement_success": True, "refined_selected_worst_error": 0.25},
+            {"seed": 3, "method": "qaoa_random_p1", "refinement_success": False, "refined_selected_worst_error": 0.29},
+            {"seed": 1, "method": "qaoa_optimized_p1", "refinement_success": True, "refined_selected_worst_error": 0.08},
+            {"seed": 2, "method": "qaoa_optimized_p1", "refinement_success": True, "refined_selected_worst_error": 0.21},
+            {"seed": 3, "method": "qaoa_optimized_p1", "refinement_success": True, "refined_selected_worst_error": 0.28},
+        ]
+    )
+    results_dir = tmp_path / "results"
+    tables_dir = tmp_path / "tables"
+    results_dir.mkdir()
+    tables_dir.mkdir()
+
+    artifacts = module.write_statistical_artifacts(raw, results_dir, tables_dir)
+
+    success = artifacts["success_intervals"]
+    optimized = success.loc[success["method"] == "qaoa_optimized_p1"].iloc[0]
+    assert optimized["successes"] == 3
+    assert optimized["runs"] == 3
+    assert 0.0 < optimized["success_rate_wilson95_lower"] < 1.0
+    assert optimized["success_rate_wilson95_upper"] == 1.0
+
+    comparisons = artifacts["paired_comparisons"]
+    vs_sa = comparisons[
+        (comparisons["baseline_method"] == "surrogate_qubo_sa")
+        & (comparisons["method"] == "qaoa_optimized_p1")
+    ].iloc[0]
+    assert vs_sa["paired_seeds"] == 3
+    assert np.isclose(vs_sa["paired_success_delta_mean"], 1.0 / 3.0)
+    assert vs_sa["selected_worst_error_method_wins"] == 2
+    assert vs_sa["selected_worst_error_method_losses"] == 1
+    assert np.isfinite(vs_sa["selected_worst_error_sign_test_p_two_sided"])
+
+    deltas = artifacts["paired_success_deltas"]
+    assert len(deltas[deltas["baseline_method"] == "surrogate_qubo_sa"]) == 6
+    assert (results_dir / "success_intervals.csv").exists()
+    assert (results_dir / "paired_success_deltas.csv").exists()
+    assert (results_dir / "paired_comparisons.csv").exists()
+    assert (tables_dir / "qaoa_depth_ablation_statistics_table.tex").exists()
+
+
 def test_direct_collocation_evaluation_projects_reported_controls_to_bound():
     from qlt.direct_collocation import DirectCollocationProblem, DirectCollocationWeights, initial_guess
 
@@ -2886,6 +2937,10 @@ def test_run_direct_collocation_baseline_hermite_simpson_reports_method_and_boun
     selected_branch_semantics = result["selected_branch_semantics"].lower()
     assert "only the nominal trajectory is optimized" in selected_branch_semantics
     assert "selected outage branches are optimized" not in selected_branch_semantics
+    all_mask_semantics = result["all_mask_diagnostic_semantics"].lower()
+    assert "masked nominal controls only" in all_mask_semantics
+    assert "no selected outage branch recovery controls are optimized" in all_mask_semantics
+    assert "selected masks use optimized" not in all_mask_semantics
     assert result["selected_outage_indices"] == []
     assert np.isfinite(result["nominal_error"])
     assert np.isfinite(result["selected_worst_error"])
@@ -3111,3 +3166,97 @@ def test_catalog_feasibility_envelope_resume_rejects_stale_and_writes_artifacts(
     assert metadata["row_count"] == 1
     assert metadata["resume_rejected_rows"][0]["reason"] == "settings_fingerprint missing or mismatched"
     assert "Nominal-only rows" in metadata["limitations"][0]
+
+
+def test_catalog_feasibility_envelope_refreshes_direct_collocation_nominal_only_semantics():
+    module = load_script_module(
+        "run_catalog_feasibility_envelope_direct_semantics_test",
+        ROOT / "scripts" / "run_catalog_feasibility_envelope.py",
+    )
+    case = {
+        "suite_case_id": "direct",
+        "backend": "direct_collocation",
+        "selected_outages": 0,
+    }
+    stale = {column: None for column in module.CATALOG_FEASIBILITY_ENVELOPE_COLUMNS}
+    stale.update(
+        {
+            "suite_case_id": "direct",
+            "case_type": "selected_branch",
+            "selected_outages": 0,
+            "selected_outage_indices": "[]",
+            "selected_branch_semantics": "stale selected branch text",
+            "all_mask_diagnostic_semantics": (
+                "all outage masks are evaluated after optimization; selected masks use optimized branch recovery controls, "
+                "unselected masks use masked nominal controls only"
+            ),
+            "control_bound_semantics": "stale bound text",
+            "nominal_only_semantics": "stale nominal text",
+        }
+    )
+
+    refreshed = module._refresh_reused_row_semantics(
+        pd.DataFrame([stale], columns=module.CATALOG_FEASIBILITY_ENVELOPE_COLUMNS),
+        [case],
+    )
+    row = refreshed.iloc[0]
+    all_mask_semantics = row["all_mask_diagnostic_semantics"].lower()
+
+    assert row["case_type"] == "nominal_only"
+    assert "masked nominal controls only" in all_mask_semantics
+    assert "no selected outage branch recovery controls are optimized" in all_mask_semantics
+    assert "selected masks use optimized" not in all_mask_semantics
+    assert "only the nominal trajectory is optimized" in row["selected_branch_semantics"].lower()
+
+
+def test_catalog_feasibility_envelope_multiple_shooting_selected_semantics():
+    module = load_script_module(
+        "run_catalog_feasibility_envelope_semantics_test",
+        ROOT / "scripts" / "run_catalog_feasibility_envelope.py",
+    )
+    case = {
+        "suite_case_id": "unit",
+        "purpose": "unit",
+        "backend": "multiple_shooting",
+        "method": "multiple_shooting",
+        "transfer_time": 4.0,
+        "amax": 1.0,
+        "segments": 14,
+        "max_nfev": 1,
+        "selected_outages": 1,
+        "min_recovery_segments": 4,
+        "node_initialization": "linear",
+        "node_initialization_blend": 0.5,
+    }
+    case_config = {"objective": {"thresholds": {"nominal_success": 0.09, "robust_success": 0.17}}}
+    states = SimpleNamespace(target_metadata={"target_state_generation": "fixture"})
+    cfg = SimpleNamespace(substeps=7)
+    result = {
+        "nominal_error": 0.2,
+        "selected_worst_error": 0.03,
+        "all_mask_worst_error": 1.0,
+        "solver_mode": "bounded_projected_multiple_shooting",
+        "control_max_norm": 1.0,
+        "control_bound_violation": 0.0,
+        "nominal_fuel": 1.0,
+        "recovery_fuel_mean": 0.8,
+        "recovery_fuel_max": 0.9,
+        "cost": 0.1,
+        "optimality": 0.0,
+        "nfev": 1,
+        "runtime_seconds": 0.01,
+        "selected_outage_indices": [0],
+        "selected_outage_errors": [0.03],
+        "all_outage_errors": [0.03, 1.0],
+        "optimizer_success": True,
+        "success": True,
+        "accepted_candidate": "optimizer",
+        "message": "unit",
+    }
+    expected = {"settings_fingerprint": "fp", "config_hash": "cfg", "source_states_id": "source"}
+
+    row = module._row_from_result(case, case_config, states, cfg, result, expected)
+
+    assert "selected_outages=0" not in row["all_mask_diagnostic_semantics"]
+    assert "selected masks use optimized recovery branches" in row["all_mask_diagnostic_semantics"]
+    assert "unselected masks use masked nominal controls only" in row["all_mask_diagnostic_semantics"]

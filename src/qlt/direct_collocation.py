@@ -504,6 +504,11 @@ def run_direct_collocation_baseline(
         if selected.size == 0
         else "nominal trajectory and selected outage branches are optimized in one least-squares direct transcription; branch starts are fixed by RK4 propagation through the missed segment(s), then branch controls are re-optimized after the outage"
     )
+    all_mask_diagnostic_semantics = (
+        "all outage masks are diagnostic under masked nominal controls only; no selected outage branch recovery controls are optimized"
+        if selected.size == 0
+        else "all outage masks are evaluated after optimization; selected masks use optimized branch recovery controls and unselected masks use masked nominal controls only"
+    )
     return {
         **evaluation,
         "method_type": collocation_method_type(method),
@@ -514,7 +519,7 @@ def run_direct_collocation_baseline(
             else "constant-control Hermite-Simpson direct transcription; controls are held constant over each segment and no independent midpoint control variables are optimized"
         ),
         "selected_branch_semantics": selected_branch_semantics,
-        "all_mask_diagnostic_semantics": "all outage masks are evaluated after optimization; selected masks use optimized branch recovery controls, unselected masks use masked nominal controls only",
+        "all_mask_diagnostic_semantics": all_mask_diagnostic_semantics,
         "control_bound_semantics": "all nominal and branch controls are Euclidean projected to ||u_i|| <= amax inside residual evaluation, RK4 reporting propagation, fuel computation, and output diagnostics; scalar optimizer bounds are finite guards, not the scientific bound",
         "optimizer_success": bool(result.success),
         "message": str(result.message),

@@ -1,0 +1,27 @@
+base_config: configs/q1_phase_shift_cardinality.yaml
+seeds:
+  [11, 23, 37, 41, 53, 67, 79, 83, 97, 101, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211]
+results_dir: data/results/qaoa_depth_ablation_30seed
+figures_dir: figures/qaoa_depth_ablation_30seed
+tables_dir: tables/qaoa_depth_ablation_30seed
+qaoa_variants:
+  random_p1:
+    p: 1
+    optimizer: random_trials
+    angle_trials: 24
+    sample_count: 512
+    candidates_to_evaluate: 24
+  optimized_p1:
+    p: 1
+    optimizer: scipy_minimize
+    angle_restarts: 1
+    maxiter: 10
+    sample_count: 512
+    candidates_to_evaluate: 24
+  optimized_p2:
+    p: 2
+    optimizer: scipy_minimize
+    angle_restarts: 1
+    maxiter: 10
+    sample_count: 512
+    candidates_to_evaluate: 24

@@ -1,0 +1,127 @@
+{
+  "command": "scripts/run_qaoa_depth_ablation.py --config configs/qaoa_depth_ablation_30seed.yaml --angle-restarts 1 --maxiter 10",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3",
+    "pyyaml": "6.0.3"
+  },
+  "git_head": "00d1bd67fa048b23c9e846536e1e6d0a0121b4b1",
+  "git_status_short": "M scripts/run_qaoa_depth_ablation.py\n M tests/test_smoke.py\n?? configs/hard_catalog_selected_outage_envelope.yaml\n?? configs/qaoa_depth_ablation_30seed.yaml\n?? data/results/hard_catalog_selected_outage_envelope/\n?? data/results/qaoa_depth_ablation_30seed/\n?? figures/hard_catalog_selected_outage_envelope/\n?? figures/qaoa_depth_ablation_30seed/\n?? tables/hard_catalog_selected_outage_envelope/\n?? tables/qaoa_depth_ablation_30seed/",
+  "tracked_file_count": 305,
+  "untracked_file_count": 80,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 81,
+  "project_manifest_total_bytes": 2307310,
+  "project_manifest_hash": "d3ef934aab3801de14fa53e148f415338963e2816b68c0daa2eec6005802dec3",
+  "ablation_config": "configs\\qaoa_depth_ablation_30seed.yaml",
+  "base_config": "configs\\q1_phase_shift_cardinality.yaml",
+  "target_mode": "catalog_halo_phase_shift",
+  "seeds": [
+    11,
+    23,
+    37,
+    41,
+    53,
+    67,
+    79,
+    83,
+    97,
+    101,
+    107,
+    109,
+    113,
+    127,
+    131,
+    137,
+    139,
+    149,
+    151,
+    157,
+    163,
+    167,
+    173,
+    179,
+    181,
+    191,
+    193,
+    197,
+    199,
+    211
+  ],
+  "pilot": false,
+  "qubo_training_evaluations_per_seed": 96,
+  "solver_true_candidate_evaluations_per_method_seed": 24,
+  "qaoa_variants": {
+    "random_p1": {
+      "p": 1,
+      "optimizer": "random_trials",
+      "angle_trials": 24,
+      "sample_count": 512,
+      "candidates_to_evaluate": 24
+    },
+    "optimized_p1": {
+      "p": 1,
+      "optimizer": "scipy_minimize",
+      "angle_restarts": 1,
+      "maxiter": 10,
+      "sample_count": 512,
+      "candidates_to_evaluate": 24
+    },
+    "optimized_p2": {
+      "p": 2,
+      "optimizer": "scipy_minimize",
+      "angle_restarts": 1,
+      "maxiter": 10,
+      "sample_count": 512,
+      "candidates_to_evaluate": 24
+    }
+  },
+  "comparisons_vs_qaoa_random_p1": {
+    "qaoa_optimized_p1": {
+      "success_rate_delta_vs_qaoa_random_p1": 0.19999999999999996,
+      "selected_worst_error_delta_vs_qaoa_random_p1": -0.012138399660955201
+    },
+    "qaoa_optimized_p2": {
+      "success_rate_delta_vs_qaoa_random_p1": 0.4666666666666667,
+      "selected_worst_error_delta_vs_qaoa_random_p1": -0.011383450464709552
+    }
+  },
+  "formal_statistics": {
+    "success_interval": "Wilson 95% confidence interval for the binomial refinement success rate per method.",
+    "paired_success_delta": "Per-seed method success minus baseline success; +1 favors the method, -1 favors the baseline.",
+    "paired_selected_worst_error_diff": "Per-seed method refined_selected_worst_error minus baseline refined_selected_worst_error; negative values favor the method.",
+    "paired_comparison_baselines": [
+      "surrogate_qubo_sa",
+      "qaoa_random_p1"
+    ],
+    "selected_worst_error_sign_test": "Two-sided exact sign test after excluding exact ties.",
+    "bootstrap_ci": {
+      "samples": 20000,
+      "seed": 20260615,
+      "confidence": 0.95
+    }
+  },
+  "statistical_artifacts": {
+    "success_intervals_csv": "data\\results\\qaoa_depth_ablation_30seed\\success_intervals.csv",
+    "success_intervals_json": "data\\results\\qaoa_depth_ablation_30seed\\success_intervals.json",
+    "paired_success_deltas_csv": "data\\results\\qaoa_depth_ablation_30seed\\paired_success_deltas.csv",
+    "paired_comparisons_csv": "data\\results\\qaoa_depth_ablation_30seed\\paired_comparisons.csv",
+    "paired_comparisons_json": "data\\results\\qaoa_depth_ablation_30seed\\paired_comparisons.json",
+    "statistics_table_tex": "tables\\qaoa_depth_ablation_30seed\\qaoa_depth_ablation_statistics_table.tex"
+  },
+  "runtime_seconds": 3301.4725910999987,
+  "interpretation_limits": [
+    "The optimized-angle QAOA variants optimize expected surrogate QUBO energy only.",
+    "All QUBO-derived methods receive the same 96 shared QUBO training evaluations and 24 post-QUBO true candidate evaluations per seed.",
+    "This ablation does not claim quantum advantage.",
+    "Paired error differences are method minus baseline; negative values favor the method."
+  ]
+}

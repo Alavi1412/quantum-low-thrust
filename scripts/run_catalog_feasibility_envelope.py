@@ -5,6 +5,7 @@ import copy
 import json
 import sys
 from pathlib import Path
+from typing import Sequence
 
 import matplotlib
 
@@ -290,6 +291,83 @@ def _nominal_only_semantics(case: dict) -> str:
     return "selected outage recovery branches are optimized for the selected outage masks"
 
 
+def _multiple_shooting_selected_branch_semantics(case: dict) -> str:
+    if int(case["selected_outages"]) > 0:
+        return "direct multiple-shooting nominal and selected outage recovery branches are optimized together"
+    return "direct multiple shooting optimizes the nominal trajectory only because selected_outages=0"
+
+
+def _multiple_shooting_all_mask_semantics(case: dict) -> str:
+    if int(case["selected_outages"]) > 0:
+        return (
+            "all outage masks are evaluated after optimization; selected masks use optimized recovery branches, "
+            "while unselected masks use masked nominal controls only"
+        )
+    return "all outage masks are evaluated after optimization; with selected_outages=0 every mask uses masked nominal controls only"
+
+
+def _multiple_shooting_control_bound_semantics() -> str:
+    return "controls are projected to the Euclidean acceleration ball during multiple-shooting residual and evaluation paths"
+
+
+def _has_selected_recovery_branches(case: dict, row: pd.Series | None = None) -> bool:
+    if row is not None:
+        raw = row.get("selected_outage_indices")
+        if raw is not None and not pd.isna(raw):
+            try:
+                return len(json.loads(str(raw))) > 0
+            except (TypeError, json.JSONDecodeError):
+                pass
+    return int(case["selected_outages"]) > 0
+
+
+def _direct_collocation_selected_branch_semantics(case: dict, row: pd.Series | None = None) -> str:
+    if _has_selected_recovery_branches(case, row):
+        return (
+            "nominal trajectory and selected outage branches are optimized in one least-squares direct transcription; "
+            "branch starts are fixed by RK4 propagation through the missed segment(s), then branch controls are re-optimized after the outage"
+        )
+    return (
+        "selected_outages=0/no selected outage branches: only the nominal trajectory is optimized; "
+        "selected_worst_error equals nominal_error; all outage masks are diagnostic under masked nominal controls"
+    )
+
+
+def _direct_collocation_all_mask_semantics(case: dict, row: pd.Series | None = None) -> str:
+    if _has_selected_recovery_branches(case, row):
+        return (
+            "all outage masks are evaluated after optimization; selected masks use optimized branch recovery controls "
+            "and unselected masks use masked nominal controls only"
+        )
+    return "all outage masks are diagnostic under masked nominal controls only; no selected outage branch recovery controls are optimized"
+
+
+def _direct_collocation_control_bound_semantics() -> str:
+    return "all nominal and branch controls are Euclidean projected to ||u_i|| <= amax inside residual evaluation, RK4 reporting propagation, fuel computation, and output diagnostics; scalar optimizer bounds are finite guards, not the scientific bound"
+
+
+def _refresh_reused_row_semantics(df: pd.DataFrame, cases: Sequence[dict]) -> pd.DataFrame:
+    if df.empty:
+        return df
+    refreshed = df.copy()
+    cases_by_id = {str(case["suite_case_id"]): case for case in cases}
+    for index, row in refreshed.iterrows():
+        case = cases_by_id.get(str(row.get("suite_case_id")))
+        if case is None:
+            continue
+        refreshed.at[index, "case_type"] = _case_type(case)
+        refreshed.at[index, "nominal_only_semantics"] = _nominal_only_semantics(case)
+        if str(case.get("backend")) == "multiple_shooting":
+            refreshed.at[index, "selected_branch_semantics"] = _multiple_shooting_selected_branch_semantics(case)
+            refreshed.at[index, "all_mask_diagnostic_semantics"] = _multiple_shooting_all_mask_semantics(case)
+            refreshed.at[index, "control_bound_semantics"] = _multiple_shooting_control_bound_semantics()
+        elif str(case.get("backend")) == "direct_collocation":
+            refreshed.at[index, "selected_branch_semantics"] = _direct_collocation_selected_branch_semantics(case, row)
+            refreshed.at[index, "all_mask_diagnostic_semantics"] = _direct_collocation_all_mask_semantics(case, row)
+            refreshed.at[index, "control_bound_semantics"] = _direct_collocation_control_bound_semantics()
+    return refreshed
+
+
 def _row_from_result(case: dict, case_config: dict, states, cfg, result: dict, expected: dict) -> dict:
     thresholds = {
         "nominal_success": float(case_config["objective"]["thresholds"]["nominal_success"]),
@@ -302,15 +380,9 @@ def _row_from_result(case: dict, case_config: dict, states, cfg, result: dict, e
     collocation_method = str(case.get("collocation_method", ""))
     if backend == "multiple_shooting":
         method_type = str(result.get("solver_mode", "bounded_projected_multiple_shooting"))
-        selected_branch_semantics = (
-            "direct multiple-shooting nominal and selected outage recovery branches are optimized together"
-            if int(case["selected_outages"]) > 0
-            else "direct multiple shooting optimizes the nominal trajectory only because selected_outages=0"
-        )
-        all_mask_semantics = (
-            "all outage masks are evaluated after optimization; with selected_outages=0 every mask uses masked nominal controls only"
-        )
-        control_bound_semantics = "controls are projected to the Euclidean acceleration ball during multiple-shooting residual and evaluation paths"
+        selected_branch_semantics = _multiple_shooting_selected_branch_semantics(case)
+        all_mask_semantics = _multiple_shooting_all_mask_semantics(case)
+        control_bound_semantics = _multiple_shooting_control_bound_semantics()
     else:
         method_type = str(result["method_type"])
         selected_branch_semantics = str(result.get("selected_branch_semantics", ""))
@@ -530,6 +602,7 @@ def main() -> None:
 
     if args.resume:
         df, resume_rejected_rows = _compatible_existing_rows(_load_existing(csv_path), expected)
+        df = _refresh_reused_row_semantics(df, cases)
     else:
         df = pd.DataFrame(columns=CATALOG_FEASIBILITY_ENVELOPE_COLUMNS)
         resume_rejected_rows = []
