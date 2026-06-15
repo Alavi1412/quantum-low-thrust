@@ -1,9 +1,9 @@
 {
     "manifest_version":  1,
-    "generated_utc":  "2026-06-15T03:44:46Z",
+    "generated_utc":  "2026-06-15T03:59:30Z",
     "note":  "Scoped artifact manifest for paper reproducibility; excludes .venv, caches, logs, and bulk generated intermediates.",
-    "git_head":  null,
-    "git_status_note":  "Current metadata records git_head null because the workspace files were untracked at run time.",
+    "git_head":  "b2a005620a164e7bff7938486c0d45e06362987b",
+    "git_status_note":  "git_head records the current HEAD before the packaging commit; file hashes and byte counts reflect the working tree at generated_utc.",
     "files":  [
                   {
                       "path":  "README.md",
@@ -27,8 +27,8 @@
                   },
                   {
                       "path":  ".gitignore",
-                      "sha256":  "e13f0b6107f0cfdaf911d96862bdaf7a39f3a6e741eac0291e0b3772315437c7",
-                      "bytes":  45
+                      "sha256":  "38e524c2e104eff85c7a07796c8aeaa07fba0993a2024381ccdfde7afcbc7ea3",
+                      "bytes":  158
                   },
                   {
                       "path":  "paper/main.tex",
