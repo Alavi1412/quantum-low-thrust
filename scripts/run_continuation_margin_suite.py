@@ -417,6 +417,20 @@ def _is_missing(value) -> bool:
         return False
 
 
+def _as_bool(value) -> bool:
+    if isinstance(value, (bool, np.bool_)):
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "1", "yes", "y"}:
+            return True
+        if normalized in {"false", "0", "no", "n", ""}:
+            return False
+    if _is_missing(value):
+        return False
+    return bool(value)
+
+
 def _case_by_id(cases: list[dict]) -> dict[str, dict]:
     indexed = {}
     for case in cases:
@@ -741,26 +755,46 @@ def _write_table(df: pd.DataFrame, tables_dir: Path) -> None:
 def _write_plot(df: pd.DataFrame, figures_dir: Path) -> None:
     if df.empty:
         return
-    groups = [
-        ("phase_continuation_all_single", "All single outages"),
-        ("two_segment_all_mask_diagnostic", "All one/two-segment outages"),
-    ]
-    fig, axes = plt.subplots(1, 2, figsize=(10.8, 4.2), sharey=False)
-    for ax, (group_name, title) in zip(axes, groups):
+    ordered = df.sort_values("case_order")
+    groups = ordered["case_group"].dropna().astype(str).drop_duplicates().tolist()
+    if not groups:
+        return
+    ncols = min(2, len(groups))
+    nrows = (len(groups) + ncols - 1) // ncols
+    fig, axes = plt.subplots(nrows, ncols, figsize=(5.4 * ncols, 4.2 * nrows), sharey=False)
+    axes = np.asarray(axes, dtype=object).reshape(-1)
+    for ax, group_name in zip(axes, groups):
+        title = _table_group_label(group_name)
         group = df[df["case_group"] == group_name].sort_values("case_order")
-        if group.empty:
-            ax.set_axis_off()
-            ax.set_title(title)
-            continue
         x = np.arange(len(group))
         colors = ["tab:blue" if str(kind) == "cold" else "tab:orange" for kind in group["warm_start_kind"]]
-        ax.bar(x, group["selected_worst_error"].astype(float), color=colors, alpha=0.72, label="selected/all-mask worst")
-        ax.plot(x, group["nominal_error"].astype(float), color="black", marker="o", linewidth=1.4, label="nominal")
+        selected_worst = group["selected_worst_error"].astype(float)
+        nominal = group["nominal_error"].astype(float)
+        nominal_threshold = group["nominal_threshold"].astype(float)
+        selected_threshold = group["selected_worst_threshold"].astype(float)
+        ax.bar(x, selected_worst, color=colors, alpha=0.72, label="selected/all-mask worst")
+        ax.plot(x, nominal, color="black", marker="o", linewidth=1.4, label="nominal")
+        y_top = float(
+            max(
+                selected_worst.max(),
+                nominal.max(),
+                nominal_threshold.max(),
+                selected_threshold.max(),
+            )
+        )
+        y_pad = max(0.012, 0.06 * y_top)
         for index, (_, row) in enumerate(group.iterrows()):
-            marker = "pass" if bool(row["meets_thresholds"]) else "fail"
-            ax.text(index, float(row["selected_worst_error"]) + 0.012, marker, ha="center", fontsize=8)
-        ax.axhline(float(group["nominal_threshold"].iloc[0]), color="0.45", linestyle="--", linewidth=1.0)
-        ax.axhline(float(group["selected_worst_threshold"].iloc[0]), color="0.25", linestyle=":", linewidth=1.0)
+            marker = "pass" if _as_bool(row["meets_thresholds"]) else "fail"
+            marker_base = max(float(row["selected_worst_error"]), float(row["nominal_error"]))
+            ax.text(index, marker_base + y_pad, marker, ha="center", fontsize=8)
+        if nominal_threshold.nunique(dropna=True) == 1:
+            ax.axhline(float(nominal_threshold.iloc[0]), color="0.45", linestyle="--", linewidth=1.0)
+        else:
+            ax.plot(x, nominal_threshold, color="0.45", linestyle="--", linewidth=1.0)
+        if selected_threshold.nunique(dropna=True) == 1:
+            ax.axhline(float(selected_threshold.iloc[0]), color="0.25", linestyle=":", linewidth=1.0)
+        else:
+            ax.plot(x, selected_threshold, color="0.25", linestyle=":", linewidth=1.0)
         labels = []
         for _, row in group.iterrows():
             if str(row["warm_start_kind"]) == "cold":
@@ -770,7 +804,10 @@ def _write_plot(df: pd.DataFrame, figures_dir: Path) -> None:
         ax.set_xticks(x, labels)
         ax.set_title(title)
         ax.set_ylabel("Normalized terminal error")
+        ax.set_ylim(top=y_top + 3 * y_pad)
         ax.grid(axis="y", alpha=0.25)
+    for ax in axes[len(groups) :]:
+        fig.delaxes(ax)
     fig.legend(
         handles=[
             Line2D([0], [0], color="black", marker="o", linewidth=1.4, label="nominal"),
@@ -787,6 +824,51 @@ def _write_plot(df: pd.DataFrame, figures_dir: Path) -> None:
     plt.close(fig)
 
 
+def _configured_outage_semantics(cases: list[dict]) -> str:
+    group_summaries: list[str] = []
+    seen_groups: set[str] = set()
+    for case in sorted(cases, key=lambda item: int(item["case_order"])):
+        group = str(case["case_group"])
+        if group in seen_groups:
+            continue
+        seen_groups.add(group)
+        matching = [candidate for candidate in cases if str(candidate["case_group"]) == group]
+        segments = sorted({int(candidate["segments"]) for candidate in matching})
+        outage_lengths = sorted(
+            {
+                int(length)
+                for candidate in matching
+                for length in candidate.get("outage_lengths", [])
+            }
+        )
+        segment_text = ", ".join(f"N={value}" for value in segments)
+        outage_text = ", ".join(str(value) for value in outage_lengths)
+        group_summaries.append(f"{_table_group_label(group)} ({segment_text}; outage lengths {outage_text})")
+
+    summary = "Configured outage groups are evaluated in case_order: " + "; ".join(group_summaries) + "."
+    two_segment_ns = sorted(
+        {
+            int(case["segments"])
+            for case in cases
+            if any(int(length) >= 2 for length in case.get("outage_lengths", []))
+        }
+    )
+    single_segment_ns = sorted(
+        {
+            int(case["segments"])
+            for case in cases
+            if case.get("outage_lengths") and max(int(length) for length in case.get("outage_lengths", [])) == 1
+        }
+    )
+    if 6 in two_segment_ns and 8 in single_segment_ns:
+        summary += " Rows with N=6 two-segment outage diagnostics are intentionally coarser than N=8 one-segment continuation rows."
+    elif two_segment_ns:
+        summary += " Two-segment outage diagnostics use the segment counts configured for their rows."
+    else:
+        summary += " No two-segment outage diagnostic group is configured for this run."
+    return summary
+
+
 def _metadata(
     df: pd.DataFrame,
     config: dict,
@@ -795,7 +877,7 @@ def _metadata(
     resume_rejected_rows: list[dict],
     skipped_cases: list[dict],
 ) -> dict:
-    feasible_count = int(df["meets_thresholds"].astype(bool).sum()) if not df.empty else 0
+    feasible_count = int(df["meets_thresholds"].map(_as_bool).sum()) if not df.empty else 0
     return {
         "command": command,
         "row_count": int(len(df)),
@@ -819,10 +901,7 @@ def _metadata(
                 "all_mask_worst_error and all_outage_errors evaluate all configured outage masks for that row. "
                 "Because selected_all_outages is true in this suite, selected_worst_error uses the same configured mask set."
             ),
-            "two_segment_diagnostic": (
-                "The two_segment_all_mask_diagnostic group uses N=6, which is intentionally smaller and coarser "
-                "than the N=8 one-segment continuation group."
-            ),
+            "configured_outage_groups": _configured_outage_semantics(cases),
         },
         "limitations": [
             "Normalized Earth-Moon CR3BP only.",

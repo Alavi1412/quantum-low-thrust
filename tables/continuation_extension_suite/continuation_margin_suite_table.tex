@@ -1,0 +1,11 @@
+\begin{tabular}{lrlrlrrrrrrrrr}
+\toprule
+Group & Phase time & Warm start & Segments & Outage masks & Max nfev & Nominal error & Selected worst error & All-mask worst error & Optimizer success & MS success & nfev & Runtime (s) & Meets thresholds \\
+\midrule
+all single headroom & 0.3000 & cold & 8 & 8/8 & 120 & 0.0555 & 0.0351 & 0.0351 & True & True & 77 & 138.7051 & True \\
+all single headroom & 0.4000 & from 0.3 & 8 & 8/8 & 100 & 0.0531 & 0.0139 & 0.0139 & True & True & 61 & 120.8934 & True \\
+two segment budget test & 0.3000 & cold & 6 & 11/11 & 120 & 0.0592 & 0.0690 & 0.0690 & True & True & 74 & 106.8293 & True \\
+two segment budget test & 0.2000 & from 0.3 & 6 & 11/11 & 160 & 0.0651 & 0.2193 & 0.2193 & False & False & 160 & 253.8218 & False \\
+two segment budget test & 0.3000 & cold & 8 & 15/15 & 120 & 0.0612 & 0.0435 & 0.0435 & True & True & 76 & 243.8341 & True \\
+\bottomrule
+\end{tabular}
