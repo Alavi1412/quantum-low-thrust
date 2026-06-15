@@ -32,6 +32,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from qlt.direct_collocation import (
+    collocation_method_uses_midpoint_controls,
     config_hash as _dc_config_hash,
     file_identity as _dc_file_identity,
     run_direct_collocation_baseline,
@@ -40,6 +41,35 @@ from qlt.direct_collocation import (
 from qlt.experiment import load_configured_states, make_objective_config, output_directories
 from qlt.objective import outage_masks
 from qlt.reporting import write_json
+
+
+SUITE_NAME = "hermite_simpson_continuation_baseline"
+ARTIFACT_STEM = "hermite_simpson_continuation_baseline"
+DEFAULT_CONFIG_PATH = Path("configs/hermite_simpson_continuation_baseline.yaml")
+DEFAULT_COLLOCATION_METHOD = "hermite_simpson"
+FORCE_COLLOCATION_METHOD: str | None = None
+SCRIPT_DESCRIPTION = (
+    "Hermite-Simpson direct-collocation continuation baseline. "
+    "Continuous-backend probe; not a quantum/discrete result."
+)
+METADATA_BACKEND_SEMANTICS = (
+    "This is a continuous-backend Hermite-Simpson direct-collocation implementation baseline/probe "
+    "with persisted nominal-control warm starts and trajectory stacking; "
+    "it is NOT a quantum, QUBO, QAOA, or discrete schedule-search result."
+)
+METADATA_METHOD_KEY = "hermite_simpson"
+METADATA_METHOD_SEMANTICS = (
+    "Hermite-Simpson constant-control direct transcription; "
+    "controls are held constant over each segment and no independent midpoint control "
+    "variables are optimized."
+)
+METADATA_LIMITATIONS = [
+    "Normalized Earth-Moon CR3BP only; not a flight-ready trajectory optimization.",
+    "Constant-control Hermite-Simpson scheme; no independent midpoint control variables.",
+    "Warm starts use only persisted nominal controls from the named source row.",
+    "Failed/negative diagnostics are preserved honestly and not extrapolated.",
+    "The optimizer may stop at max_nfev; such rows are retained with optimizer_success=False.",
+]
 
 
 # ---------------------------------------------------------------------------
@@ -71,6 +101,8 @@ HS_CONTINUATION_COLUMNS = [
     "node_initialization_blend",
     "method_type",
     "collocation_method",
+    "collocation_scheme_semantics",
+    "fuel_quadrature",
     "nominal_error",
     "selected_worst_error",
     "all_mask_worst_error",
@@ -99,6 +131,11 @@ HS_CONTINUATION_COLUMNS = [
     "control_bound_semantics",
     "nominal_control_path",
     "nominal_control_hash",
+    "nominal_control_sidecar_hash",
+    "nominal_endpoint_control_hash",
+    "nominal_midpoint_control_present",
+    "nominal_midpoint_control_hash",
+    "nominal_midpoint_warm_start_loaded",
     "settings_fingerprint",
     "config_hash",
     "source_states_id",
@@ -150,6 +187,47 @@ def _control_hash(controls: np.ndarray) -> str:
     return _json_hash(payload)
 
 
+def _combined_control_sidecar_hash(controls: np.ndarray, midpoint_controls: np.ndarray | None) -> str:
+    endpoint_hash = _control_hash(controls)
+    if midpoint_controls is None:
+        return endpoint_hash
+    midpoint_arr = np.asarray(midpoint_controls, dtype=float)
+    payload = {
+        "schema_version": 2,
+        "endpoint_control_hash": endpoint_hash,
+        "midpoint_control_hash": _control_hash(midpoint_arr),
+        "endpoint_shape": list(np.asarray(controls, dtype=float).shape),
+        "midpoint_shape": list(midpoint_arr.shape),
+    }
+    return _json_hash(payload)
+
+
+class ControlSidecar:
+    def __init__(
+        self,
+        *,
+        controls: np.ndarray,
+        control_hash: str,
+        path: Path,
+        endpoint_control_hash: str,
+        midpoint_controls: np.ndarray | None = None,
+        midpoint_control_hash: str = "",
+        midpoint_control_present: bool = False,
+    ):
+        self.controls = controls
+        self.control_hash = control_hash
+        self.path = path
+        self.endpoint_control_hash = endpoint_control_hash
+        self.midpoint_controls = midpoint_controls
+        self.midpoint_control_hash = midpoint_control_hash
+        self.midpoint_control_present = midpoint_control_present
+
+    def __iter__(self):
+        yield self.controls
+        yield self.control_hash
+        yield self.path
+
+
 # ---------------------------------------------------------------------------
 # Case loading helpers
 # ---------------------------------------------------------------------------
@@ -192,6 +270,12 @@ def _suite_cases(config: dict) -> list[dict]:
         purpose = str(group.get("purpose", ""))
         for raw_case in group.get("cases", []):
             case = dict(raw_case)
+            target_mode = str(
+                case.get(
+                    "target_mode",
+                    group.get("target_mode", default_benchmark.get("target_mode", "catalog_halo_phase_shift")),
+                )
+            )
             segments = int(case.get("segments", default_benchmark.get("segments")))
             outage_total = _outage_count(segments, group_outages)
             selected = _selected_outages(
@@ -210,6 +294,7 @@ def _suite_cases(config: dict) -> list[dict]:
                     "case_id": str(case.get("case_id") or f"{group_name}_{order}"),
                     "case_group": str(group_name),
                     "group_purpose": purpose,
+                    "target_mode": target_mode,
                     "phase_time": float(case.get("phase_time", default_benchmark.get("phase_time"))),
                     "transfer_time": float(case.get("transfer_time", default_benchmark.get("transfer_time"))),
                     "amax": float(case.get("amax", default_benchmark.get("amax"))),
@@ -257,7 +342,7 @@ def _source_case(cases_by_id: dict[str, dict], case: dict) -> dict | None:
 def _case_config(base_config: dict, case: dict) -> dict:
     config = copy.deepcopy(base_config)
     benchmark = config.setdefault("benchmark", {})
-    benchmark["target_mode"] = "catalog_halo_phase_shift"
+    benchmark["target_mode"] = str(case.get("target_mode", "catalog_halo_phase_shift"))
     benchmark["phase_time"] = float(case["phase_time"])
     benchmark["transfer_time"] = float(case["transfer_time"])
     benchmark["amax"] = float(case["amax"])
@@ -270,7 +355,7 @@ def _dc_params(base_config: dict) -> dict:
     """Extract the direct-collocation parameters used in the settings fingerprint."""
     direct = base_config.get("direct_collocation", {}) or {}
     return {
-        "method": str(direct.get("method", "hermite_simpson")),
+        "method": str(direct.get("method", DEFAULT_COLLOCATION_METHOD)),
         "node_initialization": str(direct.get("node_initialization", "blend")),
         "node_initialization_blend": float(direct.get("node_initialization_blend", 0.35)),
         "xtol": float(direct.get("xtol", 1e-5)),
@@ -283,14 +368,19 @@ def _dc_params(base_config: dict) -> dict:
     }
 
 
+def _requires_midpoint_controls(base_config: dict) -> bool:
+    return collocation_method_uses_midpoint_controls(_dc_params(base_config)["method"])
+
+
 def _base_settings_payload(base_config: dict, source_states: Path, case: dict) -> dict:
     thresholds = base_config["objective"]["thresholds"]
     dc_params = _dc_params(base_config)
     return {
-        "suite": "hermite_simpson_continuation_baseline",
+        "suite": SUITE_NAME,
         "case_id": str(case["case_id"]),
         "case_order": int(case["case_order"]),
         "case_group": str(case["case_group"]),
+        "target_mode": str(case.get("target_mode", "catalog_halo_phase_shift")),
         "phase_time": float(case["phase_time"]),
         "transfer_time": float(case["transfer_time"]),
         "amax": float(case["amax"]),
@@ -304,7 +394,6 @@ def _base_settings_payload(base_config: dict, source_states: Path, case: dict) -
         "max_nfev": int(case["max_nfev"]),
         "min_recovery_segments": int(case["min_recovery_segments"]),
         "direct_collocation": dc_params,
-        "target_mode": "catalog_halo_phase_shift",
         "thresholds": {
             "nominal_success": float(thresholds["nominal_success"]),
             "robust_success": float(thresholds["robust_success"]),
@@ -365,18 +454,33 @@ def write_control_sidecar(
     case_id: str,
     settings_fingerprint: str,
     controls: np.ndarray,
+    midpoint_controls: np.ndarray | None = None,
     row: dict,
 ) -> dict:
     controls_dir.mkdir(parents=True, exist_ok=True)
     arr = np.asarray(controls, dtype=float)
-    digest = _control_hash(arr)
+    endpoint_digest = _control_hash(arr)
+    midpoint_arr = None if midpoint_controls is None else np.asarray(midpoint_controls, dtype=float)
+    if midpoint_arr is not None and midpoint_arr.shape != arr.shape:
+        raise ValueError(
+            f"midpoint_controls shape {midpoint_arr.shape} does not match endpoint controls shape {arr.shape}"
+        )
+    midpoint_digest = "" if midpoint_arr is None else _control_hash(midpoint_arr)
+    sidecar_digest = _combined_control_sidecar_hash(arr, midpoint_arr)
     path = _control_sidecar_path(controls_dir, case_id)
     payload = {
+        "schema_version": 2,
         "case_id": str(case_id),
         "settings_fingerprint": str(settings_fingerprint),
-        "control_hash": digest,
+        "control_hash": endpoint_digest,
+        "endpoint_control_hash": endpoint_digest,
+        "midpoint_control_present": midpoint_arr is not None,
+        "midpoint_control_hash": midpoint_digest,
+        "sidecar_hash": sidecar_digest,
         "shape": list(arr.shape),
         "controls": arr.astype(float).tolist(),
+        "nominal_endpoint_controls": arr.astype(float).tolist(),
+        "nominal_midpoint_controls": None if midpoint_arr is None else midpoint_arr.astype(float).tolist(),
         "row_summary": {
             "phase_time": float(row.get("phase_time", 0.0)),
             "transfer_time": float(row.get("transfer_time", 0.0)),
@@ -385,18 +489,29 @@ def write_control_sidecar(
             "outage_lengths": json.loads(str(row.get("outage_lengths", "[1]"))),
             "warm_start_kind": str(row.get("warm_start_kind", "cold")),
             "warm_start_from_case_id": row.get("warm_start_from_case_id") or "",
-            "collocation_method": str(row.get("collocation_method", "hermite_simpson")),
+            "collocation_method": str(row.get("collocation_method", DEFAULT_COLLOCATION_METHOD)),
         },
     }
     write_json(path, payload)
-    return {"path": path, "control_hash": digest, "controls": arr}
+    return {
+        "path": path,
+        "control_hash": sidecar_digest,
+        "sidecar_hash": sidecar_digest,
+        "endpoint_control_hash": endpoint_digest,
+        "midpoint_control_hash": midpoint_digest,
+        "midpoint_control_present": midpoint_arr is not None,
+        "controls": arr,
+        "midpoint_controls": midpoint_arr,
+    }
 
 
 def load_control_sidecar(
     controls_dir: Path,
     case_id: str,
     expected_settings_fingerprint: str,
-) -> tuple[np.ndarray, str, Path] | None:
+    *,
+    require_midpoint_controls: bool = False,
+) -> ControlSidecar | None:
     path = _control_sidecar_path(controls_dir, case_id)
     try:
         if not path.exists():
@@ -408,13 +523,45 @@ def load_control_sidecar(
             return None
         if str(payload.get("settings_fingerprint")) != str(expected_settings_fingerprint):
             return None
-        controls = np.asarray(payload.get("controls"), dtype=float)
-        found_hash = str(payload.get("control_hash", ""))
-        if _control_hash(controls) != found_hash:
+        raw_controls = payload.get("nominal_endpoint_controls", payload.get("controls"))
+        controls = np.asarray(raw_controls, dtype=float)
+        endpoint_hash = str(payload.get("endpoint_control_hash", payload.get("control_hash", "")))
+        legacy_control_hash = str(payload.get("control_hash", endpoint_hash))
+        if legacy_control_hash != endpoint_hash:
+            return None
+        if _control_hash(controls) != endpoint_hash:
+            return None
+        midpoint_present = bool(payload.get("midpoint_control_present", False))
+        midpoint_controls: np.ndarray | None = None
+        midpoint_hash = ""
+        if midpoint_present:
+            if payload.get("nominal_midpoint_controls") is None:
+                return None
+            midpoint_controls = np.asarray(payload.get("nominal_midpoint_controls"), dtype=float)
+            if midpoint_controls.shape != controls.shape:
+                return None
+            midpoint_hash = str(payload.get("midpoint_control_hash", ""))
+            if _control_hash(midpoint_controls) != midpoint_hash:
+                return None
+        if require_midpoint_controls and midpoint_controls is None:
+            return None
+        sidecar_hash = str(payload.get("sidecar_hash", ""))
+        expected_sidecar_hash = _combined_control_sidecar_hash(controls, midpoint_controls)
+        if not sidecar_hash:
+            sidecar_hash = endpoint_hash
+        if sidecar_hash != expected_sidecar_hash:
             return None
     except (OSError, json.JSONDecodeError, TypeError, ValueError):
         return None
-    return controls, found_hash, path
+    return ControlSidecar(
+        controls=controls,
+        control_hash=sidecar_hash,
+        path=path,
+        endpoint_control_hash=endpoint_hash,
+        midpoint_controls=midpoint_controls,
+        midpoint_control_hash=midpoint_hash,
+        midpoint_control_present=midpoint_controls is not None,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -468,8 +615,8 @@ def _row_from_result(
         "case_order": int(case["case_order"]),
         "case_group": str(case["case_group"]),
         "group_purpose": str(case["group_purpose"]),
-        "target_mode": "catalog_halo_phase_shift",
-        "target_generation": TARGET_GENERATION,
+        "target_mode": str(case.get("target_mode", "catalog_halo_phase_shift")),
+        "target_generation": str(result.get("target_generation", TARGET_GENERATION)),
         "phase_time": float(case["phase_time"]),
         "transfer_time": float(case["transfer_time"]),
         "amax": float(case["amax"]),
@@ -488,7 +635,9 @@ def _row_from_result(
         "node_initialization": str(dc_params["node_initialization"]),
         "node_initialization_blend": float(dc_params["node_initialization_blend"]),
         "method_type": str(result.get("method_type", "")),
-        "collocation_method": str(result.get("collocation_method", "hermite_simpson")),
+        "collocation_method": str(result.get("collocation_method", DEFAULT_COLLOCATION_METHOD)),
+        "collocation_scheme_semantics": str(result.get("collocation_scheme_semantics", "")),
+        "fuel_quadrature": str(result.get("fuel_quadrature", "")),
         "nominal_error": nominal_error,
         "selected_worst_error": selected_worst,
         "all_mask_worst_error": float(result["all_mask_worst_error"]),
@@ -522,6 +671,13 @@ def _row_from_result(
         "control_bound_semantics": str(result.get("control_bound_semantics", "")),
         "nominal_control_path": "",
         "nominal_control_hash": "",
+        "nominal_control_sidecar_hash": "",
+        "nominal_endpoint_control_hash": "",
+        "nominal_midpoint_control_present": bool(result.get("nominal_midpoint_controls") is not None),
+        "nominal_midpoint_control_hash": "",
+        "nominal_midpoint_warm_start_loaded": bool(
+            (result.get("warm_start_info") or {}).get("source_midpoint_control_present", False)
+        ),
         "settings_fingerprint": settings_fp,
         "config_hash": _config_hash(base_config),
         "source_states_id": _file_identity(source_states),
@@ -540,7 +696,7 @@ def _run_case(
     source_states: Path,
     case: dict,
     source_info: dict | None,
-) -> tuple[dict, np.ndarray]:
+) -> tuple[dict, np.ndarray, np.ndarray | None]:
     case_config = _case_config(base_config, case)
     states = load_configured_states(Path.cwd(), case_config, source_states)
     cfg = make_objective_config(case_config, states.mu)
@@ -550,6 +706,7 @@ def _run_case(
     direct_cfg["max_nfev"] = int(case["max_nfev"])
     direct_cfg["selected_outages"] = int(case["selected_outages"])
     direct_cfg["min_recovery_segments"] = int(case["min_recovery_segments"])
+    collocation_method = str(direct_cfg.get("method", DEFAULT_COLLOCATION_METHOD))
 
     warm_start_info = {
         "enabled": source_info is not None,
@@ -557,11 +714,17 @@ def _run_case(
         "source_case_id": case.get("warm_start_from_case_id"),
         "source_settings_fingerprint": None if source_info is None else str(source_info["settings_fingerprint"]),
         "source_control_hash": None if source_info is None else str(source_info["control_hash"]),
+        "source_endpoint_control_hash": None if source_info is None else str(source_info.get("endpoint_control_hash", "")),
+        "source_midpoint_control_hash": None if source_info is None else str(source_info.get("midpoint_control_hash", "")),
+        "source_midpoint_control_present": bool(
+            source_info is not None and source_info.get("midpoint_controls") is not None
+        ),
         "continuous_backend_baseline": True,
-        "collocation_method": "hermite_simpson",
+        "collocation_method": collocation_method,
     }
 
     nominal_guess: np.ndarray | None = None
+    nominal_midpoint_guess: np.ndarray | None = None
     if source_info is not None:
         nominal_guess = np.asarray(source_info["controls"], dtype=float)
         if nominal_guess.shape != (cfg.n_segments, 3):
@@ -569,23 +732,40 @@ def _run_case(
                 f"{case['case_id']} warm-start controls shape {nominal_guess.shape} "
                 f"does not match {(cfg.n_segments, 3)}"
             )
+        if source_info.get("midpoint_controls") is not None:
+            nominal_midpoint_guess = np.asarray(source_info["midpoint_controls"], dtype=float)
+            if nominal_midpoint_guess.shape != (cfg.n_segments, 3):
+                raise ValueError(
+                    f"{case['case_id']} warm-start midpoint controls shape {nominal_midpoint_guess.shape} "
+                    f"does not match {(cfg.n_segments, 3)}"
+                )
 
-    result = run_direct_collocation_baseline(
-        state0=states.initial,
-        target=states.target,
-        cfg=cfg,
-        masks=masks,
-        thresholds=thresholds,
-        selected_outages=int(case["selected_outages"]),
-        max_nfev=int(case["max_nfev"]),
-        min_recovery_segments=int(case["min_recovery_segments"]),
-        collocation_config=direct_cfg,
-        nominal_control_guess=nominal_guess,
-        selected_branch_control_guesses=None,
-        warm_start_info=warm_start_info,
+    backend_kwargs = {
+        "state0": states.initial,
+        "target": states.target,
+        "cfg": cfg,
+        "masks": masks,
+        "thresholds": thresholds,
+        "selected_outages": int(case["selected_outages"]),
+        "max_nfev": int(case["max_nfev"]),
+        "min_recovery_segments": int(case["min_recovery_segments"]),
+        "collocation_config": direct_cfg,
+        "nominal_control_guess": nominal_guess,
+        "selected_branch_control_guesses": None,
+        "warm_start_info": warm_start_info,
+    }
+    if nominal_midpoint_guess is not None:
+        backend_kwargs["nominal_midpoint_control_guess"] = nominal_midpoint_guess
+    result = run_direct_collocation_baseline(**backend_kwargs)
+    result["target_generation"] = str(
+        (getattr(states, "target_metadata", {}) or {}).get("target_state_generation", TARGET_GENERATION)
     )
     nominal_controls = np.asarray(result["nominal_controls"], dtype=float)
-    return result, nominal_controls
+    raw_midpoint_controls = result.get("nominal_midpoint_controls")
+    nominal_midpoint_controls = (
+        None if raw_midpoint_controls is None else np.asarray(raw_midpoint_controls, dtype=float)
+    )
+    return result, nominal_controls, nominal_midpoint_controls
 
 
 # ---------------------------------------------------------------------------
@@ -618,6 +798,7 @@ def _compatible_existing_rows(
     controls_by_case_id: dict[str, dict] = {}
     rejected: list[dict] = []
     seen_case_ids: set[str] = set()
+    require_midpoint_controls = _requires_midpoint_controls(base_config)
 
     for case in cases:
         case_id = str(case["case_id"])
@@ -681,7 +862,12 @@ def _compatible_existing_rows(
             )
             continue
 
-        loaded = load_control_sidecar(controls_dir, case_id, expected_fp)
+        loaded = load_control_sidecar(
+            controls_dir,
+            case_id,
+            expected_fp,
+            require_midpoint_controls=require_midpoint_controls,
+        )
         if loaded is None:
             rejected.append(
                 {
@@ -707,10 +893,18 @@ def _compatible_existing_rows(
         normalized["case_order"] = int(case["case_order"])
         normalized["nominal_control_path"] = control_path.as_posix()
         normalized["nominal_control_hash"] = control_hash
+        normalized["nominal_control_sidecar_hash"] = control_hash
+        normalized["nominal_endpoint_control_hash"] = loaded.endpoint_control_hash
+        normalized["nominal_midpoint_control_present"] = bool(loaded.midpoint_control_present)
+        normalized["nominal_midpoint_control_hash"] = loaded.midpoint_control_hash
         kept_rows.append(normalized)
         controls_by_case_id[case_id] = {
             "controls": controls,
+            "midpoint_controls": loaded.midpoint_controls,
             "control_hash": control_hash,
+            "endpoint_control_hash": loaded.endpoint_control_hash,
+            "midpoint_control_hash": loaded.midpoint_control_hash,
+            "midpoint_control_present": loaded.midpoint_control_present,
             "path": control_path,
             "settings_fingerprint": expected_fp,
             "row": normalized,
@@ -793,7 +987,7 @@ def _write_table(df: pd.DataFrame, tables_dir: Path) -> None:
         "Runtime (s)",
         "Meets thresholds",
     ]
-    (tables_dir / "hermite_simpson_continuation_baseline_table.tex").write_text(
+    (tables_dir / f"{ARTIFACT_STEM}_table.tex").write_text(
         table.to_latex(index=False, float_format="%.4f", escape=True),
         encoding="utf-8",
     )
@@ -868,7 +1062,7 @@ def _write_plot(df: pd.DataFrame, figures_dir: Path) -> None:
     fig.tight_layout(rect=(0, 0, 1, 0.90))
     for suffix in (".png", ".pdf"):
         fig.savefig(
-            figures_dir / f"hermite_simpson_continuation_baseline{suffix}",
+            figures_dir / f"{ARTIFACT_STEM}{suffix}",
             dpi=220 if suffix == ".png" else None,
         )
     plt.close(fig)
@@ -897,38 +1091,34 @@ def _metadata(
             "and selected_worst_error <= robust_success"
         ),
         "semantics": {
-            "backend": (
-                "This is a continuous-backend Hermite-Simpson direct-collocation implementation baseline/probe "
-                "with persisted nominal-control warm starts and trajectory stacking; "
-                "it is NOT a quantum, QUBO, QAOA, or discrete schedule-search result."
-            ),
+            "backend": METADATA_BACKEND_SEMANTICS,
             "continuation": (
-                "Continuation rows pass the previous row's persisted nominal controls to "
+                "Continuation rows pass the previous row's persisted nominal endpoint controls to "
                 "qlt.direct_collocation.run_direct_collocation_baseline as nominal_control_guess. "
-                "Controls are Euclidean projected to the amax ball before use."
+                "For independent-midpoint HS rows, persisted nominal midpoint controls are also passed "
+                "as nominal_midpoint_control_guess when present. Controls are Euclidean projected to "
+                "the amax ball before use."
             ),
-            "hermite_simpson": (
-                "Hermite-Simpson constant-control direct transcription; "
-                "controls are held constant over each segment and no independent midpoint control "
-                "variables are optimized."
+            "sidecar_schema": (
+                "Nominal-control sidecars are backward compatible with legacy endpoint-only files. "
+                "Rows use nominal_control_hash/nominal_control_sidecar_hash for the full sidecar hash; "
+                "nominal_endpoint_control_hash records endpoint controls, and "
+                "nominal_midpoint_control_present/nominal_midpoint_control_hash record optional "
+                "independent midpoint controls."
             ),
+            METADATA_METHOD_KEY: METADATA_METHOD_SEMANTICS,
             "all_mask": (
                 "all_mask_worst_error and all_outage_errors evaluate all configured outage masks. "
                 "Selected masks use optimized branch recovery controls; "
                 "unselected masks use masked nominal controls only."
             ),
             "target": (
-                "Non-teacher catalog halo phase-shift target generated by zero-thrust CR3BP "
-                "phase propagation of the JPL halo source state."
+                "Each row records target_mode and target_generation; phase-shift rows use zero-thrust "
+                "CR3BP phase propagation of the JPL halo source state, while catalog-DRO rows use the "
+                "configured catalog-DRO target loader."
             ),
         },
-        "limitations": [
-            "Normalized Earth-Moon CR3BP only; not a flight-ready trajectory optimization.",
-            "Constant-control Hermite-Simpson scheme; no independent midpoint control variables.",
-            "Warm starts use only persisted nominal controls from the named source row.",
-            "Failed/negative diagnostics are preserved honestly and not extrapolated.",
-            "The optimizer may stop at max_nfev; such rows are retained with optimizer_success=False.",
-        ],
+        "limitations": list(METADATA_LIMITATIONS),
         "target_generation": TARGET_GENERATION,
         "expected_cases": cases,
         "rows": df.to_dict(orient="records"),
@@ -948,11 +1138,11 @@ def _regenerate(
     skipped_cases: list[dict],
 ) -> None:
     df = pd.DataFrame(df, columns=HS_CONTINUATION_COLUMNS)
-    df.to_csv(results_dir / "hermite_simpson_continuation_baseline.csv", index=False)
+    df.to_csv(results_dir / f"{ARTIFACT_STEM}.csv", index=False)
     _write_table(df, tables_dir)
     _write_plot(df, figures_dir)
     write_json(
-        results_dir / "hermite_simpson_continuation_baseline_metadata.json",
+        results_dir / f"{ARTIFACT_STEM}_metadata.json",
         _metadata(df, config, command, cases, resume_rejected_rows, skipped_cases),
     )
 
@@ -972,12 +1162,14 @@ def _runtime_budget(args, config: dict) -> float | None:
 
 def run(args) -> pd.DataFrame:
     config = yaml.safe_load(args.config.read_text(encoding="utf-8"))
+    if FORCE_COLLOCATION_METHOD is not None:
+        config.setdefault("direct_collocation", {})["method"] = str(FORCE_COLLOCATION_METHOD)
     root = Path.cwd()
     results_dir, figures_dir, tables_dir = output_directories(root, config)
     controls_dir = results_dir / "controls"
     for directory in (results_dir, figures_dir, tables_dir, controls_dir):
         directory.mkdir(parents=True, exist_ok=True)
-    csv_path = results_dir / "hermite_simpson_continuation_baseline.csv"
+    csv_path = results_dir / f"{ARTIFACT_STEM}.csv"
 
     cases = _suite_cases(config)
     if getattr(args, "max_cases", None) is not None:
@@ -1062,7 +1254,7 @@ def run(args) -> pd.DataFrame:
             active_stack.remove(case_id)
             return
 
-        result, nominal_controls = _run_case(
+        result, nominal_controls, nominal_midpoint_controls = _run_case(
             base_config=config,
             source_states=args.source_states,
             case=case,
@@ -1082,13 +1274,25 @@ def run(args) -> pd.DataFrame:
             case_id=case_id,
             settings_fingerprint=settings_fp,
             controls=nominal_controls,
+            midpoint_controls=nominal_midpoint_controls,
             row=row,
         )
         row["nominal_control_path"] = sidecar["path"].as_posix()
         row["nominal_control_hash"] = sidecar["control_hash"]
+        row["nominal_control_sidecar_hash"] = sidecar["sidecar_hash"]
+        row["nominal_endpoint_control_hash"] = sidecar["endpoint_control_hash"]
+        row["nominal_midpoint_control_present"] = bool(sidecar["midpoint_control_present"])
+        row["nominal_midpoint_control_hash"] = sidecar["midpoint_control_hash"]
+        row["nominal_midpoint_warm_start_loaded"] = bool(
+            (result.get("warm_start_info") or {}).get("source_midpoint_control_present", False)
+        )
         controls_by_case_id[case_id] = {
             "controls": sidecar["controls"],
+            "midpoint_controls": sidecar["midpoint_controls"],
             "control_hash": sidecar["control_hash"],
+            "endpoint_control_hash": sidecar["endpoint_control_hash"],
+            "midpoint_control_hash": sidecar["midpoint_control_hash"],
+            "midpoint_control_present": sidecar["midpoint_control_present"],
             "path": sidecar["path"],
             "settings_fingerprint": settings_fp,
             "row": row,
@@ -1142,15 +1346,12 @@ def run(args) -> pd.DataFrame:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description=(
-            "Hermite-Simpson direct-collocation continuation baseline. "
-            "Continuous-backend probe; not a quantum/discrete result."
-        )
+        description=SCRIPT_DESCRIPTION
     )
     parser.add_argument(
         "--config",
         type=Path,
-        default=Path("configs/hermite_simpson_continuation_baseline.yaml"),
+        default=DEFAULT_CONFIG_PATH,
     )
     parser.add_argument(
         "--source-states",

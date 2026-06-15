@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
-  "generated_utc": "2026-06-15T13:04:12Z",
-  "note": "Tracked-file artifact manifest for paper reproducibility; excludes the manifest itself, .venv, caches, and logs. File hashes and byte counts reflect the working tree at generated_utc.",
-  "git_head": "adfca3e56f97e675b254e1beca785d46124036e6",
+  "generated_utc": "2026-06-15T14:49:03Z",
+  "note": "Scoped-file artifact manifest for paper reproducibility; includes tracked files and untracked evidence files visible to git, excludes the manifest itself, .venv, caches, and logs. File hashes and byte counts reflect the working tree at generated_utc.",
+  "git_head": "0287a693cbe0ca565315b66da9ddcd4f2709cae7",
   "git_status_note": "git_head records the current HEAD before the manifest-refresh commit; file hashes and byte counts reflect the working tree at generated_utc.",
-  "file_count": 486,
+  "file_count": 499,
   "files": [
     {
       "path": ".gitignore",
@@ -13,13 +13,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "c511a64c3f99a705ca69cce25ab9cdb27105aff0072725322a00d20c9791fe49",
-      "bytes": 7219
+      "sha256": "d9f2b4dd78fcdfda18ceae90865e56a06090a61c98a38bcec4ce96c5285e53dd",
+      "bytes": 9551
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "87ee5854faace30dec5aad23a4b6d5648f3c22ec623bea4612a330ae4144ee15",
-      "bytes": 11555
+      "sha256": "c1ac21c9b7200af5704cb87361db24026b751b1dfc29c9c1e574fcecd3fc055c",
+      "bytes": 15255
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -75,6 +75,11 @@
       "path": "configs/hermite_simpson_continuation_baseline.yaml",
       "sha256": "d2840adf1e39e035f40c6790fd3cb8a6b1d3246777e3aea11c1d0a2804d3f4eb",
       "bytes": 2816
+    },
+    {
+      "path": "configs/independent_hs_continuation_baseline.yaml",
+      "sha256": "8743d2febd75b922974040089a58389a1bda4467bd2172e939ee132b965640c6",
+      "bytes": 3506
     },
     {
       "path": "configs/pilot_replicated.yaml",
@@ -325,6 +330,41 @@
       "path": "data/results/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_metadata.json",
       "sha256": "361aa0461680739da55305709cecade2c19fd6bd3f2b8521e31ab3c4c24c5a45",
       "bytes": 26133
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/controls/ihs_catalog_dro_tf4_amax1_selected1_nominal_controls.json",
+      "sha256": "4482b86d14585d4020e299ea8b5a804a0188913a8954a8b87f20d35b1b709c52",
+      "bytes": 3329
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/controls/ihs_phase_p02_warm_from_p03_nominal_controls.json",
+      "sha256": "4dfd0896733e0f9dedc2841415f14b753cf70d8a2072e8090eb3018d27b6ecbc",
+      "bytes": 3418
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/controls/ihs_phase_p03_cold_nominal_controls.json",
+      "sha256": "9a1c6b6e2dbe73a0dcc416e73b6c10b89f85824caacdb48cf2e557d69d82990f",
+      "bytes": 3386
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/controls/ihs_phase_p04_amax02_warm_from_p03_nominal_controls.json",
+      "sha256": "27da33d6e6986d8ff5ef5a53b48fa08db1ecad9fe163607f75ce8ab96ac96bc7",
+      "bytes": 3466
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/controls/ihs_phase_p04_warm_from_p03_nominal_controls.json",
+      "sha256": "a8ac39319cecd77fb9873f258b8d31e47b7b0022ef82271c14d7e25636d988e2",
+      "bytes": 3447
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline.csv",
+      "sha256": "cebebee6c4d8925954c81629df6d58885012005b7adff6d3403b37dd4e71dd65",
+      "bytes": 15920
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline_metadata.json",
+      "sha256": "8e5646119bab7e029e7bc9e5e8e55397310597c583a86a1d922b9d5252e8b517",
+      "bytes": 36854
     },
     {
       "path": "data/results/multiple_shooting_feasibility.csv",
@@ -1712,6 +1752,16 @@
       "bytes": 96786
     },
     {
+      "path": "figures/independent_hs_continuation_baseline/independent_hs_continuation_baseline.pdf",
+      "sha256": "28af1ee84c7b14a86410a8650f6304baf02e525a44792b181cfca2c9213deda5",
+      "bytes": 16413
+    },
+    {
+      "path": "figures/independent_hs_continuation_baseline/independent_hs_continuation_baseline.png",
+      "sha256": "dd7ca0b5ece9eb410eb140735598a818fee72990e416004eaf045adcc70900ce",
+      "bytes": 137541
+    },
+    {
       "path": "figures/method_comparison.pdf",
       "sha256": "6b2135c4f38a0994df0b5215f29bfd5ac77085ea384ceb15d9cd7f6a8cec7218",
       "bytes": 13149
@@ -2073,13 +2123,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "31921b9bdfd5b96d3694f3bc64dd9a156af8b66886a26752da75e41b56d9ce6e",
-      "bytes": 499665
+      "sha256": "fe44839f5fe136a931fd2d73de499514bc3510e71d3957afd7adf4db983f14cf",
+      "bytes": 563232
     },
     {
       "path": "paper/main.tex",
-      "sha256": "8271c4f3d6f26e886a4ee9115290ba3863230109314fe7da6f8ac14976059c71",
-      "bytes": 76497
+      "sha256": "73e34ce699c0d075108dad82a1c1d19a6243dc6d0c23f9f3a370adb07e0dbc3f",
+      "bytes": 94494
     },
     {
       "path": "paper/references.bib",
@@ -2153,8 +2203,13 @@
     },
     {
       "path": "scripts/run_hermite_simpson_continuation.py",
-      "sha256": "4ccec287aa4293a1c2c9917f3dba5bda1b65123289febe5f36ab40f7d59f93a5",
-      "bytes": 45406
+      "sha256": "19df504b799ef477e2b361c8971b3497ef34631c17c124ef2c4d8fc6ccb7e435",
+      "bytes": 55341
+    },
+    {
+      "path": "scripts/run_independent_hs_continuation.py",
+      "sha256": "e026c53a28cc189bc5610df0fd0643db83411a64e00449dd70e205e1ae555fb8",
+      "bytes": 5663
     },
     {
       "path": "scripts/run_main_method_statistics.py",
@@ -2188,8 +2243,8 @@
     },
     {
       "path": "src/qlt/direct_collocation.py",
-      "sha256": "b880d6cada883b1dfb115a16d22ad8494e9fe9ef6d4c70497c7684e9528ae30b",
-      "bytes": 25452
+      "sha256": "91d36ec1958975ee8618efe4a371b9798c3cd1e02cd3a796382e04503f8a5b07",
+      "bytes": 41106
     },
     {
       "path": "src/qlt/experiment.py",
@@ -2290,6 +2345,11 @@
       "path": "tables/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_table.tex",
       "sha256": "015659e173e7c1ef2cc6006c1232ad009a006a88fd54a4c326389b70adc74282",
       "bytes": 1058
+    },
+    {
+      "path": "tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex",
+      "sha256": "905cd876b04b6f4e02afca06c8ee868eadc5ce906bdd29cc6dc3e7e80fe83962",
+      "bytes": 1309
     },
     {
       "path": "tables/multiple_shooting_feasibility_table.tex",
@@ -2430,6 +2490,11 @@
       "path": "tests/test_hermite_simpson_continuation.py",
       "sha256": "d0ba3120250d6784e1a31fe241e02bbb57d2117d61f1e814325e171aa06cee40",
       "bytes": 30584
+    },
+    {
+      "path": "tests/test_independent_hs_direct_collocation.py",
+      "sha256": "ee550116afac3d9a3e6418ebd374e21547f9051bff0571184fe623d41fc366c4",
+      "bytes": 18466
     },
     {
       "path": "tests/test_smoke.py",

@@ -1,0 +1,110 @@
+run:
+  label: independent_hs_continuation_baseline
+  output_subdir: independent_hs_continuation_baseline
+  evidence_level: "continuous-backend independent-midpoint-control Hermite-Simpson direct-collocation continuation evidence; non-teacher catalog halo phase-shift rows plus bounded catalog-DRO selected-outage diagnostic; not a quantum/discrete result"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: catalog_halo_phase_shift
+  transfer_time: 0.5
+  phase_time: 0.3
+  segments: 8
+  substeps_per_segment: 4
+  amax: 0.3
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1]
+direct_collocation:
+  method: hermite_simpson_midpoint
+  node_initialization: blend
+  node_initialization_blend: 0.35
+  xtol: 1.0e-5
+  ftol: 1.0e-5
+  gtol: 1.0e-5
+  weights:
+    initial: 10.0
+    defect: 1.0
+    terminal: 5.0
+    branch_start: 8.0
+    branch_defect: 1.0
+    branch_terminal: 5.0
+    control: 0.01
+    smooth: 0.012
+suite:
+  runtime_budget_seconds: 1800
+  selected_outages: 3
+  min_recovery_segments: 1
+  groups:
+    phase_continuation_single:
+      purpose: "one-segment outage selected-branch continuation at N=8 using independent midpoint controls; warm rows reuse the cold p=0.3 persisted nominal endpoint controls"
+      target_mode: catalog_halo_phase_shift
+      outage_lengths: [1]
+      cases:
+        - case_id: ihs_phase_p03_cold
+          phase_time: 0.3
+          transfer_time: 0.5
+          amax: 0.3
+          segments: 8
+          selected_outages: 3
+          max_nfev: 60
+          warm_start_kind: cold
+        - case_id: ihs_phase_p02_warm_from_p03
+          phase_time: 0.2
+          transfer_time: 0.5
+          amax: 0.3
+          segments: 8
+          selected_outages: 3
+          max_nfev: 90
+          warm_start_kind: nominal_controls
+          warm_start_from_case_id: ihs_phase_p03_cold
+        - case_id: ihs_phase_p04_warm_from_p03
+          phase_time: 0.4
+          transfer_time: 0.5
+          amax: 0.3
+          segments: 8
+          selected_outages: 3
+          max_nfev: 90
+          warm_start_kind: nominal_controls
+          warm_start_from_case_id: ihs_phase_p03_cold
+    tighter_thrust_phase_shift:
+      purpose: "tighter-thrust phase-shift stress row using independent midpoint controls; negative diagnostics retained if thresholds are not met"
+      target_mode: catalog_halo_phase_shift
+      outage_lengths: [1]
+      cases:
+        - case_id: ihs_phase_p04_amax02_warm_from_p03
+          phase_time: 0.4
+          transfer_time: 0.5
+          amax: 0.2
+          segments: 8
+          selected_outages: 3
+          max_nfev: 80
+          warm_start_kind: nominal_controls
+          warm_start_from_case_id: ihs_phase_p03_cold
+    hard_catalog_selected_outage:
+      purpose: "bounded true catalog-DRO selected-outage diagnostic with independent midpoint controls; failure is retained as a negative result"
+      target_mode: catalog_dro_phase
+      outage_lengths: [1, 2]
+      cases:
+        - case_id: ihs_catalog_dro_tf4_amax1_selected1
+          target_mode: catalog_dro_phase
+          phase_time: 0.0
+          transfer_time: 4.0
+          amax: 1.0
+          segments: 8
+          selected_outages: 1
+          min_recovery_segments: 2
+          max_nfev: 50
+          warm_start_kind: cold

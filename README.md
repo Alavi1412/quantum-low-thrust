@@ -48,9 +48,8 @@ runs, and commands used for the paper evidence. A machine-readable SHA-256
 manifest is written to `data/results/artifact_manifest.json`.
 
 Historical experiment metadata may contain `git_head: null` because those runs
-predated the first commit. The refreshed manifest records 486 tracked files,
-with evidence commit `adfca3e` as the manifest `git_head` and manifest refresh
-commit `519d331` containing the manifest update. The manifest intentionally does
+predated the first commit. The refreshed manifest records the current scoped file
+set and working-tree hashes at generation time. The manifest intentionally does
 not include an entry for itself.
 
 ## Main Commands
@@ -180,6 +179,24 @@ diagnostic with persisted nominal-control warm starts and trajectory-stacking
 semantics, not a QUBO, QAOA, quantum, or discrete-sampler result. The
 `hs_hard_p04_amax02_warm_from_p03` row is a lower-thrust catalog halo phase-shift
 stress probe, not the unresolved hard NRHO-like catalog benchmark.
+
+For the independent-midpoint-control Hermite-Simpson continuation evidence:
+
+```powershell
+py -3.11 scripts\run_independent_hs_continuation.py --config configs\independent_hs_continuation_baseline.yaml --source-states data\source_states.json --resume
+```
+
+The independent-HS package writes
+`data/results/independent_hs_continuation_baseline/*`, endpoint-plus-midpoint
+nominal-control sidecars under
+`data/results/independent_hs_continuation_baseline/controls/`,
+`tables/independent_hs_continuation_baseline/*`, and
+`figures/independent_hs_continuation_baseline/*`. Its sidecar schema persists
+endpoint and midpoint nominal controls and records endpoint, midpoint, and
+combined sidecar hashes so midpoint-control trajectory, fuel, and terminal-error
+diagnostics are reproducible. This is continuous-backend evidence only; the
+phase-time `0.2` diagnostic and bounded catalog-DRO selected-outage row remain
+unresolved.
 
 For the cardinality ablation:
 

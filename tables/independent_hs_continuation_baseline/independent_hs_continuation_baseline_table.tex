@@ -1,0 +1,11 @@
+\begin{tabular}{llrlrlrlrrrrrrrr}
+\toprule
+Case ID & Group & Phase time & Warm start & Segments & Outage masks & Max nfev & Method & Nominal error & Selected worst error & All-mask worst error & Optimizer success & DC success & nfev & Runtime (s) & Meets thresholds \\
+\midrule
+ihs\_phase\_p03\_cold & Phase continuation (single outage) & 0.3000 & cold & 8 & 3/8 & 60 & hermite\_simpson\_midpoint & 0.0358 & 0.0300 & 0.0849 & False & True & 60 & 221.3432 & True \\
+ihs\_phase\_p02\_warm\_from\_p03 & Phase continuation (single outage) & 0.2000 & from 0.3 & 8 & 3/8 & 90 & hermite\_simpson\_midpoint & 0.0976 & 0.0942 & 0.1694 & False & False & 90 & 419.5509 & False \\
+ihs\_phase\_p04\_warm\_from\_p03 & Phase continuation (single outage) & 0.4000 & from 0.3 & 8 & 3/8 & 90 & hermite\_simpson\_midpoint & 0.0194 & 0.0152 & 0.0605 & True & True & 7 & 34.3690 & True \\
+ihs\_phase\_p04\_amax02\_warm\_from\_p03 & tighter thrust phase shift & 0.4000 & from 0.3 & 8 & 3/8 & 80 & hermite\_simpson\_midpoint & 0.0197 & 0.0188 & 0.0532 & True & True & 17 & 73.7907 & True \\
+ihs\_catalog\_dro\_tf4\_amax1\_selected1 & hard catalog selected outage & 0.0000 & cold & 8 & 1/15 & 50 & hermite\_simpson\_midpoint & 4.2644 & 11.0843 & 11.0843 & False & False & 50 & 50.2186 & False \\
+\bottomrule
+\end{tabular}

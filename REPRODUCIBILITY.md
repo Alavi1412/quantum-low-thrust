@@ -14,9 +14,8 @@ not a flight-ready trajectory design tool.
 - The repository now has commits. Some historical experiment metadata record
   `git_head: null` because those runs predated the first commit. For the current
   snapshot, use git history together with `data/results/artifact_manifest.json`.
-  The refreshed manifest records 486 tracked files, with evidence commit
-  `adfca3e` as the manifest `git_head` and manifest refresh commit `519d331`
-  containing the manifest update. The manifest intentionally has no self-entry.
+  The refreshed manifest records the current scoped file set and working-tree
+  hashes at generation time. The manifest intentionally has no self-entry.
 
 ## Quick Verification
 
@@ -44,6 +43,7 @@ regenerated; use the recorded artifacts for normal verification.
 | Continuation-extension suite | `py -3.11 scripts\run_continuation_margin_suite.py --config configs/continuation_extension_suite.yaml --resume` | `configs/continuation_extension_suite.yaml`, `data/source_states.json`, persisted nominal-control sidecars for warm rows | `data/results/continuation_extension_suite/*`, `data/results/continuation_extension_suite/controls/*`, `figures/continuation_extension_suite/*`, `tables/continuation_extension_suite/*` | Expensive if regenerated; continuous-backend direct multiple-shooting continuation baseline, not a quantum or discrete-sampler run. |
 | Direct-collocation baseline | `python scripts/run_direct_collocation_baseline.py --config configs/direct_collocation_baseline.yaml` | `configs/direct_collocation_baseline.yaml`, `src/qlt/direct_collocation.py`, `data/source_states.json` | `data/results/direct_collocation_baseline/*`, `figures/direct_collocation_baseline/*`, `tables/direct_collocation_baseline/*` | Expensive if regenerated; use recorded artifacts for short verification. |
 | Constant-control Hermite-Simpson continuation baseline/probe | `py -3.11 scripts\run_hermite_simpson_continuation.py --resume` | `configs/hermite_simpson_continuation_baseline.yaml`, `data/source_states.json`, persisted nominal-control sidecars for warm rows | `data/results/hermite_simpson_continuation_baseline/*`, `data/results/hermite_simpson_continuation_baseline/controls/*`, `figures/hermite_simpson_continuation_baseline/*`, `tables/hermite_simpson_continuation_baseline/*` | Expensive if regenerated; continuous-backend diagnostic with constant segment controls and no independent midpoint controls. Not quantum/discrete evidence. |
+| Independent-midpoint-control Hermite-Simpson continuation evidence | `py -3.11 scripts\run_independent_hs_continuation.py --config configs\independent_hs_continuation_baseline.yaml --source-states data\source_states.json --resume` | `configs/independent_hs_continuation_baseline.yaml`, `data/source_states.json`, persisted endpoint-plus-midpoint nominal-control sidecars for warm rows | `data/results/independent_hs_continuation_baseline/*`, `data/results/independent_hs_continuation_baseline/controls/*`, `figures/independent_hs_continuation_baseline/*`, `tables/independent_hs_continuation_baseline/*` | Expensive if regenerated; continuous-backend diagnostic with independent midpoint controls and endpoint/midpoint sidecar hashes. Not quantum/discrete evidence. The phase-time `0.2` and bounded catalog-DRO diagnostics remain negative. |
 | Phase-shift cardinality main-method 30-seed package | `py -3.11 scripts\run_experiment.py --config configs\q1_phase_shift_cardinality_30seed.yaml` and `py -3.11 scripts\run_main_method_statistics.py --config configs\q1_phase_shift_cardinality_30seed.yaml` | `configs/q1_phase_shift_cardinality_30seed.yaml`, `data/source_states.json` | `data/results/phase_shift_cardinality_30seed/*`, `figures/phase_shift_cardinality_30seed/*`, `tables/phase_shift_cardinality_30seed/*` | Expensive to regenerate the raw run; statistics generation is short. 210 rows = 30 seeds x 7 methods; no quantum-advantage or QAOA-superiority claim. |
 | QAOA depth ablation, 30-seed statistics | `python scripts/run_qaoa_depth_ablation.py --config configs/qaoa_depth_ablation_30seed.yaml --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation_30seed.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation_30seed/*`, `figures/qaoa_depth_ablation_30seed/*`, `tables/qaoa_depth_ablation_30seed/*` | Expensive; recorded runtime is 3301.5 s. QAOA-depth statistical package; no superiority or quantum-advantage claim. |
 | Cardinality ablation | `python scripts/run_cardinality_ablation.py` | `configs/q1_phase_shift_cardinality.yaml` | `data/results/phase_shift_cardinality_ablation/*`, `figures/phase_shift_cardinality_ablation/*`, `tables/phase_shift_cardinality_ablation/*` | Expensive; recorded runtime is 2069.8 s. |
@@ -84,6 +84,13 @@ regenerated; use the recorded artifacts for normal verification.
   `data/results/hermite_simpson_continuation_baseline/controls/*`,
   `tables/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_table.tex`,
   and `figures/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline.*`.
+- Independent-midpoint-control Hermite-Simpson continuation evidence and
+  endpoint-plus-midpoint sidecar provenance:
+  `data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline_metadata.json`,
+  `data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline.csv`,
+  `data/results/independent_hs_continuation_baseline/controls/*`,
+  `tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex`,
+  and `figures/independent_hs_continuation_baseline/independent_hs_continuation_baseline.*`.
 - Duty-cycle-prior 30-seed main-method statistics:
   `data/results/phase_shift_cardinality_30seed/raw_results.csv`,
   `data/results/phase_shift_cardinality_30seed/success_intervals.csv`,

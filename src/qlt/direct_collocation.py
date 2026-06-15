@@ -18,11 +18,20 @@ METHOD_TYPE = "bounded_projected_trapezoidal_direct_collocation"
 COLLOCATION_METHOD_TYPES = {
     "trapezoidal": METHOD_TYPE,
     "hermite_simpson": "bounded_projected_constant_control_hermite_simpson_direct_collocation",
+    "hermite_simpson_midpoint": "bounded_projected_independent_midpoint_control_hermite_simpson_direct_collocation",
+}
+COLLOCATION_METHOD_ALIASES = {
+    "hermite_simpson_independent": "hermite_simpson_midpoint",
+    "independent_hermite_simpson": "hermite_simpson_midpoint",
+    "independent_hs": "hermite_simpson_midpoint",
+    "hs_independent": "hermite_simpson_midpoint",
+    "hs_midpoint": "hermite_simpson_midpoint",
 }
 
 
 def normalize_collocation_method(method: str | None) -> str:
     normalized = str(method or "trapezoidal").lower().replace("-", "_")
+    normalized = COLLOCATION_METHOD_ALIASES.get(normalized, normalized)
     if normalized not in COLLOCATION_METHOD_TYPES:
         allowed = ", ".join(sorted(COLLOCATION_METHOD_TYPES))
         raise ValueError(f"direct-collocation method must be one of: {allowed}")
@@ -31,6 +40,10 @@ def normalize_collocation_method(method: str | None) -> str:
 
 def collocation_method_type(method: str | None) -> str:
     return COLLOCATION_METHOD_TYPES[normalize_collocation_method(method)]
+
+
+def collocation_method_uses_midpoint_controls(method: str | None) -> bool:
+    return normalize_collocation_method(method) == "hermite_simpson_midpoint"
 
 
 def config_hash(config: dict) -> str:
@@ -85,6 +98,34 @@ def outage_end(mask: np.ndarray) -> int:
     return int(missed[-1] + 1)
 
 
+def quadratic_midpoint_control(endpoint_control: np.ndarray, midpoint_control: np.ndarray, tau: float) -> np.ndarray:
+    """Control interpolation with u(0)=u(1)=endpoint and u(0.5)=midpoint."""
+    tau = float(tau)
+    endpoint = np.asarray(endpoint_control, dtype=float)
+    midpoint = np.asarray(midpoint_control, dtype=float)
+    return endpoint + 4.0 * tau * (1.0 - tau) * (midpoint - endpoint)
+
+
+def _rk4_step_quadratic_control(
+    state: np.ndarray,
+    mu: float,
+    dt: float,
+    endpoint_control: np.ndarray,
+    midpoint_control: np.ndarray,
+    tau0: float,
+    tau1: float,
+) -> np.ndarray:
+    tau_mid = 0.5 * (float(tau0) + float(tau1))
+    u1 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau0)
+    u2 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau_mid)
+    u4 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau1)
+    k1 = cr3bp_derivative(state, mu, u1)
+    k2 = cr3bp_derivative(state + 0.5 * dt * k1, mu, u2)
+    k3 = cr3bp_derivative(state + 0.5 * dt * k2, mu, u2)
+    k4 = cr3bp_derivative(state + dt * k3, mu, u4)
+    return state + (dt / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4)
+
+
 def propagate_piecewise_controls(
     state0: np.ndarray,
     controls: np.ndarray,
@@ -92,9 +133,16 @@ def propagate_piecewise_controls(
     tf: float,
     substeps_per_segment: int,
     *,
+    midpoint_controls: np.ndarray | None = None,
     return_nodes: bool = False,
 ) -> tuple[np.ndarray, np.ndarray | None]:
     controls = project_controls_to_ball(np.asarray(controls, dtype=float), np.inf)
+    if midpoint_controls is not None:
+        midpoint_controls = project_controls_to_ball(np.asarray(midpoint_controls, dtype=float), np.inf)
+        if midpoint_controls.shape != controls.shape:
+            raise ValueError(
+                f"midpoint_controls shape {midpoint_controls.shape} does not match controls shape {controls.shape}"
+            )
     state = np.asarray(state0, dtype=float).copy()
     n_segments = int(controls.shape[0])
     if n_segments == 0:
@@ -103,9 +151,17 @@ def propagate_piecewise_controls(
     h = float(tf) / float(n_segments)
     dt = h / float(substeps_per_segment)
     nodes = [state.copy()] if return_nodes else None
-    for control in controls:
-        for _ in range(int(substeps_per_segment)):
-            state = rk4_step(state, mu, dt, control)
+    steps = int(substeps_per_segment)
+    for segment_index, control in enumerate(controls):
+        if midpoint_controls is None:
+            for _ in range(steps):
+                state = rk4_step(state, mu, dt, control)
+        else:
+            midpoint_control = midpoint_controls[segment_index]
+            for step_index in range(steps):
+                tau0 = step_index / float(steps)
+                tau1 = (step_index + 1) / float(steps)
+                state = _rk4_step_quadratic_control(state, mu, dt, control, midpoint_control, tau0, tau1)
         if return_nodes:
             nodes.append(state.copy())
     return state, np.asarray(nodes) if return_nodes else None
@@ -117,14 +173,31 @@ def propagate_prefix(
     mu: float,
     segment_dt: float,
     substeps_per_segment: int,
+    *,
+    midpoint_controls: np.ndarray | None = None,
 ) -> np.ndarray:
     state = np.asarray(state0, dtype=float).copy()
+    controls = np.asarray(controls, dtype=float)
+    if midpoint_controls is not None:
+        midpoint_controls = np.asarray(midpoint_controls, dtype=float)
+        if midpoint_controls.shape != controls.shape:
+            raise ValueError(
+                f"midpoint_controls shape {midpoint_controls.shape} does not match controls shape {controls.shape}"
+            )
     if len(controls) == 0:
         return state
     dt = float(segment_dt) / float(substeps_per_segment)
-    for control in np.asarray(controls, dtype=float):
-        for _ in range(int(substeps_per_segment)):
-            state = rk4_step(state, mu, dt, control)
+    steps = int(substeps_per_segment)
+    for segment_index, control in enumerate(controls):
+        if midpoint_controls is None:
+            for _ in range(steps):
+                state = rk4_step(state, mu, dt, control)
+        else:
+            midpoint_control = midpoint_controls[segment_index]
+            for step_index in range(steps):
+                tau0 = step_index / float(steps)
+                tau1 = (step_index + 1) / float(steps)
+                state = _rk4_step_quadratic_control(state, mu, dt, control, midpoint_control, tau0, tau1)
     return state
 
 
@@ -147,16 +220,41 @@ def hermite_simpson_defect(left: np.ndarray, right: np.ndarray, control: np.ndar
     return right - left - h / 6.0 * (f_left + 4.0 * f_mid + f_right)
 
 
+def hermite_simpson_midpoint_defect(
+    left: np.ndarray,
+    right: np.ndarray,
+    endpoint_control: np.ndarray,
+    midpoint_control: np.ndarray,
+    cfg: ObjectiveConfig,
+) -> np.ndarray:
+    h = float(cfg.tf) / float(cfg.n_segments)
+    left = np.asarray(left, dtype=float)
+    right = np.asarray(right, dtype=float)
+    endpoint_control = np.asarray(endpoint_control, dtype=float)
+    midpoint_control = np.asarray(midpoint_control, dtype=float)
+    f_left = cr3bp_derivative(left, cfg.mu, endpoint_control)
+    f_right = cr3bp_derivative(right, cfg.mu, endpoint_control)
+    x_mid = 0.5 * (left + right) + h / 8.0 * (f_left - f_right)
+    f_mid = cr3bp_derivative(x_mid, cfg.mu, midpoint_control)
+    return right - left - h / 6.0 * (f_left + 4.0 * f_mid + f_right)
+
+
 def collocation_defect(
     left: np.ndarray,
     right: np.ndarray,
     control: np.ndarray,
     cfg: ObjectiveConfig,
     method: str,
+    *,
+    midpoint_control: np.ndarray | None = None,
 ) -> np.ndarray:
     normalized = normalize_collocation_method(method)
     if normalized == "trapezoidal":
         return trapezoidal_defect(left, right, control, cfg)
+    if normalized == "hermite_simpson_midpoint":
+        if midpoint_control is None:
+            midpoint_control = control
+        return hermite_simpson_midpoint_defect(left, right, control, midpoint_control, cfg)
     return hermite_simpson_defect(left, right, control, cfg)
 
 
@@ -199,9 +297,21 @@ class DirectCollocationWeights:
         }
 
 
+@dataclass(frozen=True)
+class DirectCollocationDecision:
+    nominal_nodes: np.ndarray
+    nominal_controls: np.ndarray
+    nominal_midpoint_controls: np.ndarray | None
+    branch_nodes: list[np.ndarray]
+    branch_controls: list[np.ndarray]
+    branch_midpoint_controls: list[np.ndarray | None]
+
+
 class DirectCollocationLayout:
-    def __init__(self, cfg: ObjectiveConfig, selected_masks: np.ndarray):
+    def __init__(self, cfg: ObjectiveConfig, selected_masks: np.ndarray, method: str | None = "trapezoidal"):
         self.cfg = cfg
+        self.method = normalize_collocation_method(method)
+        self.has_midpoint_controls = collocation_method_uses_midpoint_controls(self.method)
         self.selected_masks = np.asarray(selected_masks, dtype=float)
         self.starts = [outage_end(mask) for mask in self.selected_masks]
         cursor = 0
@@ -209,8 +319,13 @@ class DirectCollocationLayout:
         cursor = self.nominal_nodes.stop
         self.nominal_controls = slice(cursor, cursor + cfg.n_segments * 3)
         cursor = self.nominal_controls.stop
+        self.nominal_midpoint_controls: slice | None = None
+        if self.has_midpoint_controls:
+            self.nominal_midpoint_controls = slice(cursor, cursor + cfg.n_segments * 3)
+            cursor = self.nominal_midpoint_controls.stop
         self.branch_nodes: list[slice] = []
         self.branch_controls: list[slice] = []
+        self.branch_midpoint_controls: list[slice | None] = []
         for start in self.starts:
             node_count = cfg.n_segments - start + 1
             control_count = cfg.n_segments - start
@@ -218,18 +333,35 @@ class DirectCollocationLayout:
             cursor = self.branch_nodes[-1].stop
             self.branch_controls.append(slice(cursor, cursor + control_count * 3))
             cursor = self.branch_controls[-1].stop
+            if self.has_midpoint_controls:
+                self.branch_midpoint_controls.append(slice(cursor, cursor + control_count * 3))
+                cursor = self.branch_midpoint_controls[-1].stop
+            else:
+                self.branch_midpoint_controls.append(None)
         self.size = cursor
 
-    def unpack(self, vec: np.ndarray) -> tuple[np.ndarray, np.ndarray, list[np.ndarray], list[np.ndarray]]:
+    def unpack_decision(self, vec: np.ndarray) -> DirectCollocationDecision:
         cfg = self.cfg
         nominal_nodes = np.asarray(vec[self.nominal_nodes], dtype=float).reshape((cfg.n_segments + 1, 6))
         nominal_controls = project_controls_to_ball(
             np.asarray(vec[self.nominal_controls], dtype=float).reshape((cfg.n_segments, 3)),
             cfg.amax,
         )
+        nominal_midpoint_controls = None
+        if self.nominal_midpoint_controls is not None:
+            nominal_midpoint_controls = project_controls_to_ball(
+                np.asarray(vec[self.nominal_midpoint_controls], dtype=float).reshape((cfg.n_segments, 3)),
+                cfg.amax,
+            )
         branch_nodes = []
         branch_controls = []
-        for start, node_slice, control_slice in zip(self.starts, self.branch_nodes, self.branch_controls):
+        branch_midpoint_controls: list[np.ndarray | None] = []
+        for start, node_slice, control_slice, midpoint_slice in zip(
+            self.starts,
+            self.branch_nodes,
+            self.branch_controls,
+            self.branch_midpoint_controls,
+        ):
             branch_nodes.append(np.asarray(vec[node_slice], dtype=float).reshape((cfg.n_segments - start + 1, 6)))
             control_count = cfg.n_segments - start
             if control_count:
@@ -237,12 +369,35 @@ class DirectCollocationLayout:
             else:
                 controls = np.zeros((0, 3), dtype=float)
             branch_controls.append(project_controls_to_ball(controls, cfg.amax))
-        return nominal_nodes, nominal_controls, branch_nodes, branch_controls
+            if midpoint_slice is not None:
+                if control_count:
+                    midpoint_controls = np.asarray(vec[midpoint_slice], dtype=float).reshape((control_count, 3))
+                else:
+                    midpoint_controls = np.zeros((0, 3), dtype=float)
+                branch_midpoint_controls.append(project_controls_to_ball(midpoint_controls, cfg.amax))
+            else:
+                branch_midpoint_controls.append(None)
+        return DirectCollocationDecision(
+            nominal_nodes=nominal_nodes,
+            nominal_controls=nominal_controls,
+            nominal_midpoint_controls=nominal_midpoint_controls,
+            branch_nodes=branch_nodes,
+            branch_controls=branch_controls,
+            branch_midpoint_controls=branch_midpoint_controls,
+        )
+
+    def unpack(self, vec: np.ndarray) -> tuple[np.ndarray, np.ndarray, list[np.ndarray], list[np.ndarray]]:
+        decision = self.unpack_decision(vec)
+        return decision.nominal_nodes, decision.nominal_controls, decision.branch_nodes, decision.branch_controls
 
     def bounds(self) -> tuple[np.ndarray, np.ndarray]:
         lower = np.full(self.size, -np.inf, dtype=float)
         upper = np.full(self.size, np.inf, dtype=float)
-        for control_slice in [self.nominal_controls, *self.branch_controls]:
+        midpoint_slices = []
+        if self.nominal_midpoint_controls is not None:
+            midpoint_slices.append(self.nominal_midpoint_controls)
+        midpoint_slices.extend(item for item in self.branch_midpoint_controls if item is not None)
+        for control_slice in [self.nominal_controls, *self.branch_controls, *midpoint_slices]:
             lower[control_slice] = -self.cfg.amax
             upper[control_slice] = self.cfg.amax
         return lower, upper
@@ -260,7 +415,9 @@ def initial_guess(
     selected_masks: np.ndarray,
     *,
     nominal_control_guess: np.ndarray | None = None,
+    nominal_midpoint_control_guess: np.ndarray | None = None,
     selected_branch_control_guesses: list[np.ndarray] | None = None,
+    method: str | None = "trapezoidal",
     node_initialization: str = "blend",
     node_initialization_blend: float = 0.35,
 ) -> tuple[DirectCollocationLayout, np.ndarray]:
@@ -270,13 +427,16 @@ def initial_guess(
 
     - ``nominal_control_guess`` is a full ``(n_segments, 3)`` acceleration
       schedule, Euclidean projected to ``||u_i|| <= amax``.
+    - ``nominal_midpoint_control_guess`` optionally seeds the independent
+      midpoint controls for ``hermite_simpson_midpoint``.  When omitted,
+      midpoint controls are initialized from the endpoint controls.
     - ``selected_branch_control_guesses`` is an optional list of full-length
       ``(n_segments, 3)`` schedules whose post-outage tail seeds each selected
       branch's recovery controls.
 
     When omitted the historical feedback-rollout guess is used unchanged.
     """
-    layout = DirectCollocationLayout(cfg, selected_masks)
+    layout = DirectCollocationLayout(cfg, selected_masks, method=method)
     schedule = np.ones(cfg.n_segments, dtype=int)
     if nominal_control_guess is None:
         nominal_controls = feedback_controls_for_schedule(schedule, state0, target, cfg)
@@ -287,7 +447,27 @@ def initial_guess(
                 f"nominal_control_guess shape {nominal_controls.shape} does not match {(cfg.n_segments, 3)}"
             )
         nominal_controls = project_controls_to_ball(nominal_controls, cfg.amax)
-    _, rollout_nodes = propagate_piecewise_controls(state0, nominal_controls, cfg.mu, cfg.tf, cfg.substeps, return_nodes=True)
+    nominal_midpoint_controls = None
+    if layout.has_midpoint_controls:
+        if nominal_midpoint_control_guess is None:
+            nominal_midpoint_controls = nominal_controls.copy()
+        else:
+            nominal_midpoint_controls = np.asarray(nominal_midpoint_control_guess, dtype=float)
+            if nominal_midpoint_controls.shape != (cfg.n_segments, 3):
+                raise ValueError(
+                    "nominal_midpoint_control_guess shape "
+                    f"{nominal_midpoint_controls.shape} does not match {(cfg.n_segments, 3)}"
+                )
+            nominal_midpoint_controls = project_controls_to_ball(nominal_midpoint_controls, cfg.amax)
+    _, rollout_nodes = propagate_piecewise_controls(
+        state0,
+        nominal_controls,
+        cfg.mu,
+        cfg.tf,
+        cfg.substeps,
+        midpoint_controls=nominal_midpoint_controls,
+        return_nodes=True,
+    )
     assert rollout_nodes is not None
     linear_nodes = _linear_nodes(state0, target, cfg.n_segments + 1)
     mode = str(node_initialization or "blend").lower().replace("_", "-")
@@ -310,18 +490,35 @@ def initial_guess(
             )
 
     chunks = [nominal_nodes.reshape(-1), nominal_controls.reshape(-1)]
+    if nominal_midpoint_controls is not None:
+        chunks.append(nominal_midpoint_controls.reshape(-1))
     h = float(cfg.tf) / float(cfg.n_segments)
     for branch_index, (mask, start) in enumerate(zip(np.asarray(selected_masks, dtype=float), layout.starts)):
         prefix_controls = nominal_controls[:start] * mask[:start, None]
-        branch_start = propagate_prefix(state0, prefix_controls, cfg.mu, h, cfg.substeps)
+        prefix_midpoint_controls = (
+            nominal_midpoint_controls[:start] * mask[:start, None]
+            if nominal_midpoint_controls is not None
+            else None
+        )
+        branch_start = propagate_prefix(
+            state0,
+            prefix_controls,
+            cfg.mu,
+            h,
+            cfg.substeps,
+            midpoint_controls=prefix_midpoint_controls,
+        )
         branch_nodes = _linear_nodes(branch_start, target, cfg.n_segments - start + 1)
         if branch_index < len(branch_guesses):
             branch_full = project_controls_to_ball(np.asarray(branch_guesses[branch_index], dtype=float), cfg.amax)
             branch_controls = branch_full[start:].copy()
         else:
             branch_controls = nominal_controls[start:].copy()
+        branch_midpoint_controls = branch_controls.copy() if layout.has_midpoint_controls else None
         chunks.append(branch_nodes.reshape(-1))
         chunks.append(branch_controls.reshape(-1))
+        if branch_midpoint_controls is not None:
+            chunks.append(branch_midpoint_controls.reshape(-1))
     return layout, np.concatenate(chunks)
 
 
@@ -330,6 +527,70 @@ def branch_full_controls(nominal_controls: np.ndarray, mask: np.ndarray, start: 
     if int(start) < controls.shape[0]:
         controls[int(start) :] = np.asarray(recovery_controls, dtype=float)
     return project_controls_to_ball(controls, amax)
+
+
+def branch_full_midpoint_controls(
+    nominal_midpoint_controls: np.ndarray | None,
+    mask: np.ndarray,
+    start: int,
+    recovery_midpoint_controls: np.ndarray | None,
+    amax: float,
+) -> np.ndarray | None:
+    if nominal_midpoint_controls is None:
+        return None
+    controls = np.asarray(nominal_midpoint_controls, dtype=float).copy() * np.asarray(mask, dtype=float)[:, None]
+    if int(start) < controls.shape[0] and recovery_midpoint_controls is not None:
+        controls[int(start) :] = np.asarray(recovery_midpoint_controls, dtype=float)
+    return project_controls_to_ball(controls, amax)
+
+
+def simpson_control_fuel(controls: np.ndarray, midpoint_controls: np.ndarray | None, tf: float) -> float:
+    controls = np.asarray(controls, dtype=float)
+    if midpoint_controls is None:
+        return control_fuel(controls, tf)
+    midpoint_controls = np.asarray(midpoint_controls, dtype=float)
+    if controls.size == 0:
+        return 0.0
+    if midpoint_controls.shape != controls.shape:
+        raise ValueError(
+            f"midpoint_controls shape {midpoint_controls.shape} does not match controls shape {controls.shape}"
+        )
+    h = float(tf) / float(controls.shape[0])
+    endpoint_norms = np.linalg.norm(controls, axis=-1)
+    midpoint_norms = np.linalg.norm(midpoint_controls, axis=-1)
+    return float((h / 6.0) * np.sum(endpoint_norms + 4.0 * midpoint_norms + endpoint_norms))
+
+
+def _control_arrays_for_diagnostics(
+    controls: np.ndarray,
+    midpoint_controls: np.ndarray | None,
+    branch_controls: list[np.ndarray],
+    branch_midpoint_controls: list[np.ndarray | None],
+) -> list[np.ndarray]:
+    arrays = [controls, *branch_controls]
+    if midpoint_controls is not None:
+        arrays.append(midpoint_controls)
+    arrays.extend(item for item in branch_midpoint_controls if item is not None)
+    return arrays
+
+
+def _append_control_regularization(
+    chunks: list[np.ndarray],
+    *,
+    controls: np.ndarray,
+    midpoint_controls: np.ndarray | None,
+    cfg: ObjectiveConfig,
+    weights: DirectCollocationWeights,
+) -> None:
+    scale = max(cfg.amax, 1e-12)
+    if controls.size:
+        chunks.append(weights.control * controls.reshape(-1) / scale)
+    if controls.shape[0] > 1:
+        chunks.append(weights.smooth * np.diff(controls, axis=0).reshape(-1) / scale)
+    if midpoint_controls is not None and midpoint_controls.size:
+        chunks.append(weights.control * midpoint_controls.reshape(-1) / scale)
+        if midpoint_controls.shape[0] > 1:
+            chunks.append(weights.smooth * np.diff(midpoint_controls, axis=0).reshape(-1) / scale)
 
 
 class DirectCollocationProblem:
@@ -353,69 +614,128 @@ class DirectCollocationProblem:
         self.layout = layout
         self.weights = weights
         self.method = normalize_collocation_method(method)
+        if collocation_method_uses_midpoint_controls(self.method) and not self.layout.has_midpoint_controls:
+            raise ValueError("hermite_simpson_midpoint requires a DirectCollocationLayout with midpoint controls")
 
     def residual(self, vec: np.ndarray) -> np.ndarray:
         cfg = self.cfg
-        nodes, controls, branch_nodes, branch_controls = self.layout.unpack(vec)
+        decision = self.layout.unpack_decision(vec)
+        nodes = decision.nominal_nodes
+        controls = decision.nominal_controls
+        midpoint_controls = decision.nominal_midpoint_controls
+        branch_nodes = decision.branch_nodes
+        branch_controls = decision.branch_controls
+        branch_midpoint_controls = decision.branch_midpoint_controls
         scale = np.maximum(scale_vector(cfg), 1e-12)
         chunks = [
             self.weights.initial * scaled_state_residual(nodes[0], self.state0, cfg),
         ]
         for i in range(cfg.n_segments):
+            midpoint_control = None if midpoint_controls is None else midpoint_controls[i]
             chunks.append(
                 self.weights.defect
-                * collocation_defect(nodes[i], nodes[i + 1], controls[i], cfg, self.method)
+                * collocation_defect(
+                    nodes[i],
+                    nodes[i + 1],
+                    controls[i],
+                    cfg,
+                    self.method,
+                    midpoint_control=midpoint_control,
+                )
                 / scale
             )
         chunks.append(self.weights.terminal * scaled_state_residual(nodes[-1], self.target, cfg))
-        chunks.append(self.weights.control * controls.reshape(-1) / max(cfg.amax, 1e-12))
-        if cfg.n_segments > 1:
-            chunks.append(self.weights.smooth * np.diff(controls, axis=0).reshape(-1) / max(cfg.amax, 1e-12))
+        _append_control_regularization(
+            chunks,
+            controls=controls,
+            midpoint_controls=midpoint_controls,
+            cfg=cfg,
+            weights=self.weights,
+        )
 
         h = float(cfg.tf) / float(cfg.n_segments)
-        for mask_index, mask, start, nodes_b, controls_b in zip(
+        for mask_index, mask, start, nodes_b, controls_b, midpoint_controls_b in zip(
             self.selected,
             self.layout.selected_masks,
             self.layout.starts,
             branch_nodes,
             branch_controls,
+            branch_midpoint_controls,
         ):
             del mask_index
-            branch_start = propagate_prefix(self.state0, controls[:start] * mask[:start, None], cfg.mu, h, cfg.substeps)
+            prefix_midpoint_controls = (
+                midpoint_controls[:start] * mask[:start, None]
+                if midpoint_controls is not None
+                else None
+            )
+            branch_start = propagate_prefix(
+                self.state0,
+                controls[:start] * mask[:start, None],
+                cfg.mu,
+                h,
+                cfg.substeps,
+                midpoint_controls=prefix_midpoint_controls,
+            )
             chunks.append(self.weights.branch_start * scaled_state_residual(nodes_b[0], branch_start, cfg))
             for j in range(cfg.n_segments - start):
+                midpoint_control_b = None if midpoint_controls_b is None else midpoint_controls_b[j]
                 chunks.append(
                     self.weights.branch_defect
-                    * collocation_defect(nodes_b[j], nodes_b[j + 1], controls_b[j], cfg, self.method)
+                    * collocation_defect(
+                        nodes_b[j],
+                        nodes_b[j + 1],
+                        controls_b[j],
+                        cfg,
+                        self.method,
+                        midpoint_control=midpoint_control_b,
+                    )
                     / scale
                 )
             chunks.append(self.weights.branch_terminal * scaled_state_residual(nodes_b[-1], self.target, cfg))
-            if controls_b.size:
-                chunks.append(self.weights.control * controls_b.reshape(-1) / max(cfg.amax, 1e-12))
-            if controls_b.shape[0] > 1:
-                chunks.append(self.weights.smooth * np.diff(controls_b, axis=0).reshape(-1) / max(cfg.amax, 1e-12))
+            _append_control_regularization(
+                chunks,
+                controls=controls_b,
+                midpoint_controls=midpoint_controls_b,
+                cfg=cfg,
+                weights=self.weights,
+            )
         return np.concatenate(chunks)
 
     def evaluate_vector(self, vec: np.ndarray, thresholds: dict) -> dict:
         cfg = self.cfg
-        _, nominal_controls, _, selected_branch_controls = self.layout.unpack(vec)
+        decision = self.layout.unpack_decision(vec)
+        nominal_controls = decision.nominal_controls
+        nominal_midpoint_controls = decision.nominal_midpoint_controls
+        selected_branch_controls = decision.branch_controls
+        selected_branch_midpoint_controls = decision.branch_midpoint_controls
         nominal_final, nominal_history = propagate_piecewise_controls(
             self.state0,
             nominal_controls,
             cfg.mu,
             cfg.tf,
             cfg.substeps,
+            midpoint_controls=nominal_midpoint_controls,
             return_nodes=True,
         )
         nominal_error = float(state_error(nominal_final, self.target, cfg.position_scale, cfg.velocity_scale))
 
         selected_lookup = {
-            int(mask_index): branch_full_controls(nominal_controls, mask, start, controls, cfg.amax)
-            for mask_index, mask, start, controls in zip(
+            int(mask_index): (
+                branch_full_controls(nominal_controls, mask, start, controls, cfg.amax),
+                branch_full_midpoint_controls(
+                    nominal_midpoint_controls,
+                    mask,
+                    start,
+                    midpoint_controls_b,
+                    cfg.amax,
+                ),
+            )
+            for mask_index, mask, start, controls, midpoint_controls_b in zip(
                 self.selected,
                 self.layout.selected_masks,
                 self.layout.starts,
                 selected_branch_controls,
+                selected_branch_midpoint_controls,
             )
         }
         all_errors: list[float] = []
@@ -424,20 +744,38 @@ class DirectCollocationProblem:
         selected_fuels: list[float] = []
         for mask_index, mask in enumerate(self.masks):
             if mask_index in selected_lookup:
-                controls = selected_lookup[mask_index]
+                controls, midpoint_controls = selected_lookup[mask_index]
             else:
                 controls = project_controls_to_ball(nominal_controls * mask[:, None], cfg.amax)
-            final, _ = propagate_piecewise_controls(self.state0, controls, cfg.mu, cfg.tf, cfg.substeps)
+                midpoint_controls = (
+                    project_controls_to_ball(nominal_midpoint_controls * mask[:, None], cfg.amax)
+                    if nominal_midpoint_controls is not None
+                    else None
+                )
+            final, _ = propagate_piecewise_controls(
+                self.state0,
+                controls,
+                cfg.mu,
+                cfg.tf,
+                cfg.substeps,
+                midpoint_controls=midpoint_controls,
+            )
             err = float(state_error(final, self.target, cfg.position_scale, cfg.velocity_scale))
+            fuel = simpson_control_fuel(controls, midpoint_controls, cfg.tf)
             all_errors.append(err)
-            all_fuels.append(control_fuel(controls, cfg.tf))
+            all_fuels.append(fuel)
             if mask_index in set(int(v) for v in self.selected.tolist()):
                 selected_errors.append(err)
-                selected_fuels.append(control_fuel(controls, cfg.tf))
+                selected_fuels.append(fuel)
 
         selected_worst = float(np.max(selected_errors)) if selected_errors else nominal_error
         all_worst = float(np.max(all_errors)) if all_errors else selected_worst
-        all_controls = [nominal_controls, *selected_branch_controls]
+        all_controls = _control_arrays_for_diagnostics(
+            nominal_controls,
+            nominal_midpoint_controls,
+            selected_branch_controls,
+            selected_branch_midpoint_controls,
+        )
         max_norm = max(
             [0.0]
             + [
@@ -462,12 +800,19 @@ class DirectCollocationProblem:
             "selected_outage_errors": selected_errors,
             "all_outage_errors": all_errors,
             "nominal_controls": nominal_controls,
+            "nominal_midpoint_controls": nominal_midpoint_controls,
             "selected_branch_controls": selected_branch_controls,
+            "selected_branch_midpoint_controls": selected_branch_midpoint_controls,
             "nominal_history": nominal_history,
-            "nominal_fuel": control_fuel(nominal_controls, cfg.tf),
-            "recovery_fuel_mean": float(np.mean(selected_fuels)) if selected_fuels else control_fuel(nominal_controls, cfg.tf),
-            "recovery_fuel_max": float(np.max(selected_fuels)) if selected_fuels else control_fuel(nominal_controls, cfg.tf),
-            "all_mask_recovery_fuel_mean": float(np.mean(all_fuels)) if all_fuels else control_fuel(nominal_controls, cfg.tf),
+            "nominal_fuel": simpson_control_fuel(nominal_controls, nominal_midpoint_controls, cfg.tf),
+            "recovery_fuel_mean": float(np.mean(selected_fuels)) if selected_fuels else simpson_control_fuel(nominal_controls, nominal_midpoint_controls, cfg.tf),
+            "recovery_fuel_max": float(np.max(selected_fuels)) if selected_fuels else simpson_control_fuel(nominal_controls, nominal_midpoint_controls, cfg.tf),
+            "all_mask_recovery_fuel_mean": float(np.mean(all_fuels)) if all_fuels else simpson_control_fuel(nominal_controls, nominal_midpoint_controls, cfg.tf),
+            "fuel_quadrature": (
+                "simpson_endpoint_midpoint_endpoint"
+                if nominal_midpoint_controls is not None
+                else "segment_rectangle_endpoint_controls"
+            ),
             "control_max_norm": max_norm,
             "control_bound_violation": bound_violation,
         }
@@ -485,6 +830,7 @@ def run_direct_collocation_baseline(
     min_recovery_segments: int = 1,
     collocation_config: dict | None = None,
     nominal_control_guess: np.ndarray | None = None,
+    nominal_midpoint_control_guess: np.ndarray | None = None,
     selected_branch_control_guesses: list[np.ndarray] | None = None,
     warm_start_info: dict | None = None,
 ) -> dict:
@@ -511,7 +857,9 @@ def run_direct_collocation_baseline(
         cfg,
         selected_masks,
         nominal_control_guess=nominal_control_guess,
+        nominal_midpoint_control_guess=nominal_midpoint_control_guess,
         selected_branch_control_guesses=selected_branch_control_guesses,
+        method=method,
         node_initialization=str(collocation_config.get("node_initialization", "blend")),
         node_initialization_blend=float(collocation_config.get("node_initialization_blend", 0.35)),
     )
@@ -548,18 +896,36 @@ def run_direct_collocation_baseline(
         if selected.size == 0
         else "all outage masks are evaluated after optimization; selected masks use optimized branch recovery controls and unselected masks use masked nominal controls only"
     )
+    collocation_scheme_semantics = {
+        "trapezoidal": "trapezoidal direct transcription with segment-constant controls",
+        "hermite_simpson": (
+            "constant-control Hermite-Simpson direct transcription; controls are held constant over each "
+            "segment and no independent midpoint control variables are optimized"
+        ),
+        "hermite_simpson_midpoint": (
+            "independent-midpoint-control Hermite-Simpson direct transcription; each segment optimizes an "
+            "endpoint/segment control and a separate midpoint control, f_left/f_right use the endpoint control, "
+            "f_mid uses the midpoint control, and reporting propagation uses RK4 substeps with quadratic "
+            "control interpolation satisfying u(0)=u(1)=endpoint and u(0.5)=midpoint"
+        ),
+    }[method]
+    control_bound_semantics = (
+        "all nominal and branch endpoint controls are Euclidean projected to ||u_i|| <= amax inside residual "
+        "evaluation, RK4 reporting propagation, fuel computation, and output diagnostics; scalar optimizer "
+        "bounds are finite guards, not the scientific bound"
+        if method != "hermite_simpson_midpoint"
+        else "all nominal and branch endpoint and independent midpoint controls are Euclidean projected to "
+        "||u_i|| <= amax inside residual evaluation, RK4 reporting propagation, Simpson-style fuel "
+        "computation, and output diagnostics; scalar optimizer bounds are finite guards, not the scientific bound"
+    )
     return {
         **evaluation,
         "method_type": collocation_method_type(method),
         "collocation_method": method,
-        "collocation_scheme_semantics": (
-            "trapezoidal direct transcription with segment-constant controls"
-            if method == "trapezoidal"
-            else "constant-control Hermite-Simpson direct transcription; controls are held constant over each segment and no independent midpoint control variables are optimized"
-        ),
+        "collocation_scheme_semantics": collocation_scheme_semantics,
         "selected_branch_semantics": selected_branch_semantics,
         "all_mask_diagnostic_semantics": all_mask_diagnostic_semantics,
-        "control_bound_semantics": "all nominal and branch controls are Euclidean projected to ||u_i|| <= amax inside residual evaluation, RK4 reporting propagation, fuel computation, and output diagnostics; scalar optimizer bounds are finite guards, not the scientific bound",
+        "control_bound_semantics": control_bound_semantics,
         "optimizer_success": bool(result.success),
         "message": str(result.message),
         "cost": float(result.cost),
