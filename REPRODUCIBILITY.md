@@ -11,20 +11,26 @@ not a flight-ready trajectory design tool.
 - A project-local `.venv` is recommended. During this packaging pass, local venv
   creation on the NAS workspace was reported to stall, while the recorded
   artifact runs used the global Python 3.11.9 interpreter.
-- The repository currently has no committed snapshot: metadata files record
-  `git_head: null` because all files were untracked at run time. Use
-  `data/results/artifact_manifest.json` as the file-level integrity manifest
-  until a git commit is made.
+- The repository now has commits. Some historical experiment metadata record
+  `git_head: null` because those runs predated the first commit. For the current
+  snapshot, use git history together with `data/results/artifact_manifest.json`,
+  which records the HEAD available before the integration commit and file-level
+  hashes for the working tree at manifest generation time. The manifest
+  intentionally has no self-entry, so it cannot record the commit that contains
+  itself.
 
 ## Quick Verification
 
 ```powershell
-python -m pip install -r requirements-lock.txt
-python -m pytest tests
+py -3.11 -m pip install -r requirements-lock.txt
+py -3.11 -m pytest tests -q
+cd paper
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The smoke tests are the intended short verification path. Do not rerun the long
-experiments unless the paper artifacts need to be regenerated.
+The pytest suite and LaTeX build are the intended short clean-clone verification
+path. Do not rerun the long experiments unless the paper artifacts need to be
+regenerated; use the recorded artifacts for normal verification.
 
 ## Artifact Map
 
@@ -35,6 +41,7 @@ experiments unless the paper artifacts need to be regenerated.
 | Phase-shift benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift.yaml` | `configs/q1_phase_shift.yaml`, `data/source_states.json` | `data/results/phase_shift/*`, `figures/phase_shift/*`, `tables/phase_shift/*` | Moderate; metadata records package versions but no total runtime field. |
 | Phase-shift cardinality benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift_cardinality.yaml` | `configs/q1_phase_shift_cardinality.yaml`, `data/source_states.json` | `data/results/phase_shift_cardinality/*`, `figures/phase_shift_cardinality/*`, `tables/phase_shift_cardinality/*` | Moderate to expensive; 10 seeds with branch recovery. |
 | Bounded phase suite | `python scripts/run_bounded_phase_suite.py --resume` | `configs/bounded_phase_suite.yaml`, `data/source_states.json` | `data/results/bounded_phase_suite/bounded_phase_suite.csv`, `figures/bounded_phase_suite/*`, `tables/bounded_phase_suite/*` | Expensive; configured runtime budget is 600 s, with recorded cases from about 13 s to 367 s. |
+| Robust-margin suite | `python scripts/run_robust_margin_suite.py --resume` | `configs/robust_margin_suite.yaml`, `data/source_states.json` | `data/results/robust_margin_suite/*`, `figures/robust_margin_suite/*`, `tables/robust_margin_suite/*` | Expensive if regenerated; recorded rows include selected-branch thrust-margin and all one-segment outage branch diagnostics. |
 | Direct-collocation baseline | `python scripts/run_direct_collocation_baseline.py --config configs/direct_collocation_baseline.yaml` | `configs/direct_collocation_baseline.yaml`, `src/qlt/direct_collocation.py`, `data/source_states.json` | `data/results/direct_collocation_baseline/*`, `figures/direct_collocation_baseline/*`, `tables/direct_collocation_baseline/*` | Expensive if regenerated; use recorded artifacts for short verification. |
 | QAOA depth ablation | `python scripts/run_qaoa_depth_ablation.py --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation/*`, `figures/qaoa_depth_ablation/*`, `tables/qaoa_depth_ablation/*` | Expensive; recorded runtime is 1291.5 s. |
 | Cardinality ablation | `python scripts/run_cardinality_ablation.py` | `configs/q1_phase_shift_cardinality.yaml` | `data/results/phase_shift_cardinality_ablation/*`, `figures/phase_shift_cardinality_ablation/*`, `tables/phase_shift_cardinality_ablation/*` | Expensive; recorded runtime is 2069.8 s. |
@@ -53,6 +60,10 @@ experiments unless the paper artifacts need to be regenerated.
 - Bounded projected multiple-shooting feasibility claims:
   `data/results/bounded_phase_suite/bounded_phase_suite_metadata.json` and
   `tables/bounded_phase_suite/bounded_phase_suite_table.tex`.
+- Robust-margin selected-branch and all one-segment outage claims:
+  `data/results/robust_margin_suite/robust_margin_suite_metadata.json`,
+  `data/results/robust_margin_suite/robust_margin_suite.csv`, and
+  `tables/robust_margin_suite/robust_margin_suite_table.tex`.
 - Direct-collocation baseline comparison:
   `data/results/direct_collocation_baseline/*`,
   `tables/direct_collocation_baseline/*`, and
@@ -76,4 +87,5 @@ experiments unless the paper artifacts need to be regenerated.
 
 `data/results/artifact_manifest.json` records scoped SHA-256 hashes for key
 source, configuration, manuscript, result, table, and figure files. It excludes
-`.venv`, caches, logs, and exhaustive generated intermediates.
+`.venv`, caches, logs, exhaustive generated intermediates, and the manifest
+file itself.

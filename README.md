@@ -1,7 +1,7 @@
 # Quantum Low-Thrust Robust Initialization Benchmark
 
 Research-code scaffold for the controlled CR3BP initialization benchmark:
-"Quantum-Assisted Robust Maneuver Initialization for Low-Thrust Cislunar
+"Quantum-Ready Robust Maneuver Initialization for Low-Thrust Cislunar
 Transfers Under Missed-Thrust Events".
 
 This is not a flight-ready trajectory design tool. It is a reproducible
@@ -29,20 +29,29 @@ For the exact direct dependencies used by the verified runs:
 python -m pip install -r requirements-lock.txt
 ```
 
-## Smoke Test
+## Short Verification
 
 ```powershell
-.\.venv\Scripts\python -m pytest tests
+py -3.11 -m pytest tests -q
+cd paper
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-If using the verified global interpreter instead of `.venv`, replace
-`.\.venv\Scripts\python` with `python` or `py -3.11`.
+This is the intended clean-clone verification path after installing the pinned
+dependencies. The long experiment commands below are expensive; use the recorded
+artifacts unless intentionally regenerating evidence.
 
 ## Reproducibility Manifest
 
 See `REPRODUCIBILITY.md` for the artifact map, expected outputs, known expensive
 runs, and commands used for the paper evidence. A machine-readable SHA-256
 manifest is written to `data/results/artifact_manifest.json`.
+
+Historical experiment metadata may contain `git_head: null` because those runs
+predated the first commit. The repository now has commits; the current manifest
+records the HEAD available before the integration commit and file-level hashes
+for the working tree at manifest generation time. The manifest intentionally
+does not include an entry for itself.
 
 ## Main Commands
 
@@ -96,6 +105,15 @@ For the bounded non-teacher phase suite:
 ```powershell
 .\.venv\Scripts\python scripts\run_bounded_phase_suite.py --resume
 ```
+
+For the robust-margin suite:
+
+```powershell
+.\.venv\Scripts\python scripts\run_robust_margin_suite.py --resume
+```
+
+The robust-margin suite writes `data/results/robust_margin_suite/*`,
+`tables/robust_margin_suite/*`, and `figures/robust_margin_suite/*`.
 
 For the cardinality ablation:
 

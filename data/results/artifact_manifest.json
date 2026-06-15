@@ -1,19 +1,19 @@
 {
     "manifest_version":  1,
-    "generated_utc":  "2026-06-15T03:59:30Z",
+    "generated_utc":  "2026-06-15T05:22:55Z",
     "note":  "Scoped artifact manifest for paper reproducibility; excludes .venv, caches, logs, and bulk generated intermediates.",
-    "git_head":  "b2a005620a164e7bff7938486c0d45e06362987b",
-    "git_status_note":  "git_head records the current HEAD before the packaging commit; file hashes and byte counts reflect the working tree at generated_utc.",
+    "git_head":  "b0b01c9469423a5db3abc11303a9a603f2080adb",
+    "git_status_note":  "git_head records the current HEAD before the integration commit; file hashes and byte counts reflect the working tree at generated_utc.",
     "files":  [
                   {
                       "path":  "README.md",
-                      "sha256":  "b4998397613edbec3e2b9acb5088dcb58420779025cb226e3ed8c3e52c7678f7",
-                      "bytes":  4726
+                      "sha256":  "788cd441b577907ece04822abcdda922abd83dd8843fe1efa61dc729a115965c",
+                      "bytes":  5491
                   },
                   {
                       "path":  "REPRODUCIBILITY.md",
-                      "sha256":  "bd50667ad7b11ace0fa6fb5cf14071c5537845b4522602e03e232fc6155986ab",
-                      "bytes":  7679
+                      "sha256":  "1cdb46138f1500999c8ae5aaac7468a194436d5b764c3235498922447f16c2ef",
+                      "bytes":  8734
                   },
                   {
                       "path":  "requirements.txt",
@@ -32,8 +32,8 @@
                   },
                   {
                       "path":  "paper/main.tex",
-                      "sha256":  "21aff4189255e4d054b0361e3434149d6b68b83c227617b97029b681b4bed67c",
-                      "bytes":  64028
+                      "sha256":  "cdac6b40ea3101ec537df30543ef76cbb32d249287ae07886dfd1383d2b7f649",
+                      "bytes":  66095
                   },
                   {
                       "path":  "paper/references.bib",
@@ -42,8 +42,8 @@
                   },
                   {
                       "path":  "paper/main.pdf",
-                      "sha256":  "66e13f005218e58889d8893dfe9422af7aed990e46af7f20183b12b0156bd43e",
-                      "bytes":  456697
+                      "sha256":  "f37c2dedf1cb0e35b2720993b106a2dc6bb982a4b3e4b312874668cbe337aa60",
+                      "bytes":  460938
                   },
                   {
                       "path":  "data/source_states.json",
@@ -52,8 +52,8 @@
                   },
                   {
                       "path":  "tests/test_smoke.py",
-                      "sha256":  "b5b7a6f3d8bd440e0c859438ae36351044cabf8212b2759c971c7ce5f9ae6e0f",
-                      "bytes":  87998
+                      "sha256":  "27f507ba7d41ff4f52d169b109229874970dff05f49df21f27f22c81a7372807",
+                      "bytes":  97685
                   },
                   {
                       "path":  "src/qlt/__init__.py",
@@ -604,6 +604,41 @@
                       "path":  "figures/direct_collocation_baseline/direct_collocation_baseline.png",
                       "sha256":  "c394791174b15b29fac9350b80f011c46ad334859a0734921bff63a2819c60ff",
                       "bytes":  124244
+                  },
+                  {
+                      "path":  "configs/robust_margin_suite.yaml",
+                      "sha256":  "24260cc333a5984212bb39ddaaf023df30ccb89f7c20e6e820c8bf233c684d1b",
+                      "bytes":  2704
+                  },
+                  {
+                      "path":  "scripts/run_robust_margin_suite.py",
+                      "sha256":  "c3603acab5f70a9908045dbff19ee45b7c7392657d4b7334ad5b713bdcdcf6c4",
+                      "bytes":  27205
+                  },
+                  {
+                      "path":  "data/results/robust_margin_suite/robust_margin_suite.csv",
+                      "sha256":  "f830a36ecd440e1db039d89ce1f8fe17640230c2ffb63698c703a8bf91afa015",
+                      "bytes":  9179
+                  },
+                  {
+                      "path":  "data/results/robust_margin_suite/robust_margin_suite_metadata.json",
+                      "sha256":  "f2648cb0122d6c4ac521cc2a98469e109ddfd934eb0a198fbac6e566216d23db",
+                      "bytes":  37359
+                  },
+                  {
+                      "path":  "tables/robust_margin_suite/robust_margin_suite_table.tex",
+                      "sha256":  "601cfd07166db119c0de9c7ae4a27b28e030306de2a54545a226a2f7ab78329a",
+                      "bytes":  1168
+                  },
+                  {
+                      "path":  "figures/robust_margin_suite/robust_margin_suite.pdf",
+                      "sha256":  "e6607003a960766fa1879058b702f84041d62fd6573c6383129cf25542d1a7e2",
+                      "bytes":  16216
+                  },
+                  {
+                      "path":  "figures/robust_margin_suite/robust_margin_suite.png",
+                      "sha256":  "720e8be01d81bb1b26329baf392dd6ffb339f126bbfd50ee52c8424ecc634bef",
+                      "bytes":  165029
                   }
               ]
 }

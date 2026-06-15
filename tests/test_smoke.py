@@ -116,6 +116,124 @@ def multiple_shooting_fixture_row(**overrides):
     return multiple_shooting_module.normalize_multiple_shooting_row(row)
 
 
+def robust_margin_fixture_config(output_subdir="robust_margin_test", groups=None):
+    if groups is None:
+        groups = {
+            "thrust_margin_selected": {
+                "purpose": "test selected branch",
+                "phase_times": [0.2],
+                "transfer_times": [0.5],
+                "amax": [0.2],
+                "segments": [4],
+                "selected_outages": [1],
+                "max_nfev": [1],
+                "min_recovery_segments": 1,
+            },
+            "all_single_outage_margin": {
+                "purpose": "test all single outages",
+                "phase_times": [0.3],
+                "transfer_times": [0.5],
+                "amax": [0.3],
+                "segments": [3],
+                "selected_outages": "all_single_outage_masks",
+                "max_nfev": [1],
+                "min_recovery_segments": 1,
+            },
+        }
+    return {
+        "run": {"label": "robust_margin_test", "output_subdir": output_subdir},
+        "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_halo_phase_shift",
+            "transfer_time": 0.5,
+            "phase_time": 0.2,
+            "segments": 4,
+            "substeps_per_segment": 1,
+            "amax": 0.2,
+            "steering": {"kr": 0.75, "kv": 1.45},
+        },
+        "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+                "nominal": 1.0,
+                "robust_worst": 0.85,
+                "robust_degradation": 0.55,
+                "active_fraction": 0.08,
+                "smoothness": 0.04,
+            },
+            "thresholds": {"nominal_success": 0.09, "robust_success": 0.17},
+        },
+        "outages": {"block_lengths": [1]},
+        "suite": {
+            "residual_weights": {
+                "initial_weight": 10.0,
+                "defect_weight": 1.0,
+                "terminal_weight": 4.0,
+                "branch_terminal_weight": 4.0,
+                "branch_start_weight": 5.0,
+                "control_weight": 0.01,
+                "smooth_weight": 0.012,
+            },
+            "groups": groups,
+        },
+        "refinement": {
+            "mode": "multiple_shooting_branch_recovery",
+            "solver_mode": "bounded_projected_multiple_shooting",
+            "max_nfev": 1,
+            "selected_outages": 1,
+            "outage_selection_min_recovery_segments": 1,
+            "node_initialization": "linear",
+            "node_initialization_blend": 0.5,
+            "nominal_first_homotopy": False,
+            "nominal_first_nfev": 1,
+        },
+    }
+
+
+def fake_robust_margin_backend_row(base_config, transfer_time, amax, segments, max_nfev, args):
+    settings = multiple_shooting_module.settings_values_for_case(
+        base_config,
+        transfer_time,
+        amax,
+        segments,
+        max_nfev,
+        args,
+    )
+    selected = int(args.selected_outages)
+    errors = [0.02 + 0.001 * index for index in range(selected)]
+    all_errors = [0.03 + 0.001 * index for index in range(int(segments))]
+    row = multiple_shooting_fixture_row(
+        **settings,
+        substeps_per_segment=int(base_config["benchmark"]["substeps_per_segment"]),
+        selected_outage_indices=json.dumps(list(range(selected))),
+        selected_outage_errors=json.dumps(errors),
+        all_outage_errors=json.dumps(all_errors),
+        nominal_error=0.01 + float(amax) * 0.01,
+        selected_recovery_worst_error=max(errors) if errors else 0.0,
+        selected_worst_error=max(errors) if errors else 0.0,
+        all_outage_worst_error=max(all_errors) if all_errors else 0.0,
+        all_mask_worst_error=max(all_errors) if all_errors else 0.0,
+        nominal_threshold=float(base_config["objective"]["thresholds"]["nominal_success"]),
+        selected_recovery_threshold=float(base_config["objective"]["thresholds"]["robust_success"]),
+        selected_worst_threshold=float(base_config["objective"]["thresholds"]["robust_success"]),
+        meets_nominal_threshold=True,
+        meets_selected_recovery_threshold=True,
+        meets_selected_worst_threshold=True,
+        meets_thresholds=True,
+        optimizer_success=True,
+        multiple_shooting_success=True,
+        nfev=int(max_nfev),
+        runtime_seconds=0.01,
+        control_max_norm=float(amax) * 0.5,
+        control_bound_violation=0.0,
+        accepted_candidate="fixture",
+        message="fixture ok",
+    )
+    row["settings_fingerprint"] = multiple_shooting_module._settings_fingerprint(settings)
+    return row
+
+
 def test_multiple_shooting_node_initialization_modes_endpoint_behavior():
     cfg = small_objective_config(n_segments=4, tf=0.2, amax=0.04)
     state0 = np.array([1.05, 0.02, -0.01, 0.0, 0.08, 0.02], dtype=float)
@@ -1269,6 +1387,135 @@ def test_multiple_shooting_resume_fingerprint_reruns_changed_settings(monkeypatc
     assert run_calls == [(4.0, 0.2, 14, 120)]
     assert len(df) == 2
     assert sorted(df["min_recovery_segments"].astype(int).tolist()) == [4, 5]
+
+
+def test_robust_margin_suite_schema_metadata_and_artifacts(monkeypatch, tmp_path):
+    robust_module = load_script_module(
+        "run_robust_margin_suite_schema_test",
+        ROOT / "scripts" / "run_robust_margin_suite.py",
+    )
+    config = robust_margin_fixture_config()
+    config_path = tmp_path / "robust_margin.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(robust_module.multiple_shooting, "run_case", fake_robust_margin_backend_row)
+    args = robust_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states)]
+    )
+
+    df = robust_module.run(args)
+    results_dir = tmp_path / "data" / "results" / "robust_margin_test"
+    tables_dir = tmp_path / "tables" / "robust_margin_test"
+    figures_dir = tmp_path / "figures" / "robust_margin_test"
+    metadata = json.loads((results_dir / "robust_margin_suite_metadata.json").read_text(encoding="utf-8"))
+    csv_df = pd.read_csv(results_dir / "robust_margin_suite.csv")
+
+    required = {
+        "case_group",
+        "phase_time",
+        "transfer_time",
+        "amax",
+        "segments",
+        "selected_outages",
+        "outage_count",
+        "selected_all_outages",
+        "nominal_error",
+        "selected_worst_error",
+        "all_mask_worst_error",
+        "thresholds",
+        "meets_thresholds",
+        "nfev",
+        "runtime_seconds",
+        "optimizer_success",
+        "accepted_candidate",
+        "control_max_norm",
+        "control_bound_violation",
+        "selected_outage_indices",
+        "selected_outage_errors",
+        "all_outage_errors",
+        "settings_fingerprint",
+        "config_hash",
+        "source_states_id",
+        "message",
+    }
+    all_single = df[df["case_group"] == "all_single_outage_margin"].iloc[0]
+
+    assert required.issubset(df.columns)
+    assert len(df) == 2
+    assert len(csv_df) == 2
+    assert bool(all_single["selected_all_outages"]) is True
+    assert int(all_single["selected_outages"]) == int(all_single["outage_count"]) == 3
+    assert json.loads(all_single["thresholds"]) == {"nominal_success": 0.09, "robust_success": 0.17}
+    assert metadata["row_count"] == 2
+    assert "all_mask" in metadata["semantics"]
+    assert "one-segment outage masks only" in metadata["limitations"][2]
+    assert (tables_dir / "robust_margin_suite_table.tex").exists()
+    assert (figures_dir / "robust_margin_suite.png").exists()
+
+
+def test_robust_margin_suite_resume_rejects_stale_rows(monkeypatch, tmp_path):
+    robust_module = load_script_module(
+        "run_robust_margin_suite_resume_test",
+        ROOT / "scripts" / "run_robust_margin_suite.py",
+    )
+    groups = {
+        "thrust_margin_selected": {
+            "purpose": "test stale resume",
+            "phase_times": [0.2],
+            "transfer_times": [0.5],
+            "amax": [0.2],
+            "segments": [4],
+            "selected_outages": [1],
+            "max_nfev": [1],
+            "min_recovery_segments": 1,
+        }
+    }
+    config = robust_margin_fixture_config(output_subdir="robust_margin_resume_test", groups=groups)
+    config_path = tmp_path / "robust_margin.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+
+    monkeypatch.chdir(tmp_path)
+    args = robust_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states), "--resume"]
+    )
+    cases = robust_module._suite_cases(config)
+    expected = robust_module._expected_case(config, args, cases[0])
+    results_dir = tmp_path / "data" / "results" / "robust_margin_resume_test"
+    results_dir.mkdir(parents=True)
+    stale = {column: None for column in robust_module.ROBUST_MARGIN_COLUMNS}
+    stale.update(
+        {
+            "case_id": expected["case_id"],
+            "case_group": "thrust_margin_selected",
+            "settings_fingerprint": "stale-fingerprint",
+            "config_hash": expected["config_hash"],
+            "source_states_id": expected["source_states_id"],
+        }
+    )
+    pd.DataFrame([stale]).to_csv(results_dir / "robust_margin_suite.csv", index=False)
+
+    run_calls = []
+
+    def fake_run_case(*call_args, **call_kwargs):
+        del call_kwargs
+        run_calls.append(call_args[1:5])
+        return fake_robust_margin_backend_row(*call_args)
+
+    monkeypatch.setattr(robust_module.multiple_shooting, "run_case", fake_run_case)
+
+    df = robust_module.run(args)
+    metadata = json.loads((results_dir / "robust_margin_suite_metadata.json").read_text(encoding="utf-8"))
+    rewritten = pd.read_csv(results_dir / "robust_margin_suite.csv")
+
+    assert run_calls == [(0.5, 0.2, 4, 1)]
+    assert len(df) == 1
+    assert rewritten.loc[0, "settings_fingerprint"] != "stale-fingerprint"
+    assert metadata["resume_rejected_rows"][0]["reason"] == "settings_fingerprint missing or mismatched"
 
 
 def test_multiple_shooting_result_schema_and_control_bound():
