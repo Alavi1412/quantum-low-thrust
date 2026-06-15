@@ -115,6 +115,18 @@ For the robust-margin suite:
 The robust-margin suite writes `data/results/robust_margin_suite/*`,
 `tables/robust_margin_suite/*`, and `figures/robust_margin_suite/*`.
 
+For the continuation-margin continuous-backend baseline:
+
+```powershell
+py -3.11 scripts\run_continuation_margin_suite.py --resume
+```
+
+The continuation-margin suite writes `data/results/continuation_margin_suite/*`,
+nominal-control sidecars under `data/results/continuation_margin_suite/controls/`,
+`tables/continuation_margin_suite/*`, and
+`figures/continuation_margin_suite/*`. This is a direct multiple-shooting
+continuation baseline, not a QUBO, QAOA, quantum, or discrete-sampler result.
+
 For the cardinality ablation:
 
 ```powershell

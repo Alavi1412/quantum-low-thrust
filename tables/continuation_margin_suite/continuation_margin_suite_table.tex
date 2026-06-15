@@ -1,0 +1,11 @@
+\begin{tabular}{lrlrlrrrrrrrrr}
+\toprule
+Group & Phase time & Warm start & Segments & Outage masks & Max nfev & Nominal error & Selected worst error & All-mask worst error & Optimizer success & MS success & nfev & Runtime (s) & Meets thresholds \\
+\midrule
+All single outages & 0.3000 & cold & 8 & 8/8 & 60 & 0.0555 & 0.0358 & 0.0358 & False & True & 60 & 107.9698 & True \\
+All single outages & 0.2000 & from 0.3 & 8 & 8/8 & 100 & 0.0464 & 0.1086 & 0.1086 & True & True & 100 & 200.9974 & True \\
+All one/two-segment outages & 0.3000 & cold & 6 & 11/11 & 60 & 0.0600 & 0.0690 & 0.0690 & False & True & 60 & 89.6254 & True \\
+All one/two-segment outages & 0.4000 & from 0.3 & 6 & 11/11 & 80 & 0.0625 & 0.0368 & 0.0368 & True & True & 53 & 85.8142 & True \\
+All one/two-segment outages & 0.2000 & from 0.3 & 6 & 11/11 & 80 & 0.0740 & 0.2200 & 0.2200 & False & False & 80 & 128.2762 & False \\
+\bottomrule
+\end{tabular}

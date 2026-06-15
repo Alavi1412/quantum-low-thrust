@@ -234,6 +234,154 @@ def fake_robust_margin_backend_row(base_config, transfer_time, amax, segments, m
     return row
 
 
+def continuation_margin_fixture_config(output_subdir="continuation_margin_test", groups=None):
+    if groups is None:
+        groups = {
+            "phase_continuation_all_single": {
+                "purpose": "test continuation",
+                "outage_lengths": [1],
+                "cases": [
+                    {
+                        "case_id": "source_p03",
+                        "phase_time": 0.3,
+                        "transfer_time": 0.5,
+                        "amax": 0.3,
+                        "segments": 3,
+                        "selected_outages": "all_configured_outage_masks",
+                        "max_nfev": 2,
+                        "warm_start_kind": "cold",
+                    },
+                    {
+                        "case_id": "warm_p02",
+                        "phase_time": 0.2,
+                        "transfer_time": 0.5,
+                        "amax": 0.3,
+                        "segments": 3,
+                        "selected_outages": "all_configured_outage_masks",
+                        "max_nfev": 2,
+                        "warm_start_kind": "nominal_controls",
+                        "warm_start_from_case_id": "source_p03",
+                    },
+                ],
+            }
+        }
+    return {
+        "run": {"label": "continuation_margin_test", "output_subdir": output_subdir},
+        "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_halo_phase_shift",
+            "transfer_time": 0.5,
+            "phase_time": 0.3,
+            "segments": 3,
+            "substeps_per_segment": 1,
+            "amax": 0.3,
+            "steering": {"kr": 0.75, "kv": 1.45},
+        },
+        "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+                "nominal": 1.0,
+                "robust_worst": 0.85,
+                "robust_degradation": 0.55,
+                "active_fraction": 0.08,
+                "smoothness": 0.04,
+            },
+            "thresholds": {"nominal_success": 0.09, "robust_success": 0.17},
+        },
+        "outages": {"block_lengths": [1]},
+        "suite": {
+            "residual_weights": {
+                "initial_weight": 10.0,
+                "defect_weight": 1.0,
+                "terminal_weight": 4.0,
+                "branch_terminal_weight": 4.0,
+                "branch_start_weight": 5.0,
+                "control_weight": 0.01,
+                "smooth_weight": 0.012,
+            },
+            "groups": groups,
+        },
+        "refinement": {
+            "mode": "multiple_shooting_branch_recovery",
+            "solver_mode": "bounded_projected_multiple_shooting",
+            "max_nfev": 2,
+            "selected_outages": "all_configured_outage_masks",
+            "outage_selection_min_recovery_segments": 1,
+            "node_initialization": "linear",
+            "node_initialization_blend": 0.5,
+        },
+    }
+
+
+def fake_continuation_states(root, config, source_states):
+    del root, config, source_states
+    return SimpleNamespace(
+        mu=0.01215058560962404,
+        initial=np.zeros(6, dtype=float),
+        target=np.ones(6, dtype=float) * 0.01,
+        target_metadata={"target_state_generation": "fixture"},
+    )
+
+
+def fake_continuation_backend(calls):
+    def _fake_backend(
+        *,
+        state0,
+        target,
+        cfg,
+        masks,
+        thresholds,
+        selected_outages,
+        max_nfev,
+        min_recovery_segments,
+        residual_weights,
+        nominal_control_guess,
+        selected_branch_control_guesses,
+        node_initialization,
+        node_initialization_blend,
+        warm_start_info,
+    ):
+        del state0, target, thresholds, max_nfev, min_recovery_segments, residual_weights
+        del selected_branch_control_guesses, node_initialization, node_initialization_blend, warm_start_info
+        guess = None if nominal_control_guess is None else np.asarray(nominal_control_guess, dtype=float).copy()
+        calls.append({"guess": guess, "selected_outages": int(selected_outages), "mask_count": int(masks.shape[0])})
+        if guess is None:
+            controls = np.full((cfg.n_segments, 3), 0.01 * len(calls), dtype=float)
+        else:
+            controls = guess + 0.001
+        selected_errors = [0.02 + 0.001 * index for index in range(int(selected_outages))]
+        all_errors = [0.03 + 0.001 * index for index in range(int(masks.shape[0]))]
+        return {
+            "success": True,
+            "mode": "multiple_shooting_branch_recovery",
+            "solver_mode": "bounded_projected_multiple_shooting",
+            "optimizer_success": True,
+            "message": "fixture ok",
+            "cost": 0.0,
+            "optimality": 0.0,
+            "nfev": int(len(calls)),
+            "runtime_seconds": 0.01,
+            "nominal_error": 0.01,
+            "selected_recovery_worst_error": max(selected_errors) if selected_errors else 0.01,
+            "selected_worst_error": max(selected_errors) if selected_errors else 0.01,
+            "all_outage_worst_error": max(all_errors) if all_errors else 0.01,
+            "all_mask_worst_error": max(all_errors) if all_errors else 0.01,
+            "nominal_fuel": 0.01,
+            "recovery_fuel_mean": 0.01,
+            "recovery_fuel_max": 0.01,
+            "control_max_norm": float(np.linalg.norm(controls, axis=1).max()),
+            "control_bound_violation": 0.0,
+            "controls": controls,
+            "accepted_candidate": "fixture",
+            "selected_outage_indices": list(range(int(selected_outages))),
+            "selected_outage_errors": selected_errors,
+            "all_outage_errors": all_errors,
+        }
+
+    return _fake_backend
+
+
 def test_multiple_shooting_node_initialization_modes_endpoint_behavior():
     cfg = small_objective_config(n_segments=4, tf=0.2, amax=0.04)
     state0 = np.array([1.05, 0.02, -0.01, 0.0, 0.08, 0.02], dtype=float)
@@ -1516,6 +1664,354 @@ def test_robust_margin_suite_resume_rejects_stale_rows(monkeypatch, tmp_path):
     assert len(df) == 1
     assert rewritten.loc[0, "settings_fingerprint"] != "stale-fingerprint"
     assert metadata["resume_rejected_rows"][0]["reason"] == "settings_fingerprint missing or mismatched"
+
+
+def test_continuation_margin_suite_schema_controls_and_warm_start(monkeypatch, tmp_path):
+    continuation_module = load_script_module(
+        "run_continuation_margin_suite_schema_test",
+        ROOT / "scripts" / "run_continuation_margin_suite.py",
+    )
+    config = continuation_margin_fixture_config()
+    config_path = tmp_path / "continuation_margin.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+    calls = []
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(continuation_module, "load_configured_states", fake_continuation_states)
+    monkeypatch.setattr(
+        continuation_module.multiple_shooting,
+        "run_multiple_shooting_baseline",
+        fake_continuation_backend(calls),
+    )
+    args = continuation_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states)]
+    )
+
+    df = continuation_module.run(args)
+    results_dir = tmp_path / "data" / "results" / "continuation_margin_test"
+    tables_dir = tmp_path / "tables" / "continuation_margin_test"
+    figures_dir = tmp_path / "figures" / "continuation_margin_test"
+    metadata = json.loads((results_dir / "continuation_margin_suite_metadata.json").read_text(encoding="utf-8"))
+    csv_df = pd.read_csv(results_dir / "continuation_margin_suite.csv")
+    warm_row = df[df["case_id"] == "warm_p02"].iloc[0]
+
+    required = {
+        "case_id",
+        "case_order",
+        "case_group",
+        "phase_time",
+        "transfer_time",
+        "amax",
+        "segments",
+        "outage_lengths",
+        "selected_outages",
+        "outage_count",
+        "selected_all_outages",
+        "warm_start_from_case_id",
+        "warm_start_from_phase_time",
+        "warm_start_kind",
+        "max_nfev",
+        "nominal_error",
+        "selected_worst_error",
+        "all_mask_worst_error",
+        "thresholds",
+        "meets_thresholds",
+        "optimizer_success",
+        "multiple_shooting_success",
+        "accepted_candidate",
+        "nfev",
+        "runtime_seconds",
+        "control_max_norm",
+        "control_bound_violation",
+        "nominal_fuel",
+        "selected_outage_indices",
+        "selected_outage_errors",
+        "all_outage_errors",
+        "settings_fingerprint",
+        "config_hash",
+        "source_states_id",
+        "message",
+    }
+
+    assert required.issubset(df.columns)
+    assert len(df) == 2
+    assert len(csv_df) == 2
+    assert df["case_order"].astype(int).tolist() == [0, 1]
+    assert csv_df["case_order"].astype(int).tolist() == [0, 1]
+    assert [int(row["case_order"]) for row in metadata["rows"]] == [0, 1]
+    assert calls[0]["guess"] is None
+    assert np.allclose(calls[1]["guess"], np.full((3, 3), 0.01))
+    assert bool(warm_row["selected_all_outages"]) is True
+    assert int(warm_row["selected_outages"]) == int(warm_row["outage_count"]) == 3
+    assert str(warm_row["warm_start_from_case_id"]) == "source_p03"
+    assert str(warm_row["warm_start_source_control_hash"])
+    assert (results_dir / "controls" / "source_p03_nominal_controls.json").exists()
+    assert (results_dir / "controls" / "warm_p02_nominal_controls.json").exists()
+    assert "continuous-backend direct multiple-shooting" in metadata["semantics"]["backend"]
+    assert metadata["row_count"] == 2
+    assert (tables_dir / "continuation_margin_suite_table.tex").exists()
+    assert (figures_dir / "continuation_margin_suite.png").exists()
+
+
+def test_continuation_margin_suite_all_mask_count_for_two_segment_outages(monkeypatch, tmp_path):
+    continuation_module = load_script_module(
+        "run_continuation_margin_suite_count_test",
+        ROOT / "scripts" / "run_continuation_margin_suite.py",
+    )
+    groups = {
+        "single_segment_all_mask_diagnostic": {
+            "purpose": "test all one-segment outages",
+            "outage_lengths": [1],
+            "cases": [
+                {
+                    "case_id": "single_segment_source",
+                    "phase_time": 0.3,
+                    "transfer_time": 0.5,
+                    "amax": 0.3,
+                    "segments": 8,
+                    "selected_outages": "all_configured_outage_masks",
+                    "max_nfev": 2,
+                    "warm_start_kind": "cold",
+                }
+            ],
+        },
+        "two_segment_all_mask_diagnostic": {
+            "purpose": "test all one/two-segment outages",
+            "outage_lengths": [1, 2],
+            "cases": [
+                {
+                    "case_id": "two_segment_source",
+                    "phase_time": 0.3,
+                    "transfer_time": 0.5,
+                    "amax": 0.3,
+                    "segments": 6,
+                    "selected_outages": "all_configured_outage_masks",
+                    "max_nfev": 2,
+                    "warm_start_kind": "cold",
+                }
+            ],
+        }
+    }
+    config = continuation_margin_fixture_config(output_subdir="continuation_margin_count_test", groups=groups)
+    config_path = tmp_path / "continuation_margin.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+    calls = []
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(continuation_module, "load_configured_states", fake_continuation_states)
+    monkeypatch.setattr(
+        continuation_module.multiple_shooting,
+        "run_multiple_shooting_baseline",
+        fake_continuation_backend(calls),
+    )
+    args = continuation_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states)]
+    )
+
+    df = continuation_module.run(args)
+    single_row = df[df["case_id"] == "single_segment_source"].iloc[0]
+    two_segment_row = df[df["case_id"] == "two_segment_source"].iloc[0]
+
+    assert continuation_module._outage_count(8, [1]) == 8
+    assert continuation_module._selected_outages("all_configured_outage_masks", 8, [1]) == 8
+    assert continuation_module._outage_count(6, [1, 2]) == 11
+    assert continuation_module._selected_outages("all_configured_outage_masks", 6, [1, 2]) == 11
+    assert calls[0]["mask_count"] == 8
+    assert calls[0]["selected_outages"] == 8
+    assert calls[1]["mask_count"] == 11
+    assert calls[1]["selected_outages"] == 11
+    assert int(single_row["outage_count"]) == 8
+    assert int(single_row["selected_outages"]) == 8
+    assert bool(single_row["selected_all_outages"]) is True
+    assert int(two_segment_row["outage_count"]) == 11
+    assert int(two_segment_row["selected_outages"]) == 11
+    assert bool(two_segment_row["selected_all_outages"]) is True
+
+
+def test_continuation_margin_suite_resume_uses_persisted_controls(monkeypatch, tmp_path):
+    continuation_module = load_script_module(
+        "run_continuation_margin_suite_resume_test",
+        ROOT / "scripts" / "run_continuation_margin_suite.py",
+    )
+    config = continuation_margin_fixture_config(output_subdir="continuation_margin_resume_test")
+    config_path = tmp_path / "continuation_margin.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+    calls = []
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(continuation_module, "load_configured_states", fake_continuation_states)
+    monkeypatch.setattr(
+        continuation_module.multiple_shooting,
+        "run_multiple_shooting_baseline",
+        fake_continuation_backend(calls),
+    )
+    first_args = continuation_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states)]
+    )
+    continuation_module.run(first_args)
+    assert len(calls) == 2
+    results_dir = tmp_path / "data" / "results" / "continuation_margin_resume_test"
+    csv_path = results_dir / "continuation_margin_suite.csv"
+    stale_csv = pd.read_csv(csv_path)
+    stale_csv["case_order"] = ""
+    stale_csv.to_csv(csv_path, index=False)
+
+    def fail_backend(*args, **kwargs):
+        del args, kwargs
+        raise AssertionError("resume should use compatible CSV rows and persisted controls")
+
+    calls.clear()
+    monkeypatch.setattr(continuation_module.multiple_shooting, "run_multiple_shooting_baseline", fail_backend)
+    resume_args = continuation_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states), "--resume"]
+    )
+
+    df = continuation_module.run(resume_args)
+    metadata = json.loads((results_dir / "continuation_margin_suite_metadata.json").read_text(encoding="utf-8"))
+    rewritten = pd.read_csv(csv_path)
+
+    assert len(df) == 2
+    assert calls == []
+    assert df["case_order"].astype(int).tolist() == [0, 1]
+    assert rewritten["case_order"].astype(int).tolist() == [0, 1]
+    assert [int(row["case_order"]) for row in metadata["rows"]] == [0, 1]
+    assert metadata["resume_rejected_rows"] == []
+
+
+def test_continuation_margin_suite_resume_reruns_when_source_controls_missing(monkeypatch, tmp_path):
+    continuation_module = load_script_module(
+        "run_continuation_margin_suite_missing_source_controls_test",
+        ROOT / "scripts" / "run_continuation_margin_suite.py",
+    )
+    config = continuation_margin_fixture_config(output_subdir="continuation_margin_missing_source_controls_test")
+    config_path = tmp_path / "continuation_margin.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+    calls = []
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(continuation_module, "load_configured_states", fake_continuation_states)
+    monkeypatch.setattr(
+        continuation_module.multiple_shooting,
+        "run_multiple_shooting_baseline",
+        fake_continuation_backend(calls),
+    )
+    first_args = continuation_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states)]
+    )
+    continuation_module.run(first_args)
+    assert len(calls) == 2
+
+    results_dir = tmp_path / "data" / "results" / "continuation_margin_missing_source_controls_test"
+    (results_dir / "controls" / "source_p03_nominal_controls.json").unlink()
+
+    calls.clear()
+    resume_args = continuation_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states), "--resume"]
+    )
+
+    df = continuation_module.run(resume_args)
+    metadata = json.loads((results_dir / "continuation_margin_suite_metadata.json").read_text(encoding="utf-8"))
+
+    assert len(df) == 2
+    assert len(calls) == 2
+    assert calls[0]["guess"] is None
+    assert np.allclose(calls[1]["guess"], np.full((3, 3), 0.01))
+    assert [
+        (row["case_id"], row["reason"])
+        for row in metadata["resume_rejected_rows"]
+    ] == [
+        ("source_p03", "nominal-control sidecar missing, stale, or hash mismatched"),
+        ("warm_p02", "warm-start source controls are unavailable or stale"),
+    ]
+    assert metadata["resume_rejected_rows"][1]["source_case_id"] == "source_p03"
+
+
+@pytest.mark.parametrize("corrupt_kind", ["truncated_json", "invalid_controls"])
+def test_continuation_margin_suite_resume_reruns_when_source_controls_corrupt(monkeypatch, tmp_path, corrupt_kind):
+    continuation_module = load_script_module(
+        f"run_continuation_margin_suite_corrupt_source_controls_test_{corrupt_kind}",
+        ROOT / "scripts" / "run_continuation_margin_suite.py",
+    )
+    config = continuation_margin_fixture_config(output_subdir=f"continuation_margin_corrupt_source_controls_test_{corrupt_kind}")
+    config_path = tmp_path / "continuation_margin.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+    calls = []
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(continuation_module, "load_configured_states", fake_continuation_states)
+    monkeypatch.setattr(
+        continuation_module.multiple_shooting,
+        "run_multiple_shooting_baseline",
+        fake_continuation_backend(calls),
+    )
+    first_args = continuation_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states)]
+    )
+    continuation_module.run(first_args)
+    assert len(calls) == 2
+
+    results_dir = tmp_path / "data" / "results" / f"continuation_margin_corrupt_source_controls_test_{corrupt_kind}"
+    controls_dir = results_dir / "controls"
+    csv_path = results_dir / "continuation_margin_suite.csv"
+    source_sidecar = controls_dir / "source_p03_nominal_controls.json"
+    if corrupt_kind == "truncated_json":
+        source_sidecar.write_text('{"case_id": "source_p03",', encoding="utf-8")
+    elif corrupt_kind == "invalid_controls":
+        payload = json.loads(source_sidecar.read_text(encoding="utf-8"))
+        payload["controls"] = [["not-a-float"]]
+        source_sidecar.write_text(json.dumps(payload), encoding="utf-8")
+    else:
+        raise AssertionError(f"unhandled corrupt_kind {corrupt_kind}")
+
+    calls.clear()
+    resume_args = continuation_module.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states), "--resume"]
+    )
+
+    df = continuation_module.run(resume_args)
+    metadata = json.loads((results_dir / "continuation_margin_suite_metadata.json").read_text(encoding="utf-8"))
+    csv_df = pd.read_csv(csv_path)
+
+    assert len(df) == 2
+    assert len(csv_df) == 2
+    assert len(calls) == 2
+    assert calls[0]["guess"] is None
+    assert np.allclose(calls[1]["guess"], np.full((3, 3), 0.01))
+    assert df["case_order"].astype(int).tolist() == [0, 1]
+    assert csv_df["case_order"].astype(int).tolist() == [0, 1]
+    assert metadata["row_count"] == 2
+    assert [int(row["case_order"]) for row in metadata["rows"]] == [0, 1]
+    assert [
+        (row["case_id"], row["reason"])
+        for row in metadata["resume_rejected_rows"]
+    ] == [
+        ("source_p03", "nominal-control sidecar missing, stale, or hash mismatched"),
+        ("warm_p02", "warm-start source controls are unavailable or stale"),
+    ]
+    assert metadata["resume_rejected_rows"][1]["source_case_id"] == "source_p03"
+
+    for case_id in ("source_p03", "warm_p02"):
+        sidecar_path = controls_dir / f"{case_id}_nominal_controls.json"
+        payload = json.loads(sidecar_path.read_text(encoding="utf-8"))
+        row = csv_df[csv_df["case_id"] == case_id].iloc[0]
+        loaded = continuation_module._load_controls(controls_dir, case_id, str(row["settings_fingerprint"]))
+        assert loaded is not None
+        controls, control_hash, control_path = loaded
+        assert payload["case_id"] == case_id
+        assert payload["control_hash"] == control_hash
+        assert control_path == sidecar_path
+        assert controls.shape == (3, 3)
+        assert control_hash == str(row["nominal_control_hash"])
 
 
 def test_multiple_shooting_result_schema_and_control_bound():

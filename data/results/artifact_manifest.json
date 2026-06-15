@@ -1,19 +1,19 @@
 {
     "manifest_version":  1,
-    "generated_utc":  "2026-06-15T05:22:55Z",
+    "generated_utc":  "2026-06-15T07:18:53Z",
     "note":  "Scoped artifact manifest for paper reproducibility; excludes .venv, caches, logs, and bulk generated intermediates.",
-    "git_head":  "b0b01c9469423a5db3abc11303a9a603f2080adb",
+    "git_head":  "cdddb634026799b8fb89e48e11d4fbf4c4eba148",
     "git_status_note":  "git_head records the current HEAD before the integration commit; file hashes and byte counts reflect the working tree at generated_utc.",
     "files":  [
                   {
                       "path":  "README.md",
-                      "sha256":  "788cd441b577907ece04822abcdda922abd83dd8843fe1efa61dc729a115965c",
-                      "bytes":  5491
+                      "sha256":  "50fd4b604abe1b9df41ad3d2d6343b869d1d09c269068184aaf191cf7527ad3a",
+                      "bytes":  5986
                   },
                   {
                       "path":  "REPRODUCIBILITY.md",
-                      "sha256":  "1cdb46138f1500999c8ae5aaac7468a194436d5b764c3235498922447f16c2ef",
-                      "bytes":  8734
+                      "sha256":  "5a046ce4d83e3557a062a47e2dd8f04ccd428c93ee76621e6176a618e3d63e37",
+                      "bytes":  9716
                   },
                   {
                       "path":  "requirements.txt",
@@ -32,8 +32,8 @@
                   },
                   {
                       "path":  "paper/main.tex",
-                      "sha256":  "cdac6b40ea3101ec537df30543ef76cbb32d249287ae07886dfd1383d2b7f649",
-                      "bytes":  66095
+                      "sha256":  "b34d830423838a32ca9cc9727744a7629b6d1597764b49948d2f453928a17854",
+                      "bytes":  70795
                   },
                   {
                       "path":  "paper/references.bib",
@@ -42,8 +42,8 @@
                   },
                   {
                       "path":  "paper/main.pdf",
-                      "sha256":  "f37c2dedf1cb0e35b2720993b106a2dc6bb982a4b3e4b312874668cbe337aa60",
-                      "bytes":  460938
+                      "sha256":  "d1ad2097fcfd9b04e5be54edd8aa0dd4551cd00b43de88a6f9472fc6fbdb4708",
+                      "bytes":  466494
                   },
                   {
                       "path":  "data/source_states.json",
@@ -52,8 +52,8 @@
                   },
                   {
                       "path":  "tests/test_smoke.py",
-                      "sha256":  "27f507ba7d41ff4f52d169b109229874970dff05f49df21f27f22c81a7372807",
-                      "bytes":  97685
+                      "sha256":  "505c87bd8e2ecede1cb399b3dfc079ca8466494dacfb534c9b6d317e5ded11bd",
+                      "bytes":  118580
                   },
                   {
                       "path":  "src/qlt/__init__.py",
@@ -639,6 +639,66 @@
                       "path":  "figures/robust_margin_suite/robust_margin_suite.png",
                       "sha256":  "720e8be01d81bb1b26329baf392dd6ffb339f126bbfd50ee52c8424ecc634bef",
                       "bytes":  165029
+                  },
+                  {
+                      "path":  "configs/continuation_margin_suite.yaml",
+                      "sha256":  "570865ba8467079f4753ebc5f53ae966249bf588ec3e94fc62effb9055c4c43c",
+                      "bytes":  3873
+                  },
+                  {
+                      "path":  "scripts/run_continuation_margin_suite.py",
+                      "sha256":  "806ebf0560a72859cd8a854926a567ddb2bd463717b24923ffb5d546787bfddf",
+                      "bytes":  40948
+                  },
+                  {
+                      "path":  "data/results/continuation_margin_suite/continuation_margin_suite.csv",
+                      "sha256":  "dc2ded672ef3e2b08c83d0af771ccfb49c84379e4554ef69265a249c5be3a31b",
+                      "bytes":  9912
+                  },
+                  {
+                      "path":  "data/results/continuation_margin_suite/continuation_margin_suite_metadata.json",
+                      "sha256":  "13ef92f0b3bb51a587b434c6e58cdf97faa9fa38114b21fea176ba94dea74fb5",
+                      "bytes":  28095
+                  },
+                  {
+                      "path":  "data/results/continuation_margin_suite/controls/phase_all_single_p02_warm_from_p03_nominal_controls.json",
+                      "sha256":  "59cd9f0c0ccebf00e7c371ed92d7c1b7d3f1cc757f65cbc30937bafb433359a3",
+                      "bytes":  1353
+                  },
+                  {
+                      "path":  "data/results/continuation_margin_suite/controls/phase_all_single_p03_cold_nominal_controls.json",
+                      "sha256":  "05f0f015920ac845c9f9875741e8fff7cc70731e418277e2c559f8b4d3899257",
+                      "bytes":  1301
+                  },
+                  {
+                      "path":  "data/results/continuation_margin_suite/controls/two_segment_p02_warm_from_p03_nominal_controls.json",
+                      "sha256":  "95ae38d7d7bce04dacd901c6fcef9fb3a2e899bf650115cca9ff6566ca07dea8",
+                      "bytes":  1151
+                  },
+                  {
+                      "path":  "data/results/continuation_margin_suite/controls/two_segment_p03_cold_nominal_controls.json",
+                      "sha256":  "0540391c7709c581fcff341b2b1d4a67210ca266fe9ca9109cd08f8209bbb1e0",
+                      "bytes":  1107
+                  },
+                  {
+                      "path":  "data/results/continuation_margin_suite/controls/two_segment_p04_warm_from_p03_nominal_controls.json",
+                      "sha256":  "3b4e27cfb2ce7c0009ebafe6b0d457c963677f3fc5ffbcccb2d6bce5447a286f",
+                      "bytes":  1148
+                  },
+                  {
+                      "path":  "tables/continuation_margin_suite/continuation_margin_suite_table.tex",
+                      "sha256":  "29659250352a944bc54a2ebe65b9c2b29e69b895c1e803f365baa2537c1f0b5a",
+                      "bytes":  929
+                  },
+                  {
+                      "path":  "figures/continuation_margin_suite/continuation_margin_suite.pdf",
+                      "sha256":  "c120ec2aabaf274c65c907e31843ea2106a954e0d8aac48665baaee646055a39",
+                      "bytes":  15270
+                  },
+                  {
+                      "path":  "figures/continuation_margin_suite/continuation_margin_suite.png",
+                      "sha256":  "8d44b48ea2dd5fec7c1795d6a4000ab8b01edd5318851e9d197d0c868cbf625b",
+                      "bytes":  92070
                   }
               ]
 }

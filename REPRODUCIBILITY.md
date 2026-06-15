@@ -42,6 +42,7 @@ regenerated; use the recorded artifacts for normal verification.
 | Phase-shift cardinality benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift_cardinality.yaml` | `configs/q1_phase_shift_cardinality.yaml`, `data/source_states.json` | `data/results/phase_shift_cardinality/*`, `figures/phase_shift_cardinality/*`, `tables/phase_shift_cardinality/*` | Moderate to expensive; 10 seeds with branch recovery. |
 | Bounded phase suite | `python scripts/run_bounded_phase_suite.py --resume` | `configs/bounded_phase_suite.yaml`, `data/source_states.json` | `data/results/bounded_phase_suite/bounded_phase_suite.csv`, `figures/bounded_phase_suite/*`, `tables/bounded_phase_suite/*` | Expensive; configured runtime budget is 600 s, with recorded cases from about 13 s to 367 s. |
 | Robust-margin suite | `python scripts/run_robust_margin_suite.py --resume` | `configs/robust_margin_suite.yaml`, `data/source_states.json` | `data/results/robust_margin_suite/*`, `figures/robust_margin_suite/*`, `tables/robust_margin_suite/*` | Expensive if regenerated; recorded rows include selected-branch thrust-margin and all one-segment outage branch diagnostics. |
+| Continuation-margin suite | `py -3.11 scripts\run_continuation_margin_suite.py --resume` | `configs/continuation_margin_suite.yaml`, `data/source_states.json`, persisted nominal-control sidecars for warm rows | `data/results/continuation_margin_suite/*`, `data/results/continuation_margin_suite/controls/*`, `figures/continuation_margin_suite/*`, `tables/continuation_margin_suite/*` | Expensive if regenerated; continuous-backend direct multiple-shooting continuation baseline, not a quantum or discrete-sampler run. |
 | Direct-collocation baseline | `python scripts/run_direct_collocation_baseline.py --config configs/direct_collocation_baseline.yaml` | `configs/direct_collocation_baseline.yaml`, `src/qlt/direct_collocation.py`, `data/source_states.json` | `data/results/direct_collocation_baseline/*`, `figures/direct_collocation_baseline/*`, `tables/direct_collocation_baseline/*` | Expensive if regenerated; use recorded artifacts for short verification. |
 | QAOA depth ablation | `python scripts/run_qaoa_depth_ablation.py --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation/*`, `figures/qaoa_depth_ablation/*`, `tables/qaoa_depth_ablation/*` | Expensive; recorded runtime is 1291.5 s. |
 | Cardinality ablation | `python scripts/run_cardinality_ablation.py` | `configs/q1_phase_shift_cardinality.yaml` | `data/results/phase_shift_cardinality_ablation/*`, `figures/phase_shift_cardinality_ablation/*`, `tables/phase_shift_cardinality_ablation/*` | Expensive; recorded runtime is 2069.8 s. |
@@ -64,6 +65,13 @@ regenerated; use the recorded artifacts for normal verification.
   `data/results/robust_margin_suite/robust_margin_suite_metadata.json`,
   `data/results/robust_margin_suite/robust_margin_suite.csv`, and
   `tables/robust_margin_suite/robust_margin_suite_table.tex`.
+- Continuation-margin continuous-backend claims, warm-start provenance, and
+  control-sidecar hashes:
+  `data/results/continuation_margin_suite/continuation_margin_suite_metadata.json`,
+  `data/results/continuation_margin_suite/continuation_margin_suite.csv`,
+  `data/results/continuation_margin_suite/controls/*`,
+  `tables/continuation_margin_suite/continuation_margin_suite_table.tex`, and
+  `figures/continuation_margin_suite/continuation_margin_suite.*`.
 - Direct-collocation baseline comparison:
   `data/results/direct_collocation_baseline/*`,
   `tables/direct_collocation_baseline/*`, and
