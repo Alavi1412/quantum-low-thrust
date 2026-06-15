@@ -1,5 +1,5 @@
 {
-  "command": "scripts\\run_catalog_collocation_feasibility.py --resume --max-cases 0",
+  "command": "scripts\\run_catalog_collocation_feasibility.py --config configs\\catalog_collocation_feasibility.yaml --source-states data\\source_states.json --transfer-times 4.0 --amax 1.0 --segments 14 --max-nfev 220 --selected-outages 1 --min-recovery-segments 4 --node-initialization blend --node-initialization-blend 0.35 --nominal-first-homotopy --nominal-first-nfev 120 --terminal-weight 12 --branch-terminal-weight 4 --branch-start-weight 6 --control-weight 0.003 --smooth-weight 0.003 --resume",
   "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
   "platform": "Windows-10-10.0.26200-SP0",
   "packages": {
@@ -241,6 +241,7 @@
               "control_weight": 0.01,
               "smooth_weight": 0.01
             },
+            "solver_mode": "bounded_projected_multiple_shooting",
             "warm_start_refinement": false,
             "warm_start_nfev": 90
           }
@@ -368,6 +369,7 @@
               "control_weight": 0.01,
               "smooth_weight": 0.01
             },
+            "solver_mode": "bounded_projected_multiple_shooting",
             "warm_start_refinement": false,
             "warm_start_nfev": 90
           }
@@ -495,6 +497,7 @@
               "control_weight": 0.01,
               "smooth_weight": 0.01
             },
+            "solver_mode": "bounded_projected_multiple_shooting",
             "warm_start_refinement": false,
             "warm_start_nfev": 90
           }
@@ -622,6 +625,7 @@
               "control_weight": 0.01,
               "smooth_weight": 0.01
             },
+            "solver_mode": "bounded_projected_multiple_shooting",
             "warm_start_refinement": false,
             "warm_start_nfev": 90
           }
@@ -749,6 +753,7 @@
               "control_weight": 0.01,
               "smooth_weight": 0.01
             },
+            "solver_mode": "bounded_projected_multiple_shooting",
             "warm_start_refinement": false,
             "warm_start_nfev": 90
           }
@@ -876,6 +881,135 @@
               "control_weight": 0.01,
               "smooth_weight": 0.01
             },
+            "solver_mode": "bounded_projected_multiple_shooting",
+            "warm_start_refinement": false,
+            "warm_start_nfev": 90
+          }
+        }
+      },
+      {
+        "case_index": 6,
+        "case": {
+          "transfer_time": 4.0,
+          "amax": 1.0,
+          "segments": 14,
+          "max_nfev": 220
+        },
+        "config": {
+          "run": {
+            "label": "catalog_collocation_feasibility",
+            "output_subdir": "catalog_collocation_feasibility",
+            "evidence_level": "targeted catalog-DRO direct multiple-shooting feasibility exploration with direct-collocation-like linear node initialization; thresholds are inherited and not relaxed"
+          },
+          "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_dro_phase",
+            "transfer_time": 4.0,
+            "segments": 14,
+            "substeps_per_segment": 7,
+            "amax": 1.0,
+            "steering": {
+              "kr": 0.75,
+              "kv": 1.45
+            }
+          },
+          "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+              "nominal": 1.0,
+              "robust_worst": 0.85,
+              "robust_degradation": 0.55,
+              "active_fraction": 0.08,
+              "smoothness": 0.04
+            },
+            "thresholds": {
+              "nominal_success": 0.09,
+              "robust_success": 0.17
+            }
+          },
+          "outages": {
+            "block_lengths": [
+              1,
+              2
+            ]
+          },
+          "experiments": {
+            "seeds": [
+              11,
+              23,
+              37
+            ],
+            "solver_true_budget": 48,
+            "equal_total_budget": true,
+            "qubo_train_samples": 72,
+            "qubo_validation_fraction": 0.25,
+            "top_refine_per_method": 1,
+            "save_top_schedules": 5
+          },
+          "solvers": {
+            "random": {
+              "samples": 48
+            },
+            "cem": {
+              "iterations": 8,
+              "batch_size": 12,
+              "elite_fraction": 0.25,
+              "smoothing": 0.65
+            },
+            "genetic": {
+              "population": 20,
+              "generations": 6,
+              "elite": 4,
+              "mutation_rate": 0.08
+            },
+            "true_sa": {
+              "steps": 48,
+              "temp0": 0.25,
+              "temp_min": 0.01
+            },
+            "surrogate_sa": {
+              "steps": 420,
+              "candidates_to_evaluate": 48,
+              "temp0": 0.35,
+              "temp_min": 0.004
+            },
+            "qaoa": {
+              "p": 1,
+              "angle_trials": 14,
+              "sample_count": 240,
+              "candidates_to_evaluate": 48
+            }
+          },
+          "baselines": {
+            "all_windows_continuous": {
+              "enabled": true
+            }
+          },
+          "refinement": {
+            "mode": "multiple_shooting_branch_recovery",
+            "max_nfev": 220,
+            "selected_outages": 1,
+            "outage_selection_min_recovery_segments": 4,
+            "node_initialization": "blend",
+            "node_initialization_blend": 0.35,
+            "nominal_first_homotopy": true,
+            "nominal_first_nfev": 120,
+            "state_residual_weight": 1.25,
+            "robust_residual_weight": 1.15,
+            "fuel_residual_weight": 0.01,
+            "smooth_residual_weight": 0.006,
+            "control_regularization": 0.006,
+            "multiple_shooting_residual_weights": {
+              "initial_weight": 10.0,
+              "defect_weight": 1.0,
+              "terminal_weight": 12.0,
+              "branch_terminal_weight": 4.0,
+              "branch_start_weight": 6.0,
+              "control_weight": 0.003,
+              "smooth_weight": 0.003
+            },
+            "solver_mode": "bounded_projected_multiple_shooting",
             "warm_start_refinement": false,
             "warm_start_nfev": 90
           }
@@ -883,24 +1017,26 @@
       }
     ]
   },
-  "git_head": null,
-  "git_status_short": "?? .gitignore\n?? README.md\n?? configs/\n?? data/\n?? figures/\n?? logs/\n?? paper/\n?? requirements.txt\n?? scripts/\n?? src/\n?? tables/\n?? tests/",
-  "tracked_file_count": 0,
-  "untracked_file_count": 240,
+  "git_head": "f02e491dc31a6b465ad88940d31f5ce38802abbe",
+  "git_status_short": "M data/results/catalog_collocation_feasibility/multiple_shooting_feasibility.csv\n M data/results/catalog_collocation_feasibility/multiple_shooting_feasibility_metadata.json\n M data/results/catalog_collocation_feasibility/multiple_shooting_metadata.json\n M figures/catalog_collocation_feasibility/multiple_shooting_feasibility.pdf\n M figures/catalog_collocation_feasibility/multiple_shooting_feasibility.png\n M tables/catalog_collocation_feasibility/multiple_shooting_feasibility_table.tex",
+  "tracked_file_count": 500,
+  "untracked_file_count": 0,
   "project_manifest_roots": [
     "src",
     "scripts",
     "configs",
     "tests"
   ],
-  "project_manifest_file_count": 56,
-  "project_manifest_total_bytes": 1022430,
-  "project_manifest_hash": "16b38dd14afb4a6105aa2ee390f9c9b7d4803b89ec172e5389506b06e33caab4",
-  "multiple_shooting_rows": 6,
+  "project_manifest_file_count": 96,
+  "project_manifest_total_bytes": 2914535,
+  "project_manifest_hash": "4f6305005c922f6a3a236b12efc1742d77746a9ba85614306f92c58e14ee6450",
+  "multiple_shooting_rows": 7,
   "multiple_shooting_output": "\\\\nas\\Projects\\Papers\\quantum-low-thrust\\data\\results\\catalog_collocation_feasibility\\multiple_shooting_feasibility.csv",
   "threshold_rule": "meets_thresholds requires nominal_error <= nominal_success and selected_recovery_worst_error <= robust_success",
   "mask_semantics": "selected_recovery_worst_error/selected_worst_error evaluate only the selected outage masks optimized with branch recovery; all_outage_worst_error/all_mask_worst_error evaluate every outage mask as a diagnostic. worst_error and selected_worst_error are retained as backwards-compatible aliases for selected_recovery_worst_error in the multiple-shooting baseline result.",
-  "control_bound": "all reported nominal and branch recovery controls are projected to ||u_i|| <= amax before propagation and reporting",
+  "control_bound": "bounded_projected_multiple_shooting projects every nominal and branch-recovery acceleration vector to ||u_i|| <= amax inside the residual before RK4 propagation, fuel/smoothness residuals, evaluation propagation, and reporting",
+  "bounded_controls_in_residual": true,
+  "max_control_bound_violation": 0.0,
   "node_initialization": "rollout preserves the historical feedback-rollout node seed; linear seeds state nodes by interpolation from the branch start to the hard target; blend linearly combines rollout and linear nodes before optimization.",
   "effective_cases": [
     {
@@ -1025,6 +1161,7 @@
             "control_weight": 0.01,
             "smooth_weight": 0.01
           },
+          "solver_mode": "bounded_projected_multiple_shooting",
           "warm_start_refinement": false,
           "warm_start_nfev": 90
         }
@@ -1152,6 +1289,7 @@
             "control_weight": 0.01,
             "smooth_weight": 0.01
           },
+          "solver_mode": "bounded_projected_multiple_shooting",
           "warm_start_refinement": false,
           "warm_start_nfev": 90
         }
@@ -1279,6 +1417,7 @@
             "control_weight": 0.01,
             "smooth_weight": 0.01
           },
+          "solver_mode": "bounded_projected_multiple_shooting",
           "warm_start_refinement": false,
           "warm_start_nfev": 90
         }
@@ -1406,6 +1545,7 @@
             "control_weight": 0.01,
             "smooth_weight": 0.01
           },
+          "solver_mode": "bounded_projected_multiple_shooting",
           "warm_start_refinement": false,
           "warm_start_nfev": 90
         }
@@ -1533,6 +1673,7 @@
             "control_weight": 0.01,
             "smooth_weight": 0.01
           },
+          "solver_mode": "bounded_projected_multiple_shooting",
           "warm_start_refinement": false,
           "warm_start_nfev": 90
         }
@@ -1660,6 +1801,135 @@
             "control_weight": 0.01,
             "smooth_weight": 0.01
           },
+          "solver_mode": "bounded_projected_multiple_shooting",
+          "warm_start_refinement": false,
+          "warm_start_nfev": 90
+        }
+      }
+    },
+    {
+      "case_index": 6,
+      "case": {
+        "transfer_time": 4.0,
+        "amax": 1.0,
+        "segments": 14,
+        "max_nfev": 220
+      },
+      "config": {
+        "run": {
+          "label": "catalog_collocation_feasibility",
+          "output_subdir": "catalog_collocation_feasibility",
+          "evidence_level": "targeted catalog-DRO direct multiple-shooting feasibility exploration with direct-collocation-like linear node initialization; thresholds are inherited and not relaxed"
+        },
+        "benchmark": {
+          "mu": 0.01215058560962404,
+          "target_mode": "catalog_dro_phase",
+          "transfer_time": 4.0,
+          "segments": 14,
+          "substeps_per_segment": 7,
+          "amax": 1.0,
+          "steering": {
+            "kr": 0.75,
+            "kv": 1.45
+          }
+        },
+        "objective": {
+          "position_scale": 1.0,
+          "velocity_scale": 0.35,
+          "weights": {
+            "nominal": 1.0,
+            "robust_worst": 0.85,
+            "robust_degradation": 0.55,
+            "active_fraction": 0.08,
+            "smoothness": 0.04
+          },
+          "thresholds": {
+            "nominal_success": 0.09,
+            "robust_success": 0.17
+          }
+        },
+        "outages": {
+          "block_lengths": [
+            1,
+            2
+          ]
+        },
+        "experiments": {
+          "seeds": [
+            11,
+            23,
+            37
+          ],
+          "solver_true_budget": 48,
+          "equal_total_budget": true,
+          "qubo_train_samples": 72,
+          "qubo_validation_fraction": 0.25,
+          "top_refine_per_method": 1,
+          "save_top_schedules": 5
+        },
+        "solvers": {
+          "random": {
+            "samples": 48
+          },
+          "cem": {
+            "iterations": 8,
+            "batch_size": 12,
+            "elite_fraction": 0.25,
+            "smoothing": 0.65
+          },
+          "genetic": {
+            "population": 20,
+            "generations": 6,
+            "elite": 4,
+            "mutation_rate": 0.08
+          },
+          "true_sa": {
+            "steps": 48,
+            "temp0": 0.25,
+            "temp_min": 0.01
+          },
+          "surrogate_sa": {
+            "steps": 420,
+            "candidates_to_evaluate": 48,
+            "temp0": 0.35,
+            "temp_min": 0.004
+          },
+          "qaoa": {
+            "p": 1,
+            "angle_trials": 14,
+            "sample_count": 240,
+            "candidates_to_evaluate": 48
+          }
+        },
+        "baselines": {
+          "all_windows_continuous": {
+            "enabled": true
+          }
+        },
+        "refinement": {
+          "mode": "multiple_shooting_branch_recovery",
+          "max_nfev": 220,
+          "selected_outages": 1,
+          "outage_selection_min_recovery_segments": 4,
+          "node_initialization": "blend",
+          "node_initialization_blend": 0.35,
+          "nominal_first_homotopy": true,
+          "nominal_first_nfev": 120,
+          "state_residual_weight": 1.25,
+          "robust_residual_weight": 1.15,
+          "fuel_residual_weight": 0.01,
+          "smooth_residual_weight": 0.006,
+          "control_regularization": 0.006,
+          "multiple_shooting_residual_weights": {
+            "initial_weight": 10.0,
+            "defect_weight": 1.0,
+            "terminal_weight": 12.0,
+            "branch_terminal_weight": 4.0,
+            "branch_start_weight": 6.0,
+            "control_weight": 0.003,
+            "smooth_weight": 0.003
+          },
+          "solver_mode": "bounded_projected_multiple_shooting",
           "warm_start_refinement": false,
           "warm_start_nfev": 90
         }

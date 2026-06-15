@@ -151,6 +151,28 @@ evidence: selected recovery branch errors are small for the chosen masks, but
 the nominal trajectory fails, optimizer/backend success is false at the
 evaluation cap, and all-mask diagnostics remain high.
 
+For the locked-nominal hard-catalog branch-recovery diagnostic:
+
+```powershell
+py -3.11 scripts\run_locked_nominal_recovery.py --config configs\hard_catalog_locked_nominal_recovery.yaml --resume
+```
+
+The locked-nominal package writes
+`data/results/hard_catalog_locked_nominal_recovery/*`,
+`tables/hard_catalog_locked_nominal_recovery/*`, and
+`figures/hard_catalog_locked_nominal_recovery/*`. It is a continuous-backend
+diagnostic only, not QUBO, QAOA, or quantum evidence. It freezes a feasible
+nominal control (nominal error `0.0131`) and optimizes each selected
+missed-thrust branch independently after the outage. The bounded one-segment
+selected subset with at least six recovery segments
+(`locked_hard_single_min6_selected8`) meets the thresholds, while the selected
+one/two-segment (`locked_hard_selected1`, `locked_hard_selected3`) and
+all-single-outage (`locked_hard_all_single`) scopes fail. The passing
+`locked_hard_single_min6_selected8` row carries an `optimizer_success` caveat:
+it is threshold-feasible but not optimizer-converged because some selected
+branches hit the evaluation cap. The all-mask column is a diagnostic over every
+configured mask, not a robustness claim.
+
 For the continuation-extension continuous-backend baseline:
 
 ```powershell

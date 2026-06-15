@@ -1,0 +1,11 @@
+\begin{tabular}{lllllllllll}
+\toprule
+Case & Policy & Selected masks & Nominal error & Selected worst error & All-mask diagnostic worst & Max ||u|| & Bound violation & nfev & Runtime (s) & Meets thresholds \\
+\midrule
+locked\_hard\_all\_single & all\_single & 14 & 0.0131 & 0.8044 & 8.5410 & 1.0000 & 0.0000 & 955 & 575.7630 & False \\
+locked\_hard\_nominal\_only & 0 & 0 & 0.0131 & 0.0131 & 8.5410 & 1.0000 & 0.0000 & 71 & 40.6265 & True \\
+locked\_hard\_selected1 & 1 & 1 & 0.0131 & 0.1973 & 8.1384 & 1.0000 & 0.0000 & 161 & 96.3449 & False \\
+locked\_hard\_selected3 & 3 & 3 & 0.0131 & 0.1973 & 6.2972 & 1.0000 & 0.0000 & 401 & 247.4372 & False \\
+locked\_hard\_single\_min6\_selected8 & 8 & 8 & 0.0131 & 0.1580 & 1.4982 & 1.0000 & 0.0000 & 823 & 495.8345 & True \\
+\bottomrule
+\end{tabular}
