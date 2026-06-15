@@ -1,10 +1,16 @@
 {
-  "manifest_version": 1,
-  "generated_utc": "2026-06-15T10:52:09Z",
-  "note": "Scoped artifact manifest for paper reproducibility; excludes .venv, caches, logs, and bulk generated intermediates.",
-  "git_head": "d35b01967849e5e12c320e5676dd95813f4a6d9d",
-  "git_status_note": "git_head records the current HEAD before the integration commit; file hashes and byte counts reflect the working tree at generated_utc.",
+  "manifest_version": 2,
+  "generated_utc": "2026-06-15T13:04:12Z",
+  "note": "Tracked-file artifact manifest for paper reproducibility; excludes the manifest itself, .venv, caches, and logs. File hashes and byte counts reflect the working tree at generated_utc.",
+  "git_head": "adfca3e56f97e675b254e1beca785d46124036e6",
+  "git_status_note": "git_head records the current HEAD before the manifest-refresh commit; file hashes and byte counts reflect the working tree at generated_utc.",
+  "file_count": 486,
   "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "38e524c2e104eff85c7a07796c8aeaa07fba0993a2024381ccdfde7afcbc7ea3",
+      "bytes": 158
+    },
     {
       "path": "README.md",
       "sha256": "c511a64c3f99a705ca69cce25ab9cdb27105aff0072725322a00d20c9791fe49",
@@ -16,19 +22,2059 @@
       "bytes": 11555
     },
     {
-      "path": "requirements.txt",
-      "sha256": "67babbe8c076985d1c6f3ec679d890fbabba2106ceedbc199b294b3c1bdc01f9",
-      "bytes": 76
+      "path": "configs/bounded_collocation_phase_or_catalog.yaml",
+      "sha256": "ad5ff94890fab9573d81a489e45c7f9883b0a089d3f53bb503ab0083f166cc77",
+      "bytes": 1896
     },
     {
-      "path": "requirements-lock.txt",
-      "sha256": "c199d455b46c1d22cf3b2f812cd312acc492b9616a74f51b1d2047d0a75c88cb",
-      "bytes": 514
+      "path": "configs/bounded_phase_suite.yaml",
+      "sha256": "515283040812319aa7ebff22f87fee5c92d308179314653e666558b766497403",
+      "bytes": 2209
     },
     {
-      "path": ".gitignore",
-      "sha256": "38e524c2e104eff85c7a07796c8aeaa07fba0993a2024381ccdfde7afcbc7ea3",
-      "bytes": 158
+      "path": "configs/catalog_collocation_feasibility.yaml",
+      "sha256": "834f8e2b474fb64678cca51f019c4c07a1c78e38737cfcd001fcb0b64797e973",
+      "bytes": 1867
+    },
+    {
+      "path": "configs/catalog_feasibility_envelope.yaml",
+      "sha256": "3281714fec1e151147aa2c1e8ba1ba95abd0de252d5954c055c2ca4ea9f815f3",
+      "bytes": 2511
+    },
+    {
+      "path": "configs/catalog_targeted_feasibility.yaml",
+      "sha256": "46832f2d7a8505837728ba97bdf752a046ad5c4c3287a767e38c5c9d6ed88ffa",
+      "bytes": 1943
+    },
+    {
+      "path": "configs/continuation_extension_suite.yaml",
+      "sha256": "17b9d0390276ec393253ba971ca19a4c9f8a4d7ecdb100ef7a05008e4f3cc74f",
+      "bytes": 3716
+    },
+    {
+      "path": "configs/continuation_margin_suite.yaml",
+      "sha256": "570865ba8467079f4753ebc5f53ae966249bf588ec3e94fc62effb9055c4c43c",
+      "bytes": 3873
+    },
+    {
+      "path": "configs/default.yaml",
+      "sha256": "cd0af8f0698205a40d01641f097075a44e6f72ddf3f19f189b74800f6bf23990",
+      "bytes": 1370
+    },
+    {
+      "path": "configs/direct_collocation_baseline.yaml",
+      "sha256": "171b027e5c54cefb0fbec2597882bbc9013df55e6c4ec224a09c50e9ef13424c",
+      "bytes": 1369
+    },
+    {
+      "path": "configs/hard_catalog_selected_outage_envelope.yaml",
+      "sha256": "54b4a80c64e6a78532932d3cdc4e5beaf2e05ff0cc401599807e9813b57dd12f",
+      "bytes": 2481
+    },
+    {
+      "path": "configs/hermite_simpson_continuation_baseline.yaml",
+      "sha256": "d2840adf1e39e035f40c6790fd3cb8a6b1d3246777e3aea11c1d0a2804d3f4eb",
+      "bytes": 2816
+    },
+    {
+      "path": "configs/pilot_replicated.yaml",
+      "sha256": "79051cae17cda2092e7b9033b28557a948972f9def435a4c294f3a48252e36e8",
+      "bytes": 1637
+    },
+    {
+      "path": "configs/q1_candidate.yaml",
+      "sha256": "d8c610b5636c6af1cec15aaa06f0ce1a5fc6a1530e8f01105c740fba9e757923",
+      "bytes": 1635
+    },
+    {
+      "path": "configs/q1_phase_shift.yaml",
+      "sha256": "2a0282b2e2f9d18206bb9d48fc6a43a04553d1f1fde43b7e5fe0f63925185cbd",
+      "bytes": 1917
+    },
+    {
+      "path": "configs/q1_phase_shift_cardinality.yaml",
+      "sha256": "8ae0cfbb5f27d6dbb24fe09ebc44ca6ee8167c9b09e9fdd3f41b1d5a74bacceb",
+      "bytes": 2099
+    },
+    {
+      "path": "configs/q1_phase_shift_cardinality_30seed.yaml",
+      "sha256": "de91163490de76d9a21f365c7359bd414a61615c8b7b14e781c0a115539adacc",
+      "bytes": 2268
+    },
+    {
+      "path": "configs/q1_phase_shift_repair.yaml",
+      "sha256": "554c2955c14743df869ba15588b7f9b6a1ba48af3439dd798598e8016a7fc91a",
+      "bytes": 2113
+    },
+    {
+      "path": "configs/q1_teacher_feasible.yaml",
+      "sha256": "084eb3dce47dd8deb4d37d5d032fbff6e0cc712a6f6b572370ac3224085a2662",
+      "bytes": 2203
+    },
+    {
+      "path": "configs/qaoa_depth_ablation.yaml",
+      "sha256": "006f7eb4dd7135e94749cec238cb515fcda9583446af6531c52042140eded01f",
+      "bytes": 660
+    },
+    {
+      "path": "configs/qaoa_depth_ablation_30seed.yaml",
+      "sha256": "4170e1360220843a782fac8b730adca6fe8f59a370d65ab80254f18136eac243",
+      "bytes": 783
+    },
+    {
+      "path": "configs/robust_margin_suite.yaml",
+      "sha256": "24260cc333a5984212bb39ddaaf023df30ccb89f7c20e6e820c8bf233c684d1b",
+      "bytes": 2704
+    },
+    {
+      "path": "configs/smoke.yaml",
+      "sha256": "b25ceb8cd6768155e15522ec1137d1ee4de2e8746f5ef98b67ba500f5118ce07",
+      "bytes": 1487
+    },
+    {
+      "path": "data/results/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility.csv",
+      "sha256": "cbe70ccceb452f8f42eda88599d0d881373c18489fd4c7e25d7d8e89d52e0a3b",
+      "bytes": 4827
+    },
+    {
+      "path": "data/results/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility_metadata.json",
+      "sha256": "9a31b457ccf78e03917caa0d4d7aec21d15aae81d59ac62bbea556f85e0e17f9",
+      "bytes": 11033
+    },
+    {
+      "path": "data/results/bounded_collocation_phase_or_catalog/multiple_shooting_metadata.json",
+      "sha256": "819a42785079e1ae6b3a87f4c3c59471e14aa775facacc7102ec56fe937d858a",
+      "bytes": 28818
+    },
+    {
+      "path": "data/results/bounded_phase_suite/bounded_phase_suite.csv",
+      "sha256": "90b33de93398aa49a10b70ad044f2fe7359f59ef4e136f53a3d90b8548d502e4",
+      "bytes": 5854
+    },
+    {
+      "path": "data/results/bounded_phase_suite/bounded_phase_suite_metadata.json",
+      "sha256": "5ffa5f563c58355efda317bf1feca9f464edeea17d3272528728164d1f3e8bee",
+      "bytes": 15132
+    },
+    {
+      "path": "data/results/catalog_collocation_feasibility/multiple_shooting_feasibility.csv",
+      "sha256": "7706745a42a1b137cedbbcdf7e169af0ba22b270e9e328a1e0902c5b5343a426",
+      "bytes": 7955
+    },
+    {
+      "path": "data/results/catalog_collocation_feasibility/multiple_shooting_feasibility_metadata.json",
+      "sha256": "eb87cc03c09b5bc8d0fc9960a7b2dc9662d2a53598a1fd1d2a67b39db71352fc",
+      "bytes": 16340
+    },
+    {
+      "path": "data/results/catalog_collocation_feasibility/multiple_shooting_metadata.json",
+      "sha256": "fe4239017f92bef64b0ffb5b12b6cc32a8da0dffa6ac584458f15d934d026b1d",
+      "bytes": 51808
+    },
+    {
+      "path": "data/results/catalog_feasibility_envelope/catalog_feasibility_envelope.csv",
+      "sha256": "6057187eb704c9dbf1cf793c42c5c0c50789bbab1bac2195f626381850cca31f",
+      "bytes": 7257
+    },
+    {
+      "path": "data/results/catalog_feasibility_envelope/catalog_feasibility_envelope_metadata.json",
+      "sha256": "234670ad91bdf091c5d449ada49ecd66b4f7ebc91740cba1842b4dbf34399601",
+      "bytes": 17283
+    },
+    {
+      "path": "data/results/catalog_targeted_feasibility/feasibility_metadata.json",
+      "sha256": "16df18748eac60f1ebbc2fe9de4521accf350de79378478748007aa13a811379",
+      "bytes": 4639
+    },
+    {
+      "path": "data/results/catalog_targeted_feasibility/feasibility_sweep.csv",
+      "sha256": "27ca804355b12a819e6ab6673e882ae6a9cd5ef35e599d93755c191cde45e3e0",
+      "bytes": 1583
+    },
+    {
+      "path": "data/results/catalog_targeted_feasibility/summary_feasibility.json",
+      "sha256": "30759d05c7d5f9e77de2afca26e429c96bb664be1465dc163d14b75eb89c93f5",
+      "bytes": 2776
+    },
+    {
+      "path": "data/results/continuation_extension_suite/continuation_margin_suite.csv",
+      "sha256": "194688c1dc8df761622fee1069914aeb1a1e91ae2078a8e15ced6a59f4673311",
+      "bytes": 9759
+    },
+    {
+      "path": "data/results/continuation_extension_suite/continuation_margin_suite_metadata.json",
+      "sha256": "6edd9785451049a70797abcc4918efce0a475bb46960fb7755b7401805949d93",
+      "bytes": 27700
+    },
+    {
+      "path": "data/results/continuation_extension_suite/controls/all_single_p03_headroom_cold_nominal_controls.json",
+      "sha256": "09775ffe8f7fb2e9c3077049462f289c191cfb30bdcd6abd087c06d1af9c89af",
+      "bytes": 1308
+    },
+    {
+      "path": "data/results/continuation_extension_suite/controls/all_single_p04_warm_from_p03_nominal_controls.json",
+      "sha256": "9498dbcd4d5a23332fabf59495e3a66bb38f0f381cfa4510b763fae30f646f90",
+      "bytes": 1356
+    },
+    {
+      "path": "data/results/continuation_extension_suite/controls/two_segment_n6_p02_warm_160_from_p03_nominal_controls.json",
+      "sha256": "c98022c1e686f358a16bd053cd75c9ff397b1ec5028d920ca8813340b253dd47",
+      "bytes": 1171
+    },
+    {
+      "path": "data/results/continuation_extension_suite/controls/two_segment_n6_p03_headroom_cold_nominal_controls.json",
+      "sha256": "6398e34d2330e5cc05ef205fb6a415bc9910b78d1e9ed93ced68230e7274e430",
+      "bytes": 1121
+    },
+    {
+      "path": "data/results/continuation_extension_suite/controls/two_segment_n8_p03_cold_nominal_controls.json",
+      "sha256": "86bb319acbd4cdd40d8161988739205a4dc358d12a40eaa98ed1659a9a30cf84",
+      "bytes": 1310
+    },
+    {
+      "path": "data/results/continuation_margin_suite/continuation_margin_suite.csv",
+      "sha256": "dc2ded672ef3e2b08c83d0af771ccfb49c84379e4554ef69265a249c5be3a31b",
+      "bytes": 9912
+    },
+    {
+      "path": "data/results/continuation_margin_suite/continuation_margin_suite_metadata.json",
+      "sha256": "13ef92f0b3bb51a587b434c6e58cdf97faa9fa38114b21fea176ba94dea74fb5",
+      "bytes": 28095
+    },
+    {
+      "path": "data/results/continuation_margin_suite/controls/phase_all_single_p02_warm_from_p03_nominal_controls.json",
+      "sha256": "59cd9f0c0ccebf00e7c371ed92d7c1b7d3f1cc757f65cbc30937bafb433359a3",
+      "bytes": 1353
+    },
+    {
+      "path": "data/results/continuation_margin_suite/controls/phase_all_single_p03_cold_nominal_controls.json",
+      "sha256": "05f0f015920ac845c9f9875741e8fff7cc70731e418277e2c559f8b4d3899257",
+      "bytes": 1301
+    },
+    {
+      "path": "data/results/continuation_margin_suite/controls/two_segment_p02_warm_from_p03_nominal_controls.json",
+      "sha256": "95ae38d7d7bce04dacd901c6fcef9fb3a2e899bf650115cca9ff6566ca07dea8",
+      "bytes": 1151
+    },
+    {
+      "path": "data/results/continuation_margin_suite/controls/two_segment_p03_cold_nominal_controls.json",
+      "sha256": "0540391c7709c581fcff341b2b1d4a67210ca266fe9ca9109cd08f8209bbb1e0",
+      "bytes": 1107
+    },
+    {
+      "path": "data/results/continuation_margin_suite/controls/two_segment_p04_warm_from_p03_nominal_controls.json",
+      "sha256": "3b4e27cfb2ce7c0009ebafe6b0d457c963677f3fc5ffbcccb2d6bce5447a286f",
+      "bytes": 1148
+    },
+    {
+      "path": "data/results/direct_collocation_baseline/direct_collocation_baseline.csv",
+      "sha256": "b1f9b4c10daba731fbf5f7074e7b9b213a804d51a9f74fc0c6bd356898c2443d",
+      "bytes": 6007
+    },
+    {
+      "path": "data/results/direct_collocation_baseline/direct_collocation_baseline_metadata.json",
+      "sha256": "dacdd04704f6a8108213a5f557eb2db3bceda88397772560f693e5639e52b89a",
+      "bytes": 13600
+    },
+    {
+      "path": "data/results/feasibility_metadata.json",
+      "sha256": "e3fab7e16093284c5b9a274295e5d1ba006dcd1ee037f1c15347b06cb2618bd3",
+      "bytes": 3883
+    },
+    {
+      "path": "data/results/feasibility_sweep.csv",
+      "sha256": "2a066ae2d92af5e4f63ca3581f9a8e98740be7d5225190796d4cb920372ab395",
+      "bytes": 8305
+    },
+    {
+      "path": "data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.csv",
+      "sha256": "66d9e7cda69cd1a1bbefae8e903fa83c32b32830c06eb7d52acc43db7ae0d769",
+      "bytes": 6792
+    },
+    {
+      "path": "data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_metadata.json",
+      "sha256": "72c17b0e168e6353a1707dc395c4517568be902a5b6cfa1642775f66c72547be",
+      "bytes": 16354
+    },
+    {
+      "path": "data/results/hermite_simpson_continuation_baseline/controls/hs_hard_p04_amax02_warm_from_p03_nominal_controls.json",
+      "sha256": "2424b44af29a312f2cc2510bb1b210f68aaa83f4b0b7b58adfde0eea064ea332",
+      "bytes": 1397
+    },
+    {
+      "path": "data/results/hermite_simpson_continuation_baseline/controls/hs_phase_p02_warm_from_p03_nominal_controls.json",
+      "sha256": "fa2392a086504bcf292b58cd8fedf8d8e5fa6ccb40c576273f8b160f124cbe87",
+      "bytes": 1391
+    },
+    {
+      "path": "data/results/hermite_simpson_continuation_baseline/controls/hs_phase_p03_cold_nominal_controls.json",
+      "sha256": "af1da749b7c22edb576b667ea6b9e097c767607086f6639c49a0bc5fae04d94b",
+      "bytes": 1350
+    },
+    {
+      "path": "data/results/hermite_simpson_continuation_baseline/controls/hs_phase_p04_warm_from_p03_nominal_controls.json",
+      "sha256": "30008dac6fb3370eebf443dbeb3be98582e518b4453396d3eb5f300b61a495c3",
+      "bytes": 1398
+    },
+    {
+      "path": "data/results/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline.csv",
+      "sha256": "26b2c42327ba6ae3f371ee91c30489235d4ad867f667fd88d36273795fc3f091",
+      "bytes": 10493
+    },
+    {
+      "path": "data/results/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_metadata.json",
+      "sha256": "361aa0461680739da55305709cecade2c19fd6bd3f2b8521e31ab3c4c24c5a45",
+      "bytes": 26133
+    },
+    {
+      "path": "data/results/multiple_shooting_feasibility.csv",
+      "sha256": "fe453173dec463abfa45fd3e22db35314eda5748ebdfba3c46e0a81c8e2168ce",
+      "bytes": 1745
+    },
+    {
+      "path": "data/results/multiple_shooting_feasibility_metadata.json",
+      "sha256": "d1ef2e17c9de933e43e19d90aa2c3d29f6f1cb9b4c744d4828274a05aa932fcc",
+      "bytes": 2701
+    },
+    {
+      "path": "data/results/multiple_shooting_metadata.json",
+      "sha256": "ff947d466391f296acd879c088e644ffe53329b292a4a674a02f1b809bdcbcc3",
+      "bytes": 4165
+    },
+    {
+      "path": "data/results/phase_shift/qubo_coefficients_seed11.json",
+      "sha256": "68b1bc9ae699159faa1bfdd8993fc18a015fe7a8c176563e43774503c003b5f7",
+      "bytes": 2578
+    },
+    {
+      "path": "data/results/phase_shift/qubo_coefficients_seed23.json",
+      "sha256": "9005d714ce484303bf09f7702aab703aab96ad002536403de7bf227039d53b11",
+      "bytes": 2573
+    },
+    {
+      "path": "data/results/phase_shift/qubo_coefficients_seed37.json",
+      "sha256": "54ad8b5489cf86aa28848caa3f0daa56b4edf12f0cecfee37a5dd7977b0058bb",
+      "bytes": 2561
+    },
+    {
+      "path": "data/results/phase_shift/qubo_coefficients_seed41.json",
+      "sha256": "3f5e748f4e3c3a135a2b326e5cee89fb1cc4e53d7a3af57c0875c31e02046478",
+      "bytes": 2536
+    },
+    {
+      "path": "data/results/phase_shift/qubo_coefficients_seed53.json",
+      "sha256": "63f13a68c4d0465aca5057487e9c0956991e4fdb23f9c164a08a61b71f3fe3d8",
+      "bytes": 2566
+    },
+    {
+      "path": "data/results/phase_shift/qubo_diagnostics.csv",
+      "sha256": "01fb3d0b35045609c717202a3809b3f4323554f092572b8807f03d4c4bb0da4d",
+      "bytes": 940
+    },
+    {
+      "path": "data/results/phase_shift/qubo_fit_seed11.csv",
+      "sha256": "11df815d55737d3fa3c9ce4902aa6628d7652b084258cda3b83e8c388ac2e389",
+      "bytes": 1541
+    },
+    {
+      "path": "data/results/phase_shift/qubo_fit_seed23.csv",
+      "sha256": "1c0ee006c4427775a0a9e843d1b69dcef3d693a705a99d3183cb855ee412c239",
+      "bytes": 1538
+    },
+    {
+      "path": "data/results/phase_shift/qubo_fit_seed37.csv",
+      "sha256": "69456bc3e980ead9a97101a691ddb430f05fcc6d393181d864bea9a954cc842f",
+      "bytes": 1536
+    },
+    {
+      "path": "data/results/phase_shift/qubo_fit_seed41.csv",
+      "sha256": "05b2678c396a17149713adbf250829f132a38672393b65894bb0465045c94eeb",
+      "bytes": 1541
+    },
+    {
+      "path": "data/results/phase_shift/qubo_fit_seed53.csv",
+      "sha256": "a62e944ff5d3feb7d3f093373778475409e7b4956d76c8db3f435681b2de3c60",
+      "bytes": 1538
+    },
+    {
+      "path": "data/results/phase_shift/raw_results.csv",
+      "sha256": "c646e8ba65a011c77aefff83a27bdff59e6917b8e60590e6aabbe4f9568d1fb1",
+      "bytes": 43637
+    },
+    {
+      "path": "data/results/phase_shift/run_metadata.json",
+      "sha256": "56ed146fb2f3a1c0efea54795b15127b31a5c0b04d569fa530ce4a0639764a83",
+      "bytes": 6036
+    },
+    {
+      "path": "data/results/phase_shift/summary.csv",
+      "sha256": "2b4035c5d3434c2172acd75b0524e3b4a56e59b48f8d530ad4d661504686aee5",
+      "bytes": 4387
+    },
+    {
+      "path": "data/results/phase_shift/summary.json",
+      "sha256": "0bbca71a412f831689bea02ae1593ff9de0326ad5b06cc292202dd5e312d9c97",
+      "bytes": 12620
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed101.json",
+      "sha256": "cc899001488a748fc6963898fc27aca9cba26b2df882aeb38d1df0ff95e1f0e2",
+      "bytes": 4845
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed11.json",
+      "sha256": "1a49047b18aa5ccbaecd85da5b8f7bf9a77acfa57e6ca17c323d666af4d8da03",
+      "bytes": 4802
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed23.json",
+      "sha256": "b8a5f7cca8fa6771c898b1e3374e5a6daf02df19d607d5b36357efaab83fc057",
+      "bytes": 4808
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed37.json",
+      "sha256": "418f2a0aacd0afa73407b362821fe457f76799eaec5dafab3a591bebd9a83e13",
+      "bytes": 4817
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed41.json",
+      "sha256": "9bf8b5933fcc143abcdb756877bf890dd6cd1bcf500225ead3194148f3bc64db",
+      "bytes": 4830
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed53.json",
+      "sha256": "5b55e020ca31fa7222875cbca8698cfde1ecab31d9a4c874a8991995caa4f53a",
+      "bytes": 4807
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed67.json",
+      "sha256": "e95fdfd22750d64e9204f77a03786ab442ac6ee2f24f9f1aaa3c0ce8a252804d",
+      "bytes": 4832
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed79.json",
+      "sha256": "dbece9413c9366348f592b169cfd6470f10d191e26e1fb44c6d0e81019a6b4c4",
+      "bytes": 4823
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed83.json",
+      "sha256": "f8033813446bcfbb4be3f93e16c3a9944a69965bf8874fc9eb12245f14d8c1bc",
+      "bytes": 4834
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_coefficients_seed97.json",
+      "sha256": "2a5328bacd4dec493f84565afd1e09c3d9c332ed60b30c707f4b4f1fd085987c",
+      "bytes": 4801
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_diagnostics.csv",
+      "sha256": "8389620d9ac8e5da782f66808891dcd7aafc24746698d62134474ee838003e3d",
+      "bytes": 1712
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed101.csv",
+      "sha256": "9ebb441e4d4a4a59d84112b2b36cff59227cac00fb01ac5a29a6467690e5a065",
+      "bytes": 4594
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed11.csv",
+      "sha256": "5b69b2b0b3ad199fceb2df3b2b592fafcadd8b69e4ab8c70b1937d452f82b804",
+      "bytes": 4488
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed23.csv",
+      "sha256": "be8359ccab13e330607e5ac6025ae2b1f74e6d4d77be184490c40c97ac0c3b50",
+      "bytes": 4489
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed37.csv",
+      "sha256": "6d6187e35c8ebcea1eeae261966cde5c42f543eb8fac3a57f4938381fc6f191d",
+      "bytes": 4495
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed41.csv",
+      "sha256": "ce1ea90def9256b3f64ec563c5bea20c8f462938f53b0fdf8eaeabec376d131c",
+      "bytes": 4480
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed53.csv",
+      "sha256": "2849f72e47221045f5c76e58bb53b5b795a92d4bf42dffea0a5051d81743a41f",
+      "bytes": 4492
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed67.csv",
+      "sha256": "d2b1383d49e30ed5ce2d64ab0d97b5960276e5c2ce2d906912cc6ef41b6d2971",
+      "bytes": 4493
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed79.csv",
+      "sha256": "32551a0428622fa23f10022ab1a1d2c56e9f7778f77ef765dfd06bb88b8cf1d2",
+      "bytes": 4503
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed83.csv",
+      "sha256": "cc8a8377d2642783fecb7486e17d2a5772095b0f9efd169d17968833b043618e",
+      "bytes": 4487
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/qubo_fit_seed97.csv",
+      "sha256": "a1cbc7bd5f73e67e02568090795e94226377b115e18af41ae8370e8a8ff4fe6f",
+      "bytes": 4488
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/raw_results.csv",
+      "sha256": "b06312d4785cbb9ce4cb0de8e6c4705289e75b68b682e6452d0ae70be8702b39",
+      "bytes": 165829
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/run_metadata.json",
+      "sha256": "2e0830a872a92d15c265b72f580ad315d0aed62465cdb9740cd8b6219a0f31d7",
+      "bytes": 7049
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/summary.csv",
+      "sha256": "193dc19089c85a072bbcc58f7155b789a698e3139745699f8f243fdd5fa6475b",
+      "bytes": 7190
+    },
+    {
+      "path": "data/results/phase_shift_cardinality/summary.json",
+      "sha256": "01718e4f9c25c2abe7c658df88a72c4c047370d39c52fc0cbb33a581bb8d57d0",
+      "bytes": 18640
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/main_method_statistics_metadata.json",
+      "sha256": "509886f98caefa254e9751cebb66f731ddfef8d3f795ae9ba9f58392e1ca5d93",
+      "bytes": 9744
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/paired_comparisons.csv",
+      "sha256": "3f8a98400f04519cd70f1a4ad6e59190d67d2c444bcbbb0383d42dfd3ef005a7",
+      "bytes": 3026
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/paired_comparisons.json",
+      "sha256": "cbc5417b4c5e96899e60d4a75d496f2f363598ac9dc18a351217464650c0702d",
+      "bytes": 11431
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/paired_success_deltas.csv",
+      "sha256": "00b3fc29803a2c634686144d844d4106b29c2e8824ce4e41d7df69148bdfd0b6",
+      "bytes": 38554
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed101.json",
+      "sha256": "cc899001488a748fc6963898fc27aca9cba26b2df882aeb38d1df0ff95e1f0e2",
+      "bytes": 4845
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed107.json",
+      "sha256": "ec7f18e19355981f607f9417562c70c0bfcaaacfb301ea5aeb8b43dd2004f726",
+      "bytes": 4838
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed109.json",
+      "sha256": "26e6850378a389e3634136e9e2f40ffb0dc05af1c09b92edd230b8ebb65d93ea",
+      "bytes": 4827
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed11.json",
+      "sha256": "1a49047b18aa5ccbaecd85da5b8f7bf9a77acfa57e6ca17c323d666af4d8da03",
+      "bytes": 4802
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed113.json",
+      "sha256": "4b943386a50f779e4e0ebf7c4ebe7f406bb76be4bd0cdd09243015ca09d5fc98",
+      "bytes": 4794
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed127.json",
+      "sha256": "004bcb7b2fe10375c33747e4b7fbb7c082309629cc879b1e0368a31c5bdf701d",
+      "bytes": 4805
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed131.json",
+      "sha256": "efb99f072b6133c3664f369ace0531ff61d336669c98c3c2ad27cfa7deee072e",
+      "bytes": 4799
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed137.json",
+      "sha256": "e15982347afa5d77368b8c6363cb3b808eadfc24fc40f5b94a3a960bad9f8b9f",
+      "bytes": 4825
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed139.json",
+      "sha256": "84c164748257e28ed816211e80dcbf50d7d764957f474f737804aa91d376e81c",
+      "bytes": 4850
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed149.json",
+      "sha256": "92478340b818df40da1261545921f9acfaee27dc6c04d386ac84204f3f270df8",
+      "bytes": 4818
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed151.json",
+      "sha256": "bc00d07d6d1678dd22668c2c126a4ed695ea6bfa54f7d2dea2237453220aaf7f",
+      "bytes": 4836
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed157.json",
+      "sha256": "6c0444739d85e13d7cf07b8c3f1c260dc93933ea5e0e9475c8742f547aa589a4",
+      "bytes": 4800
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed163.json",
+      "sha256": "e1aa760a86fc8bce39bc84a907046a58056f9f67bcd68e82048951878e3b88dd",
+      "bytes": 4816
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed167.json",
+      "sha256": "bd6b1faf8e5548de2bb878962b9f9d6f2e56e11804940910b9a711abd5f000dd",
+      "bytes": 4812
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed173.json",
+      "sha256": "a53f3cc27a7374eb994f4241186768cb02745e513d9f3abc6e79f19253b5a7df",
+      "bytes": 4855
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed179.json",
+      "sha256": "b8ac25210aacb0c8a9dac652ae0c0ee93ba403c50d862b25ea5b65e034d25b17",
+      "bytes": 4855
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed181.json",
+      "sha256": "95f53941b461072c1cc0a06b07c3246efbaf2a62831c41bd5b51d5d4cc828fa7",
+      "bytes": 4816
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed191.json",
+      "sha256": "18defa534621358c8d0a713b5a63756ae76b75fa381cd203732f81758a300c3c",
+      "bytes": 4795
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed193.json",
+      "sha256": "e21c13edf5be662d01e005405b74ba6d6b23ad52f207b0a9ec600aef6e546408",
+      "bytes": 4831
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed197.json",
+      "sha256": "1966b9649696d24f6bc675c77516325f7c01ed5b426db543ca000b47b245371c",
+      "bytes": 4806
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed199.json",
+      "sha256": "2c78d746fcdab976ae25e9a390b4882aa2223fdaaab6c1f60c2208d0751424fe",
+      "bytes": 4813
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed211.json",
+      "sha256": "c748afc8d0406e6f46ec76b80b81aa39b432a2cba88ce18b8c6f2ff168ab9fdd",
+      "bytes": 4838
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed23.json",
+      "sha256": "b8a5f7cca8fa6771c898b1e3374e5a6daf02df19d607d5b36357efaab83fc057",
+      "bytes": 4808
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed37.json",
+      "sha256": "418f2a0aacd0afa73407b362821fe457f76799eaec5dafab3a591bebd9a83e13",
+      "bytes": 4817
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed41.json",
+      "sha256": "9bf8b5933fcc143abcdb756877bf890dd6cd1bcf500225ead3194148f3bc64db",
+      "bytes": 4830
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed53.json",
+      "sha256": "5b55e020ca31fa7222875cbca8698cfde1ecab31d9a4c874a8991995caa4f53a",
+      "bytes": 4807
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed67.json",
+      "sha256": "e95fdfd22750d64e9204f77a03786ab442ac6ee2f24f9f1aaa3c0ce8a252804d",
+      "bytes": 4832
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed79.json",
+      "sha256": "dbece9413c9366348f592b169cfd6470f10d191e26e1fb44c6d0e81019a6b4c4",
+      "bytes": 4823
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed83.json",
+      "sha256": "f8033813446bcfbb4be3f93e16c3a9944a69965bf8874fc9eb12245f14d8c1bc",
+      "bytes": 4834
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_coefficients_seed97.json",
+      "sha256": "2a5328bacd4dec493f84565afd1e09c3d9c332ed60b30c707f4b4f1fd085987c",
+      "bytes": 4801
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_diagnostics.csv",
+      "sha256": "acd20791674af3f0825bd5a247105186a090e4d36dd18a64876019a549d04ddf",
+      "bytes": 4748
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed101.csv",
+      "sha256": "9ebb441e4d4a4a59d84112b2b36cff59227cac00fb01ac5a29a6467690e5a065",
+      "bytes": 4594
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed107.csv",
+      "sha256": "d7ea63ae61fcf62a63f55fd95fcb3c5a580755080d4dbf543c5d2b01a3aea49c",
+      "bytes": 4579
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed109.csv",
+      "sha256": "6863597c3e51b8c945d46f510f5e459c368632ac23018376154964ddc9058cd9",
+      "bytes": 4577
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed11.csv",
+      "sha256": "5b69b2b0b3ad199fceb2df3b2b592fafcadd8b69e4ab8c70b1937d452f82b804",
+      "bytes": 4488
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed113.csv",
+      "sha256": "28833b9a645a7af71e563411a0e0c3c39afb77743d61067f0251f094be7d244e",
+      "bytes": 4586
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed127.csv",
+      "sha256": "630bc0be7e9fd7ba6eb052b2db5a8a2b6657c3e3a3fd031ea0cec748ee221f32",
+      "bytes": 4589
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed131.csv",
+      "sha256": "2fff25a1fe575fff970dc570728d1fc77db017829879be2a1ebf77a123a9ac01",
+      "bytes": 4580
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed137.csv",
+      "sha256": "eca56ae8bc0e81a571dfdf6cddd0e7da0d6ba2c9351d462a7be74399b3fea194",
+      "bytes": 4587
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed139.csv",
+      "sha256": "2a72704ae18e4273c9a02d3fb937659d4008be69d3cd5c75a7dc92107fa89214",
+      "bytes": 4589
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed149.csv",
+      "sha256": "1fe5d73673cf0fe5d5eaf132d0a4d38137a47bb8f835313221d23a7b7672c6d0",
+      "bytes": 4596
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed151.csv",
+      "sha256": "e28fc04d97d289372de6a8ce34dcf93d10d56ba259715ddb345c6a1443398003",
+      "bytes": 4585
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed157.csv",
+      "sha256": "c88369451f104daf766c077eae7d7c6ec5b85d41e0870e64d0d5e2d0f2f7a9dc",
+      "bytes": 4580
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed163.csv",
+      "sha256": "9f09d5b62e7ef0546c801907bae40c8881d033f43ccbd485311057f16d656d06",
+      "bytes": 4567
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed167.csv",
+      "sha256": "5f7550ed186bd7c07381adbd393dd11ceafa58de13245e464f21647cef4a0bcc",
+      "bytes": 4587
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed173.csv",
+      "sha256": "5f256b6ece58c579aaa4cc5c47771cb3fbaf4f4247d42f6981dd76ba55827005",
+      "bytes": 4587
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed179.csv",
+      "sha256": "a9cdd27505b6785d36204fa640fed3cfe855aaa31abc5cd903bb26eb8fc4bc01",
+      "bytes": 4601
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed181.csv",
+      "sha256": "feb3a6c13013dd26a5b0002745f7a2a1337414ba3a1e6f41a4c803234ac742ce",
+      "bytes": 4572
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed191.csv",
+      "sha256": "4f3bfc16b91f134cafae9a40a72f8091de3298dcbe7206b2bf03c63ee202053c",
+      "bytes": 4584
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed193.csv",
+      "sha256": "f753667c61be20c2a8c2fb1572ffbd1a111d32719f8e09c7579d865be28bed92",
+      "bytes": 4593
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed197.csv",
+      "sha256": "fce43d01bbc06ab4e857f1bb9a817a23f0dddfd8195b507151d92e51cdb646be",
+      "bytes": 4589
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed199.csv",
+      "sha256": "437475b7edc4742582f33eba7460c1a5ee40a51960b8f01426a3d1d74018100e",
+      "bytes": 4579
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed211.csv",
+      "sha256": "4a15711fab9b2123b753e1702c2eeb9164966915968a2d58d10caea428936824",
+      "bytes": 4601
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed23.csv",
+      "sha256": "be8359ccab13e330607e5ac6025ae2b1f74e6d4d77be184490c40c97ac0c3b50",
+      "bytes": 4489
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed37.csv",
+      "sha256": "6d6187e35c8ebcea1eeae261966cde5c42f543eb8fac3a57f4938381fc6f191d",
+      "bytes": 4495
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed41.csv",
+      "sha256": "ce1ea90def9256b3f64ec563c5bea20c8f462938f53b0fdf8eaeabec376d131c",
+      "bytes": 4480
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed53.csv",
+      "sha256": "2849f72e47221045f5c76e58bb53b5b795a92d4bf42dffea0a5051d81743a41f",
+      "bytes": 4492
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed67.csv",
+      "sha256": "d2b1383d49e30ed5ce2d64ab0d97b5960276e5c2ce2d906912cc6ef41b6d2971",
+      "bytes": 4493
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed79.csv",
+      "sha256": "32551a0428622fa23f10022ab1a1d2c56e9f7778f77ef765dfd06bb88b8cf1d2",
+      "bytes": 4503
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed83.csv",
+      "sha256": "cc8a8377d2642783fecb7486e17d2a5772095b0f9efd169d17968833b043618e",
+      "bytes": 4487
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/qubo_fit_seed97.csv",
+      "sha256": "a1cbc7bd5f73e67e02568090795e94226377b115e18af41ae8370e8a8ff4fe6f",
+      "bytes": 4488
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/raw_results.csv",
+      "sha256": "98eddd7034a3d9cdc1dfd987872c1793732976d5283e7c9707d8be2ca5865eeb",
+      "bytes": 497951
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/run_metadata.json",
+      "sha256": "b88d10b39bc2c55eeba4b0327a85057b7454130503a653a1a81cd39f639f7935",
+      "bytes": 7891
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/success_intervals.csv",
+      "sha256": "ab2502ca33ddfb675c6b5b3ffff2f9774702765d888fdf0d8f87b0f67746597a",
+      "bytes": 563
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/success_intervals.json",
+      "sha256": "f9f9c0efe96f4fe0b34ef4253b383bc5441259cbd3c5d1313a960679924347e4",
+      "bytes": 1566
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/summary.csv",
+      "sha256": "b71e6ab8fcbc6f18bfe41278fdb734fe9ff13b79a369abe659b4c1be356014e8",
+      "bytes": 7173
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/summary.json",
+      "sha256": "396e57a8e6c7b5c786402e1dd1b36e1aa4f4ba02ea05fd2d9e634bbc3bccd3d0",
+      "bytes": 18670
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_ablation/cardinality_refinements.csv",
+      "sha256": "d34baf36afc8ed1cd854960c2cf9ec1ecfdffdee7e39bbb8ce199d9079ea745b",
+      "bytes": 44433
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_ablation/cardinality_summary.csv",
+      "sha256": "d5ad2bccb29dbe2399f1292244745f1aa730e4ff8646d793176aa06914da2e3b",
+      "bytes": 868
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_ablation/fuel_sweep.csv",
+      "sha256": "1a8438bcb41fa0331e45b1a209a824f0b83cedc605c885a974e16f46dc65e07c",
+      "bytes": 3766
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_ablation/metadata.json",
+      "sha256": "f1507097d05dad3787eec04ecc3ee4913c2575e0a370058dda1de546df482114",
+      "bytes": 2256
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_ablation/method_vs_frontier.csv",
+      "sha256": "c12b77e9d90987f75f90c3ea1b801fc86ad0a29a91f3cc93f16de14731dcebba",
+      "bytes": 1294
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_coefficients_seed11.json",
+      "sha256": "68b1bc9ae699159faa1bfdd8993fc18a015fe7a8c176563e43774503c003b5f7",
+      "bytes": 2578
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_coefficients_seed23.json",
+      "sha256": "9005d714ce484303bf09f7702aab703aab96ad002536403de7bf227039d53b11",
+      "bytes": 2573
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_coefficients_seed37.json",
+      "sha256": "54ad8b5489cf86aa28848caa3f0daa56b4edf12f0cecfee37a5dd7977b0058bb",
+      "bytes": 2561
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_coefficients_seed41.json",
+      "sha256": "3f5e748f4e3c3a135a2b326e5cee89fb1cc4e53d7a3af57c0875c31e02046478",
+      "bytes": 2536
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_coefficients_seed53.json",
+      "sha256": "63f13a68c4d0465aca5057487e9c0956991e4fdb23f9c164a08a61b71f3fe3d8",
+      "bytes": 2566
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_diagnostics.csv",
+      "sha256": "01fb3d0b35045609c717202a3809b3f4323554f092572b8807f03d4c4bb0da4d",
+      "bytes": 940
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_fit_seed11.csv",
+      "sha256": "11df815d55737d3fa3c9ce4902aa6628d7652b084258cda3b83e8c388ac2e389",
+      "bytes": 1541
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_fit_seed23.csv",
+      "sha256": "1c0ee006c4427775a0a9e843d1b69dcef3d693a705a99d3183cb855ee412c239",
+      "bytes": 1538
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_fit_seed37.csv",
+      "sha256": "69456bc3e980ead9a97101a691ddb430f05fcc6d393181d864bea9a954cc842f",
+      "bytes": 1536
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_fit_seed41.csv",
+      "sha256": "05b2678c396a17149713adbf250829f132a38672393b65894bb0465045c94eeb",
+      "bytes": 1541
+    },
+    {
+      "path": "data/results/phase_shift_repair/qubo_fit_seed53.csv",
+      "sha256": "a62e944ff5d3feb7d3f093373778475409e7b4956d76c8db3f435681b2de3c60",
+      "bytes": 1538
+    },
+    {
+      "path": "data/results/phase_shift_repair/raw_results.csv",
+      "sha256": "e1812d9fa2c128a5e6f4e8f5c54207f3a41ae35e1a593c21f889a0bdebf26eb9",
+      "bytes": 64560
+    },
+    {
+      "path": "data/results/phase_shift_repair/run_metadata.json",
+      "sha256": "e450415b0fd08b36f7f672f4c134681d1836fe1e1be6d1708c8ac6b7a2fcad6d",
+      "bytes": 6915
+    },
+    {
+      "path": "data/results/phase_shift_repair/summary.csv",
+      "sha256": "db17020c4069d9afa2cd104da21bd6a4a02982dfe75b0981f05ddda0cba68802",
+      "bytes": 5784
+    },
+    {
+      "path": "data/results/phase_shift_repair/summary.json",
+      "sha256": "3d5f55e79303c5f5ad99f7b3726f7d7a4f649c7b22331a046cd87e7242bd20b1",
+      "bytes": 16078
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/metadata.json",
+      "sha256": "e7b5c94fac79698351084e8a0573583d9d3f57d0701d000f1cc673287a36dbb4",
+      "bytes": 2604
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed101.json",
+      "sha256": "cc899001488a748fc6963898fc27aca9cba26b2df882aeb38d1df0ff95e1f0e2",
+      "bytes": 4845
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed11.json",
+      "sha256": "1a49047b18aa5ccbaecd85da5b8f7bf9a77acfa57e6ca17c323d666af4d8da03",
+      "bytes": 4802
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed23.json",
+      "sha256": "b8a5f7cca8fa6771c898b1e3374e5a6daf02df19d607d5b36357efaab83fc057",
+      "bytes": 4808
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed37.json",
+      "sha256": "418f2a0aacd0afa73407b362821fe457f76799eaec5dafab3a591bebd9a83e13",
+      "bytes": 4817
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed41.json",
+      "sha256": "9bf8b5933fcc143abcdb756877bf890dd6cd1bcf500225ead3194148f3bc64db",
+      "bytes": 4830
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed53.json",
+      "sha256": "5b55e020ca31fa7222875cbca8698cfde1ecab31d9a4c874a8991995caa4f53a",
+      "bytes": 4807
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed67.json",
+      "sha256": "e95fdfd22750d64e9204f77a03786ab442ac6ee2f24f9f1aaa3c0ce8a252804d",
+      "bytes": 4832
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed79.json",
+      "sha256": "dbece9413c9366348f592b169cfd6470f10d191e26e1fb44c6d0e81019a6b4c4",
+      "bytes": 4823
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed83.json",
+      "sha256": "f8033813446bcfbb4be3f93e16c3a9944a69965bf8874fc9eb12245f14d8c1bc",
+      "bytes": 4834
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_coefficients_seed97.json",
+      "sha256": "2a5328bacd4dec493f84565afd1e09c3d9c332ed60b30c707f4b4f1fd085987c",
+      "bytes": 4801
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_diagnostics.csv",
+      "sha256": "a1d41916f49c501502c6b6ffbc616c33d4a407b6c93780b77eef7f7689157865",
+      "bytes": 1643
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed101.csv",
+      "sha256": "9ebb441e4d4a4a59d84112b2b36cff59227cac00fb01ac5a29a6467690e5a065",
+      "bytes": 4594
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed11.csv",
+      "sha256": "5b69b2b0b3ad199fceb2df3b2b592fafcadd8b69e4ab8c70b1937d452f82b804",
+      "bytes": 4488
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed23.csv",
+      "sha256": "be8359ccab13e330607e5ac6025ae2b1f74e6d4d77be184490c40c97ac0c3b50",
+      "bytes": 4489
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed37.csv",
+      "sha256": "6d6187e35c8ebcea1eeae261966cde5c42f543eb8fac3a57f4938381fc6f191d",
+      "bytes": 4495
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed41.csv",
+      "sha256": "ce1ea90def9256b3f64ec563c5bea20c8f462938f53b0fdf8eaeabec376d131c",
+      "bytes": 4480
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed53.csv",
+      "sha256": "2849f72e47221045f5c76e58bb53b5b795a92d4bf42dffea0a5051d81743a41f",
+      "bytes": 4492
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed67.csv",
+      "sha256": "d2b1383d49e30ed5ce2d64ab0d97b5960276e5c2ce2d906912cc6ef41b6d2971",
+      "bytes": 4493
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed79.csv",
+      "sha256": "32551a0428622fa23f10022ab1a1d2c56e9f7778f77ef765dfd06bb88b8cf1d2",
+      "bytes": 4503
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed83.csv",
+      "sha256": "cc8a8377d2642783fecb7486e17d2a5772095b0f9efd169d17968833b043618e",
+      "bytes": 4487
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/qubo_fit_seed97.csv",
+      "sha256": "a1cbc7bd5f73e67e02568090795e94226377b115e18af41ae8370e8a8ff4fe6f",
+      "bytes": 4488
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/raw_results.csv",
+      "sha256": "39679d13efe69c4bcb534c36d665eb0b369793c745815c871e28c426dd904fb7",
+      "bytes": 122597
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/summary.csv",
+      "sha256": "02ec795554b0751f7f1551ea359efac950b6d6606c304f72b4876bcd0ffdd944",
+      "bytes": 5474
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation/summary.json",
+      "sha256": "2780cba3a93863f2568dd714c791b02eeee3c37974fceadfbd317be5972da5b1",
+      "bytes": 14515
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/metadata.json",
+      "sha256": "d3d999cb40cf8a54f236e4272aa4e702852810abe10715e42967b288d6d50d67",
+      "bytes": 4687
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/paired_comparisons.csv",
+      "sha256": "7a8ef7b7c6ebdebf7eb600ef78d45e2917dbecb92e0e4405931ec5e2282fb9e1",
+      "bytes": 1820
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/paired_comparisons.json",
+      "sha256": "19dc04ec6fefffe7660c9e4af3b8604daa77a84640e10b6a697ee4dc0e91eea7",
+      "bytes": 5737
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/paired_success_deltas.csv",
+      "sha256": "05481902ad36abf1429eca1938f517e62352f1c3a87dfbb8c8a9d600e9eae3bd",
+      "bytes": 19859
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed101.json",
+      "sha256": "cc899001488a748fc6963898fc27aca9cba26b2df882aeb38d1df0ff95e1f0e2",
+      "bytes": 4845
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed107.json",
+      "sha256": "ec7f18e19355981f607f9417562c70c0bfcaaacfb301ea5aeb8b43dd2004f726",
+      "bytes": 4838
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed109.json",
+      "sha256": "26e6850378a389e3634136e9e2f40ffb0dc05af1c09b92edd230b8ebb65d93ea",
+      "bytes": 4827
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed11.json",
+      "sha256": "1a49047b18aa5ccbaecd85da5b8f7bf9a77acfa57e6ca17c323d666af4d8da03",
+      "bytes": 4802
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed113.json",
+      "sha256": "4b943386a50f779e4e0ebf7c4ebe7f406bb76be4bd0cdd09243015ca09d5fc98",
+      "bytes": 4794
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed127.json",
+      "sha256": "004bcb7b2fe10375c33747e4b7fbb7c082309629cc879b1e0368a31c5bdf701d",
+      "bytes": 4805
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed131.json",
+      "sha256": "efb99f072b6133c3664f369ace0531ff61d336669c98c3c2ad27cfa7deee072e",
+      "bytes": 4799
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed137.json",
+      "sha256": "e15982347afa5d77368b8c6363cb3b808eadfc24fc40f5b94a3a960bad9f8b9f",
+      "bytes": 4825
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed139.json",
+      "sha256": "84c164748257e28ed816211e80dcbf50d7d764957f474f737804aa91d376e81c",
+      "bytes": 4850
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed149.json",
+      "sha256": "92478340b818df40da1261545921f9acfaee27dc6c04d386ac84204f3f270df8",
+      "bytes": 4818
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed151.json",
+      "sha256": "bc00d07d6d1678dd22668c2c126a4ed695ea6bfa54f7d2dea2237453220aaf7f",
+      "bytes": 4836
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed157.json",
+      "sha256": "6c0444739d85e13d7cf07b8c3f1c260dc93933ea5e0e9475c8742f547aa589a4",
+      "bytes": 4800
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed163.json",
+      "sha256": "e1aa760a86fc8bce39bc84a907046a58056f9f67bcd68e82048951878e3b88dd",
+      "bytes": 4816
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed167.json",
+      "sha256": "bd6b1faf8e5548de2bb878962b9f9d6f2e56e11804940910b9a711abd5f000dd",
+      "bytes": 4812
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed173.json",
+      "sha256": "a53f3cc27a7374eb994f4241186768cb02745e513d9f3abc6e79f19253b5a7df",
+      "bytes": 4855
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed179.json",
+      "sha256": "b8ac25210aacb0c8a9dac652ae0c0ee93ba403c50d862b25ea5b65e034d25b17",
+      "bytes": 4855
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed181.json",
+      "sha256": "95f53941b461072c1cc0a06b07c3246efbaf2a62831c41bd5b51d5d4cc828fa7",
+      "bytes": 4816
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed191.json",
+      "sha256": "18defa534621358c8d0a713b5a63756ae76b75fa381cd203732f81758a300c3c",
+      "bytes": 4795
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed193.json",
+      "sha256": "e21c13edf5be662d01e005405b74ba6d6b23ad52f207b0a9ec600aef6e546408",
+      "bytes": 4831
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed197.json",
+      "sha256": "1966b9649696d24f6bc675c77516325f7c01ed5b426db543ca000b47b245371c",
+      "bytes": 4806
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed199.json",
+      "sha256": "2c78d746fcdab976ae25e9a390b4882aa2223fdaaab6c1f60c2208d0751424fe",
+      "bytes": 4813
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed211.json",
+      "sha256": "c748afc8d0406e6f46ec76b80b81aa39b432a2cba88ce18b8c6f2ff168ab9fdd",
+      "bytes": 4838
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed23.json",
+      "sha256": "b8a5f7cca8fa6771c898b1e3374e5a6daf02df19d607d5b36357efaab83fc057",
+      "bytes": 4808
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed37.json",
+      "sha256": "418f2a0aacd0afa73407b362821fe457f76799eaec5dafab3a591bebd9a83e13",
+      "bytes": 4817
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed41.json",
+      "sha256": "9bf8b5933fcc143abcdb756877bf890dd6cd1bcf500225ead3194148f3bc64db",
+      "bytes": 4830
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed53.json",
+      "sha256": "5b55e020ca31fa7222875cbca8698cfde1ecab31d9a4c874a8991995caa4f53a",
+      "bytes": 4807
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed67.json",
+      "sha256": "e95fdfd22750d64e9204f77a03786ab442ac6ee2f24f9f1aaa3c0ce8a252804d",
+      "bytes": 4832
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed79.json",
+      "sha256": "dbece9413c9366348f592b169cfd6470f10d191e26e1fb44c6d0e81019a6b4c4",
+      "bytes": 4823
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed83.json",
+      "sha256": "f8033813446bcfbb4be3f93e16c3a9944a69965bf8874fc9eb12245f14d8c1bc",
+      "bytes": 4834
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_coefficients_seed97.json",
+      "sha256": "2a5328bacd4dec493f84565afd1e09c3d9c332ed60b30c707f4b4f1fd085987c",
+      "bytes": 4801
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_diagnostics.csv",
+      "sha256": "a766f83ea6768eaf82e0bbe88339a8592b330f040f71f6fef6af47b90f6aef12",
+      "bytes": 4579
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed101.csv",
+      "sha256": "9ebb441e4d4a4a59d84112b2b36cff59227cac00fb01ac5a29a6467690e5a065",
+      "bytes": 4594
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed107.csv",
+      "sha256": "d7ea63ae61fcf62a63f55fd95fcb3c5a580755080d4dbf543c5d2b01a3aea49c",
+      "bytes": 4579
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed109.csv",
+      "sha256": "6863597c3e51b8c945d46f510f5e459c368632ac23018376154964ddc9058cd9",
+      "bytes": 4577
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed11.csv",
+      "sha256": "5b69b2b0b3ad199fceb2df3b2b592fafcadd8b69e4ab8c70b1937d452f82b804",
+      "bytes": 4488
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed113.csv",
+      "sha256": "28833b9a645a7af71e563411a0e0c3c39afb77743d61067f0251f094be7d244e",
+      "bytes": 4586
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed127.csv",
+      "sha256": "630bc0be7e9fd7ba6eb052b2db5a8a2b6657c3e3a3fd031ea0cec748ee221f32",
+      "bytes": 4589
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed131.csv",
+      "sha256": "2fff25a1fe575fff970dc570728d1fc77db017829879be2a1ebf77a123a9ac01",
+      "bytes": 4580
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed137.csv",
+      "sha256": "eca56ae8bc0e81a571dfdf6cddd0e7da0d6ba2c9351d462a7be74399b3fea194",
+      "bytes": 4587
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed139.csv",
+      "sha256": "2a72704ae18e4273c9a02d3fb937659d4008be69d3cd5c75a7dc92107fa89214",
+      "bytes": 4589
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed149.csv",
+      "sha256": "1fe5d73673cf0fe5d5eaf132d0a4d38137a47bb8f835313221d23a7b7672c6d0",
+      "bytes": 4596
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed151.csv",
+      "sha256": "e28fc04d97d289372de6a8ce34dcf93d10d56ba259715ddb345c6a1443398003",
+      "bytes": 4585
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed157.csv",
+      "sha256": "c88369451f104daf766c077eae7d7c6ec5b85d41e0870e64d0d5e2d0f2f7a9dc",
+      "bytes": 4580
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed163.csv",
+      "sha256": "9f09d5b62e7ef0546c801907bae40c8881d033f43ccbd485311057f16d656d06",
+      "bytes": 4567
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed167.csv",
+      "sha256": "5f7550ed186bd7c07381adbd393dd11ceafa58de13245e464f21647cef4a0bcc",
+      "bytes": 4587
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed173.csv",
+      "sha256": "5f256b6ece58c579aaa4cc5c47771cb3fbaf4f4247d42f6981dd76ba55827005",
+      "bytes": 4587
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed179.csv",
+      "sha256": "a9cdd27505b6785d36204fa640fed3cfe855aaa31abc5cd903bb26eb8fc4bc01",
+      "bytes": 4601
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed181.csv",
+      "sha256": "feb3a6c13013dd26a5b0002745f7a2a1337414ba3a1e6f41a4c803234ac742ce",
+      "bytes": 4572
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed191.csv",
+      "sha256": "4f3bfc16b91f134cafae9a40a72f8091de3298dcbe7206b2bf03c63ee202053c",
+      "bytes": 4584
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed193.csv",
+      "sha256": "f753667c61be20c2a8c2fb1572ffbd1a111d32719f8e09c7579d865be28bed92",
+      "bytes": 4593
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed197.csv",
+      "sha256": "fce43d01bbc06ab4e857f1bb9a817a23f0dddfd8195b507151d92e51cdb646be",
+      "bytes": 4589
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed199.csv",
+      "sha256": "437475b7edc4742582f33eba7460c1a5ee40a51960b8f01426a3d1d74018100e",
+      "bytes": 4579
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed211.csv",
+      "sha256": "4a15711fab9b2123b753e1702c2eeb9164966915968a2d58d10caea428936824",
+      "bytes": 4601
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed23.csv",
+      "sha256": "be8359ccab13e330607e5ac6025ae2b1f74e6d4d77be184490c40c97ac0c3b50",
+      "bytes": 4489
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed37.csv",
+      "sha256": "6d6187e35c8ebcea1eeae261966cde5c42f543eb8fac3a57f4938381fc6f191d",
+      "bytes": 4495
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed41.csv",
+      "sha256": "ce1ea90def9256b3f64ec563c5bea20c8f462938f53b0fdf8eaeabec376d131c",
+      "bytes": 4480
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed53.csv",
+      "sha256": "2849f72e47221045f5c76e58bb53b5b795a92d4bf42dffea0a5051d81743a41f",
+      "bytes": 4492
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed67.csv",
+      "sha256": "d2b1383d49e30ed5ce2d64ab0d97b5960276e5c2ce2d906912cc6ef41b6d2971",
+      "bytes": 4493
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed79.csv",
+      "sha256": "32551a0428622fa23f10022ab1a1d2c56e9f7778f77ef765dfd06bb88b8cf1d2",
+      "bytes": 4503
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed83.csv",
+      "sha256": "cc8a8377d2642783fecb7486e17d2a5772095b0f9efd169d17968833b043618e",
+      "bytes": 4487
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/qubo_fit_seed97.csv",
+      "sha256": "a1cbc7bd5f73e67e02568090795e94226377b115e18af41ae8370e8a8ff4fe6f",
+      "bytes": 4488
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/raw_results.csv",
+      "sha256": "27a052a1606424b80067dbdd81ded74d07a83ea8d92d4ffe8554de0e419526db",
+      "bytes": 367772
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/success_intervals.csv",
+      "sha256": "4f4474c07b30ad943ad831ecc8ff28770c19c756d3530a77ecdfd7f94cd17a40",
+      "bytes": 469
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/success_intervals.json",
+      "sha256": "464785fc3b0a056ede6b4fae22dcbb090459b3a1eb34a282ccbf672109970c3b",
+      "bytes": 1160
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/summary.csv",
+      "sha256": "dbaa5458ba8a67fea182f5dc59c3864d49701fbc538d673fa3731945424c0929",
+      "bytes": 5742
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/summary.json",
+      "sha256": "182dbfba5741c4b8b894afc1fc495cb3c269c8b494391107f424795b9a45f63a",
+      "bytes": 14783
+    },
+    {
+      "path": "data/results/qubo_coefficients_seed11.json",
+      "sha256": "0590ec23235bbcf3a4547a064755b0465e4ae033b8a06d2fbd0c824ea8361627",
+      "bytes": 6094
+    },
+    {
+      "path": "data/results/qubo_coefficients_seed23.json",
+      "sha256": "b559ebc74b7bbd326b5aaa4b5c8c9567d0dfa6f2ed356fdd2b4523b615325e16",
+      "bytes": 6113
+    },
+    {
+      "path": "data/results/qubo_coefficients_seed37.json",
+      "sha256": "f60bfc3f999fdc0b76ff38d60f7782d3e83d80358128b480fd7caa2478f36c5b",
+      "bytes": 6110
+    },
+    {
+      "path": "data/results/qubo_diagnostics.csv",
+      "sha256": "1fd96e5cd1e378774bb922d13ff96735c2587a8c2385d39bb8b13667fbc189a6",
+      "bytes": 466
+    },
+    {
+      "path": "data/results/qubo_fit_seed11.csv",
+      "sha256": "b6b68d25d683e2b962855eb84642e8c103f6a7b5b48ea2282be6e6ef1babb93a",
+      "bytes": 3379
+    },
+    {
+      "path": "data/results/qubo_fit_seed23.csv",
+      "sha256": "c4feda9a32c7b18e31d6cd7a3ca1447a15d5d77f1436772f46985cbec196b37e",
+      "bytes": 3380
+    },
+    {
+      "path": "data/results/qubo_fit_seed37.csv",
+      "sha256": "877c357b6224f726062c920259971cee9da00733d27604b71360f650cc367d6c",
+      "bytes": 3384
+    },
+    {
+      "path": "data/results/raw_results.csv",
+      "sha256": "2e63f16058008c908a24ff0134c79e608e3459e7f72b7476dd797341092d47c9",
+      "bytes": 75250
+    },
+    {
+      "path": "data/results/robust_margin_suite/robust_margin_suite.csv",
+      "sha256": "f830a36ecd440e1db039d89ce1f8fe17640230c2ffb63698c703a8bf91afa015",
+      "bytes": 9179
+    },
+    {
+      "path": "data/results/robust_margin_suite/robust_margin_suite_metadata.json",
+      "sha256": "f2648cb0122d6c4ac521cc2a98469e109ddfd934eb0a198fbac6e566216d23db",
+      "bytes": 37359
+    },
+    {
+      "path": "data/results/run_metadata.json",
+      "sha256": "d02b07ee3e229f66e4baea4220378b2c1be494848cbac0d0525c3e8bba245947",
+      "bytes": 4081
+    },
+    {
+      "path": "data/results/summary.csv",
+      "sha256": "2a1c96c335765adc6a7224d4b3d755b09687037a6118fc9de7fbb5016329670b",
+      "bytes": 4573
+    },
+    {
+      "path": "data/results/summary.json",
+      "sha256": "9973c29e6c981553efb819adeb688343f291fd3790aaf4ad1eff7754a3daaba7",
+      "bytes": 11944
+    },
+    {
+      "path": "data/results/summary_feasibility.json",
+      "sha256": "64686e04a513bf20dd02f88ed08a0ad1553fbb3d7cb16c7606c23270f6c74813",
+      "bytes": 10606
+    },
+    {
+      "path": "data/results/teacher_feasible/qubo_coefficients_seed11.json",
+      "sha256": "b6cf927e63ac7451995f1cd523aed059f00c574eabcd12ce9c741a6ad05e3cdd",
+      "bytes": 8053
+    },
+    {
+      "path": "data/results/teacher_feasible/qubo_coefficients_seed23.json",
+      "sha256": "297e23ed8a24cbbc22c4799f5df27aee5c7790ee5526dd2934b919222e456a00",
+      "bytes": 7938
+    },
+    {
+      "path": "data/results/teacher_feasible/qubo_coefficients_seed37.json",
+      "sha256": "dd341190a24972bbd8aab79a7589d7033c731bf0158122dc3945d307e39b6b42",
+      "bytes": 7997
+    },
+    {
+      "path": "data/results/teacher_feasible/qubo_diagnostics.csv",
+      "sha256": "1c15ecd169f8399992048a2a2833a5a9b5d99b64a1484435198f7be21612cc49",
+      "bytes": 662
+    },
+    {
+      "path": "data/results/teacher_feasible/qubo_fit_seed11.csv",
+      "sha256": "0281ac0b1b518cea6bbc80d81b32594dd5fd99b32e6e013c62789fbd32b953d0",
+      "bytes": 1516
+    },
+    {
+      "path": "data/results/teacher_feasible/qubo_fit_seed23.csv",
+      "sha256": "8c6251e109095a108c9453a497aa932bbe5c2043b9cbc5c6166d0635c1f65087",
+      "bytes": 1503
+    },
+    {
+      "path": "data/results/teacher_feasible/qubo_fit_seed37.csv",
+      "sha256": "10698bbec9ebb0fe26aa3437f4694b5ac3823dac7ee28bb3e76c9e726abd2224",
+      "bytes": 1516
+    },
+    {
+      "path": "data/results/teacher_feasible/raw_results.csv",
+      "sha256": "62de3e3fc2ed07d444cebc76b06cb25004d2281528259c3f32b010b4da62e5c4",
+      "bytes": 84364
+    },
+    {
+      "path": "data/results/teacher_feasible/run_metadata.json",
+      "sha256": "a65b2fe55cb3f4f3a73e7967efcf91bd8c29d7b4055c47d3724931200b5405cf",
+      "bytes": 8773
+    },
+    {
+      "path": "data/results/teacher_feasible/summary.csv",
+      "sha256": "ee9ca0ebdb1db677d76f629870436be2ff88b891307d4427dc56d2cba3b842b5",
+      "bytes": 5985
+    },
+    {
+      "path": "data/results/teacher_feasible/summary.json",
+      "sha256": "672c31ba046611a2d67d40d90c9748ff162638add40e7376b3142cb330423e82",
+      "bytes": 16811
+    },
+    {
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf",
+      "bytes": 1203
+    },
+    {
+      "path": "figures/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility.pdf",
+      "sha256": "cddbe2acff06266dd12f21069e34ea1b0b5e2b5424dd27ef0ad2ed94804131ed",
+      "bytes": 15812
+    },
+    {
+      "path": "figures/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility.png",
+      "sha256": "ae876bedb58c8bb7522f559675f778ef279a3d54cad63e7d755051be4d55292d",
+      "bytes": 67117
+    },
+    {
+      "path": "figures/bounded_phase_suite/bounded_phase_suite.pdf",
+      "sha256": "b3cf5d5fa8d3bc1378359686c3dc517e5713934cb152c324c386ddae2619645a",
+      "bytes": 14563
+    },
+    {
+      "path": "figures/bounded_phase_suite/bounded_phase_suite.png",
+      "sha256": "3df3eae66389b0faec12886ec010d0255992f1302d65927a09cf3d8be9eeff49",
+      "bytes": 121549
+    },
+    {
+      "path": "figures/catalog_collocation_feasibility/multiple_shooting_feasibility.pdf",
+      "sha256": "da8f9d5df8453ddf46381a5314839f5b38cf655dfd3067225ed58264fff93085",
+      "bytes": 15154
+    },
+    {
+      "path": "figures/catalog_collocation_feasibility/multiple_shooting_feasibility.png",
+      "sha256": "8eb1dc820cc0da526ab2d60d0bdb87493f8568538f2d58d6ecfc49a6d281a6a4",
+      "bytes": 69432
+    },
+    {
+      "path": "figures/catalog_feasibility_envelope/catalog_feasibility_envelope.pdf",
+      "sha256": "024d1ab22a454667cca7a4e4a47b15ee5427c375cb5c2cd583e2725302f83d24",
+      "bytes": 16735
+    },
+    {
+      "path": "figures/catalog_feasibility_envelope/catalog_feasibility_envelope.png",
+      "sha256": "1018df95f8b1a729585f8db7e046d00f6c3f2386e09aff4bfcc781a3d43174c1",
+      "bytes": 71392
+    },
+    {
+      "path": "figures/catalog_targeted_feasibility/feasibility_heatmap.pdf",
+      "sha256": "258cc9c0c742dd17f1e363b6dbea8e1e3a9d82b66fc09e4b16d64890323cce3f",
+      "bytes": 16309
+    },
+    {
+      "path": "figures/catalog_targeted_feasibility/feasibility_heatmap.png",
+      "sha256": "f07a4478f4a8a6f973bb91d999fc03d5f90d6bcbe7207e6c979cb53136ac1a9c",
+      "bytes": 64403
+    },
+    {
+      "path": "figures/continuation_extension_suite/continuation_margin_suite.pdf",
+      "sha256": "c121fdd2233177165f42aae20511fdb534e2e74836ac128336e08525da864a0c",
+      "bytes": 14967
+    },
+    {
+      "path": "figures/continuation_extension_suite/continuation_margin_suite.png",
+      "sha256": "772cbd4cbc899582e7ee96a6f0019025639c3f419d59b17066f806a13a85d2f0",
+      "bytes": 94873
+    },
+    {
+      "path": "figures/continuation_margin_suite/continuation_margin_suite.pdf",
+      "sha256": "c120ec2aabaf274c65c907e31843ea2106a954e0d8aac48665baaee646055a39",
+      "bytes": 15270
+    },
+    {
+      "path": "figures/continuation_margin_suite/continuation_margin_suite.png",
+      "sha256": "8d44b48ea2dd5fec7c1795d6a4000ab8b01edd5318851e9d197d0c868cbf625b",
+      "bytes": 92070
+    },
+    {
+      "path": "figures/direct_collocation_baseline/direct_collocation_baseline.pdf",
+      "sha256": "eeba5980f32f1653b65668bed7b80e5389b89765dbf6f1b89f60324d1217d245",
+      "bytes": 14128
+    },
+    {
+      "path": "figures/direct_collocation_baseline/direct_collocation_baseline.png",
+      "sha256": "c394791174b15b29fac9350b80f011c46ad334859a0734921bff63a2819c60ff",
+      "bytes": 124244
+    },
+    {
+      "path": "figures/feasibility_heatmap.pdf",
+      "sha256": "ceff6e000c18bc9928763f754b79dbd832fb3eddffcc1ac25c0d4535c8bc6f9a",
+      "bytes": 17377
+    },
+    {
+      "path": "figures/feasibility_heatmap.png",
+      "sha256": "04e8b3f9d48aef79a81552df5492df78a199ea847ac7dc50a99e0e672b9db388",
+      "bytes": 79856
+    },
+    {
+      "path": "figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.pdf",
+      "sha256": "6171e023dc78561c6295975b36a38c81975d6489ecfe0ce8b00f3034ed4b507a",
+      "bytes": 16081
+    },
+    {
+      "path": "figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.png",
+      "sha256": "1fbb4071a06ce03cf9c0434f17218b54dc2a4bc62015d73fe538074d7f0a7631",
+      "bytes": 63907
+    },
+    {
+      "path": "figures/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline.pdf",
+      "sha256": "fc6ca0c19da329774e55a79522303782d4df0f6171c6a52ac9b38ededce80d75",
+      "bytes": 15392
+    },
+    {
+      "path": "figures/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline.png",
+      "sha256": "815cbd0691d7968a49b81a16ee367aa9fd491eeb489d2e0feb5e848d5797ccf2",
+      "bytes": 96786
+    },
+    {
+      "path": "figures/method_comparison.pdf",
+      "sha256": "6b2135c4f38a0994df0b5215f29bfd5ac77085ea384ceb15d9cd7f6a8cec7218",
+      "bytes": 13149
+    },
+    {
+      "path": "figures/method_comparison.png",
+      "sha256": "3ddf2137a1e877e16bd02b847c1ce49b87faf3b4c48b7a61ace22feee7baacd0",
+      "bytes": 81377
+    },
+    {
+      "path": "figures/multiple_shooting_feasibility.pdf",
+      "sha256": "b4820976f3428298307366665db7a75059a6337115695b04f016dbe03c476d70",
+      "bytes": 14257
+    },
+    {
+      "path": "figures/multiple_shooting_feasibility.png",
+      "sha256": "37779c1b68de468fb5b201744a1deb1ea5658a598f18997e20f4fbf3c25f5877",
+      "bytes": 55003
+    },
+    {
+      "path": "figures/phase_shift/method_comparison.pdf",
+      "sha256": "d4c187ddfa379ce198de8c744fdadb03d09eedac370e7d9610b8c594fa2f9d33",
+      "bytes": 13118
+    },
+    {
+      "path": "figures/phase_shift/method_comparison.png",
+      "sha256": "67872ba267b17ab1e19899c3b6930972e99ccb6da62f53796de83245b445fa61",
+      "bytes": 77706
+    },
+    {
+      "path": "figures/phase_shift/qubo_fit.pdf",
+      "sha256": "29666612651d0fe76d190e25f753ed52affb990148ed16c2b5e033f51a974aba",
+      "bytes": 17425
+    },
+    {
+      "path": "figures/phase_shift/qubo_fit.png",
+      "sha256": "cbcbab435536dcd9d7ad607059031652a9df2defb0b5be7e98bd5bce655b7dad",
+      "bytes": 90558
+    },
+    {
+      "path": "figures/phase_shift/recovery_fuel.pdf",
+      "sha256": "953e1d64d9a05949eccab34d76c081f642ad85013f1704c98358087c96fcdc92",
+      "bytes": 13621
+    },
+    {
+      "path": "figures/phase_shift/recovery_fuel.png",
+      "sha256": "76e1c5da47b4d2b351282f7853ac3baa895cb09d8cb16b3e6f56885312612129",
+      "bytes": 83160
+    },
+    {
+      "path": "figures/phase_shift/refinement_success.pdf",
+      "sha256": "ef80b8b26af1d472a851a0b70e029177c5c3a321c8b517452cd2bd32b59fa499",
+      "bytes": 12926
+    },
+    {
+      "path": "figures/phase_shift/refinement_success.png",
+      "sha256": "4e48609bca29b3775b9efe46ee3ec17810e622e6797e1697b5c52b5a8513c875",
+      "bytes": 75848
+    },
+    {
+      "path": "figures/phase_shift/trajectory_example.pdf",
+      "sha256": "4d34591c2d6264c9afd782119268cfa41f57526c87804118249b71f8314ca1ad",
+      "bytes": 17723
+    },
+    {
+      "path": "figures/phase_shift/trajectory_example.png",
+      "sha256": "902b9f01a7080533a468ad2d5f92b63ce49969d4d621f6e3a7c8bd15ec3a52ae",
+      "bytes": 240077
+    },
+    {
+      "path": "figures/phase_shift_cardinality/method_comparison.pdf",
+      "sha256": "85c5cc929ac90c80ba78dd0c121599c5630ca9ae8cc05a882dbf9e5867678822",
+      "bytes": 13128
+    },
+    {
+      "path": "figures/phase_shift_cardinality/method_comparison.png",
+      "sha256": "d0fae81c8f57c7f1c2f073ef05aebf7804609e61bd640bdf483e5d2b0f86ad8d",
+      "bytes": 78672
+    },
+    {
+      "path": "figures/phase_shift_cardinality/qubo_fit.pdf",
+      "sha256": "cce4581a01634ff25fb25c2c89cf210b13c94b4f6def019e763d1b153cdad9cc",
+      "bytes": 23274
+    },
+    {
+      "path": "figures/phase_shift_cardinality/qubo_fit.png",
+      "sha256": "7532434d001480331755c2d081f368d858735630b26a6b6de8080f1f9c8d9e68",
+      "bytes": 141882
+    },
+    {
+      "path": "figures/phase_shift_cardinality/recovery_fuel.pdf",
+      "sha256": "a10ca69fe61821eec8ce237db70492039b46e105bb70eed09211e0624d4a927d",
+      "bytes": 13620
+    },
+    {
+      "path": "figures/phase_shift_cardinality/recovery_fuel.png",
+      "sha256": "804c364d9ac44e7f7f5ff96abe6160de6b88cd729e1071e1ddb5eac91549f580",
+      "bytes": 84026
+    },
+    {
+      "path": "figures/phase_shift_cardinality/refinement_success.pdf",
+      "sha256": "f46007485f4fe23878bd541f7d3fecd9be63292f0254e14272570bd40ce21ee8",
+      "bytes": 12944
+    },
+    {
+      "path": "figures/phase_shift_cardinality/refinement_success.png",
+      "sha256": "1b7522b908ed953342fe2dbc880cdcb0d2d7b9e99eefbe14b4cc14336f070b47",
+      "bytes": 76354
+    },
+    {
+      "path": "figures/phase_shift_cardinality/trajectory_example.pdf",
+      "sha256": "2e94e3ccf7e019f1b8f66747e3f8c0f118ab53b78f154afd554cb25f5ec5b8fb",
+      "bytes": 18102
+    },
+    {
+      "path": "figures/phase_shift_cardinality/trajectory_example.png",
+      "sha256": "44d5f721a6f7005ef8ca40f0e4194f416c764c5f5c3b32d94e228d2c1dfe7e41",
+      "bytes": 244573
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/main_method_statistics_summary.pdf",
+      "sha256": "b446a1aa15e4f573307c1d330bcfcf3a4d8a26c94472b4605653446584ca4e4f",
+      "bytes": 17963
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/main_method_statistics_summary.png",
+      "sha256": "fd273632d2101eee8e40c08be28f1c92741fbb7575af6741db737875c4e7f9a5",
+      "bytes": 121879
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/method_comparison.pdf",
+      "sha256": "36b3eb04a8d804df8ead5d98f2e8a67950e11b61666ac57c9f90ae8c2ec0afaf",
+      "bytes": 13129
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/method_comparison.png",
+      "sha256": "3d8ff36cddfc24c378afa2a0938f5224f8fdd4355a54c2652903cdcdd44aa363",
+      "bytes": 78703
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/qubo_fit.pdf",
+      "sha256": "9e18b2c6600feacb0e69761193dcfaf7d42a94eac0d15e758db8972d544dec9b",
+      "bytes": 41058
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/qubo_fit.png",
+      "sha256": "de4872e3f7d6941851b2b69d0670914ca80122ac2cc85335bc94ecbe26600e8e",
+      "bytes": 185446
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/recovery_fuel.pdf",
+      "sha256": "1bbc1fc45de6722a4fc9bf2413401acb5d08858c708ef84ec2a763866be07902",
+      "bytes": 13620
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/recovery_fuel.png",
+      "sha256": "804c364d9ac44e7f7f5ff96abe6160de6b88cd729e1071e1ddb5eac91549f580",
+      "bytes": 84026
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/refinement_success.pdf",
+      "sha256": "e7c40ddfe05a9077ba4a5ee7e08e81b6e67c79f144a577d9781864a66ccaced7",
+      "bytes": 12948
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/refinement_success.png",
+      "sha256": "857940513a467b05c1606883eb5c153c1a23e80fe9d4e6d6f244528f3905756e",
+      "bytes": 76375
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/trajectory_example.pdf",
+      "sha256": "c4ed664cee14cad4f8da5dfe98b0eee4cc8faad1ac0eb26343926369a620f6d1",
+      "bytes": 18102
+    },
+    {
+      "path": "figures/phase_shift_cardinality_30seed/trajectory_example.png",
+      "sha256": "44d5f721a6f7005ef8ca40f0e4194f416c764c5f5c3b32d94e228d2c1dfe7e41",
+      "bytes": 244573
+    },
+    {
+      "path": "figures/phase_shift_cardinality_ablation/fuel_error_pareto.pdf",
+      "sha256": "d88b240036a0e5ebe6913500f18f25254d97ddb1542a9e75bf0dbed6f1dbdb99",
+      "bytes": 18046
+    },
+    {
+      "path": "figures/phase_shift_cardinality_ablation/fuel_error_pareto.png",
+      "sha256": "adc1516be7fdfe913e978db1c508f55aabbced8b1c3bb7ffca5c63d932f3b35d",
+      "bytes": 103719
+    },
+    {
+      "path": "figures/phase_shift_repair/method_comparison.pdf",
+      "sha256": "477673fc01ebb877f97fcb6d9a4045be1aae3a31482fc076c31139ab06effbc2",
+      "bytes": 13118
+    },
+    {
+      "path": "figures/phase_shift_repair/method_comparison.png",
+      "sha256": "67872ba267b17ab1e19899c3b6930972e99ccb6da62f53796de83245b445fa61",
+      "bytes": 77706
+    },
+    {
+      "path": "figures/phase_shift_repair/qubo_fit.pdf",
+      "sha256": "2b8f5de85d155fbb53b208c9845a8c169531d69be333a8ba2fdf643217ebd356",
+      "bytes": 17425
+    },
+    {
+      "path": "figures/phase_shift_repair/qubo_fit.png",
+      "sha256": "cbcbab435536dcd9d7ad607059031652a9df2defb0b5be7e98bd5bce655b7dad",
+      "bytes": 90558
+    },
+    {
+      "path": "figures/phase_shift_repair/recovery_fuel.pdf",
+      "sha256": "b26258fcbf4dbb94161f1a99effd1f43f0e609aae7d61633b5ff3ca5b2099871",
+      "bytes": 13602
+    },
+    {
+      "path": "figures/phase_shift_repair/recovery_fuel.png",
+      "sha256": "9c8ce084ad4b86c9a0c73e14d00cebcc752d8bd669d79cfe1d67fa2bad5b7705",
+      "bytes": 84881
+    },
+    {
+      "path": "figures/phase_shift_repair/refinement_success.pdf",
+      "sha256": "38ff5e93b911c99584ae9ef69b5029e6a760995d0d196c9b3501d82f1d23bf5c",
+      "bytes": 12931
+    },
+    {
+      "path": "figures/phase_shift_repair/refinement_success.png",
+      "sha256": "17ff69438999028653b65bd43c3ef8df676b058706e9d93c0ea28ad47ddf6d6a",
+      "bytes": 76434
+    },
+    {
+      "path": "figures/phase_shift_repair/trajectory_example.pdf",
+      "sha256": "404bffd8d0eb3fb31e35016a14438113f36f133d18c8fa3f696c08bdd9e0e20b",
+      "bytes": 17723
+    },
+    {
+      "path": "figures/phase_shift_repair/trajectory_example.png",
+      "sha256": "902b9f01a7080533a468ad2d5f92b63ce49969d4d621f6e3a7c8bd15ec3a52ae",
+      "bytes": 240077
+    },
+    {
+      "path": "figures/qaoa_depth_ablation/qaoa_depth_ablation_summary.pdf",
+      "sha256": "599076cb50e3920fe4d192d1ffea0e4658aa789ab76590cff668b9d4273eba16",
+      "bytes": 14255
+    },
+    {
+      "path": "figures/qaoa_depth_ablation/qaoa_depth_ablation_summary.png",
+      "sha256": "f290bedad84f96156c66c239a8b1ef41b504266e3392623fd194215e34526df8",
+      "bytes": 103346
+    },
+    {
+      "path": "figures/qaoa_depth_ablation_30seed/qaoa_depth_ablation_summary.pdf",
+      "sha256": "7be9bb0c7ef9062353661cf005ecb8fac371b4e3bb6d2ede5a603be1764e3632",
+      "bytes": 14442
+    },
+    {
+      "path": "figures/qaoa_depth_ablation_30seed/qaoa_depth_ablation_summary.png",
+      "sha256": "b9709c29c4571046220870db5f7463ab8a482c2b89ec85b8a4747b1c7c083653",
+      "bytes": 102875
+    },
+    {
+      "path": "figures/qubo_fit.pdf",
+      "sha256": "1df474161bf19465044a4ee23afcdc3ffc82cf59e602e35f5c0d7fb3d2941d02",
+      "bytes": 15250
+    },
+    {
+      "path": "figures/qubo_fit.png",
+      "sha256": "9c301f84f7ef0c9ab9d3b801c9b812d9367c8d3096aa6cedc26efade3d2f2675",
+      "bytes": 91991
+    },
+    {
+      "path": "figures/recovery_fuel.pdf",
+      "sha256": "2fe27327c75d907af10825b925cd6b0dbd41c648831ba7cf5f985323ebfe2cda",
+      "bytes": 13175
+    },
+    {
+      "path": "figures/recovery_fuel.png",
+      "sha256": "48819f2f00d1dc0d0b3621384bd298a7aea9e566e5e7196d959c00b978599d28",
+      "bytes": 92826
+    },
+    {
+      "path": "figures/refinement_success.pdf",
+      "sha256": "cd3fa3af88ae3f6c93604c171c60b67746b9a546357a400700d7d8e0b394c426",
+      "bytes": 12923
+    },
+    {
+      "path": "figures/refinement_success.png",
+      "sha256": "b4867b21a56a579feeb83de35d9ab52f3be37c77a5b9d1e2752d599e7a44953c",
+      "bytes": 75638
+    },
+    {
+      "path": "figures/robust_margin_suite/robust_margin_suite.pdf",
+      "sha256": "e6607003a960766fa1879058b702f84041d62fd6573c6383129cf25542d1a7e2",
+      "bytes": 16216
+    },
+    {
+      "path": "figures/robust_margin_suite/robust_margin_suite.png",
+      "sha256": "720e8be01d81bb1b26329baf392dd6ffb339f126bbfd50ee52c8424ecc634bef",
+      "bytes": 165029
+    },
+    {
+      "path": "figures/teacher_feasible/method_comparison.pdf",
+      "sha256": "10c7e34a1f3af776fcea8aca5744bad2b089eab02e6a5b7da3af74280ce40a4a",
+      "bytes": 14002
+    },
+    {
+      "path": "figures/teacher_feasible/method_comparison.png",
+      "sha256": "3ed3482372271feb41944b79ba6829634eaef9db7d55cb1e35f779a988702adc",
+      "bytes": 90700
+    },
+    {
+      "path": "figures/teacher_feasible/qubo_fit.pdf",
+      "sha256": "52c7ca7207550bbb1a54cdc37e941a3d4427892e7f03b9d71e85bedabbf9af78",
+      "bytes": 14494
+    },
+    {
+      "path": "figures/teacher_feasible/qubo_fit.png",
+      "sha256": "e68b8cf374242c0a6df934b49cda576dfa3d831a85645ede715d95eaf5b9dbfd",
+      "bytes": 76349
+    },
+    {
+      "path": "figures/teacher_feasible/recovery_fuel.pdf",
+      "sha256": "187a294632cf33bb92da6701e2f74b13367bd2584c6a30903b52018cb7ce7ad7",
+      "bytes": 13239
+    },
+    {
+      "path": "figures/teacher_feasible/recovery_fuel.png",
+      "sha256": "c51ef6e020a7387ae2b80d5f2599f01681842813efd5a17a5d935300ed4b8e1b",
+      "bytes": 95510
+    },
+    {
+      "path": "figures/teacher_feasible/refinement_success.pdf",
+      "sha256": "cf5d9e183970d400b256b846cf262dab589d5cf2c095d4fb83eab05a80dc3f34",
+      "bytes": 13288
+    },
+    {
+      "path": "figures/teacher_feasible/refinement_success.png",
+      "sha256": "b1bb9afe4e435a02a36d2ff0b68223a32be77c92d57cb864a8fdcd264844c878",
+      "bytes": 86437
+    },
+    {
+      "path": "figures/teacher_feasible/trajectory_example.pdf",
+      "sha256": "da51c25b5831be5a4d44ddf38117b55440e6d1b7ce769d97f569c7eae0772597",
+      "bytes": 16378
+    },
+    {
+      "path": "figures/teacher_feasible/trajectory_example.png",
+      "sha256": "7a385fe5d14b3418ff93cd7417503ce988bf3a9e733f1526558ccc2e3fc037e8",
+      "bytes": 249635
+    },
+    {
+      "path": "figures/trajectory_example.pdf",
+      "sha256": "50b7c6d0c904d63ce8f64821287efa67ad3ed574d06cbdee425c72599407761c",
+      "bytes": 18620
+    },
+    {
+      "path": "figures/trajectory_example.png",
+      "sha256": "037e6126aff2fa750791bc33431141adc1dd9abba96dcbd8d497f481ba9cc692",
+      "bytes": 233663
+    },
+    {
+      "path": "paper/main.pdf",
+      "sha256": "31921b9bdfd5b96d3694f3bc64dd9a156af8b66886a26752da75e41b56d9ce6e",
+      "bytes": 499665
     },
     {
       "path": "paper/main.tex",
@@ -41,19 +2087,94 @@
       "bytes": 4666
     },
     {
-      "path": "paper/main.pdf",
-      "sha256": "31921b9bdfd5b96d3694f3bc64dd9a156af8b66886a26752da75e41b56d9ce6e",
-      "bytes": 499665
+      "path": "requirements-lock.txt",
+      "sha256": "c199d455b46c1d22cf3b2f812cd312acc492b9616a74f51b1d2047d0a75c88cb",
+      "bytes": 514
     },
     {
-      "path": "data/source_states.json",
-      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf",
-      "bytes": 1203
+      "path": "requirements.txt",
+      "sha256": "67babbe8c076985d1c6f3ec679d890fbabba2106ceedbc199b294b3c1bdc01f9",
+      "bytes": 76
     },
     {
-      "path": "tests/test_smoke.py",
-      "sha256": "0119207446bbbd097f6594ef77f9c0f2442d026b3d8f26648b3c3c3e3e28a98e",
-      "bytes": 132755
+      "path": "scripts/generate_tables.py",
+      "sha256": "4c3fc77451e7b2abab6476a1fa54f2613835b98b6d955b681890b34d9b4c3588",
+      "bytes": 1491
+    },
+    {
+      "path": "scripts/plot_results.py",
+      "sha256": "ddaac2d55889a4dce74ca85a4f3108d99a800003fa2d8448b03fd691a68ce7fa",
+      "bytes": 1695
+    },
+    {
+      "path": "scripts/run_bounded_collocation_benchmark.py",
+      "sha256": "528d5f95f96b83549b0c12ed3b43fb844ed638277726827eee1eec9b3be3ea93",
+      "bytes": 3083
+    },
+    {
+      "path": "scripts/run_bounded_phase_suite.py",
+      "sha256": "9c9512dd7e3da4056cbe25a8c5811d1657ca3605be7127423d1a657f46375918",
+      "bytes": 25629
+    },
+    {
+      "path": "scripts/run_cardinality_ablation.py",
+      "sha256": "37f23cf7fb8ed36fc8332d44b61a6db30e499c9d6c3b43ded81d8be4592bd588",
+      "bytes": 25381
+    },
+    {
+      "path": "scripts/run_catalog_collocation_feasibility.py",
+      "sha256": "73b37abacf256166cb45ae23652c2bdff70cb9fb67af6e7d1081ccc67a872533",
+      "bytes": 722
+    },
+    {
+      "path": "scripts/run_catalog_feasibility_envelope.py",
+      "sha256": "0496ea7f24c5cd337168fed41cc8d7c5158bb7f31f1c564ebb1d3c847772ac25",
+      "bytes": 28731
+    },
+    {
+      "path": "scripts/run_continuation_margin_suite.py",
+      "sha256": "51f224c631e965cef789c06dc51b9ab0e909562a603d792ae65e0017c8d9116a",
+      "bytes": 44171
+    },
+    {
+      "path": "scripts/run_direct_collocation_baseline.py",
+      "sha256": "a22b53537cfa1e66823883b1d31a1902e67f7558443bd519da28b6609722018a",
+      "bytes": 24639
+    },
+    {
+      "path": "scripts/run_experiment.py",
+      "sha256": "c254123690d71ae857b157369803fe14b99eee17c42eab65e6e0dee295a98efc",
+      "bytes": 227
+    },
+    {
+      "path": "scripts/run_feasibility_sweep.py",
+      "sha256": "fb607d1af34b4844ba2da9c82c0ff8b67193e4e8bc8a27da447a9945124d3cb3",
+      "bytes": 228
+    },
+    {
+      "path": "scripts/run_hermite_simpson_continuation.py",
+      "sha256": "4ccec287aa4293a1c2c9917f3dba5bda1b65123289febe5f36ab40f7d59f93a5",
+      "bytes": 45406
+    },
+    {
+      "path": "scripts/run_main_method_statistics.py",
+      "sha256": "ef941d8c9baf23ab01627772971fe6db601512059b2b62104db5f185b5e74368",
+      "bytes": 24762
+    },
+    {
+      "path": "scripts/run_multiple_shooting_feasibility.py",
+      "sha256": "ebafaf71e2234cf59600ef1f2d6af11f729ef4de81e65e6b442c7be1cbcf82c8",
+      "bytes": 234
+    },
+    {
+      "path": "scripts/run_qaoa_depth_ablation.py",
+      "sha256": "bdc0d0f06a970f467ca694d8aff3658d8905dde773e83f33a39b33eb2f8e972b",
+      "bytes": 29202
+    },
+    {
+      "path": "scripts/run_robust_margin_suite.py",
+      "sha256": "c3603acab5f70a9908045dbff19ee45b7c7392657d4b7334ad5b713bdcdcf6c4",
+      "bytes": 27205
     },
     {
       "path": "src/qlt/__init__.py",
@@ -64,6 +2185,11 @@
       "path": "src/qlt/cr3bp.py",
       "sha256": "65fd1a4092a206e2af1c2ededbba0473f3d201281aa95ab9a0b20eec2d29a175",
       "bytes": 11154
+    },
+    {
+      "path": "src/qlt/direct_collocation.py",
+      "sha256": "b880d6cada883b1dfb115a16d22ad8494e9fe9ef6d4c70497c7684e9528ae30b",
+      "bytes": 25452
     },
     {
       "path": "src/qlt/experiment.py",
@@ -106,299 +2232,14 @@
       "bytes": 6090
     },
     {
-      "path": "scripts/run_experiment.py",
-      "sha256": "c254123690d71ae857b157369803fe14b99eee17c42eab65e6e0dee295a98efc",
-      "bytes": 227
+      "path": "tables/ablation_table.tex",
+      "sha256": "d26dad1e6ad973130c32e9a9fe3a69801bb011bf73467ff17a6640df1d41f8e1",
+      "bytes": 497
     },
     {
-      "path": "scripts/run_bounded_phase_suite.py",
-      "sha256": "9c9512dd7e3da4056cbe25a8c5811d1657ca3605be7127423d1a657f46375918",
-      "bytes": 25629
-    },
-    {
-      "path": "scripts/run_qaoa_depth_ablation.py",
-      "sha256": "bdc0d0f06a970f467ca694d8aff3658d8905dde773e83f33a39b33eb2f8e972b",
-      "bytes": 29202
-    },
-    {
-      "path": "scripts/run_cardinality_ablation.py",
-      "sha256": "37f23cf7fb8ed36fc8332d44b61a6db30e499c9d6c3b43ded81d8be4592bd588",
-      "bytes": 25381
-    },
-    {
-      "path": "scripts/run_feasibility_sweep.py",
-      "sha256": "fb607d1af34b4844ba2da9c82c0ff8b67193e4e8bc8a27da447a9945124d3cb3",
-      "bytes": 228
-    },
-    {
-      "path": "scripts/run_multiple_shooting_feasibility.py",
-      "sha256": "ebafaf71e2234cf59600ef1f2d6af11f729ef4de81e65e6b442c7be1cbcf82c8",
-      "bytes": 234
-    },
-    {
-      "path": "scripts/run_catalog_collocation_feasibility.py",
-      "sha256": "73b37abacf256166cb45ae23652c2bdff70cb9fb67af6e7d1081ccc67a872533",
-      "bytes": 722
-    },
-    {
-      "path": "scripts/generate_tables.py",
-      "sha256": "4c3fc77451e7b2abab6476a1fa54f2613835b98b6d955b681890b34d9b4c3588",
-      "bytes": 1491
-    },
-    {
-      "path": "scripts/plot_results.py",
-      "sha256": "ddaac2d55889a4dce74ca85a4f3108d99a800003fa2d8448b03fd691a68ce7fa",
-      "bytes": 1695
-    },
-    {
-      "path": "configs/default.yaml",
-      "sha256": "cd0af8f0698205a40d01641f097075a44e6f72ddf3f19f189b74800f6bf23990",
-      "bytes": 1370
-    },
-    {
-      "path": "configs/smoke.yaml",
-      "sha256": "b25ceb8cd6768155e15522ec1137d1ee4de2e8746f5ef98b67ba500f5118ce07",
-      "bytes": 1487
-    },
-    {
-      "path": "configs/q1_candidate.yaml",
-      "sha256": "d8c610b5636c6af1cec15aaa06f0ce1a5fc6a1530e8f01105c740fba9e757923",
-      "bytes": 1635
-    },
-    {
-      "path": "configs/q1_teacher_feasible.yaml",
-      "sha256": "084eb3dce47dd8deb4d37d5d032fbff6e0cc712a6f6b572370ac3224085a2662",
-      "bytes": 2203
-    },
-    {
-      "path": "configs/q1_phase_shift.yaml",
-      "sha256": "2a0282b2e2f9d18206bb9d48fc6a43a04553d1f1fde43b7e5fe0f63925185cbd",
-      "bytes": 1917
-    },
-    {
-      "path": "configs/q1_phase_shift_cardinality.yaml",
-      "sha256": "8ae0cfbb5f27d6dbb24fe09ebc44ca6ee8167c9b09e9fdd3f41b1d5a74bacceb",
-      "bytes": 2099
-    },
-    {
-      "path": "configs/qaoa_depth_ablation.yaml",
-      "sha256": "006f7eb4dd7135e94749cec238cb515fcda9583446af6531c52042140eded01f",
-      "bytes": 660
-    },
-    {
-      "path": "configs/bounded_phase_suite.yaml",
-      "sha256": "515283040812319aa7ebff22f87fee5c92d308179314653e666558b766497403",
-      "bytes": 2209
-    },
-    {
-      "path": "configs/catalog_targeted_feasibility.yaml",
-      "sha256": "46832f2d7a8505837728ba97bdf752a046ad5c4c3287a767e38c5c9d6ed88ffa",
-      "bytes": 1943
-    },
-    {
-      "path": "configs/catalog_collocation_feasibility.yaml",
-      "sha256": "834f8e2b474fb64678cca51f019c4c07a1c78e38737cfcd001fcb0b64797e973",
-      "bytes": 1867
-    },
-    {
-      "path": "data/results/phase_shift/run_metadata.json",
-      "sha256": "56ed146fb2f3a1c0efea54795b15127b31a5c0b04d569fa530ce4a0639764a83",
-      "bytes": 6036
-    },
-    {
-      "path": "data/results/phase_shift/summary.json",
-      "sha256": "0bbca71a412f831689bea02ae1593ff9de0326ad5b06cc292202dd5e312d9c97",
-      "bytes": 12620
-    },
-    {
-      "path": "data/results/phase_shift/summary.csv",
-      "sha256": "2b4035c5d3434c2172acd75b0524e3b4a56e59b48f8d530ad4d661504686aee5",
-      "bytes": 4387
-    },
-    {
-      "path": "data/results/phase_shift/raw_results.csv",
-      "sha256": "c646e8ba65a011c77aefff83a27bdff59e6917b8e60590e6aabbe4f9568d1fb1",
-      "bytes": 43637
-    },
-    {
-      "path": "data/results/phase_shift_cardinality/run_metadata.json",
-      "sha256": "2e0830a872a92d15c265b72f580ad315d0aed62465cdb9740cd8b6219a0f31d7",
-      "bytes": 7049
-    },
-    {
-      "path": "data/results/phase_shift_cardinality/summary.json",
-      "sha256": "01718e4f9c25c2abe7c658df88a72c4c047370d39c52fc0cbb33a581bb8d57d0",
-      "bytes": 18640
-    },
-    {
-      "path": "data/results/phase_shift_cardinality/summary.csv",
-      "sha256": "193dc19089c85a072bbcc58f7155b789a698e3139745699f8f243fdd5fa6475b",
-      "bytes": 7190
-    },
-    {
-      "path": "data/results/phase_shift_cardinality/raw_results.csv",
-      "sha256": "b06312d4785cbb9ce4cb0de8e6c4705289e75b68b682e6452d0ae70be8702b39",
-      "bytes": 165829
-    },
-    {
-      "path": "data/results/qaoa_depth_ablation/metadata.json",
-      "sha256": "e7b5c94fac79698351084e8a0573583d9d3f57d0701d000f1cc673287a36dbb4",
-      "bytes": 2604
-    },
-    {
-      "path": "data/results/qaoa_depth_ablation/summary.json",
-      "sha256": "2780cba3a93863f2568dd714c791b02eeee3c37974fceadfbd317be5972da5b1",
-      "bytes": 14515
-    },
-    {
-      "path": "data/results/qaoa_depth_ablation/summary.csv",
-      "sha256": "02ec795554b0751f7f1551ea359efac950b6d6606c304f72b4876bcd0ffdd944",
-      "bytes": 5474
-    },
-    {
-      "path": "data/results/qaoa_depth_ablation/raw_results.csv",
-      "sha256": "39679d13efe69c4bcb534c36d665eb0b369793c745815c871e28c426dd904fb7",
-      "bytes": 122597
-    },
-    {
-      "path": "data/results/bounded_phase_suite/bounded_phase_suite_metadata.json",
-      "sha256": "5ffa5f563c58355efda317bf1feca9f464edeea17d3272528728164d1f3e8bee",
-      "bytes": 15132
-    },
-    {
-      "path": "data/results/bounded_phase_suite/bounded_phase_suite.csv",
-      "sha256": "90b33de93398aa49a10b70ad044f2fe7359f59ef4e136f53a3d90b8548d502e4",
-      "bytes": 5854
-    },
-    {
-      "path": "data/results/phase_shift_cardinality_ablation/metadata.json",
-      "sha256": "f1507097d05dad3787eec04ecc3ee4913c2575e0a370058dda1de546df482114",
-      "bytes": 2256
-    },
-    {
-      "path": "data/results/phase_shift_cardinality_ablation/cardinality_summary.csv",
-      "sha256": "d5ad2bccb29dbe2399f1292244745f1aa730e4ff8646d793176aa06914da2e3b",
-      "bytes": 868
-    },
-    {
-      "path": "data/results/phase_shift_cardinality_ablation/cardinality_refinements.csv",
-      "sha256": "d34baf36afc8ed1cd854960c2cf9ec1ecfdffdee7e39bbb8ce199d9079ea745b",
-      "bytes": 44433
-    },
-    {
-      "path": "data/results/phase_shift_cardinality_ablation/fuel_sweep.csv",
-      "sha256": "1a8438bcb41fa0331e45b1a209a824f0b83cedc605c885a974e16f46dc65e07c",
-      "bytes": 3766
-    },
-    {
-      "path": "data/results/phase_shift_cardinality_ablation/method_vs_frontier.csv",
-      "sha256": "c12b77e9d90987f75f90c3ea1b801fc86ad0a29a91f3cc93f16de14731dcebba",
-      "bytes": 1294
-    },
-    {
-      "path": "data/results/teacher_feasible/run_metadata.json",
-      "sha256": "a65b2fe55cb3f4f3a73e7967efcf91bd8c29d7b4055c47d3724931200b5405cf",
-      "bytes": 8773
-    },
-    {
-      "path": "data/results/teacher_feasible/summary.json",
-      "sha256": "672c31ba046611a2d67d40d90c9748ff162638add40e7376b3142cb330423e82",
-      "bytes": 16811
-    },
-    {
-      "path": "data/results/teacher_feasible/summary.csv",
-      "sha256": "ee9ca0ebdb1db677d76f629870436be2ff88b891307d4427dc56d2cba3b842b5",
-      "bytes": 5985
-    },
-    {
-      "path": "data/results/teacher_feasible/raw_results.csv",
-      "sha256": "62de3e3fc2ed07d444cebc76b06cb25004d2281528259c3f32b010b4da62e5c4",
-      "bytes": 84364
-    },
-    {
-      "path": "data/results/feasibility_metadata.json",
-      "sha256": "e3fab7e16093284c5b9a274295e5d1ba006dcd1ee037f1c15347b06cb2618bd3",
-      "bytes": 3883
-    },
-    {
-      "path": "data/results/feasibility_sweep.csv",
-      "sha256": "2a066ae2d92af5e4f63ca3581f9a8e98740be7d5225190796d4cb920372ab395",
-      "bytes": 8305
-    },
-    {
-      "path": "data/results/multiple_shooting_feasibility_metadata.json",
-      "sha256": "d1ef2e17c9de933e43e19d90aa2c3d29f6f1cb9b4c744d4828274a05aa932fcc",
-      "bytes": 2701
-    },
-    {
-      "path": "data/results/multiple_shooting_feasibility.csv",
-      "sha256": "fe453173dec463abfa45fd3e22db35314eda5748ebdfba3c46e0a81c8e2168ce",
-      "bytes": 1745
-    },
-    {
-      "path": "data/results/catalog_targeted_feasibility/feasibility_metadata.json",
-      "sha256": "16df18748eac60f1ebbc2fe9de4521accf350de79378478748007aa13a811379",
-      "bytes": 4639
-    },
-    {
-      "path": "data/results/catalog_targeted_feasibility/feasibility_sweep.csv",
-      "sha256": "27ca804355b12a819e6ab6673e882ae6a9cd5ef35e599d93755c191cde45e3e0",
-      "bytes": 1583
-    },
-    {
-      "path": "data/results/catalog_targeted_feasibility/summary_feasibility.json",
-      "sha256": "30759d05c7d5f9e77de2afca26e429c96bb664be1465dc163d14b75eb89c93f5",
-      "bytes": 2776
-    },
-    {
-      "path": "data/results/catalog_collocation_feasibility/multiple_shooting_feasibility_metadata.json",
-      "sha256": "eb87cc03c09b5bc8d0fc9960a7b2dc9662d2a53598a1fd1d2a67b39db71352fc",
-      "bytes": 16340
-    },
-    {
-      "path": "data/results/catalog_collocation_feasibility/multiple_shooting_feasibility.csv",
-      "sha256": "7706745a42a1b137cedbbcdf7e169af0ba22b270e9e328a1e0902c5b5343a426",
-      "bytes": 7955
-    },
-    {
-      "path": "data/results/catalog_collocation_feasibility/multiple_shooting_metadata.json",
-      "sha256": "fe4239017f92bef64b0ffb5b12b6cc32a8da0dffa6ac584458f15d934d026b1d",
-      "bytes": 51808
-    },
-    {
-      "path": "tables/phase_shift/results_table.tex",
-      "sha256": "cdc812a8d3414464d1cb80259574014a25e1dccbd5a52358e7da7c5218cfc77c",
-      "bytes": 1317
-    },
-    {
-      "path": "tables/phase_shift/recovery_table.tex",
-      "sha256": "758f999c714fb5ea809a8a9e609124302fb7c50b5e10a2d2c2d3ec3ec2105107",
-      "bytes": 629
-    },
-    {
-      "path": "tables/phase_shift/ablation_table.tex",
-      "sha256": "0daae9a3bbc1874c933d2b09682c8b14ae3a1cd11d3b2316350fbce23536795d",
-      "bytes": 894
-    },
-    {
-      "path": "tables/phase_shift_cardinality/results_table.tex",
-      "sha256": "4615ad96155c51b14b2a85c917b4be7edfff34699e522d4a04e817f509bac9e3",
-      "bytes": 2260
-    },
-    {
-      "path": "tables/phase_shift_cardinality/recovery_table.tex",
-      "sha256": "0980dd33c29c3c6bf553e53e24e1ccca67cc99cc4c7c6125119461b2fc7a2112",
-      "bytes": 1094
-    },
-    {
-      "path": "tables/phase_shift_cardinality/ablation_table.tex",
-      "sha256": "487f24a0f763bc852c821d230bc5c4e6ed84a47443b0fdf25ff6f3e3bb7bae2b",
-      "bytes": 1450
-    },
-    {
-      "path": "tables/qaoa_depth_ablation/qaoa_depth_ablation_table.tex",
-      "sha256": "ea357464719e6f525961ab10c13a3fca513a4b8809db4c71de9544368b20d2d1",
-      "bytes": 795
+      "path": "tables/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility_table.tex",
+      "sha256": "8a6b8ed6cb8a6cf73f6cf28398c0540912260e0598416ae7d3bbd496e19da5b5",
+      "bytes": 659
     },
     {
       "path": "tables/bounded_phase_suite/bounded_phase_suite_table.tex",
@@ -406,324 +2247,9 @@
       "bytes": 816
     },
     {
-      "path": "tables/phase_shift_cardinality_ablation/one_coast_table.tex",
-      "sha256": "acfe51508a21209aac072d2988cb7499adbaf70bebb76d3d8ff34ec2d6781af3",
-      "bytes": 1216
-    },
-    {
-      "path": "tables/phase_shift_cardinality_ablation/method_vs_frontier_table.tex",
-      "sha256": "17cad10f93944c09d4e5dbaaeb685f2cc0b43500c0804ad717c9b88bc169de6a",
-      "bytes": 1191
-    },
-    {
-      "path": "tables/phase_shift_cardinality_ablation/high_duty_table.tex",
-      "sha256": "64772d15be806cb1a4d4ba8e98f85c40bc19b3ef6128c982ba45f1e4de514be8",
-      "bytes": 815
-    },
-    {
-      "path": "tables/phase_shift_cardinality_ablation/fuel_pareto_table.tex",
-      "sha256": "e0761736e2db51300a577f320dc3ec33607d861f90eabaf513a75229ca64d194",
-      "bytes": 672
-    },
-    {
-      "path": "tables/teacher_feasible/results_table.tex",
-      "sha256": "0900df8aeaf4a7553bda9df658b80779997dc19cd2e0d759ecb29e6d48ae0b64",
-      "bytes": 1565
-    },
-    {
-      "path": "tables/teacher_feasible/recovery_table.tex",
-      "sha256": "0f61b26d4fa4e4b79f46b1c5603a3c5282f0accf1454f978cb18061b4795deda",
-      "bytes": 791
-    },
-    {
-      "path": "tables/teacher_feasible/ablation_table.tex",
-      "sha256": "63145f085a27b55d4f960a9467fdd5ca4480b40408fd70eee06060931ea2348e",
-      "bytes": 678
-    },
-    {
-      "path": "tables/feasibility_table.tex",
-      "sha256": "4b2ba9e8474b5e381396f25695a766bbf963ac41c7f915da958f8d7ed98802b6",
-      "bytes": 998
-    },
-    {
-      "path": "tables/multiple_shooting_feasibility_table.tex",
-      "sha256": "36d113604022db1e5370e2c92ab1bbfc28dc899d3982de16d49a0b887f8aedbb",
-      "bytes": 332
-    },
-    {
-      "path": "tables/catalog_targeted_feasibility/feasibility_table.tex",
-      "sha256": "d5e60f63df962f59320b2a42720673796d397738b1527cb87c95ad8f6eba1e60",
-      "bytes": 351
-    },
-    {
       "path": "tables/catalog_collocation_feasibility/multiple_shooting_feasibility_table.tex",
       "sha256": "876ed1e013fc82dd1411d5be5ddb2f56c70f412ca168da4d4594f0f94fd72d69",
       "bytes": 874
-    },
-    {
-      "path": "figures/phase_shift/method_comparison.pdf",
-      "sha256": "d4c187ddfa379ce198de8c744fdadb03d09eedac370e7d9610b8c594fa2f9d33",
-      "bytes": 13118
-    },
-    {
-      "path": "figures/phase_shift/trajectory_example.pdf",
-      "sha256": "4d34591c2d6264c9afd782119268cfa41f57526c87804118249b71f8314ca1ad",
-      "bytes": 17723
-    },
-    {
-      "path": "figures/phase_shift/refinement_success.pdf",
-      "sha256": "ef80b8b26af1d472a851a0b70e029177c5c3a321c8b517452cd2bd32b59fa499",
-      "bytes": 12926
-    },
-    {
-      "path": "figures/phase_shift/recovery_fuel.pdf",
-      "sha256": "953e1d64d9a05949eccab34d76c081f642ad85013f1704c98358087c96fcdc92",
-      "bytes": 13621
-    },
-    {
-      "path": "figures/phase_shift/qubo_fit.pdf",
-      "sha256": "29666612651d0fe76d190e25f753ed52affb990148ed16c2b5e033f51a974aba",
-      "bytes": 17425
-    },
-    {
-      "path": "figures/phase_shift_cardinality/method_comparison.pdf",
-      "sha256": "85c5cc929ac90c80ba78dd0c121599c5630ca9ae8cc05a882dbf9e5867678822",
-      "bytes": 13128
-    },
-    {
-      "path": "figures/phase_shift_cardinality/trajectory_example.pdf",
-      "sha256": "2e94e3ccf7e019f1b8f66747e3f8c0f118ab53b78f154afd554cb25f5ec5b8fb",
-      "bytes": 18102
-    },
-    {
-      "path": "figures/phase_shift_cardinality/refinement_success.pdf",
-      "sha256": "f46007485f4fe23878bd541f7d3fecd9be63292f0254e14272570bd40ce21ee8",
-      "bytes": 12944
-    },
-    {
-      "path": "figures/phase_shift_cardinality/recovery_fuel.pdf",
-      "sha256": "a10ca69fe61821eec8ce237db70492039b46e105bb70eed09211e0624d4a927d",
-      "bytes": 13620
-    },
-    {
-      "path": "figures/phase_shift_cardinality/qubo_fit.pdf",
-      "sha256": "cce4581a01634ff25fb25c2c89cf210b13c94b4f6def019e763d1b153cdad9cc",
-      "bytes": 23274
-    },
-    {
-      "path": "figures/qaoa_depth_ablation/qaoa_depth_ablation_summary.pdf",
-      "sha256": "599076cb50e3920fe4d192d1ffea0e4658aa789ab76590cff668b9d4273eba16",
-      "bytes": 14255
-    },
-    {
-      "path": "figures/bounded_phase_suite/bounded_phase_suite.pdf",
-      "sha256": "b3cf5d5fa8d3bc1378359686c3dc517e5713934cb152c324c386ddae2619645a",
-      "bytes": 14563
-    },
-    {
-      "path": "figures/phase_shift_cardinality_ablation/fuel_error_pareto.pdf",
-      "sha256": "d88b240036a0e5ebe6913500f18f25254d97ddb1542a9e75bf0dbed6f1dbdb99",
-      "bytes": 18046
-    },
-    {
-      "path": "figures/teacher_feasible/method_comparison.pdf",
-      "sha256": "10c7e34a1f3af776fcea8aca5744bad2b089eab02e6a5b7da3af74280ce40a4a",
-      "bytes": 14002
-    },
-    {
-      "path": "figures/teacher_feasible/trajectory_example.pdf",
-      "sha256": "da51c25b5831be5a4d44ddf38117b55440e6d1b7ce769d97f569c7eae0772597",
-      "bytes": 16378
-    },
-    {
-      "path": "figures/teacher_feasible/refinement_success.pdf",
-      "sha256": "cf5d9e183970d400b256b846cf262dab589d5cf2c095d4fb83eab05a80dc3f34",
-      "bytes": 13288
-    },
-    {
-      "path": "figures/teacher_feasible/recovery_fuel.pdf",
-      "sha256": "187a294632cf33bb92da6701e2f74b13367bd2584c6a30903b52018cb7ce7ad7",
-      "bytes": 13239
-    },
-    {
-      "path": "figures/teacher_feasible/qubo_fit.pdf",
-      "sha256": "52c7ca7207550bbb1a54cdc37e941a3d4427892e7f03b9d71e85bedabbf9af78",
-      "bytes": 14494
-    },
-    {
-      "path": "figures/multiple_shooting_feasibility.pdf",
-      "sha256": "b4820976f3428298307366665db7a75059a6337115695b04f016dbe03c476d70",
-      "bytes": 14257
-    },
-    {
-      "path": "figures/catalog_targeted_feasibility/feasibility_heatmap.pdf",
-      "sha256": "258cc9c0c742dd17f1e363b6dbea8e1e3a9d82b66fc09e4b16d64890323cce3f",
-      "bytes": 16309
-    },
-    {
-      "path": "figures/catalog_collocation_feasibility/multiple_shooting_feasibility.pdf",
-      "sha256": "da8f9d5df8453ddf46381a5314839f5b38cf655dfd3067225ed58264fff93085",
-      "bytes": 15154
-    },
-    {
-      "path": "src/qlt/direct_collocation.py",
-      "sha256": "a18204c472112dc6c165b236be914f02e7f522dc76bf8162092659c916349430",
-      "bytes": 22851
-    },
-    {
-      "path": "scripts/run_direct_collocation_baseline.py",
-      "sha256": "a22b53537cfa1e66823883b1d31a1902e67f7558443bd519da28b6609722018a",
-      "bytes": 24639
-    },
-    {
-      "path": "configs/direct_collocation_baseline.yaml",
-      "sha256": "171b027e5c54cefb0fbec2597882bbc9013df55e6c4ec224a09c50e9ef13424c",
-      "bytes": 1369
-    },
-    {
-      "path": "data/results/direct_collocation_baseline/direct_collocation_baseline.csv",
-      "sha256": "b1f9b4c10daba731fbf5f7074e7b9b213a804d51a9f74fc0c6bd356898c2443d",
-      "bytes": 6007
-    },
-    {
-      "path": "data/results/direct_collocation_baseline/direct_collocation_baseline_metadata.json",
-      "sha256": "dacdd04704f6a8108213a5f557eb2db3bceda88397772560f693e5639e52b89a",
-      "bytes": 13600
-    },
-    {
-      "path": "tables/direct_collocation_baseline/direct_collocation_baseline_table.tex",
-      "sha256": "894c2bfb98e4c757dac63cd39b3b1a145037d68f1f4d3772a8be67cdb9b7825f",
-      "bytes": 673
-    },
-    {
-      "path": "figures/direct_collocation_baseline/direct_collocation_baseline.pdf",
-      "sha256": "eeba5980f32f1653b65668bed7b80e5389b89765dbf6f1b89f60324d1217d245",
-      "bytes": 14128
-    },
-    {
-      "path": "figures/direct_collocation_baseline/direct_collocation_baseline.png",
-      "sha256": "c394791174b15b29fac9350b80f011c46ad334859a0734921bff63a2819c60ff",
-      "bytes": 124244
-    },
-    {
-      "path": "configs/robust_margin_suite.yaml",
-      "sha256": "24260cc333a5984212bb39ddaaf023df30ccb89f7c20e6e820c8bf233c684d1b",
-      "bytes": 2704
-    },
-    {
-      "path": "scripts/run_robust_margin_suite.py",
-      "sha256": "c3603acab5f70a9908045dbff19ee45b7c7392657d4b7334ad5b713bdcdcf6c4",
-      "bytes": 27205
-    },
-    {
-      "path": "data/results/robust_margin_suite/robust_margin_suite.csv",
-      "sha256": "f830a36ecd440e1db039d89ce1f8fe17640230c2ffb63698c703a8bf91afa015",
-      "bytes": 9179
-    },
-    {
-      "path": "data/results/robust_margin_suite/robust_margin_suite_metadata.json",
-      "sha256": "f2648cb0122d6c4ac521cc2a98469e109ddfd934eb0a198fbac6e566216d23db",
-      "bytes": 37359
-    },
-    {
-      "path": "tables/robust_margin_suite/robust_margin_suite_table.tex",
-      "sha256": "601cfd07166db119c0de9c7ae4a27b28e030306de2a54545a226a2f7ab78329a",
-      "bytes": 1168
-    },
-    {
-      "path": "figures/robust_margin_suite/robust_margin_suite.pdf",
-      "sha256": "e6607003a960766fa1879058b702f84041d62fd6573c6383129cf25542d1a7e2",
-      "bytes": 16216
-    },
-    {
-      "path": "figures/robust_margin_suite/robust_margin_suite.png",
-      "sha256": "720e8be01d81bb1b26329baf392dd6ffb339f126bbfd50ee52c8424ecc634bef",
-      "bytes": 165029
-    },
-    {
-      "path": "configs/continuation_margin_suite.yaml",
-      "sha256": "570865ba8467079f4753ebc5f53ae966249bf588ec3e94fc62effb9055c4c43c",
-      "bytes": 3873
-    },
-    {
-      "path": "scripts/run_continuation_margin_suite.py",
-      "sha256": "51f224c631e965cef789c06dc51b9ab0e909562a603d792ae65e0017c8d9116a",
-      "bytes": 44171
-    },
-    {
-      "path": "data/results/continuation_margin_suite/continuation_margin_suite.csv",
-      "sha256": "dc2ded672ef3e2b08c83d0af771ccfb49c84379e4554ef69265a249c5be3a31b",
-      "bytes": 9912
-    },
-    {
-      "path": "data/results/continuation_margin_suite/continuation_margin_suite_metadata.json",
-      "sha256": "13ef92f0b3bb51a587b434c6e58cdf97faa9fa38114b21fea176ba94dea74fb5",
-      "bytes": 28095
-    },
-    {
-      "path": "data/results/continuation_margin_suite/controls/phase_all_single_p02_warm_from_p03_nominal_controls.json",
-      "sha256": "59cd9f0c0ccebf00e7c371ed92d7c1b7d3f1cc757f65cbc30937bafb433359a3",
-      "bytes": 1353
-    },
-    {
-      "path": "data/results/continuation_margin_suite/controls/phase_all_single_p03_cold_nominal_controls.json",
-      "sha256": "05f0f015920ac845c9f9875741e8fff7cc70731e418277e2c559f8b4d3899257",
-      "bytes": 1301
-    },
-    {
-      "path": "data/results/continuation_margin_suite/controls/two_segment_p02_warm_from_p03_nominal_controls.json",
-      "sha256": "95ae38d7d7bce04dacd901c6fcef9fb3a2e899bf650115cca9ff6566ca07dea8",
-      "bytes": 1151
-    },
-    {
-      "path": "data/results/continuation_margin_suite/controls/two_segment_p03_cold_nominal_controls.json",
-      "sha256": "0540391c7709c581fcff341b2b1d4a67210ca266fe9ca9109cd08f8209bbb1e0",
-      "bytes": 1107
-    },
-    {
-      "path": "data/results/continuation_margin_suite/controls/two_segment_p04_warm_from_p03_nominal_controls.json",
-      "sha256": "3b4e27cfb2ce7c0009ebafe6b0d457c963677f3fc5ffbcccb2d6bce5447a286f",
-      "bytes": 1148
-    },
-    {
-      "path": "tables/continuation_margin_suite/continuation_margin_suite_table.tex",
-      "sha256": "29659250352a944bc54a2ebe65b9c2b29e69b895c1e803f365baa2537c1f0b5a",
-      "bytes": 929
-    },
-    {
-      "path": "figures/continuation_margin_suite/continuation_margin_suite.pdf",
-      "sha256": "c120ec2aabaf274c65c907e31843ea2106a954e0d8aac48665baaee646055a39",
-      "bytes": 15270
-    },
-    {
-      "path": "figures/continuation_margin_suite/continuation_margin_suite.png",
-      "sha256": "8d44b48ea2dd5fec7c1795d6a4000ab8b01edd5318851e9d197d0c868cbf625b",
-      "bytes": 92070
-    },
-    {
-      "path": "scripts/run_catalog_feasibility_envelope.py",
-      "sha256": "0496ea7f24c5cd337168fed41cc8d7c5158bb7f31f1c564ebb1d3c847772ac25",
-      "bytes": 28731
-    },
-    {
-      "path": "configs/catalog_feasibility_envelope.yaml",
-      "sha256": "3281714fec1e151147aa2c1e8ba1ba95abd0de252d5954c055c2ca4ea9f815f3",
-      "bytes": 2511
-    },
-    {
-      "path": "configs/continuation_extension_suite.yaml",
-      "sha256": "17b9d0390276ec393253ba971ca19a4c9f8a4d7ecdb100ef7a05008e4f3cc74f",
-      "bytes": 3716
-    },
-    {
-      "path": "data/results/catalog_feasibility_envelope/catalog_feasibility_envelope.csv",
-      "sha256": "6057187eb704c9dbf1cf793c42c5c0c50789bbab1bac2195f626381850cca31f",
-      "bytes": 7257
-    },
-    {
-      "path": "data/results/catalog_feasibility_envelope/catalog_feasibility_envelope_metadata.json",
-      "sha256": "234670ad91bdf091c5d449ada49ecd66b4f7ebc91740cba1842b4dbf34399601",
-      "bytes": 17283
     },
     {
       "path": "tables/catalog_feasibility_envelope/catalog_feasibility_envelope_table.tex",
@@ -731,49 +2257,9 @@
       "bytes": 716
     },
     {
-      "path": "figures/catalog_feasibility_envelope/catalog_feasibility_envelope.pdf",
-      "sha256": "024d1ab22a454667cca7a4e4a47b15ee5427c375cb5c2cd583e2725302f83d24",
-      "bytes": 16735
-    },
-    {
-      "path": "figures/catalog_feasibility_envelope/catalog_feasibility_envelope.png",
-      "sha256": "1018df95f8b1a729585f8db7e046d00f6c3f2386e09aff4bfcc781a3d43174c1",
-      "bytes": 71392
-    },
-    {
-      "path": "data/results/continuation_extension_suite/continuation_margin_suite.csv",
-      "sha256": "194688c1dc8df761622fee1069914aeb1a1e91ae2078a8e15ced6a59f4673311",
-      "bytes": 9759
-    },
-    {
-      "path": "data/results/continuation_extension_suite/continuation_margin_suite_metadata.json",
-      "sha256": "6edd9785451049a70797abcc4918efce0a475bb46960fb7755b7401805949d93",
-      "bytes": 27700
-    },
-    {
-      "path": "data/results/continuation_extension_suite/controls/all_single_p03_headroom_cold_nominal_controls.json",
-      "sha256": "09775ffe8f7fb2e9c3077049462f289c191cfb30bdcd6abd087c06d1af9c89af",
-      "bytes": 1308
-    },
-    {
-      "path": "data/results/continuation_extension_suite/controls/all_single_p04_warm_from_p03_nominal_controls.json",
-      "sha256": "9498dbcd4d5a23332fabf59495e3a66bb38f0f381cfa4510b763fae30f646f90",
-      "bytes": 1356
-    },
-    {
-      "path": "data/results/continuation_extension_suite/controls/two_segment_n6_p03_headroom_cold_nominal_controls.json",
-      "sha256": "6398e34d2330e5cc05ef205fb6a415bc9910b78d1e9ed93ced68230e7274e430",
-      "bytes": 1121
-    },
-    {
-      "path": "data/results/continuation_extension_suite/controls/two_segment_n6_p02_warm_160_from_p03_nominal_controls.json",
-      "sha256": "c98022c1e686f358a16bd053cd75c9ff397b1ec5028d920ca8813340b253dd47",
-      "bytes": 1171
-    },
-    {
-      "path": "data/results/continuation_extension_suite/controls/two_segment_n8_p03_cold_nominal_controls.json",
-      "sha256": "86bb319acbd4cdd40d8161988739205a4dc358d12a40eaa98ed1659a9a30cf84",
-      "bytes": 1310
+      "path": "tables/catalog_targeted_feasibility/feasibility_table.tex",
+      "sha256": "d5e60f63df962f59320b2a42720673796d397738b1527cb87c95ad8f6eba1e60",
+      "bytes": 351
     },
     {
       "path": "tables/continuation_extension_suite/continuation_margin_suite_table.tex",
@@ -781,29 +2267,19 @@
       "bytes": 919
     },
     {
-      "path": "figures/continuation_extension_suite/continuation_margin_suite.pdf",
-      "sha256": "c121fdd2233177165f42aae20511fdb534e2e74836ac128336e08525da864a0c",
-      "bytes": 14967
+      "path": "tables/continuation_margin_suite/continuation_margin_suite_table.tex",
+      "sha256": "29659250352a944bc54a2ebe65b9c2b29e69b895c1e803f365baa2537c1f0b5a",
+      "bytes": 929
     },
     {
-      "path": "figures/continuation_extension_suite/continuation_margin_suite.png",
-      "sha256": "772cbd4cbc899582e7ee96a6f0019025639c3f419d59b17066f806a13a85d2f0",
-      "bytes": 94873
+      "path": "tables/direct_collocation_baseline/direct_collocation_baseline_table.tex",
+      "sha256": "894c2bfb98e4c757dac63cd39b3b1a145037d68f1f4d3772a8be67cdb9b7825f",
+      "bytes": 673
     },
     {
-      "path": "configs/hard_catalog_selected_outage_envelope.yaml",
-      "sha256": "54b4a80c64e6a78532932d3cdc4e5beaf2e05ff0cc401599807e9813b57dd12f",
-      "bytes": 2481
-    },
-    {
-      "path": "data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.csv",
-      "sha256": "66d9e7cda69cd1a1bbefae8e903fa83c32b32830c06eb7d52acc43db7ae0d769",
-      "bytes": 6792
-    },
-    {
-      "path": "data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_metadata.json",
-      "sha256": "72c17b0e168e6353a1707dc395c4517568be902a5b6cfa1642775f66c72547be",
-      "bytes": 16354
+      "path": "tables/feasibility_table.tex",
+      "sha256": "4b2ba9e8474b5e381396f25695a766bbf963ac41c7f915da958f8d7ed98802b6",
+      "bytes": 998
     },
     {
       "path": "tables/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_table.tex",
@@ -811,73 +2287,103 @@
       "bytes": 713
     },
     {
-      "path": "figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.pdf",
-      "sha256": "6171e023dc78561c6295975b36a38c81975d6489ecfe0ce8b00f3034ed4b507a",
-      "bytes": 16081
+      "path": "tables/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_table.tex",
+      "sha256": "015659e173e7c1ef2cc6006c1232ad009a006a88fd54a4c326389b70adc74282",
+      "bytes": 1058
     },
     {
-      "path": "figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.png",
-      "sha256": "1fbb4071a06ce03cf9c0434f17218b54dc2a4bc62015d73fe538074d7f0a7631",
-      "bytes": 63907
+      "path": "tables/multiple_shooting_feasibility_table.tex",
+      "sha256": "36d113604022db1e5370e2c92ab1bbfc28dc899d3982de16d49a0b887f8aedbb",
+      "bytes": 332
     },
     {
-      "path": "configs/qaoa_depth_ablation_30seed.yaml",
-      "sha256": "4170e1360220843a782fac8b730adca6fe8f59a370d65ab80254f18136eac243",
-      "bytes": 783
+      "path": "tables/phase_shift/ablation_table.tex",
+      "sha256": "0daae9a3bbc1874c933d2b09682c8b14ae3a1cd11d3b2316350fbce23536795d",
+      "bytes": 894
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/metadata.json",
-      "sha256": "d3d999cb40cf8a54f236e4272aa4e702852810abe10715e42967b288d6d50d67",
-      "bytes": 4687
+      "path": "tables/phase_shift/recovery_table.tex",
+      "sha256": "758f999c714fb5ea809a8a9e609124302fb7c50b5e10a2d2c2d3ec3ec2105107",
+      "bytes": 629
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/summary.csv",
-      "sha256": "dbaa5458ba8a67fea182f5dc59c3864d49701fbc538d673fa3731945424c0929",
-      "bytes": 5742
+      "path": "tables/phase_shift/results_table.tex",
+      "sha256": "cdc812a8d3414464d1cb80259574014a25e1dccbd5a52358e7da7c5218cfc77c",
+      "bytes": 1317
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/summary.json",
-      "sha256": "182dbfba5741c4b8b894afc1fc495cb3c269c8b494391107f424795b9a45f63a",
-      "bytes": 14783
+      "path": "tables/phase_shift_cardinality/ablation_table.tex",
+      "sha256": "487f24a0f763bc852c821d230bc5c4e6ed84a47443b0fdf25ff6f3e3bb7bae2b",
+      "bytes": 1450
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/success_intervals.csv",
-      "sha256": "4f4474c07b30ad943ad831ecc8ff28770c19c756d3530a77ecdfd7f94cd17a40",
-      "bytes": 469
+      "path": "tables/phase_shift_cardinality/recovery_table.tex",
+      "sha256": "0980dd33c29c3c6bf553e53e24e1ccca67cc99cc4c7c6125119461b2fc7a2112",
+      "bytes": 1094
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/success_intervals.json",
-      "sha256": "464785fc3b0a056ede6b4fae22dcbb090459b3a1eb34a282ccbf672109970c3b",
-      "bytes": 1160
+      "path": "tables/phase_shift_cardinality/results_table.tex",
+      "sha256": "4615ad96155c51b14b2a85c917b4be7edfff34699e522d4a04e817f509bac9e3",
+      "bytes": 2260
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/paired_comparisons.csv",
-      "sha256": "7a8ef7b7c6ebdebf7eb600ef78d45e2917dbecb92e0e4405931ec5e2282fb9e1",
-      "bytes": 1820
+      "path": "tables/phase_shift_cardinality_30seed/ablation_table.tex",
+      "sha256": "7da5a285255be58d560d791485c663a62ed80925f004ea28a3ceb353e0406b50",
+      "bytes": 3670
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/paired_comparisons.json",
-      "sha256": "19dc04ec6fefffe7660c9e4af3b8604daa77a84640e10b6a697ee4dc0e91eea7",
-      "bytes": 5737
+      "path": "tables/phase_shift_cardinality_30seed/main_method_statistics_table.tex",
+      "sha256": "cddf22383d5e5d2968a09189061fbd5d2793d3331181fabc13315eab9369218b",
+      "bytes": 1223
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/paired_success_deltas.csv",
-      "sha256": "05481902ad36abf1429eca1938f517e62352f1c3a87dfbb8c8a9d600e9eae3bd",
-      "bytes": 19859
+      "path": "tables/phase_shift_cardinality_30seed/recovery_table.tex",
+      "sha256": "09423ab089bfee74ee178f49b1c4f71156b5bc55c32a257be512729733913f35",
+      "bytes": 1094
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/raw_results.csv",
-      "sha256": "27a052a1606424b80067dbdd81ded74d07a83ea8d92d4ffe8554de0e419526db",
-      "bytes": 367772
+      "path": "tables/phase_shift_cardinality_30seed/results_table.tex",
+      "sha256": "25c229769e134642157a88869b9cf1f3cecb734c81ad4bf578cff89b244717e7",
+      "bytes": 2260
     },
     {
-      "path": "data/results/qaoa_depth_ablation_30seed/qubo_diagnostics.csv",
-      "sha256": "a766f83ea6768eaf82e0bbe88339a8592b330f040f71f6fef6af47b90f6aef12",
-      "bytes": 4579
+      "path": "tables/phase_shift_cardinality_ablation/fuel_pareto_table.tex",
+      "sha256": "e0761736e2db51300a577f320dc3ec33607d861f90eabaf513a75229ca64d194",
+      "bytes": 672
     },
     {
-      "path": "tables/qaoa_depth_ablation_30seed/qaoa_depth_ablation_table.tex",
-      "sha256": "277be9517498a11b8ba759faf808a77cf875330cb77b3fcb975538180ef80289",
+      "path": "tables/phase_shift_cardinality_ablation/high_duty_table.tex",
+      "sha256": "64772d15be806cb1a4d4ba8e98f85c40bc19b3ef6128c982ba45f1e4de514be8",
+      "bytes": 815
+    },
+    {
+      "path": "tables/phase_shift_cardinality_ablation/method_vs_frontier_table.tex",
+      "sha256": "17cad10f93944c09d4e5dbaaeb685f2cc0b43500c0804ad717c9b88bc169de6a",
+      "bytes": 1191
+    },
+    {
+      "path": "tables/phase_shift_cardinality_ablation/one_coast_table.tex",
+      "sha256": "acfe51508a21209aac072d2988cb7499adbaf70bebb76d3d8ff34ec2d6781af3",
+      "bytes": 1216
+    },
+    {
+      "path": "tables/phase_shift_repair/ablation_table.tex",
+      "sha256": "0daae9a3bbc1874c933d2b09682c8b14ae3a1cd11d3b2316350fbce23536795d",
+      "bytes": 894
+    },
+    {
+      "path": "tables/phase_shift_repair/recovery_table.tex",
+      "sha256": "e1bfe8bab6408c4c57840e11f177b2aa8be056b0c4373d507d5f4e8018021c9b",
+      "bytes": 1780
+    },
+    {
+      "path": "tables/phase_shift_repair/results_table.tex",
+      "sha256": "f1ddcf6c5ea70bc52f6fa6997ec784131cdedb32053d0bad5c89844772935717",
+      "bytes": 2852
+    },
+    {
+      "path": "tables/qaoa_depth_ablation/qaoa_depth_ablation_table.tex",
+      "sha256": "ea357464719e6f525961ab10c13a3fca513a4b8809db4c71de9544368b20d2d1",
       "bytes": 795
     },
     {
@@ -886,14 +2392,49 @@
       "bytes": 820
     },
     {
-      "path": "figures/qaoa_depth_ablation_30seed/qaoa_depth_ablation_summary.pdf",
-      "sha256": "7be9bb0c7ef9062353661cf005ecb8fac371b4e3bb6d2ede5a603be1764e3632",
-      "bytes": 14442
+      "path": "tables/qaoa_depth_ablation_30seed/qaoa_depth_ablation_table.tex",
+      "sha256": "277be9517498a11b8ba759faf808a77cf875330cb77b3fcb975538180ef80289",
+      "bytes": 795
     },
     {
-      "path": "figures/qaoa_depth_ablation_30seed/qaoa_depth_ablation_summary.png",
-      "sha256": "b9709c29c4571046220870db5f7463ab8a482c2b89ec85b8a4747b1c7c083653",
-      "bytes": 102875
+      "path": "tables/recovery_table.tex",
+      "sha256": "1266d4a20b0c01e376fe9c40d4870b79ad8fc7249d4707884f8195234c54f5c6",
+      "bytes": 628
+    },
+    {
+      "path": "tables/results_table.tex",
+      "sha256": "8d770c77f5510aa71853fe56ee27b540212a178256e014e137b531a952cef1c0",
+      "bytes": 943
+    },
+    {
+      "path": "tables/robust_margin_suite/robust_margin_suite_table.tex",
+      "sha256": "601cfd07166db119c0de9c7ae4a27b28e030306de2a54545a226a2f7ab78329a",
+      "bytes": 1168
+    },
+    {
+      "path": "tables/teacher_feasible/ablation_table.tex",
+      "sha256": "63145f085a27b55d4f960a9467fdd5ca4480b40408fd70eee06060931ea2348e",
+      "bytes": 678
+    },
+    {
+      "path": "tables/teacher_feasible/recovery_table.tex",
+      "sha256": "0f61b26d4fa4e4b79f46b1c5603a3c5282f0accf1454f978cb18061b4795deda",
+      "bytes": 791
+    },
+    {
+      "path": "tables/teacher_feasible/results_table.tex",
+      "sha256": "0900df8aeaf4a7553bda9df658b80779997dc19cd2e0d759ecb29e6d48ae0b64",
+      "bytes": 1565
+    },
+    {
+      "path": "tests/test_hermite_simpson_continuation.py",
+      "sha256": "d0ba3120250d6784e1a31fe241e02bbb57d2117d61f1e814325e171aa06cee40",
+      "bytes": 30584
+    },
+    {
+      "path": "tests/test_smoke.py",
+      "sha256": "fdd96651f8fcc3a72ba4a800b58e31bb2313339d76e0b7403aaa5bfb0280f52c",
+      "bytes": 137039
     }
   ]
 }
