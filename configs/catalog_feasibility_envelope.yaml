@@ -1,0 +1,89 @@
+run:
+  label: catalog_feasibility_envelope
+  output_subdir: catalog_feasibility_envelope
+  evidence_level: "hard catalog-DRO continuous-backend feasibility envelope; nominal-only rows are not missed-thrust robustness evidence"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: catalog_dro_phase
+  transfer_time: 4.0
+  segments: 14
+  substeps_per_segment: 7
+  amax: 0.3
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1, 2]
+multiple_shooting:
+  residual_weights:
+    initial: 10.0
+    defect: 1.0
+    terminal: 4.0
+    branch_terminal: 4.0
+    branch_start: 5.0
+    control: 0.01
+    smooth: 0.01
+direct_collocation:
+  method: trapezoidal
+  node_initialization: linear
+  node_initialization_blend: 0.5
+  xtol: 1.0e-5
+  ftol: 1.0e-5
+  gtol: 1.0e-5
+  weights:
+    initial: 10.0
+    defect: 1.0
+    terminal: 5.0
+    branch_start: 8.0
+    branch_defect: 1.0
+    branch_terminal: 5.0
+    control: 0.01
+    smooth: 0.01
+envelope:
+  cases:
+    - case_id: multiple_shooting_high_thrust_nominal_only
+      backend: multiple_shooting
+      purpose: "Known high-thrust nominal-only hard-catalog feasibility probe preserved outside catalog_collocation_feasibility artifacts."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      selected_outages: 0
+      max_nfev: 150
+      min_recovery_segments: 4
+      node_initialization: linear
+      node_initialization_blend: 0.5
+    - case_id: multiple_shooting_original_thrust_nominal_only
+      backend: multiple_shooting
+      purpose: "Lower-thrust reference row for the original hard-catalog thrust level; retained even if infeasible."
+      transfer_time: 4.0
+      amax: 0.3
+      segments: 14
+      selected_outages: 0
+      max_nfev: 150
+      min_recovery_segments: 4
+      node_initialization: linear
+      node_initialization_blend: 0.5
+    - case_id: direct_collocation_hs_high_thrust_nominal_only
+      backend: direct_collocation
+      purpose: "Optional constant-control Hermite-Simpson nominal-only check with a modest iteration cap."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      selected_outages: 0
+      max_nfev: 60
+      min_recovery_segments: 4
+      node_initialization: linear
+      node_initialization_blend: 0.5
+      collocation_method: hermite_simpson

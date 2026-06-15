@@ -15,6 +15,22 @@ from .refinement import control_fuel, feedback_controls_for_schedule, project_co
 
 
 METHOD_TYPE = "bounded_projected_trapezoidal_direct_collocation"
+COLLOCATION_METHOD_TYPES = {
+    "trapezoidal": METHOD_TYPE,
+    "hermite_simpson": "bounded_projected_constant_control_hermite_simpson_direct_collocation",
+}
+
+
+def normalize_collocation_method(method: str | None) -> str:
+    normalized = str(method or "trapezoidal").lower().replace("-", "_")
+    if normalized not in COLLOCATION_METHOD_TYPES:
+        allowed = ", ".join(sorted(COLLOCATION_METHOD_TYPES))
+        raise ValueError(f"direct-collocation method must be one of: {allowed}")
+    return normalized
+
+
+def collocation_method_type(method: str | None) -> str:
+    return COLLOCATION_METHOD_TYPES[normalize_collocation_method(method)]
 
 
 def config_hash(config: dict) -> str:
@@ -117,6 +133,31 @@ def trapezoidal_defect(left: np.ndarray, right: np.ndarray, control: np.ndarray,
     f_left = cr3bp_derivative(left, cfg.mu, control)
     f_right = cr3bp_derivative(right, cfg.mu, control)
     return np.asarray(right, dtype=float) - np.asarray(left, dtype=float) - 0.5 * h * (f_left + f_right)
+
+
+def hermite_simpson_defect(left: np.ndarray, right: np.ndarray, control: np.ndarray, cfg: ObjectiveConfig) -> np.ndarray:
+    h = float(cfg.tf) / float(cfg.n_segments)
+    left = np.asarray(left, dtype=float)
+    right = np.asarray(right, dtype=float)
+    control = np.asarray(control, dtype=float)
+    f_left = cr3bp_derivative(left, cfg.mu, control)
+    f_right = cr3bp_derivative(right, cfg.mu, control)
+    x_mid = 0.5 * (left + right) + h / 8.0 * (f_left - f_right)
+    f_mid = cr3bp_derivative(x_mid, cfg.mu, control)
+    return right - left - h / 6.0 * (f_left + 4.0 * f_mid + f_right)
+
+
+def collocation_defect(
+    left: np.ndarray,
+    right: np.ndarray,
+    control: np.ndarray,
+    cfg: ObjectiveConfig,
+    method: str,
+) -> np.ndarray:
+    normalized = normalize_collocation_method(method)
+    if normalized == "trapezoidal":
+        return trapezoidal_defect(left, right, control, cfg)
+    return hermite_simpson_defect(left, right, control, cfg)
 
 
 @dataclass(frozen=True)
@@ -268,6 +309,7 @@ class DirectCollocationProblem:
         selected: np.ndarray,
         layout: DirectCollocationLayout,
         weights: DirectCollocationWeights,
+        method: str = "trapezoidal",
     ):
         self.state0 = np.asarray(state0, dtype=float)
         self.target = np.asarray(target, dtype=float)
@@ -276,6 +318,7 @@ class DirectCollocationProblem:
         self.selected = np.asarray(selected, dtype=int)
         self.layout = layout
         self.weights = weights
+        self.method = normalize_collocation_method(method)
 
     def residual(self, vec: np.ndarray) -> np.ndarray:
         cfg = self.cfg
@@ -285,7 +328,11 @@ class DirectCollocationProblem:
             self.weights.initial * scaled_state_residual(nodes[0], self.state0, cfg),
         ]
         for i in range(cfg.n_segments):
-            chunks.append(self.weights.defect * trapezoidal_defect(nodes[i], nodes[i + 1], controls[i], cfg) / scale)
+            chunks.append(
+                self.weights.defect
+                * collocation_defect(nodes[i], nodes[i + 1], controls[i], cfg, self.method)
+                / scale
+            )
         chunks.append(self.weights.terminal * scaled_state_residual(nodes[-1], self.target, cfg))
         chunks.append(self.weights.control * controls.reshape(-1) / max(cfg.amax, 1e-12))
         if cfg.n_segments > 1:
@@ -305,7 +352,7 @@ class DirectCollocationProblem:
             for j in range(cfg.n_segments - start):
                 chunks.append(
                     self.weights.branch_defect
-                    * trapezoidal_defect(nodes_b[j], nodes_b[j + 1], controls_b[j], cfg)
+                    * collocation_defect(nodes_b[j], nodes_b[j + 1], controls_b[j], cfg, self.method)
                     / scale
                 )
             chunks.append(self.weights.branch_terminal * scaled_state_residual(nodes_b[-1], self.target, cfg))
@@ -406,19 +453,20 @@ def run_direct_collocation_baseline(
 ) -> dict:
     start = time.perf_counter()
     collocation_config = dict(collocation_config or {})
-    method = str(collocation_config.get("method", "trapezoidal")).lower().replace("-", "_")
-    if method != "trapezoidal":
-        raise ValueError("direct-collocation method must be trapezoidal in this implementation")
+    method = normalize_collocation_method(collocation_config.get("method", "trapezoidal"))
     schedule = np.ones(cfg.n_segments, dtype=int)
-    selected = selected_outage_indices_for_schedule(
-        schedule,
-        state0,
-        target,
-        cfg,
-        masks,
-        int(selected_outages),
-        int(min_recovery_segments),
-    )
+    if int(selected_outages) <= 0:
+        selected = np.zeros(0, dtype=int)
+    else:
+        selected = selected_outage_indices_for_schedule(
+            schedule,
+            state0,
+            target,
+            cfg,
+            masks,
+            int(selected_outages),
+            int(min_recovery_segments),
+        )
     selected_masks = masks[selected] if selected.size else np.zeros((0, cfg.n_segments), dtype=float)
     layout, x0 = initial_guess(
         state0,
@@ -436,6 +484,7 @@ def run_direct_collocation_baseline(
         selected=selected,
         layout=layout,
         weights=DirectCollocationWeights.from_config(collocation_config),
+        method=method,
     )
     lower, upper = layout.bounds()
     result = least_squares(
@@ -449,11 +498,22 @@ def run_direct_collocation_baseline(
         verbose=0,
     )
     evaluation = problem.evaluate_vector(result.x, thresholds)
+    selected_branch_semantics = (
+        "selected_outages=0/no selected outage branches: only the nominal trajectory is optimized; "
+        "selected_worst_error equals nominal_error; all outage masks are diagnostic under masked nominal controls"
+        if selected.size == 0
+        else "nominal trajectory and selected outage branches are optimized in one least-squares direct transcription; branch starts are fixed by RK4 propagation through the missed segment(s), then branch controls are re-optimized after the outage"
+    )
     return {
         **evaluation,
-        "method_type": METHOD_TYPE,
+        "method_type": collocation_method_type(method),
         "collocation_method": method,
-        "selected_branch_semantics": "nominal trajectory and selected outage branches are optimized in one least-squares direct transcription; branch starts are fixed by RK4 propagation through the missed segment(s), then branch controls are re-optimized after the outage",
+        "collocation_scheme_semantics": (
+            "trapezoidal direct transcription with segment-constant controls"
+            if method == "trapezoidal"
+            else "constant-control Hermite-Simpson direct transcription; controls are held constant over each segment and no independent midpoint control variables are optimized"
+        ),
+        "selected_branch_semantics": selected_branch_semantics,
         "all_mask_diagnostic_semantics": "all outage masks are evaluated after optimization; selected masks use optimized branch recovery controls, unselected masks use masked nominal controls only",
         "control_bound_semantics": "all nominal and branch controls are Euclidean projected to ||u_i|| <= amax inside residual evaluation, RK4 reporting propagation, fuel computation, and output diagnostics; scalar optimizer bounds are finite guards, not the scientific bound",
         "optimizer_success": bool(result.success),

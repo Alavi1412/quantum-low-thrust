@@ -2844,6 +2844,57 @@ def test_direct_collocation_evaluation_projects_reported_controls_to_bound():
         assert np.max(np.linalg.norm(controls, axis=1)) <= cfg.amax + 1e-12
 
 
+def test_direct_collocation_hermite_simpson_defect_is_finite_and_distinct():
+    from qlt.direct_collocation import hermite_simpson_defect, trapezoidal_defect
+
+    cfg = small_objective_config(n_segments=3, tf=0.18, amax=0.05)
+    left = np.array([0.92, 0.07, -0.02, 0.01, 0.08, -0.03], dtype=float)
+    right = np.array([0.89, 0.10, -0.01, -0.02, 0.06, 0.01], dtype=float)
+    control = np.array([0.015, -0.012, 0.006], dtype=float)
+
+    trap = trapezoidal_defect(left, right, control, cfg)
+    hs = hermite_simpson_defect(left, right, control, cfg)
+
+    assert np.all(np.isfinite(hs))
+    assert np.all(np.isfinite(trap))
+    assert not np.allclose(hs, trap)
+
+
+def test_run_direct_collocation_baseline_hermite_simpson_reports_method_and_bounds():
+    from qlt.direct_collocation import run_direct_collocation_baseline
+
+    cfg = small_objective_config(n_segments=2, tf=0.08, amax=0.04)
+    state0 = np.array([1.03, 0.01, 0.02, 0.01, 0.04, -0.02], dtype=float)
+    target = np.array([0.99, -0.01, 0.01, -0.005, 0.02, 0.01], dtype=float)
+    masks = outage_masks(cfg.n_segments, (1,))
+
+    result = run_direct_collocation_baseline(
+        state0=state0,
+        target=target,
+        cfg=cfg,
+        masks=masks,
+        thresholds={"nominal_success": 1.0, "robust_success": 1.0},
+        selected_outages=0,
+        max_nfev=1,
+        min_recovery_segments=1,
+        collocation_config={"method": "hermite_simpson", "node_initialization": "linear"},
+    )
+
+    assert result["collocation_method"] == "hermite_simpson"
+    assert result["method_type"] == "bounded_projected_constant_control_hermite_simpson_direct_collocation"
+    assert "constant-control Hermite-Simpson" in result["collocation_scheme_semantics"]
+    selected_branch_semantics = result["selected_branch_semantics"].lower()
+    assert "only the nominal trajectory is optimized" in selected_branch_semantics
+    assert "selected outage branches are optimized" not in selected_branch_semantics
+    assert result["selected_outage_indices"] == []
+    assert np.isfinite(result["nominal_error"])
+    assert np.isfinite(result["selected_worst_error"])
+    assert result["selected_worst_error"] == result["nominal_error"]
+    assert np.isfinite(result["all_mask_worst_error"])
+    assert result["control_max_norm"] <= cfg.amax + 1e-12
+    assert result["control_bound_violation"] == 0.0
+
+
 def test_direct_collocation_resume_fingerprint_changes_for_thresholds_and_settings():
     module = load_script_module(
         "run_direct_collocation_baseline_fingerprint_test",
@@ -2946,3 +2997,117 @@ def test_direct_collocation_table_and_metadata_generation_smoke(tmp_path):
     metadata = json.loads((results_dir / "direct_collocation_baseline_metadata.json").read_text(encoding="utf-8"))
     assert metadata["method_type"] == "bounded_projected_trapezoidal_direct_collocation"
     assert metadata["limitations"]
+
+
+def test_catalog_feasibility_envelope_resume_rejects_stale_and_writes_artifacts(tmp_path):
+    module = load_script_module(
+        "run_catalog_feasibility_envelope_artifact_test",
+        ROOT / "scripts" / "run_catalog_feasibility_envelope.py",
+    )
+    config = yaml.safe_load((ROOT / "configs" / "catalog_feasibility_envelope.yaml").read_text(encoding="utf-8"))
+    args = SimpleNamespace(source_states=ROOT / "data" / "source_states.json")
+    cases = module._suite_cases(config)[:1]
+    expected = module._expected_index(config, args, cases)
+    case = cases[0]
+
+    changed_target = copy.deepcopy(config)
+    changed_target["benchmark"]["target_mode"] = "catalog_halo_phase_shift"
+    assert module._config_for_case(changed_target, case)["benchmark"]["target_mode"] == "catalog_dro_phase"
+
+    stale = {column: None for column in module.CATALOG_FEASIBILITY_ENVELOPE_COLUMNS}
+    stale.update(
+        {
+            "suite_case_id": case["suite_case_id"],
+            "settings_fingerprint": "stale-fingerprint",
+            "config_hash": expected[case["suite_case_id"]]["config_hash"],
+            "source_states_id": expected[case["suite_case_id"]]["source_states_id"],
+        }
+    )
+    kept, rejected = module._compatible_existing_rows(
+        pd.DataFrame([stale], columns=module.CATALOG_FEASIBILITY_ENVELOPE_COLUMNS),
+        expected,
+    )
+    assert kept.empty
+    assert rejected[0]["reason"] == "settings_fingerprint missing or mismatched"
+
+    results_dir = tmp_path / "results"
+    figures_dir = tmp_path / "figures"
+    tables_dir = tmp_path / "tables"
+    for directory in (results_dir, figures_dir, tables_dir):
+        directory.mkdir()
+
+    row = {column: None for column in module.CATALOG_FEASIBILITY_ENVELOPE_COLUMNS}
+    row.update(
+        {
+            "suite_case_id": case["suite_case_id"],
+            "case_type": "nominal_only",
+            "purpose": "unit",
+            "target_mode": "catalog_dro_phase",
+            "target_generation": "fixture",
+            "backend": "multiple_shooting",
+            "method": "multiple_shooting",
+            "method_type": "bounded_projected_multiple_shooting",
+            "collocation_method": "",
+            "transfer_time": 4.0,
+            "amax": 1.0,
+            "segments": 14,
+            "substeps_per_segment": 7,
+            "max_nfev": 1,
+            "selected_outages": 0,
+            "min_recovery_segments": 4,
+            "node_initialization": "linear",
+            "node_initialization_blend": 0.5,
+            "settings_fingerprint": expected[case["suite_case_id"]]["settings_fingerprint"],
+            "config_hash": expected[case["suite_case_id"]]["config_hash"],
+            "source_states_id": expected[case["suite_case_id"]]["source_states_id"],
+            "nominal_error": 0.01,
+            "selected_worst_error": 0.01,
+            "all_mask_worst_error": 8.5,
+            "nominal_threshold": 0.09,
+            "selected_worst_threshold": 0.17,
+            "thresholds": "{}",
+            "meets_nominal_threshold": True,
+            "meets_selected_worst_threshold": True,
+            "meets_thresholds": True,
+            "control_max_norm": 1.0,
+            "control_bound_violation": 0.0,
+            "nominal_fuel": 0.1,
+            "recovery_fuel_mean": 0.1,
+            "recovery_fuel_max": 0.1,
+            "cost": 0.0,
+            "optimality": 0.0,
+            "nfev": 1,
+            "runtime_seconds": 0.01,
+            "selected_outage_indices": "[]",
+            "selected_outage_errors": "[]",
+            "all_outage_errors": "[8.5]",
+            "optimizer_success": True,
+            "backend_success": True,
+            "accepted_candidate": "optimizer",
+            "selected_branch_semantics": "nominal only",
+            "all_mask_diagnostic_semantics": "diagnostic",
+            "control_bound_semantics": "bounded",
+            "nominal_only_semantics": "selected_outages=0 rows optimize only the nominal trajectory",
+            "message": "unit",
+        }
+    )
+
+    module.regenerate(
+        pd.DataFrame([row], columns=module.CATALOG_FEASIBILITY_ENVELOPE_COLUMNS),
+        results_dir,
+        figures_dir,
+        tables_dir,
+        config,
+        "unit-test",
+        rejected,
+    )
+
+    assert (results_dir / "catalog_feasibility_envelope.csv").exists()
+    assert (results_dir / "catalog_feasibility_envelope_metadata.json").exists()
+    assert (tables_dir / "catalog_feasibility_envelope_table.tex").exists()
+    assert (figures_dir / "catalog_feasibility_envelope.png").exists()
+    assert (figures_dir / "catalog_feasibility_envelope.pdf").exists()
+    metadata = json.loads((results_dir / "catalog_feasibility_envelope_metadata.json").read_text(encoding="utf-8"))
+    assert metadata["row_count"] == 1
+    assert metadata["resume_rejected_rows"][0]["reason"] == "settings_fingerprint missing or mismatched"
+    assert "Nominal-only rows" in metadata["limitations"][0]

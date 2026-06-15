@@ -1,0 +1,9 @@
+\begin{tabular}{llllllllllllll}
+\toprule
+Case & Method & Transfer time & amax & Segments & Selected outages & Nominal error & Selected worst error & All-mask diagnostic worst error & Max ||u|| & Bound violation & nfev & Runtime (s) & Meets thresholds \\
+\midrule
+nominal\_only & direct\_collocation\_hermite\_simpson & 4.0000 & 1.0000 & 14 & 0 & 0.6246 & 0.6246 & 17.8248 & 1.0000 & 0.0000 & 60 & 17.5175 & False \\
+nominal\_only & multiple\_shooting & 4.0000 & 0.3000 & 14 & 0 & 1.6273 & 1.6273 & 5.5503 & 0.3000 & 0.0000 & 69 & 30.2957 & False \\
+nominal\_only & multiple\_shooting & 4.0000 & 1.0000 & 14 & 0 & 0.0131 & 0.0131 & 8.5410 & 1.0000 & 0.0000 & 71 & 30.5710 & True \\
+\bottomrule
+\end{tabular}
