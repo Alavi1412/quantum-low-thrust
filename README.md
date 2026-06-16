@@ -38,6 +38,8 @@ Reviewer-facing checklist for the current artifact snapshot:
 ```powershell
 git status --short
 py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
+py -3.11 scripts\run_threshold_sensitivity.py
+py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --regenerate-artifacts-only --allow-artifact-refresh-fingerprint-mismatch
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
@@ -124,6 +126,7 @@ For the 30-seed main-method cardinality-prior package:
 ```powershell
 py -3.11 scripts\run_experiment.py --config configs\q1_phase_shift_cardinality_30seed.yaml
 py -3.11 scripts\run_main_method_statistics.py --config configs\q1_phase_shift_cardinality_30seed.yaml
+py -3.11 scripts\run_threshold_sensitivity.py
 ```
 
 This package writes `data/results/phase_shift_cardinality_30seed/*`,
@@ -131,8 +134,14 @@ This package writes `data/results/phase_shift_cardinality_30seed/*`,
 `figures/phase_shift_cardinality_30seed/*`. It contains 210 rows
 (30 seeds x 7 methods). The high-duty classical methods and surrogate-QUBO
 simulated annealing succeed in all 30 seeds, but paired selected-worst-error
-comparisons favor the all-windows continuous baseline. It does not support a
-quantum-advantage or QAOA-superiority claim.
+comparisons favor the all-windows continuous baseline. The threshold-sensitivity
+postprocessor derives `threshold_sensitivity.csv`,
+`threshold_sensitivity_metadata.json`, and
+`tables/phase_shift_cardinality_30seed/threshold_sensitivity_table.tex` from the
+recorded raw CSV only; it does not rerun trajectory optimization. At the tight
+`(0.05, 0.09)` threshold check, all sampled methods are `0/30` while
+all-windows continuous remains `30/30`. It does not support a quantum-advantage
+or QAOA-superiority claim.
 
 For the QAOA depth ablation:
 
@@ -228,6 +237,13 @@ For the fixed-final-time tail-coast hard-catalog recovery diagnostic:
 py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --resume
 ```
 
+To refresh only the table, figure, and metadata from the recorded CSV after
+reporting-code changes, without launching optimization or rewriting the raw CSV:
+
+```powershell
+py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --regenerate-artifacts-only --allow-artifact-refresh-fingerprint-mismatch
+```
+
 The tail-coast package writes
 `data/results/hard_catalog_tail_coast_recovery/*`,
 `tables/hard_catalog_tail_coast_recovery/*`, and
@@ -248,8 +264,9 @@ meets the configured thresholds with nominal tail-coast error
 `0.02299233817855882`. Fallback starts are declared and charged;
 `branch_fallback_initialization_evaluated_branch_count=4` and accepted count is
 also `4`. The branch recovery segments include the one-segment `[13..0]` and
-two-segment `[12..0]` sequences, giving two `no_recovery_variables` late-tail
-branches. Those branches are threshold-feasible direct evaluations rather than
+two-segment `[12..0]` sequences. Branches with recovery variables are
+optimizer-converged in `25/25` cases; the two `no_recovery_variables` late-tail
+branches are threshold-feasible direct evaluations rather than
 optimizer-converged branch solves, so `branch_optimizer_all_success=false`.
 The current CSV records `nfev=5929` and runtime about 1833.6 s.
 

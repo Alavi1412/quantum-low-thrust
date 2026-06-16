@@ -110,6 +110,8 @@ def test_tail_coast_table_preserves_input_case_order(tmp_path):
                 "branch_fallback_initialization_evaluated_branch_count": 0,
                 "branch_fallback_initialization_accepted_branch_count": 0,
                 "branch_recovery_segments": "[1]",
+                "branch_optimizer_success_by_branch": "[true]",
+                "branch_optimizer_ran_by_branch": "[true]",
                 "nominal_tail_coast_error": 0.01,
                 "selected_worst_error": 0.02,
                 "all_mask_worst_error": 0.03,
@@ -130,6 +132,8 @@ def test_tail_coast_table_preserves_input_case_order(tmp_path):
                 "branch_fallback_initialization_evaluated_branch_count": 0,
                 "branch_fallback_initialization_accepted_branch_count": 0,
                 "branch_recovery_segments": "[1, 0]",
+                "branch_optimizer_success_by_branch": "[true, false]",
+                "branch_optimizer_ran_by_branch": "[true, false]",
                 "nominal_tail_coast_error": 0.01,
                 "selected_worst_error": 0.02,
                 "all_mask_worst_error": 0.03,
@@ -149,7 +153,7 @@ def test_tail_coast_table_preserves_input_case_order(tmp_path):
     first = text.index("tail\\_coast\\_z\\_config\\_order\\_first")
     second = text.index("tail\\_coast\\_a\\_config\\_order\\_second")
     assert first < second
-    assert "tail\\_coast\\_a\\_config\\_order\\_second & all\\_configured & [1, 2] & 2 & 2 & 1 & 0 & 0 & 1" in text
+    assert "tail\\_coast\\_a\\_config\\_order\\_second & all configured & [1, 2] & 2 & 2 & 1 & 0 & 0 & 1/1 & 1" in text
 
 
 def test_regenerate_artifacts_only_uses_existing_csv_without_running_backend(monkeypatch, tmp_path):
@@ -199,6 +203,8 @@ def test_regenerate_artifacts_only_uses_existing_csv_without_running_backend(mon
                 "branch_fallback_initialization_evaluated_branch_count": 0,
                 "branch_fallback_initialization_accepted_branch_count": 0,
                 "branch_recovery_segments": "[]",
+                "branch_optimizer_success_by_branch": "[]",
+                "branch_optimizer_ran_by_branch": "[]",
                 "nominal_tail_coast_error": 0.01,
                 "selected_worst_error": 0.02,
                 "all_mask_worst_error": 0.03,
@@ -224,6 +230,7 @@ def test_regenerate_artifacts_only_uses_existing_csv_without_running_backend(mon
         ],
         columns=script.TAIL_COAST_COLUMNS,
     ).to_csv(results_dir / "tail_coast_recovery.csv", index=False)
+    csv_before = (results_dir / "tail_coast_recovery.csv").read_bytes()
     monkeypatch.setattr(
         script,
         "run_case",
@@ -239,10 +246,14 @@ def test_regenerate_artifacts_only_uses_existing_csv_without_running_backend(mon
 
     assert df["suite_case_id"].tolist() == ["tail_z_config_order_first", "tail_a_config_order_second"]
     csv_df = pd.read_csv(results_dir / "tail_coast_recovery.csv")
-    assert csv_df["suite_case_id"].tolist() == ["tail_z_config_order_first", "tail_a_config_order_second"]
+    assert csv_df["suite_case_id"].tolist() == ["tail_a_config_order_second", "tail_z_config_order_first"]
+    assert (results_dir / "tail_coast_recovery.csv").read_bytes() == csv_before
     table = (tmp_path / "tables" / "tail_test" / "tail_coast_recovery_table.tex").read_text(encoding="utf-8")
     assert table.index("tail\\_z\\_config\\_order\\_first") < table.index("tail\\_a\\_config\\_order\\_second")
+    assert "tail\\_z\\_config\\_order\\_first & none" in table
     metadata = json.loads((results_dir / "tail_coast_recovery_metadata.json").read_text(encoding="utf-8"))
+    assert metadata["raw_csv_written"] is False
+    assert "leaves the existing tail_coast_recovery.csv bytes untouched" in metadata["raw_csv_write_semantics"]
     assert metadata["resume_rejected_rows"] == []
     assert metadata["skipped_cases"] == []
     assert metadata["artifact_refresh_command"] == metadata["command"]
@@ -298,6 +309,8 @@ def test_regenerate_artifacts_only_rejects_stale_rows_and_records_provenance(mon
                 "branch_fallback_initialization_evaluated_branch_count": 0,
                 "branch_fallback_initialization_accepted_branch_count": 0,
                 "branch_recovery_segments": "[]",
+                "branch_optimizer_success_by_branch": "[]",
+                "branch_optimizer_ran_by_branch": "[]",
                 "nominal_tail_coast_error": 0.01,
                 "selected_worst_error": 0.02,
                 "all_mask_worst_error": 0.03,
@@ -325,6 +338,7 @@ def test_regenerate_artifacts_only_rejects_stale_rows_and_records_provenance(mon
         ],
         columns=script.TAIL_COAST_COLUMNS,
     ).to_csv(results_dir / "tail_coast_recovery.csv", index=False)
+    csv_before = (results_dir / "tail_coast_recovery.csv").read_bytes()
     monkeypatch.setattr(
         script,
         "run_case",
@@ -340,8 +354,10 @@ def test_regenerate_artifacts_only_rejects_stale_rows_and_records_provenance(mon
 
     assert df["suite_case_id"].tolist() == ["tail_keep"]
     csv_df = pd.read_csv(results_dir / "tail_coast_recovery.csv")
-    assert csv_df["suite_case_id"].tolist() == ["tail_keep"]
+    assert csv_df["suite_case_id"].tolist() == ["tail_stale", "tail_stale", "tail_keep"]
+    assert (results_dir / "tail_coast_recovery.csv").read_bytes() == csv_before
     metadata = json.loads((results_dir / "tail_coast_recovery_metadata.json").read_text(encoding="utf-8"))
+    assert metadata["raw_csv_written"] is False
     assert metadata["row_count"] == 1
     assert metadata["completed_case_count"] == 1
     assert metadata["expected_case_count"] == 2

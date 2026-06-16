@@ -3378,3 +3378,67 @@ def test_main_method_statistics_30seed_config_has_correct_seeds_and_subdir():
     assert int(config["benchmark"]["segments"]) == 12
     assert config["benchmark"]["target_mode"] == "catalog_halo_phase_shift"
     assert abs(float(config["objective"]["target_active_fraction"]) - 11.0 / 12.0) < 1e-12
+
+
+def test_threshold_sensitivity_derives_expected_30seed_counts(tmp_path):
+    module = load_script_module(
+        "run_threshold_sensitivity_test",
+        ROOT / "scripts" / "run_threshold_sensitivity.py",
+    )
+    raw = pd.read_csv(ROOT / "data" / "results" / "phase_shift_cardinality_30seed" / "raw_results.csv")
+    sensitivity = module.threshold_sensitivity(raw)
+
+    def count(threshold_id: str, method: str) -> str:
+        row = sensitivity[
+            (sensitivity["threshold_id"] == threshold_id)
+            & (sensitivity["method"] == method)
+        ].iloc[0]
+        return str(row["success_count"])
+
+    assert count("continuous_dominance_0p05_0p09", "all_windows_continuous") == "30/30"
+    assert count("continuous_dominance_0p05_0p09", "cross_entropy") == "0/30"
+    assert count("continuous_dominance_0p05_0p09", "surrogate_qubo_sa") == "0/30"
+    assert count("stricter_0p075_0p12", "random") == "4/30"
+    assert count("stricter_0p075_0p12", "qaoa_statevector") == "13/30"
+    assert count("stricter_0p075_0p12", "all_windows_continuous") == "30/30"
+
+    artifacts = module.write_artifacts(
+        raw,
+        raw_csv=ROOT / "data" / "results" / "phase_shift_cardinality_30seed" / "raw_results.csv",
+        results_dir=tmp_path / "results",
+        tables_dir=tmp_path / "tables",
+        command="unit-test",
+    )
+    assert artifacts["metadata"]["raw_results_validation"]["seed_count"] == 30
+    assert "runtime_seconds" not in artifacts["metadata"]
+    assert "Runtime is intentionally omitted" in artifacts["metadata"]["determinism_note"]
+    assert (tmp_path / "results" / "threshold_sensitivity.csv").exists()
+    metadata_path = tmp_path / "results" / "threshold_sensitivity_metadata.json"
+    first_metadata = metadata_path.read_bytes()
+    module.write_artifacts(
+        raw,
+        raw_csv=ROOT / "data" / "results" / "phase_shift_cardinality_30seed" / "raw_results.csv",
+        results_dir=tmp_path / "results",
+        tables_dir=tmp_path / "tables",
+        command="unit-test",
+    )
+    assert metadata_path.read_bytes() == first_metadata
+    table = (tmp_path / "tables" / "threshold_sensitivity_table.tex").read_text(encoding="utf-8")
+    assert "Tight" in table
+    assert "All-windows" in table
+    assert "30/30" in table
+
+
+def test_tail_coast_table_reports_eligible_optimizer_convergence(tmp_path):
+    module = load_script_module(
+        "run_tail_coast_recovery_smoke_table_test",
+        ROOT / "scripts" / "run_tail_coast_recovery.py",
+    )
+    df = pd.read_csv(ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv")
+    module.write_table(df, tmp_path)
+    table = (tmp_path / "tail_coast_recovery_table.tex").read_text(encoding="utf-8")
+
+    assert "tail\\_coast\\_nominal\\_only\\_t5 & none" in table
+    assert "tail\\_coast\\_all\\_one\\_two\\_segment\\_t5\\_portfolio & all configured" in table
+    assert "25/25 & 2 & 0.0230 & 0.0936 & 0.0936" in table
+    assert "Branch optimizer ran" not in table

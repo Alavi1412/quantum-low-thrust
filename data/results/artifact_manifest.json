@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-16T17:10:01Z",
+  "generated_utc": "2026-06-16T18:10:01Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "264128745edb9f80b9ed34b4680581270d6dde62",
+  "git_head_at_generation": "2d2ab323dcc25a1e47042a30de69ea8c04bfba32",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M .gitignore\n M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/write_artifact_manifest.py",
+  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery_metadata.json\n M figures/hard_catalog_tail_coast_recovery/tail_coast_recovery.pdf\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_tail_coast_recovery.py\n M tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex\n M tests/test_smoke.py\n M tests/test_tail_coast_recovery.py\n?? data/results/phase_shift_cardinality_30seed/threshold_sensitivity.csv\n?? data/results/phase_shift_cardinality_30seed/threshold_sensitivity_metadata.json\n?? scripts/run_threshold_sensitivity.py\n?? tables/phase_shift_cardinality_30seed/threshold_sensitivity_table.tex",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 529,
+  "file_count": 533,
   "files": [
     {
       "path": ".gitignore",
@@ -40,13 +40,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "0cc1a6e0f057b0f2d76bccf40976644b568bdc393d6ed15d2d778effb83af71d",
-      "bytes": 15444
+      "sha256": "d6c75a0ae042bc16033bc1a22ed4505298c56effb958e023ec6c4d2bd3e0df3e",
+      "bytes": 16504
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "e4986bee718cb7cf571e02d132c3cf14c489e6f6d17879ccc0c34f627d329d8c",
-      "bytes": 22062
+      "sha256": "3721c78d75e97c18a088170b8a36e58305708b6d864fa121a085db18bcce66f6",
+      "bytes": 23428
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -365,13 +365,13 @@
     },
     {
       "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery.csv",
-      "sha256": "3034104a5694dfb6325ccff27765cae1eb6df8a3dac1a45a929d4a4d69957310",
-      "bytes": 348308
+      "sha256": "2dada0321e38e64185abd00d311eee8d2fad55698abf23f0f639c53f94f4073d",
+      "bytes": 348303
     },
     {
       "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery_metadata.json",
-      "sha256": "be8f13e8d2a1cee0c102b6378126924e781dc049d189cffb1d1c7bccba19c3c1",
-      "bytes": 388693
+      "sha256": "d28afea1986fa0085238caf07ba196f2cbf89376d002d9887011a66cf7b8a214",
+      "bytes": 390905
     },
     {
       "path": "data/results/hermite_simpson_continuation_baseline/controls/hs_hard_p04_amax02_warm_from_p03_nominal_controls.json",
@@ -1007,6 +1007,16 @@
       "path": "data/results/phase_shift_cardinality_30seed/summary.json",
       "sha256": "396e57a8e6c7b5c786402e1dd1b36e1aa4f4ba02ea05fd2d9e634bbc3bccd3d0",
       "bytes": 18670
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/threshold_sensitivity.csv",
+      "sha256": "afdd44d82516bf9174478037da9d074fa19bd76c3ebdd94979890ac673ab3d67",
+      "bytes": 3427
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/threshold_sensitivity_metadata.json",
+      "sha256": "48a9010fc36a5b7971f3b5fd4312cc8f1868bea916d80d2165a64e0adb43995a",
+      "bytes": 2204
     },
     {
       "path": "data/results/phase_shift_cardinality_ablation/cardinality_refinements.csv",
@@ -1835,7 +1845,7 @@
     },
     {
       "path": "figures/hard_catalog_tail_coast_recovery/tail_coast_recovery.pdf",
-      "sha256": "a6660246d0da52549ee479c3eb46c456e0c31835afdffd32a2973847d873e20c",
+      "sha256": "4ca2b2e4483626d40703c667b44d75712784ca13e582fa7fd0bdc4d34f66a88c",
       "bytes": 14935
     },
     {
@@ -2225,13 +2235,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "a495feb07dbf6515049f92372be119b155ca340ea23ee31ad5583ef12d04ae76",
-      "bytes": 377189
+      "sha256": "3b1550dba3ab305921b6a9858922b7bed031321218fce73f8cc4a419b4ac4584",
+      "bytes": 401457
     },
     {
       "path": "paper/main.tex",
-      "sha256": "0c66b6ff2af991d304f197de9ccc73d67790083b65e464c39b11a0b1b35349a3",
-      "bytes": 42877
+      "sha256": "7054750f3333c9573853eac725a6022935a99183270b427cc81efaa804af6efd",
+      "bytes": 45818
     },
     {
       "path": "paper/references.bib",
@@ -2240,13 +2250,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "aae75cb165ed6b14792407571869e81ea143ca711f0bbad4fd3e75ff5df3de95",
-      "bytes": 466065
+      "sha256": "3f183b6b20f61119629f76248f28eab6aa2029c5d75ea433ed3b65372e3ac8f6",
+      "bytes": 467510
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "05149b2fc4a67d35c1f8a3bf05c3e5f18bb7fb2c0656e6b86fa06d3eddfeef6c",
-      "bytes": 24192
+      "sha256": "0a3e6eae66a7b8ee1e086cfa4da7b531347586b530775eda8e1bbebc899c470d",
+      "bytes": 24525
     },
     {
       "path": "requirements-lock.txt",
@@ -2355,8 +2365,13 @@
     },
     {
       "path": "scripts/run_tail_coast_recovery.py",
-      "sha256": "c61298bc83254bd880a80a1f715334b73b260ef68aa1af115a3e1a8ae3abf802",
-      "bytes": 37208
+      "sha256": "5e4ec3b96b64b3b282081daa03a331031341fa8581a66be57f7ff829dd98ebdc",
+      "bytes": 42564
+    },
+    {
+      "path": "scripts/run_threshold_sensitivity.py",
+      "sha256": "75c7a5fd1386a2e91914e1507fd83b10ad94c1ccdd77e07f3c680601f5acb860",
+      "bytes": 9768
     },
     {
       "path": "scripts/write_artifact_manifest.py",
@@ -2500,8 +2515,8 @@
     },
     {
       "path": "tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex",
-      "sha256": "7751612be69b87607e10a4e922e480805cbf4390bf99229fe293636daee19337",
-      "bytes": 1136
+      "sha256": "2ae0073d739fb47d3b3d5cf0dd155eec49bc3e931c7a518c58bb38f93243bbcf",
+      "bytes": 1089
     },
     {
       "path": "tables/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_table.tex",
@@ -2567,6 +2582,11 @@
       "path": "tables/phase_shift_cardinality_30seed/results_table.tex",
       "sha256": "25c229769e134642157a88869b9cf1f3cecb734c81ad4bf578cff89b244717e7",
       "bytes": 2260
+    },
+    {
+      "path": "tables/phase_shift_cardinality_30seed/threshold_sensitivity_table.tex",
+      "sha256": "9f2645794569df43f357515997ca5e3e57d9d029e00003a8364cc53a4f9d3fac",
+      "bytes": 491
     },
     {
       "path": "tables/phase_shift_cardinality_ablation/fuel_pareto_table.tex",
@@ -2670,13 +2690,13 @@
     },
     {
       "path": "tests/test_smoke.py",
-      "sha256": "aa1ce7161f77e28cb71cd902906ae2414cfd60cb12cf746500df7488225faf3a",
-      "bytes": 138418
+      "sha256": "ab901a2ed984a8e59d051afbda0747abac3e4c229a6439f8482c891950fe1bd6",
+      "bytes": 141421
     },
     {
       "path": "tests/test_tail_coast_recovery.py",
-      "sha256": "25b3a7afa429b4fcdc882062fb71bfd1c004b1fba166894dca3148aac28f031b",
-      "bytes": 57867
+      "sha256": "36bc1d42c7a42573dfcd9ce9735b5301f80231c586f735bfe67222c6ccc98636",
+      "bytes": 58968
     }
   ]
 }

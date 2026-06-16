@@ -1,0 +1,59 @@
+{
+  "command": "scripts\\run_threshold_sensitivity.py",
+  "raw_results_csv": "data/results/phase_shift_cardinality_30seed/raw_results.csv",
+  "raw_results_validation": {
+    "row_count": 210,
+    "seed_count": 30,
+    "methods": [
+      "random",
+      "cross_entropy",
+      "genetic",
+      "true_sa",
+      "surrogate_qubo_sa",
+      "qaoa_statevector",
+      "all_windows_continuous"
+    ]
+  },
+  "threshold_grid": [
+    {
+      "threshold_id": "configured_0p09_0p17",
+      "label": "Configured",
+      "nominal_threshold": 0.09,
+      "selected_worst_threshold": 0.17
+    },
+    {
+      "threshold_id": "stricter_0p075_0p12",
+      "label": "Stricter",
+      "nominal_threshold": 0.075,
+      "selected_worst_threshold": 0.12
+    },
+    {
+      "threshold_id": "stringent_0p065_0p10",
+      "label": "Stringent",
+      "nominal_threshold": 0.065,
+      "selected_worst_threshold": 0.1
+    },
+    {
+      "threshold_id": "continuous_dominance_0p05_0p09",
+      "label": "Tight",
+      "nominal_threshold": 0.05,
+      "selected_worst_threshold": 0.09
+    }
+  ],
+  "success_rule": "A method-seed row passes when refined_nominal_error <= nominal_threshold and refined_selected_worst_error <= selected_worst_threshold.",
+  "source_columns": [
+    "refined_nominal_error",
+    "refined_selected_worst_error"
+  ],
+  "artifacts": {
+    "threshold_sensitivity_csv": "data/results/phase_shift_cardinality_30seed/threshold_sensitivity.csv",
+    "threshold_sensitivity_table_tex": "tables/phase_shift_cardinality_30seed/threshold_sensitivity_table.tex",
+    "threshold_sensitivity_metadata_json": "data/results/phase_shift_cardinality_30seed/threshold_sensitivity_metadata.json"
+  },
+  "interpretation_limits": [
+    "Derived only from recorded raw_results.csv; no trajectory optimization is rerun.",
+    "Thresholds are normalized screening tolerances, not flight targeting tolerances.",
+    "Counts test threshold sensitivity of recorded refinements, not a new optimizer."
+  ],
+  "determinism_note": "Runtime is intentionally omitted so rerunning this deterministic postprocessor leaves metadata unchanged when inputs and command are unchanged."
+}

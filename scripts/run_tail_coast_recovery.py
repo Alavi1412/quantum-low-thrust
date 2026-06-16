@@ -205,6 +205,45 @@ def _count_zero_recovery_branches(value) -> int:
     return int(count)
 
 
+def _bool_list(value) -> list[bool]:
+    out = []
+    for item in _json_array(value):
+        if isinstance(item, bool):
+            out.append(item)
+        else:
+            out.append(str(item).strip().lower() in {"true", "1", "yes"})
+    return out
+
+
+def _readable_selected_outage_policy(value) -> str:
+    text = str(value).strip()
+    if text in {"", "0", "0.0"} or text.lower() == "nan":
+        return "none"
+    return text.replace("_", " ")
+
+
+def _eligible_optimizer_converged_count(row) -> str:
+    recovery_segments = _json_array(row.get("branch_recovery_segments"))
+    success_by_branch = _bool_list(row.get("branch_optimizer_success_by_branch"))
+    ran_by_branch = _bool_list(row.get("branch_optimizer_ran_by_branch"))
+
+    eligible_indices: list[int] = []
+    for index, segments in enumerate(recovery_segments):
+        try:
+            if int(float(segments)) > 0:
+                eligible_indices.append(index)
+        except (TypeError, ValueError):
+            continue
+
+    converged = 0
+    for index in eligible_indices:
+        success = index < len(success_by_branch) and bool(success_by_branch[index])
+        ran = index < len(ran_by_branch) and bool(ran_by_branch[index])
+        if success and ran:
+            converged += 1
+    return f"{converged}/{len(eligible_indices)}"
+
+
 def _outage_count(segments: int, lengths: list[int]) -> int:
     return int(sum(max(0, int(segments) - int(length) + 1) for length in lengths))
 
@@ -480,6 +519,49 @@ def _compatible_existing_rows(df: pd.DataFrame, expected: dict[str, dict]) -> tu
     return pd.DataFrame(kept, columns=TAIL_COAST_COLUMNS), rejected
 
 
+def _artifact_refresh_rows_by_case(
+    df: pd.DataFrame,
+    expected: dict[str, dict],
+) -> tuple[pd.DataFrame, list[dict], list[dict]]:
+    """Keep existing evidence rows for table/plot refresh after table-only edits.
+
+    This path is intentionally opt-in at the CLI. It still rejects unknown cases,
+    duplicate case IDs, and config/source provenance mismatches; it only permits a
+    settings_fingerprint mismatch caused by code/reporting identity changes.
+    """
+    if df.empty:
+        return pd.DataFrame(columns=TAIL_COAST_COLUMNS), [], []
+    kept = []
+    rejected = []
+    accepted_fingerprint_mismatches = []
+    seen = set()
+    for row in df.to_dict(orient="records"):
+        case_id = str(row.get("suite_case_id", ""))
+        expected_row = expected.get(case_id)
+        if expected_row is None:
+            rejected.append({"suite_case_id": case_id, "reason": "not in current requested case set"})
+            continue
+        mismatched = [key for key in ("config_hash", "source_states_id") if _missing_or_different(row.get(key), expected_row[key])]
+        if mismatched:
+            rejected.append({"suite_case_id": case_id, "reason": "provenance field mismatch", "mismatched_fields": mismatched})
+            continue
+        if case_id in seen:
+            rejected.append({"suite_case_id": case_id, "reason": "duplicate compatible suite_case_id"})
+            continue
+        if _missing_or_different(row.get("settings_fingerprint"), expected_row["settings_fingerprint"]):
+            accepted_fingerprint_mismatches.append(
+                {
+                    "suite_case_id": case_id,
+                    "recorded_settings_fingerprint": str(row.get("settings_fingerprint", "")),
+                    "current_settings_fingerprint": expected_row["settings_fingerprint"],
+                    "reason": "accepted for artifact refresh only after config_hash and source_states_id matched",
+                }
+            )
+        kept.append({column: row.get(column) for column in TAIL_COAST_COLUMNS})
+        seen.add(case_id)
+    return pd.DataFrame(kept, columns=TAIL_COAST_COLUMNS), rejected, accepted_fingerprint_mismatches
+
+
 def _row_from_result(case: dict, case_config: dict, states, cfg, result: dict, expected: dict, config: dict) -> dict:
     weights = _branch_weights(config, case["case_raw"])
     variants = _branch_weight_variants(config, case["case_raw"])
@@ -553,16 +635,19 @@ def write_table(df: pd.DataFrame, tables_dir: Path) -> None:
         return
     table_df = df.copy()
     table_df["no_recovery_branch_count"] = table_df["branch_recovery_segments"].map(_count_zero_recovery_branches)
+    table_df["eligible_optimizer_converged_branches"] = table_df.apply(_eligible_optimizer_converged_count, axis=1)
+    table_df["selected_outage_policy_readable"] = table_df["selected_outage_policy"].map(_readable_selected_outage_policy)
     table = table_df[
         [
             "suite_case_id",
-            "selected_outage_policy",
+            "selected_outage_policy_readable",
             "outage_lengths",
             "selected_outage_count",
             "tail_coast_segments",
             "branch_portfolio_variant_count",
             "branch_fallback_initialization_evaluated_branch_count",
             "branch_fallback_initialization_accepted_branch_count",
+            "eligible_optimizer_converged_branches",
             "no_recovery_branch_count",
             "nominal_tail_coast_error",
             "selected_worst_error",
@@ -571,8 +656,6 @@ def write_table(df: pd.DataFrame, tables_dir: Path) -> None:
             "control_bound_violation",
             "nfev",
             "meets_thresholds",
-            "branch_optimizer_ran",
-            "branch_optimizer_all_success",
         ]
     ].copy()
     table.columns = [
@@ -584,7 +667,8 @@ def write_table(df: pd.DataFrame, tables_dir: Path) -> None:
         "Portfolio variants",
         "Fallback eval branches",
         "Accepted fallback branches",
-        "No-recovery branches",
+        "Eligible optimizer-converged branches",
+        "Direct no-recovery branches",
         "Tail-coast nominal error",
         "Selected fixed-time worst error",
         "All-mask fixed-time diagnostic worst",
@@ -592,8 +676,6 @@ def write_table(df: pd.DataFrame, tables_dir: Path) -> None:
         "Bound violation",
         "nfev",
         "Meets thresholds",
-        "Branch optimizer ran",
-        "Accepted branch optimizers converged",
     ]
     path.write_text(table.to_latex(index=False, float_format="%.4f", escape=True), encoding="utf-8")
 
@@ -637,11 +719,15 @@ def regenerate(
     cases: list[dict],
     resume_rejected_rows: list[dict],
     skipped_cases: list[dict],
+    write_csv: bool = True,
+    artifact_refresh_accepted_fingerprint_mismatch_rows: list[dict] | None = None,
+    artifact_refresh_allows_fingerprint_mismatch: bool = False,
     artifact_refresh_command: str | None = None,
     evidence_replay_command: str | None = None,
 ) -> None:
     df = pd.DataFrame(df, columns=TAIL_COAST_COLUMNS)
-    df.to_csv(results_dir / "tail_coast_recovery.csv", index=False)
+    if write_csv:
+        df.to_csv(results_dir / "tail_coast_recovery.csv", index=False)
     write_table(df, tables_dir)
     write_plot(df, figures_dir)
     extra = {
@@ -649,10 +735,17 @@ def regenerate(
         "feasible_row_count": int(df["meets_thresholds"].astype(bool).sum()) if not df.empty else 0,
         "expected_case_count": int(len(cases)),
         "completed_case_count": int(len(df)),
+        "raw_csv_written": bool(write_csv),
+        "raw_csv_write_semantics": (
+            "--regenerate-artifacts-only leaves the existing tail_coast_recovery.csv bytes untouched; "
+            "only optimization/resume runs rewrite the raw evidence CSV."
+        ),
         "artifact_refresh_command": artifact_refresh_command or command,
         "evidence_replay_command": evidence_replay_command or command,
         "resume_rejected_rows": resume_rejected_rows,
         "skipped_cases": skipped_cases,
+        "artifact_refresh_allows_fingerprint_mismatch": bool(artifact_refresh_allows_fingerprint_mismatch),
+        "artifact_refresh_accepted_fingerprint_mismatch_rows": artifact_refresh_accepted_fingerprint_mismatch_rows or [],
         "implementation_identities": _implementation_identities(),
         "threshold_rule": "meets_thresholds requires tail-coast nominal error <= nominal_success and selected fixed-final-time worst error <= robust_success",
         "semantics": {
@@ -762,7 +855,14 @@ def run(args) -> pd.DataFrame:
     evidence_replay_command = _evidence_replay_command(args)
     if args.regenerate_artifacts_only:
         expected = _expected_index(config, args, cases)
-        df, resume_rejected_rows = _compatible_existing_rows(_load_existing(csv_path), expected)
+        accepted_fingerprint_mismatches: list[dict] = []
+        if args.allow_artifact_refresh_fingerprint_mismatch:
+            df, resume_rejected_rows, accepted_fingerprint_mismatches = _artifact_refresh_rows_by_case(
+                _load_existing(csv_path),
+                expected,
+            )
+        else:
+            df, resume_rejected_rows = _compatible_existing_rows(_load_existing(csv_path), expected)
         df = _order_rows_by_cases(df, cases)
         skipped_cases = _missing_compatible_cases(df, cases, expected)
         regenerate(
@@ -775,6 +875,9 @@ def run(args) -> pd.DataFrame:
             cases=cases,
             resume_rejected_rows=resume_rejected_rows,
             skipped_cases=skipped_cases,
+            artifact_refresh_accepted_fingerprint_mismatch_rows=accepted_fingerprint_mismatches,
+            artifact_refresh_allows_fingerprint_mismatch=bool(args.allow_artifact_refresh_fingerprint_mismatch),
+            write_csv=False,
             artifact_refresh_command=command,
             evidence_replay_command=evidence_replay_command,
         )
@@ -847,7 +950,20 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-cases", type=int, default=None)
     parser.add_argument("--runtime-budget-seconds", type=float, default=None)
     parser.add_argument("--resume", action="store_true")
-    parser.add_argument("--regenerate-artifacts-only", action="store_true", help="Refresh CSV ordering, table, figure, and metadata from the existing CSV without launching optimization.")
+    parser.add_argument(
+        "--regenerate-artifacts-only",
+        action="store_true",
+        help="Refresh table, figure, and metadata from the existing CSV without launching optimization or rewriting the CSV.",
+    )
+    parser.add_argument(
+        "--allow-artifact-refresh-fingerprint-mismatch",
+        action="store_true",
+        help=(
+            "With --regenerate-artifacts-only, reuse existing rows whose case_id, "
+            "config_hash, and source_states_id match even if settings_fingerprint "
+            "changed after reporting-only code edits. Does not run optimization."
+        ),
+    )
     return parser
 
 
