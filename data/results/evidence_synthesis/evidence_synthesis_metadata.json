@@ -1,0 +1,99 @@
+{
+  "command": "scripts\\run_evidence_synthesis.py",
+  "row_count": 7,
+  "optimization_rerun": false,
+  "source_mode": "Recorded CSV/JSON artifacts only; no trajectory optimization is launched.",
+  "determinism_note": "Runtime is intentionally omitted so rerunning this deterministic postprocessor leaves metadata unchanged when inputs and command are unchanged.",
+  "thresholds": {
+    "configured": {
+      "nominal": 0.09,
+      "selected_or_all_diagnostic": 0.17
+    },
+    "stringent": {
+      "nominal": 0.065,
+      "selected_or_all_diagnostic": 0.1
+    },
+    "near_tight": {
+      "nominal": 0.05,
+      "selected_or_all_diagnostic": 0.1
+    },
+    "tight": {
+      "nominal": 0.05,
+      "selected_or_all_diagnostic": 0.09
+    }
+  },
+  "pass_semantics": "Configured pass is copied from the source row where available. Derived stringent, near-tight, and tight pass columns use nominal_error and all_mask_worst_error as a conservative diagnostic; for rows that select all configured masks, selected_worst_error equals all_mask_worst_error.",
+  "row_order": [
+    "phase_shift_tight_threshold_counts",
+    "continuation_all_single_p04",
+    "continuation_two_segment_n8_p03",
+    "direct_collocation_selected_p04",
+    "ihs_tighter_thrust_p04",
+    "tail_coast_hard_catalog_all_one_two",
+    "ihs_hard_catalog_selected_failure"
+  ],
+  "input_artifacts": [
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/threshold_sensitivity.csv",
+      "sha256": "afdd44d82516bf9174478037da9d074fa19bd76c3ebdd94979890ac673ab3d67",
+      "bytes": 3427
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/threshold_sensitivity_metadata.json",
+      "sha256": "48a9010fc36a5b7971f3b5fd4312cc8f1868bea916d80d2165a64e0adb43995a",
+      "bytes": 2204
+    },
+    {
+      "path": "data/results/continuation_extension_suite/continuation_margin_suite.csv",
+      "sha256": "194688c1dc8df761622fee1069914aeb1a1e91ae2078a8e15ced6a59f4673311",
+      "bytes": 9759
+    },
+    {
+      "path": "data/results/continuation_extension_suite/continuation_margin_suite_metadata.json",
+      "sha256": "6edd9785451049a70797abcc4918efce0a475bb46960fb7755b7401805949d93",
+      "bytes": 27700
+    },
+    {
+      "path": "data/results/direct_collocation_baseline/direct_collocation_baseline.csv",
+      "sha256": "b1f9b4c10daba731fbf5f7074e7b9b213a804d51a9f74fc0c6bd356898c2443d",
+      "bytes": 6007
+    },
+    {
+      "path": "data/results/direct_collocation_baseline/direct_collocation_baseline_metadata.json",
+      "sha256": "dacdd04704f6a8108213a5f557eb2db3bceda88397772560f693e5639e52b89a",
+      "bytes": 13600
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline.csv",
+      "sha256": "cebebee6c4d8925954c81629df6d58885012005b7adff6d3403b37dd4e71dd65",
+      "bytes": 15920
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline_metadata.json",
+      "sha256": "8e5646119bab7e029e7bc9e5e8e55397310597c583a86a1d922b9d5252e8b517",
+      "bytes": 36854
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery.csv",
+      "sha256": "2dada0321e38e64185abd00d311eee8d2fad55698abf23f0f639c53f94f4073d",
+      "bytes": 348303
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery_metadata.json",
+      "sha256": "d28afea1986fa0085238caf07ba196f2cbf89376d002d9887011a66cf7b8a214",
+      "bytes": 390905
+    }
+  ],
+  "artifacts": {
+    "evidence_synthesis_csv": "data/results/evidence_synthesis/evidence_synthesis.csv",
+    "evidence_synthesis_metadata_json": "data/results/evidence_synthesis/evidence_synthesis_metadata.json",
+    "evidence_synthesis_table_tex": "tables/evidence_synthesis/evidence_synthesis_table.tex",
+    "practitioner_lessons_table_tex": "tables/evidence_synthesis/practitioner_lessons_table.tex"
+  },
+  "interpretation_limits": [
+    "This synthesis is an evidence-indexing layer over recorded artifacts, not a new experiment.",
+    "Terminal-error thresholds are normalized screening tolerances, not flight targeting tolerances.",
+    "Selected-branch collocation rows retain all-mask diagnostics as diagnostics unless all masks are explicitly selected.",
+    "The hard-catalog positive row is scoped to the tail-coast locked-nominal fixed-final-time backend."
+  ]
+}

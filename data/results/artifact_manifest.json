@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-16T18:10:01Z",
+  "generated_utc": "2026-06-16T18:33:30Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "2d2ab323dcc25a1e47042a30de69ea8c04bfba32",
+  "git_head_at_generation": "eb90f69e898872ce632f6173676776f2963dd12f",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery_metadata.json\n M figures/hard_catalog_tail_coast_recovery/tail_coast_recovery.pdf\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_tail_coast_recovery.py\n M tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex\n M tests/test_smoke.py\n M tests/test_tail_coast_recovery.py\n?? data/results/phase_shift_cardinality_30seed/threshold_sensitivity.csv\n?? data/results/phase_shift_cardinality_30seed/threshold_sensitivity_metadata.json\n?? scripts/run_threshold_sensitivity.py\n?? tables/phase_shift_cardinality_30seed/threshold_sensitivity_table.tex",
+  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n?? data/results/evidence_synthesis/evidence_synthesis.csv\n?? data/results/evidence_synthesis/evidence_synthesis_metadata.json\n?? scripts/run_evidence_synthesis.py\n?? tables/evidence_synthesis/evidence_synthesis_table.tex\n?? tables/evidence_synthesis/practitioner_lessons_table.tex\n?? tests/test_evidence_synthesis.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 533,
+  "file_count": 539,
   "files": [
     {
       "path": ".gitignore",
@@ -40,13 +40,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "d6c75a0ae042bc16033bc1a22ed4505298c56effb958e023ec6c4d2bd3e0df3e",
-      "bytes": 16504
+      "sha256": "b6f91e8e699381a8aab1de74994714e9e64ee9fbd41ff95c1cc2896b12bbd859",
+      "bytes": 17353
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "3721c78d75e97c18a088170b8a36e58305708b6d864fa121a085db18bcce66f6",
-      "bytes": 23428
+      "sha256": "dc374b0bfe7c68f2158e636d9ab8cfe6c1b12501bace28f3762f836ef1e60f66",
+      "bytes": 24581
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -322,6 +322,16 @@
       "path": "data/results/direct_collocation_baseline/direct_collocation_baseline_metadata.json",
       "sha256": "dacdd04704f6a8108213a5f557eb2db3bceda88397772560f693e5639e52b89a",
       "bytes": 13600
+    },
+    {
+      "path": "data/results/evidence_synthesis/evidence_synthesis.csv",
+      "sha256": "c20299160f6da85c2cff52d95ed4ec350b9b7356ecc08437097577724a6df427",
+      "bytes": 5111
+    },
+    {
+      "path": "data/results/evidence_synthesis/evidence_synthesis_metadata.json",
+      "sha256": "07b8bb28a56122ec549140f2458d4d219d9b45dd51a452f8700181c868287fbf",
+      "bytes": 4492
     },
     {
       "path": "data/results/feasibility_metadata.json",
@@ -2235,13 +2245,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "3b1550dba3ab305921b6a9858922b7bed031321218fce73f8cc4a419b4ac4584",
-      "bytes": 401457
+      "sha256": "250e9d7aaff43b5ee94cfc4fb60d741892111a2fdb050f54486f0a67e5cc90f0",
+      "bytes": 405677
     },
     {
       "path": "paper/main.tex",
-      "sha256": "7054750f3333c9573853eac725a6022935a99183270b427cc81efaa804af6efd",
-      "bytes": 45818
+      "sha256": "a185f78094d7d87a7d92575a2ef074d98c7dc72ad652df0d04d6962f68fbdc15",
+      "bytes": 48026
     },
     {
       "path": "paper/references.bib",
@@ -2250,13 +2260,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "3f183b6b20f61119629f76248f28eab6aa2029c5d75ea433ed3b65372e3ac8f6",
-      "bytes": 467510
+      "sha256": "9c2d3c12846a55d829e2574262dba69585b4ddc246b41c786934467e71bb6b66",
+      "bytes": 468075
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "0a3e6eae66a7b8ee1e086cfa4da7b531347586b530775eda8e1bbebc899c470d",
-      "bytes": 24525
+      "sha256": "99d80439374932f38ed77af8cb137f9fe99de25882b9b0cf40ec0e0aed542fe5",
+      "bytes": 24871
     },
     {
       "path": "requirements-lock.txt",
@@ -2317,6 +2327,11 @@
       "path": "scripts/run_direct_collocation_baseline.py",
       "sha256": "a22b53537cfa1e66823883b1d31a1902e67f7558443bd519da28b6609722018a",
       "bytes": 24639
+    },
+    {
+      "path": "scripts/run_evidence_synthesis.py",
+      "sha256": "b15168667e6684eff3f1f95c825191d5b4d45124389c7cabd7bdb63f327851a3",
+      "bytes": 23940
     },
     {
       "path": "scripts/run_experiment.py",
@@ -2492,6 +2507,16 @@
       "path": "tables/direct_collocation_baseline/direct_collocation_baseline_table.tex",
       "sha256": "894c2bfb98e4c757dac63cd39b3b1a145037d68f1f4d3772a8be67cdb9b7825f",
       "bytes": 673
+    },
+    {
+      "path": "tables/evidence_synthesis/evidence_synthesis_table.tex",
+      "sha256": "8eb59b78a00825740ff2ad7bbaee0620d9d0dfa04384d0a0c8d30015a6571ca4",
+      "bytes": 3038
+    },
+    {
+      "path": "tables/evidence_synthesis/practitioner_lessons_table.tex",
+      "sha256": "15c103eb7432b0a01c7b863c81ab30eab8fb7ffba87d74a40a628190e359f900",
+      "bytes": 2160
     },
     {
       "path": "tables/feasibility_table.tex",
@@ -2672,6 +2697,11 @@
       "path": "tests/test_delayed_recovery.py",
       "sha256": "37d98107f02d2040a18cf94011c2e774c78c1371b787c51476273711d89912c5",
       "bytes": 27343
+    },
+    {
+      "path": "tests/test_evidence_synthesis.py",
+      "sha256": "ffb6755e9fddb20a0853c0370b8a903c0e0550e3099e20f0e272aebebd772a9b",
+      "bytes": 4977
     },
     {
       "path": "tests/test_hermite_simpson_continuation.py",

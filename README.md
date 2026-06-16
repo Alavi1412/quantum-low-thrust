@@ -38,7 +38,9 @@ Reviewer-facing checklist for the current artifact snapshot:
 ```powershell
 git status --short
 py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
+py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
 py -3.11 scripts\run_threshold_sensitivity.py
+py -3.11 scripts\run_evidence_synthesis.py
 py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --regenerate-artifacts-only --allow-artifact-refresh-fingerprint-mismatch
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
@@ -52,6 +54,7 @@ For a broader local check, run `py -3.11 -m pytest tests -q` after installing
 the pinned dependencies. The long experiment commands below are expensive; use
 the recorded artifacts unless intentionally regenerating evidence. The primary
 review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
+`data/results/evidence_synthesis/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
 `data/results/qaoa_depth_ablation_30seed/*`,
 `data/results/hard_catalog_tail_coast_recovery/*`, and
@@ -127,6 +130,7 @@ For the 30-seed main-method cardinality-prior package:
 py -3.11 scripts\run_experiment.py --config configs\q1_phase_shift_cardinality_30seed.yaml
 py -3.11 scripts\run_main_method_statistics.py --config configs\q1_phase_shift_cardinality_30seed.yaml
 py -3.11 scripts\run_threshold_sensitivity.py
+py -3.11 scripts\run_evidence_synthesis.py
 ```
 
 This package writes `data/results/phase_shift_cardinality_30seed/*`,
@@ -142,6 +146,17 @@ recorded raw CSV only; it does not rerun trajectory optimization. At the tight
 `(0.05, 0.09)` threshold check, all sampled methods are `0/30` while
 all-windows continuous remains `30/30`. It does not support a quantum-advantage
 or QAOA-superiority claim.
+
+The evidence synthesis postprocessor writes
+`data/results/evidence_synthesis/evidence_synthesis.csv`,
+`data/results/evidence_synthesis/evidence_synthesis_metadata.json`,
+`tables/evidence_synthesis/evidence_synthesis_table.tex`, and
+`tables/evidence_synthesis/practitioner_lessons_table.tex`. It reads recorded
+CSV/JSON artifacts only and does not rerun trajectory optimization. The table
+cross-indexes tight 30-seed threshold sensitivity, continuation-extension
+multiple-shooting rows, compact direct-collocation and independent-midpoint
+Hermite-Simpson diagnostics, and the scoped hard-catalog tail-coast row used in
+the main manuscript claim path.
 
 For the QAOA depth ablation:
 
