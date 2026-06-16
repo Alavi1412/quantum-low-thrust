@@ -25,6 +25,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
 
     ledger = module.build_claim_evidence_ledger()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
+    has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
 
     expected_claims = [
         "phase_shift_main_method_30seed_selected_branch",
@@ -38,6 +39,11 @@ def test_claim_evidence_ledger_rows_and_semantics():
     ]
     if has_replay:
         expected_claims.insert(7, "catalog_dro_tail_coast_branch_control_replay_accepted_controls")
+    if has_bicircular:
+        expected_claims.insert(
+            8 if has_replay else 7,
+            "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe",
+        )
     assert len(ledger) == len(expected_claims)
     assert ledger["claim_id"].tolist() == expected_claims
 
@@ -107,6 +113,18 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert "high-fidelity validation" in replay["explicit_boundary"]
     else:
         assert "catalog_dro_tail_coast_branch_control_replay_accepted_controls" not in ledger["claim_id"].tolist()
+
+    if has_bicircular:
+        stress = row("catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe")
+        assert stress["all_configured_mask_evidence"] == "False"
+        assert stress["target_mode"] == "catalog_dro_phase"
+        assert "Sun phases 0.0, 90.0, 180.0, 270.0" in stress["mask_scope"]
+        assert "22/108" in stress["selected_worst_error"]
+        assert stress["passes_configured_thresholds"] == "False"
+        assert "do not remain threshold-feasible" in stress["primary_interpretation"]
+        assert "not SPICE ephemeris validation" in stress["explicit_boundary"]
+    else:
+        assert "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe" not in ledger["claim_id"].tolist()
 
 
 def test_tail_coast_threshold_audit_statuses():
@@ -195,8 +213,9 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     }
     second = module.write_artifacts(**kwargs)
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
-    expected_rows = 9 if has_replay else 8
-    expected_inputs = 13 if has_replay else 10
+    has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
+    expected_rows = 8 + int(has_replay) + int(has_bicircular)
+    expected_inputs = 10 + (3 if has_replay else 0) + (2 if has_bicircular else 0)
 
     assert second["ledger_path"].read_bytes() == first_bytes["ledger"]
     assert second["metadata_path"].read_bytes() == first_bytes["metadata"]
@@ -211,6 +230,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["uses_recorded_artifacts_only"] is True
     assert metadata["high_fidelity_claim"] is False
     assert metadata["branch_control_replay"] is has_replay
+    assert metadata["bicircular_solar_tidal_stress_probe"] is has_bicircular
     assert metadata["fuel_optimality_claim"] is False
     assert metadata["quantum_advantage_claim"] is False
     assert metadata["row_count"] == expected_rows
@@ -218,6 +238,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["tail_coast_branch_audit_row_count"] == 1
     assert "no trajectory optimization" in metadata["source_mode"]
     assert metadata["branch_control_replay_artifacts_available"] is has_replay
+    assert metadata["bicircular_solar_tidal_stress_artifacts_available"] is has_bicircular
     assert len(metadata["input_artifacts"]) == expected_inputs
 
     ledger = pd.read_csv(second["ledger_path"])
@@ -233,4 +254,8 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         assert "catalog\\_dro\\_tail\\_coast\\_branch\\_control\\_replay\\_accepted\\_controls" in table
     else:
         assert "catalog\\_dro\\_tail\\_coast\\_branch\\_control\\_replay\\_accepted\\_controls" not in table
+    if has_bicircular:
+        assert "catalog\\_dro\\_tail\\_coast\\_bicircular\\_solar\\_tidal\\_stress\\_probe" in table
+    else:
+        assert "catalog\\_dro\\_tail\\_coast\\_bicircular\\_solar\\_tidal\\_stress\\_probe" not in table
     assert "No sampled-method or QAOA superiority" in table

@@ -41,7 +41,9 @@ py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_claim_evidence_ledger.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
+py -3.11 -m pytest tests/test_bicircular_solar_tidal_stress.py -q -p no:cacheprovider
 py -3.11 scripts\run_threshold_sensitivity.py
+py -3.11 scripts\run_bicircular_solar_tidal_stress.py
 py -3.11 scripts\run_claim_evidence_ledger.py
 py -3.11 scripts\run_evidence_synthesis.py
 py -3.11 scripts\run_replay_stress_validation.py
@@ -60,6 +62,7 @@ the pinned dependencies. The long experiment commands below are expensive; use
 the recorded artifacts unless intentionally regenerating evidence. The primary
 review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/claim_evidence_ledger/*`,
+`data/results/bicircular_solar_tidal_stress/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
@@ -71,7 +74,9 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 ## Reproducibility Manifest
 
 See `REPRODUCIBILITY.md` for the artifact map, expected outputs, known expensive
-runs, and commands used for the paper evidence. A machine-readable SHA-256
+runs, and commands used for the paper evidence. `ARCHIVAL_RELEASE.md` lists the
+files to include in an external repository deposit and does not claim a DOI. A
+machine-readable SHA-256
 manifest is written to `data/results/artifact_manifest.json` with:
 
 ```powershell
@@ -170,8 +175,10 @@ py -3.11 scripts\run_claim_evidence_ledger.py
 It reads recorded artifacts only and does not rerun trajectory optimization.
 The ledger separates selected-branch evidence, all-mask diagnostics,
 all-configured-mask evidence, and the completed focused accepted-control replay
-row. The current snapshot includes the real replay CSV, metadata, and focused
-source recovery CSV, so the ledger has 9 claim rows. The tail-coast audit
+row. The current snapshot includes the real replay CSV, metadata, focused
+source recovery CSV, and bicircular solar-tidal stress CSV/metadata, so the
+ledger has 10 claim rows. The solar-tidal row is a negative stress-probe row,
+not all-configured robustness evidence. The tail-coast audit
 confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
@@ -230,6 +237,24 @@ branch terminal-error delta `0.0`, and `passes_tolerance=True`. It does not reru
 optimization, branch portfolio selection, fallback search, high-fidelity
 validation, production solver parity checks, fuel-optimal analysis, or any
 QUBO/QAOA/quantum workflow.
+
+The bicircular solar-tidal stress postprocessor writes
+`data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv`,
+`data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json`,
+and `tables/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_table.tex`:
+
+```powershell
+py -3.11 scripts\run_bicircular_solar_tidal_stress.py
+```
+
+It reuses the focused accepted-control sidecars and sweeps Sun phases
+`0, 90, 180, 270` degrees under a circular solar third-body tidal term with
+`sun_distance_lu=389.17`, `sun_mu_ratio=328900.56`, and rotating-frame phase
+rate `-0.9252`. The CR3BP replay delta is `0.0`, but the stress probe is
+negative: nominal solar-tidal rows fail the `0.09` threshold and only `22/108`
+branch-phase rows pass the `0.17` branch threshold. This is beyond-CR3BP stress
+evidence only, not SPICE ephemeris validation, production solver parity,
+fuel optimality, or high-fidelity flight validation.
 
 For the QAOA depth ablation:
 

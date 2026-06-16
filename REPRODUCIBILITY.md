@@ -34,7 +34,9 @@ py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_claim_evidence_ledger.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
+py -3.11 -m pytest tests/test_bicircular_solar_tidal_stress.py -q -p no:cacheprovider
 py -3.11 scripts\run_threshold_sensitivity.py
+py -3.11 scripts\run_bicircular_solar_tidal_stress.py
 py -3.11 scripts\run_claim_evidence_ledger.py
 py -3.11 scripts\run_evidence_synthesis.py
 py -3.11 scripts\run_replay_stress_validation.py
@@ -54,6 +56,7 @@ builds are the intended short reviewer-facing verification path. A broader local
 paper artifacts need to be regenerated; use the recorded artifacts for normal
 verification. The primary review artifacts are `paper/main.pdf`,
 `paper/supplement.pdf`, `data/results/claim_evidence_ledger/*`,
+`data/results/bicircular_solar_tidal_stress/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
@@ -68,10 +71,11 @@ verification. The primary review artifacts are `paper/main.pdf`,
 | --- | --- | --- | --- | --- |
 | Paper PDFs | `latexmk -pdf paper/main.tex` and `latexmk -pdf paper/supplement.tex` or equivalent local LaTeX build | `paper/main.tex`, `paper/supplement.tex`, `paper/references.bib`, generated `tables/`, `figures/` | `paper/main.pdf`, `paper/supplement.pdf` | Build time depends on local TeX install; not an experiment. |
 | Smoke tests | `python -m pytest tests` | `tests/test_smoke.py`, `src/qlt/*`, `configs/smoke.yaml` | pytest pass/fail output | Short. |
-| Claim evidence ledger | `py -3.11 scripts\run_claim_evidence_ledger.py` | Recorded summary/statistical CSV/JSON artifacts from the 30-seed main-method package, QAOA/QUBO ablation, continuation extension, direct collocation, independent-midpoint Hermite-Simpson, tail-coast, delayed-recovery, and focused branch-control replay packages | `data/results/claim_evidence_ledger/claim_evidence_ledger.csv`, `data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json`, `data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv`, `data/results/claim_evidence_ledger/tail_coast_branch_audit.csv`, `tables/claim_evidence_ledger/*` | Short deterministic postprocessor; no trajectory optimization or high-fidelity validation. The current snapshot emits the normalized CR3BP accepted-control replay row because the focused replay package exists. |
+| Claim evidence ledger | `py -3.11 scripts\run_claim_evidence_ledger.py` | Recorded summary/statistical CSV/JSON artifacts from the 30-seed main-method package, QAOA/QUBO ablation, continuation extension, direct collocation, independent-midpoint Hermite-Simpson, tail-coast, delayed-recovery, focused branch-control replay, and bicircular solar-tidal stress packages | `data/results/claim_evidence_ledger/claim_evidence_ledger.csv`, `data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json`, `data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv`, `data/results/claim_evidence_ledger/tail_coast_branch_audit.csv`, `tables/claim_evidence_ledger/*` | Short deterministic postprocessor; no trajectory optimization or high-fidelity validation. The current snapshot emits the normalized CR3BP accepted-control replay row and the negative bicircular solar-tidal stress row because both packages exist. |
 | Evidence synthesis replay | `py -3.11 scripts\run_evidence_synthesis.py` | Recorded CSV/JSON artifacts from threshold sensitivity, continuation extension, direct collocation, independent-midpoint Hermite-Simpson, and tail-coast packages | `data/results/evidence_synthesis/evidence_synthesis.csv`, `data/results/evidence_synthesis/evidence_synthesis_metadata.json`, `tables/evidence_synthesis/evidence_synthesis_table.tex`, `tables/evidence_synthesis/practitioner_lessons_table.tex` | Short deterministic postprocessor; no trajectory optimization is rerun. |
 | Recorded-control replay/stress validation | `py -3.11 scripts\run_replay_stress_validation.py` | Recorded nominal-control sidecars and source rows from continuation extension and independent-midpoint Hermite-Simpson packages; `data/source_states.json` | `data/results/replay_stress_validation/replay_stress_validation.csv`, `data/results/replay_stress_validation/replay_stress_validation_metadata.json`, `tables/replay_stress_validation/replay_stress_validation_table.tex` | Short deterministic postprocessor; repropagates nominal controls only. No least-squares optimization, branch recovery replay, high-fidelity force model, or operational validation claim. |
 | Tail-coast accepted branch-control replay | `py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml --resume`, then `py -3.11 scripts\run_tail_coast_branch_control_replay.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml` | `configs/hard_catalog_tail_coast_branch_control_replay.yaml`, `src/qlt/tail_coast_recovery.py`, `scripts/run_tail_coast_recovery.py`, incremental accepted-control sidecars, progress CSV, manifest, `data/source_states.json` | `data/results/hard_catalog_tail_coast_branch_control_replay/*`, `tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_table.tex` | Included current evidence package, optional to regenerate. The recovery run is checkpointed/resumable and expensive because it reruns the combined tail-coast case; the replay postprocessor is deterministic and should run only after the completed recovery package exists. Replay is normalized CR3BP accepted-control replay only; no optimization rerun, high-fidelity validation, production solver parity, fuel optimality, or quantum advantage claim. |
+| Bicircular solar-tidal stress replay | `py -3.11 scripts\run_bicircular_solar_tidal_stress.py` | Focused accepted-control replay package under `data/results/hard_catalog_tail_coast_branch_control_replay/`, `configs/hard_catalog_tail_coast_branch_control_replay.yaml`, `src/qlt/bicircular.py`, `data/source_states.json` | `data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv`, `data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json`, `tables/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_table.tex` | Short deterministic postprocessor; no optimizer rerun. Replays nominal plus 27 accepted branch controls for Sun phases 0/90/180/270 deg. Negative external-validity stress result: CR3BP replay delta is 0.0, but nominal solar-tidal rows fail and only 22/108 branch-phase rows pass. Not SPICE, high-fidelity validation, production solver parity, or fuel optimality. |
 | Phase-shift benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift.yaml` | `configs/q1_phase_shift.yaml`, `data/source_states.json` | `data/results/phase_shift/*`, `figures/phase_shift/*`, `tables/phase_shift/*` | Moderate; metadata records package versions but no total runtime field. |
 | Phase-shift cardinality benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift_cardinality.yaml` | `configs/q1_phase_shift_cardinality.yaml`, `data/source_states.json` | `data/results/phase_shift_cardinality/*`, `figures/phase_shift_cardinality/*`, `tables/phase_shift_cardinality/*` | Moderate to expensive; 10 seeds with branch recovery. |
 | Bounded phase suite | `python scripts/run_bounded_phase_suite.py --resume` | `configs/bounded_phase_suite.yaml`, `data/source_states.json` | `data/results/bounded_phase_suite/bounded_phase_suite.csv`, `figures/bounded_phase_suite/*`, `tables/bounded_phase_suite/*` | Expensive; configured runtime budget is 600 s, with recorded cases from about 13 s to 367 s. |
@@ -106,7 +110,8 @@ verification. The primary review artifacts are `paper/main.pdf`,
   evidence, all-mask diagnostics, and all-configured-mask evidence; it is a
   deterministic replay over recorded artifacts and does not rerun trajectory
   optimization or claim high-fidelity validation. The current snapshot includes
-  the focused branch-control replay row because its real replay artifacts exist.
+  the focused branch-control replay row and the negative bicircular
+  solar-tidal stress row because their real artifacts exist.
 - Cross-backend evidence synthesis and practitioner lessons:
   `data/results/evidence_synthesis/evidence_synthesis.csv`,
   `data/results/evidence_synthesis/evidence_synthesis_metadata.json`,
@@ -132,6 +137,16 @@ verification. The primary review artifacts are `paper/main.pdf`,
   schedules under normalized CR3BP only; it does not rerun branch optimization,
   high-fidelity validation, fuel-optimal analysis, production solver parity
   checks, or any quantum/QUBO/QAOA workflow.
+- Bicircular solar-tidal stress replay:
+  `data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv`,
+  `data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json`,
+  and `tables/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_table.tex`.
+  This deterministic beyond-CR3BP stress probe reuses persisted accepted
+  controls and a simple circular solar third-body tidal term. It is not SPICE
+  ephemeris validation, production solver parity, fuel optimality, or
+  high-fidelity flight validation. The current run has zero CR3BP replay delta
+  but fails the configured solar-tidal threshold sweep: nominal rows fail and
+  only 22/108 branch-phase rows pass.
 - Non-teacher catalog phase-shift results: `data/results/phase_shift/*` and
   `data/results/phase_shift_cardinality/*`.
 - Bounded projected multiple-shooting feasibility claims:

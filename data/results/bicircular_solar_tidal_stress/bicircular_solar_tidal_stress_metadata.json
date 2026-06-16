@@ -1,0 +1,271 @@
+{
+  "artifacts": {
+    "bicircular_solar_tidal_stress_csv": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv",
+    "bicircular_solar_tidal_stress_metadata_json": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json",
+    "bicircular_solar_tidal_stress_table_tex": "tables/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_table.tex"
+  },
+  "baseline_reproduction": {
+    "max_cr3bp_delta_from_source": 0.0,
+    "passes_baseline_tolerance": true
+  },
+  "baseline_tolerance": 1e-10,
+  "bicircular_solar_tidal_stress_probe": true,
+  "branch_control_replay": true,
+  "branch_source_record_count": 27,
+  "command": "scripts\\run_bicircular_solar_tidal_stress.py",
+  "fuel_optimality_claim": false,
+  "high_fidelity_validation": false,
+  "input_artifacts": [
+    {
+      "bytes": 3001,
+      "path": "configs/hard_catalog_tail_coast_branch_control_replay.yaml",
+      "sha256": "c06aa56991f6b9fbbe9e121843a7b804832595954b799552a0eb7ad0f07495d1"
+    },
+    {
+      "bytes": 1203,
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf"
+    },
+    {
+      "bytes": 177885,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.csv",
+      "sha256": "9601d729da24ecd7c74fa467f85a80a20278e9923082371426102c92cac1c50f"
+    },
+    {
+      "bytes": 21888,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_manifest.json",
+      "sha256": "7118ebb5255590e6b66b7f93513e0c1a73d4de18821eee9303af04409902922f"
+    },
+    {
+      "bytes": 3404,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_nominal_controls.json",
+      "sha256": "a837354a64fef991cbe32cc2ed8311f0e72f59d73250655e2bf89144da0d5ca4"
+    },
+    {
+      "bytes": 11004,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_000_mask_000_controls.json",
+      "sha256": "29ee001998ed326eda124d1a7cc3c36015bc7be21604e2daad3cd91e757d01d3"
+    },
+    {
+      "bytes": 10808,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_001_mask_001_controls.json",
+      "sha256": "2ac3ea5cf5870454b3cced8a57a48fb0bff50f845ef2887ad3d356d74ff138c2"
+    },
+    {
+      "bytes": 10603,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_002_mask_002_controls.json",
+      "sha256": "af4c45bf516a4979040b09e98c25f4c5f5f400e3ff1de4e2d47c1b457521577e"
+    },
+    {
+      "bytes": 10620,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_003_mask_003_controls.json",
+      "sha256": "3edba56d8ede21d879506f25e33b9a6f9e7d0217069e63895c0e3dc475e654e0"
+    },
+    {
+      "bytes": 10360,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_004_mask_004_controls.json",
+      "sha256": "9ebebca724e9d21f0fe3b1556fa59ebf191a0ea0cd129023fca9d9ae5e2c2c5d"
+    },
+    {
+      "bytes": 10409,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_005_mask_005_controls.json",
+      "sha256": "d8174ef523a3e0ad649e16446092fe1af22a1d948f1906a7226fa310005b43ff"
+    },
+    {
+      "bytes": 10302,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_006_mask_006_controls.json",
+      "sha256": "9a872cbc22dcc277fc2a22486591ca7a3588cbf75f0ee3f39f349c9216eb5f1d"
+    },
+    {
+      "bytes": 20963,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_007_mask_007_controls.json",
+      "sha256": "99a20f46082f43e92111505de31e75c38792cf5e33403923ba4fb237a4981512"
+    },
+    {
+      "bytes": 10018,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_008_mask_008_controls.json",
+      "sha256": "e748073e4e8afe834191bbec8946c37db11d5eda92ca7f8858a4ae651ee6783c"
+    },
+    {
+      "bytes": 9933,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_009_mask_009_controls.json",
+      "sha256": "bd698e9a952d2aa99661f45650d1b6a41546c4619b5eebcdbe859d9f1a75d89d"
+    },
+    {
+      "bytes": 9728,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_010_mask_010_controls.json",
+      "sha256": "9df5d8c8bad90c3e594a8980ad3e0750c6f4dd43ba9897db38fa972fb5f02460"
+    },
+    {
+      "bytes": 9517,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_011_mask_011_controls.json",
+      "sha256": "cc3e8780d7ecbb4eaf0e5618cb1cc18a410da08d2ad94ad4d4eaf3598596217d"
+    },
+    {
+      "bytes": 9353,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_012_mask_012_controls.json",
+      "sha256": "1c169ce2b326a03d694aecd3f4cdb35f08f90f86bd2eed774a9293978ef25465"
+    },
+    {
+      "bytes": 9252,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_013_mask_013_controls.json",
+      "sha256": "34a31b285f43f8ab0684e43993b7e0b82e12a50fd22344b89367e07041f2210b"
+    },
+    {
+      "bytes": 21746,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_014_mask_014_controls.json",
+      "sha256": "84bbd88511df35140ceddb6227e193a0d405fe6bcb6616ce0d4150469d13722b"
+    },
+    {
+      "bytes": 10636,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_015_mask_015_controls.json",
+      "sha256": "7a6e1db834b8ac8536692444cf394d78c3d41f9686ab82d1da077c58d68c45c5"
+    },
+    {
+      "bytes": 10440,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_016_mask_016_controls.json",
+      "sha256": "b0da49e520befc4d0a31270b759be89b086ac6b44e45c0833f3db3d102b84140"
+    },
+    {
+      "bytes": 10409,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_017_mask_017_controls.json",
+      "sha256": "225084c4e3c223c76a71f058d0f6093d7d70768255f0eb2559641e9432b979ab"
+    },
+    {
+      "bytes": 10192,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_018_mask_018_controls.json",
+      "sha256": "2ecf498e3ba4aebf4c3fe7283b2055cca7af7fd65732b180b4fe46d1e878c3d3"
+    },
+    {
+      "bytes": 10194,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_019_mask_019_controls.json",
+      "sha256": "120dec13316c394a7e11e9f409c2ce8467f76ce467f0347e83699a35b3c8936d"
+    },
+    {
+      "bytes": 20868,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_020_mask_020_controls.json",
+      "sha256": "e5fb1bcd25c8d6d1a67614c4933b5e9e6acd9b75327e00e0ffad6ec23038eea1"
+    },
+    {
+      "bytes": 20770,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_021_mask_021_controls.json",
+      "sha256": "1ba787bc23e4193dbbb4b8fb1102998dcfc62707f5ea8ccc8d799aaeb784b6b4"
+    },
+    {
+      "bytes": 9758,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_022_mask_022_controls.json",
+      "sha256": "85cd6ef61d77c183752b6de4f698049c8c7b61f6fe5a27c52c4bfff9df18162d"
+    },
+    {
+      "bytes": 9733,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_023_mask_023_controls.json",
+      "sha256": "e159301be65c1d3241a21720d1de76a6c76b7554693988ed648a6c4c1f7367eb"
+    },
+    {
+      "bytes": 9524,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_024_mask_024_controls.json",
+      "sha256": "90c2ab0d2d407a83d92adaa97da3a17f879b9e785fb03b43cd3cfa41b6ee3905"
+    },
+    {
+      "bytes": 9359,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_025_mask_025_controls.json",
+      "sha256": "d0173105a8cab9b54da962123b8bca27c81c5e76ebcd3f2e4eb25468d252a561"
+    },
+    {
+      "bytes": 9258,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_026_mask_026_controls.json",
+      "sha256": "e167db8bf69a67a62a57bd4986d96e0568909aedcc35474f023c4dffe4b8bee9"
+    }
+  ],
+  "interpretation_limits": [
+    "This is a deterministic beyond-CR3BP solar-tidal stress replay of persisted accepted controls.",
+    "It is not SPICE ephemeris validation, high-fidelity flight validation, production solver parity, fuel optimality, or quantum evidence.",
+    "Controls are not retuned under the solar-tidal perturbation; negative threshold outcomes are external-validity limitations.",
+    "Terminal errors are measured against the original CR3BP target at the original fixed final time."
+  ],
+  "nominal_source_record_count": 1,
+  "optimization_rerun": false,
+  "phase_count": 4,
+  "phase_degrees": [
+    0.0,
+    90.0,
+    180.0,
+    270.0
+  ],
+  "production_solver_parity_claim": false,
+  "quantum_advantage_claim": false,
+  "row_count": 112,
+  "solar_tidal_parameters": {
+    "distance_semantics": "constant circular Sun distance in Earth-Moon distance units",
+    "model_scope": "simple bicircular solar third-body tidal stress model; not SPICE ephemeris validation",
+    "mu_semantics": "GM_sun/(GM_earth+GM_moon) nondimensional mass ratio",
+    "rate_semantics": "Sun inertial mean-motion ratio to Earth-Moon mean motion; rotating-frame phase rate is n_sun - 1",
+    "rotating_frame_phase_rate": -0.9252,
+    "sun_distance_lu": 389.17,
+    "sun_inertial_angular_rate_ratio": 0.0748,
+    "sun_mu_ratio": 328900.56
+  },
+  "solar_tidal_summary": {
+    "all_branch_solar_tidal_rows_pass": false,
+    "all_solar_tidal_rows_pass": false,
+    "branch_solar_tidal_pass_count": 22,
+    "branch_solar_tidal_row_count": 108,
+    "max_solar_tidal_delta_from_cr3bp": 37.7596221815529,
+    "max_solar_tidal_terminal_error": 37.759623329573266,
+    "solar_tidal_pass_count": 22,
+    "solar_tidal_row_count": 112
+  },
+  "source_record_count": 28,
+  "spice_ephemeris_validation": false,
+  "summary": [
+    {
+      "all_branch_solar_tidal_pass": false,
+      "branch_row_count": 27,
+      "branch_solar_tidal_pass_count": 5,
+      "max_branch_solar_tidal_delta_from_cr3bp": 5.408043162146892,
+      "max_branch_solar_tidal_terminal_error": 5.40839182591575,
+      "max_cr3bp_delta_from_source": 0.0,
+      "nominal_solar_tidal_delta_from_cr3bp": 2.458772574105187,
+      "nominal_solar_tidal_terminal_error": 2.481764912283746,
+      "phase_degrees": 0.0,
+      "record_count": 28
+    },
+    {
+      "all_branch_solar_tidal_pass": false,
+      "branch_row_count": 27,
+      "branch_solar_tidal_pass_count": 6,
+      "max_branch_solar_tidal_delta_from_cr3bp": 7.630304244231306,
+      "max_branch_solar_tidal_terminal_error": 7.630305392251674,
+      "max_cr3bp_delta_from_source": 0.0,
+      "nominal_solar_tidal_delta_from_cr3bp": 0.8542032648203958,
+      "nominal_solar_tidal_terminal_error": 0.8771956029989546,
+      "phase_degrees": 90.0,
+      "record_count": 28
+    },
+    {
+      "all_branch_solar_tidal_pass": false,
+      "branch_row_count": 27,
+      "branch_solar_tidal_pass_count": 5,
+      "max_branch_solar_tidal_delta_from_cr3bp": 5.395955130115637,
+      "max_branch_solar_tidal_terminal_error": 5.3963037938844955,
+      "max_cr3bp_delta_from_source": 0.0,
+      "nominal_solar_tidal_delta_from_cr3bp": 2.4555151807519167,
+      "nominal_solar_tidal_terminal_error": 2.4785075189304755,
+      "phase_degrees": 180.0,
+      "record_count": 28
+    },
+    {
+      "all_branch_solar_tidal_pass": false,
+      "branch_row_count": 27,
+      "branch_solar_tidal_pass_count": 6,
+      "max_branch_solar_tidal_delta_from_cr3bp": 37.7596221815529,
+      "max_branch_solar_tidal_terminal_error": 37.759623329573266,
+      "max_cr3bp_delta_from_source": 0.0,
+      "nominal_solar_tidal_delta_from_cr3bp": 0.8742231790881986,
+      "nominal_solar_tidal_terminal_error": 0.8972155172667574,
+      "phase_degrees": 270.0,
+      "record_count": 28
+    }
+  ],
+  "uses_recorded_artifacts_only": true
+}

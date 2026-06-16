@@ -76,6 +76,20 @@ TAIL_COAST_BRANCH_REPLAY_METADATA = (
     / "hard_catalog_tail_coast_branch_control_replay"
     / "tail_coast_branch_control_replay_metadata.json"
 )
+BICIRCULAR_SOLAR_TIDAL_STRESS_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "bicircular_solar_tidal_stress"
+    / "bicircular_solar_tidal_stress.csv"
+)
+BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "bicircular_solar_tidal_stress"
+    / "bicircular_solar_tidal_stress_metadata.json"
+)
 DELAYED_RECOVERY_CSV = (
     ROOT / "data" / "results" / "hard_catalog_delayed_recovery" / "delayed_locked_recovery.csv"
 )
@@ -90,6 +104,17 @@ def tail_coast_branch_control_replay_artifacts_available() -> bool:
             TAIL_COAST_BRANCH_REPLAY_METADATA,
         )
     )
+
+
+def bicircular_solar_tidal_stress_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            BICIRCULAR_SOLAR_TIDAL_STRESS_CSV,
+            BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA,
+        )
+    )
+
 
 TAIL_COAST_COMBINED_CASE = "tail_coast_all_one_two_segment_t5_portfolio"
 
@@ -643,9 +668,78 @@ def _tail_coast_branch_control_replay_ledger_row() -> dict[str, str]:
     }
 
 
-def build_claim_evidence_ledger(include_branch_control_replay: bool | None = None) -> pd.DataFrame:
+def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
+    metadata = _read_json(BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA)
+    rows = _read_csv_rows(BICIRCULAR_SOLAR_TIDAL_STRESS_CSV)
+    if int(metadata["row_count"]) != len(rows):
+        raise RuntimeError("bicircular stress metadata row_count does not match CSV")
+    summary = metadata["solar_tidal_summary"]  # type: ignore[index]
+    parameters = metadata["solar_tidal_parameters"]  # type: ignore[index]
+    branch_pass_count = int(summary["branch_solar_tidal_pass_count"])  # type: ignore[index]
+    branch_row_count = int(summary["branch_solar_tidal_row_count"])  # type: ignore[index]
+    max_error = str(summary["max_solar_tidal_terminal_error"])  # type: ignore[index]
+    max_delta = str(summary["max_solar_tidal_delta_from_cr3bp"])  # type: ignore[index]
+    phase_degrees = ", ".join(str(value) for value in metadata["phase_degrees"])  # type: ignore[index]
+    return {
+        "claim_id": "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe",
+        "evidence_family": "bicircular solar-tidal stress replay",
+        "target_family": "catalog-DRO",
+        "target_mode": "catalog_dro_phase",
+        "source_case": TAIL_COAST_COMBINED_CASE,
+        "backend_or_method": "persisted accepted controls replayed with a circular solar third-body tidal term",
+        "mask_scope": (
+            f"{branch_row_count} branch-phase stress rows from 27 accepted branch sidecars "
+            f"and Sun phases {phase_degrees}"
+        ),
+        "selected_branch_semantics": (
+            "replays persisted nominal and accepted branch full-control schedules; controls are not retuned"
+        ),
+        "all_mask_semantics": (
+            "the source accepted-control package covers all configured one- and two-segment masks, "
+            "but the solar-tidal stress rows are phase-sweep replays rather than new branch optimizations"
+        ),
+        "all_configured_mask_evidence": "False",
+        "nominal_error": (
+            "CR3BP replay max delta="
+            f"{metadata['baseline_reproduction']['max_cr3bp_delta_from_source']}; "  # type: ignore[index]
+            "solar-tidal nominal rows fail the configured nominal threshold in the generated CSV"
+        ),
+        "selected_worst_error": (
+            f"solar-tidal branch pass count={branch_pass_count}/{branch_row_count}; "
+            f"max solar-tidal terminal error={max_error}; max delta from CR3BP={max_delta}"
+        ),
+        "all_mask_worst_error": (
+            "negative external-validity stress outcome; not an all-configured-mask robustness pass under solar tide"
+        ),
+        "thresholds": (
+            "source nominal<=0.09; source branch<=0.17; "
+            f"Sun distance={parameters['sun_distance_lu']} LU, mu ratio={parameters['sun_mu_ratio']}, "
+            f"rotating phase rate={parameters['rotating_frame_phase_rate']}"
+        ),
+        "passes_configured_thresholds": str(bool(summary["all_branch_solar_tidal_rows_pass"])),  # type: ignore[index]
+        "primary_interpretation": (
+            "The persisted controls reproduce exactly in CR3BP but do not remain threshold-feasible "
+            "under the configured bicircular solar-tidal stress sweep."
+        ),
+        "explicit_boundary": (
+            "Beyond-CR3BP stress probe only; not SPICE ephemeris validation, high-fidelity flight validation, "
+            "production solver parity, fuel optimality, quantum, QUBO, or QAOA evidence."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(BICIRCULAR_SOLAR_TIDAL_STRESS_CSV)}; "
+            f"{_relative_or_absolute(BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA)}"
+        ),
+    }
+
+
+def build_claim_evidence_ledger(
+    include_branch_control_replay: bool | None = None,
+    include_bicircular_solar_tidal_stress: bool | None = None,
+) -> pd.DataFrame:
     if include_branch_control_replay is None:
         include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
+    if include_bicircular_solar_tidal_stress is None:
+        include_bicircular_solar_tidal_stress = bicircular_solar_tidal_stress_artifacts_available()
     recorded_rows = _recorded_case_rows()
     rows = [
         _main_method_row(),
@@ -655,6 +749,9 @@ def build_claim_evidence_ledger(include_branch_control_replay: bool | None = Non
     ]
     if include_branch_control_replay:
         rows.insert(7, _tail_coast_branch_control_replay_ledger_row())
+    if include_bicircular_solar_tidal_stress:
+        insert_at = 8 if include_branch_control_replay else 7
+        rows.insert(insert_at, _bicircular_solar_tidal_stress_ledger_row())
     return pd.DataFrame(rows, columns=LEDGER_COLUMNS)
 
 
@@ -860,6 +957,13 @@ def _input_artifacts() -> list[Path]:
                 TAIL_COAST_BRANCH_REPLAY_METADATA,
             ]
         )
+    if bicircular_solar_tidal_stress_artifacts_available():
+        paths.extend(
+            [
+                BICIRCULAR_SOLAR_TIDAL_STRESS_CSV,
+                BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA,
+            ]
+        )
     return paths
 
 
@@ -870,7 +974,11 @@ def write_artifacts(
     command: str,
 ) -> dict[str, object]:
     branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
-    ledger = build_claim_evidence_ledger(include_branch_control_replay=branch_control_replay_available)
+    bicircular_stress_available = bicircular_solar_tidal_stress_artifacts_available()
+    ledger = build_claim_evidence_ledger(
+        include_branch_control_replay=branch_control_replay_available,
+        include_bicircular_solar_tidal_stress=bicircular_stress_available,
+    )
     threshold_audit = build_tail_coast_threshold_audit()
     branch_audit = build_tail_coast_branch_audit()
 
@@ -899,6 +1007,7 @@ def write_artifacts(
         "uses_recorded_artifacts_only": True,
         "high_fidelity_claim": False,
         "branch_control_replay": branch_control_replay_available,
+        "bicircular_solar_tidal_stress_probe": bicircular_stress_available,
         "fuel_optimality_claim": False,
         "quantum_advantage_claim": False,
         "source_mode": (
@@ -908,6 +1017,11 @@ def write_artifacts(
                 " A branch-control replay ledger row is included because the focused replay package is present."
                 if branch_control_replay_available
                 else " No branch-control replay claim row is included because the focused replay package is absent."
+            )
+            + (
+                " A bicircular solar-tidal stress row is included because its real stress-probe CSV and metadata exist."
+                if bicircular_stress_available
+                else " No bicircular solar-tidal stress row is included because that stress package is absent."
             )
         ),
         "determinism_note": (
@@ -927,6 +1041,7 @@ def write_artifacts(
             ),
         },
         "branch_control_replay_artifacts_available": branch_control_replay_available,
+        "bicircular_solar_tidal_stress_artifacts_available": bicircular_stress_available,
         "tail_coast_threshold_pairs": [
             {
                 "threshold_id": threshold_id,
@@ -956,6 +1071,10 @@ def write_artifacts(
             (
                 "The historical tail-coast branch audit summarizes recorded branch_results JSON only; "
                 "the focused replay row is included only when its real replay CSV and metadata exist."
+            ),
+            (
+                "The bicircular solar-tidal row, when present, is a negative beyond-CR3BP stress replay "
+                "and not high-fidelity validation or production solver parity."
             ),
             "The tail-coast positive row is fixed-final-time locked-nominal continuous-backend evidence only.",
             "The QAOA/QUBO rows are simulated initializer evidence and do not support quantum advantage or superiority claims.",

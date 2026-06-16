@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-16T22:57:04Z",
+  "generated_utc": "2026-06-16T23:34:51Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "6c435d3f45de6b1ac414c31bd547aff2536c6e6d",
+  "git_head_at_generation": "8b90b66211935029369551de8b3098fe6180373a",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_000_mask_000_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_001_mask_001_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_002_mask_002_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_003_mask_003_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_004_mask_004_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_005_mask_005_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_006_mask_006_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_007_mask_007_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_008_mask_008_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_009_mask_009_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_010_mask_010_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_011_mask_011_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_012_mask_012_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_013_mask_013_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_014_mask_014_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_015_mask_015_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_016_mask_016_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_017_mask_017_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_018_mask_018_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_019_mask_019_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_020_mask_020_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_021_mask_021_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_022_mask_022_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_023_mask_023_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_024_mask_024_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_025_mask_025_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_026_mask_026_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_manifest.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_progress.csv\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_nominal_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay.csv\n?? data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_metadata.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.csv\n?? data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery_metadata.json\n?? figures/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.pdf\n?? figures/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.png\n?? tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_table.tex\n?? tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery_table.tex",
+  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tests/test_claim_evidence_ledger.py\n?? ARCHIVAL_RELEASE.md\n?? data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv\n?? data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json\n?? scripts/run_bicircular_solar_tidal_stress.py\n?? src/qlt/bicircular.py\n?? tables/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_table.tex\n?? tests/test_bicircular_solar_tidal_stress.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 593,
+  "file_count": 600,
   "files": [
     {
       "path": ".gitignore",
@@ -39,14 +39,19 @@
       "bytes": 170
     },
     {
+      "path": "ARCHIVAL_RELEASE.md",
+      "sha256": "63bdb9629ad0b84d6832a40efbfbda2cdfd2b44ee1dd48095d124d3aef3a1c23",
+      "bytes": 1345
+    },
+    {
       "path": "README.md",
-      "sha256": "a272394d4aa2247217bef87b26995ab156ac0ec110261c6ab733a725980f1bc8",
-      "bytes": 22330
+      "sha256": "bd90edcf1af0c4f05375f9800463a79a66386615f5a5e403d611e7b9c9217adf",
+      "bytes": 23729
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "ea80b9e2221f963d0ef9edbcd5f0463b59dfc8bc8ff1b7ed6b82355fb4a1eec5",
-      "bytes": 29850
+      "sha256": "37390fd3cbff2f02f06c5cff97f2d2ac73412d5263e46ca53090df7c0d331308",
+      "bytes": 31809
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -184,6 +189,16 @@
       "bytes": 1487
     },
     {
+      "path": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv",
+      "sha256": "1342c74d412e3e2e0b85a8159bb7683c4f45fe1836831f66bfd62e6af3192c41",
+      "bytes": 87121
+    },
+    {
+      "path": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json",
+      "sha256": "92847a30e7481da2e6c119ab4b73fbdde96e29d49e0d0259f3fecaf00e0a7d7c",
+      "bytes": 13332
+    },
+    {
       "path": "data/results/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility.csv",
       "sha256": "cbe70ccceb452f8f42eda88599d0d881373c18489fd4c7e25d7d8e89d52e0a3b",
       "bytes": 4827
@@ -250,13 +265,13 @@
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
-      "sha256": "b8abec8949ef96cbeddad654066121226c93d9c588a4b17ff0be9468139d681c",
-      "bytes": 10558
+      "sha256": "aea19232e7f68757cb4ac85f2c95bc3d4c58285c4579c4305701ab85ec38a05e",
+      "bytes": 12145
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
-      "sha256": "42b6731791870349c06ac8ba07911d6e55ae20d24197c507dd74d4cf377b729b",
-      "bytes": 6798
+      "sha256": "e9aea6f43291bf17596276a19aee37a848c499bb82856dfade76968ece192fd4",
+      "bytes": 7679
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
@@ -2460,13 +2475,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "205e295782bfd3bffdc9386fd6e51639ed6041ce7d636fc23caa4ad92eae7e05",
-      "bytes": 423011
+      "sha256": "5073cffb317819dd7007d9c25136b8ef1c500fcafaa29a09814cbec69ab13860",
+      "bytes": 427671
     },
     {
       "path": "paper/main.tex",
-      "sha256": "d47cbd2f9bce5a542815cdaa3cd7dbf38646767ce139118d2d44886d5a6e29c5",
-      "bytes": 56747
+      "sha256": "051a367fdb8648f88822f07e0cc371cfdeb0a1c80a949fac549431ed1c8c5825",
+      "bytes": 59992
     },
     {
       "path": "paper/references.bib",
@@ -2475,13 +2490,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "1310d2e07323524e6bf90d83b0f1caac4074a7c101577d423da09387f9c59fa7",
-      "bytes": 479349
+      "sha256": "ab57d9cb8f7e97ae19bf511a177ccdef6758e5c1b42ee74b03cfdbb3201e8486",
+      "bytes": 482480
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "1af0f3fc6636220463dd631c7f87c897e51443d8a3b049513e2dfc4cbaca8790",
-      "bytes": 27920
+      "sha256": "848c73b4dc80d1e3494b0365d334557db0ed325631b3d315db499462f9a3087b",
+      "bytes": 29859
     },
     {
       "path": "requirements-lock.txt",
@@ -2502,6 +2517,11 @@
       "path": "scripts/plot_results.py",
       "sha256": "ddaac2d55889a4dce74ca85a4f3108d99a800003fa2d8448b03fd691a68ce7fa",
       "bytes": 1695
+    },
+    {
+      "path": "scripts/run_bicircular_solar_tidal_stress.py",
+      "sha256": "a7c0ba23dc4eaabee472735bf4396074353d20c7f1ec2d7190eee7c4b621b539",
+      "bytes": 25591
     },
     {
       "path": "scripts/run_bounded_collocation_benchmark.py",
@@ -2530,8 +2550,8 @@
     },
     {
       "path": "scripts/run_claim_evidence_ledger.py",
-      "sha256": "badfc7b3a31114352073705020cd53f3c1d0a18bdeb2a383430828e6e41f9a69",
-      "bytes": 43712
+      "sha256": "e8e37b8424a8b66887ee52624322530275b3566a7e755926612fde7adf636301",
+      "bytes": 49491
     },
     {
       "path": "scripts/run_continuation_margin_suite.py",
@@ -2629,6 +2649,11 @@
       "bytes": 197
     },
     {
+      "path": "src/qlt/bicircular.py",
+      "sha256": "6e4f0259d65b23cf0217763d16ed39a9cd9c7f20a19d05bf6afb76a9b5957745",
+      "bytes": 6358
+    },
+    {
       "path": "src/qlt/cr3bp.py",
       "sha256": "65fd1a4092a206e2af1c2ededbba0473f3d201281aa95ab9a0b20eec2d29a175",
       "bytes": 11154
@@ -2699,6 +2724,11 @@
       "bytes": 497
     },
     {
+      "path": "tables/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_table.tex",
+      "sha256": "fb09ec865d211e3241c36a3eb57378e3c49e866a20d7f25a5284dfd7c0fae2a9",
+      "bytes": 427
+    },
+    {
       "path": "tables/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility_table.tex",
       "sha256": "8a6b8ed6cb8a6cf73f6cf28398c0540912260e0598416ae7d3bbd496e19da5b5",
       "bytes": 659
@@ -2725,8 +2755,8 @@
     },
     {
       "path": "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
-      "sha256": "2dd78fe36466da0ba60801cb8eb83954a53c5b56512a9bc5880d50af1ab39bda",
-      "bytes": 4013
+      "sha256": "130e7c40878cbd0022b4265b173d24221593592f138657d41ee35dec676f25a1",
+      "bytes": 4569
     },
     {
       "path": "tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex",
@@ -2954,9 +2984,14 @@
       "bytes": 1565
     },
     {
+      "path": "tests/test_bicircular_solar_tidal_stress.py",
+      "sha256": "e5f6288b99071492bc7880b3e049663110b23ca124a45f4961d5c1f2f1591e13",
+      "bytes": 13481
+    },
+    {
       "path": "tests/test_claim_evidence_ledger.py",
-      "sha256": "b2c4a5cd3fbdb1da835ca04b554ecee0f43231fe2043aea6fab8c5083302fb04",
-      "bytes": 11368
+      "sha256": "4c4402ec9fed734b3d2a927ca606b7a2d23db1dce05f4b4ea33dad86fac102a2",
+      "bytes": 12882
     },
     {
       "path": "tests/test_delayed_recovery.py",
