@@ -1,8 +1,8 @@
-# Quantum Low-Thrust Robust Initialization Benchmark
+# Robust Low-Thrust Cislunar Initialization Benchmark
 
 Research-code scaffold for the controlled CR3BP initialization benchmark:
-"Quantum-Ready Robust Maneuver Initialization for Low-Thrust Cislunar
-Transfers Under Missed-Thrust Events".
+"Robust Low-Thrust Cislunar Maneuver Initialization Under Missed-Thrust Events:
+A Reproducible Binary-Schedule Benchmark".
 
 This is not a flight-ready trajectory design tool. It is a reproducible
 normalized Earth-Moon CR3BP benchmark for comparing binary thrust-window
@@ -35,6 +35,7 @@ python -m pip install -r requirements-lock.txt
 py -3.11 -m pytest tests -q
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
 This is the intended clean-clone verification path after installing the pinned
@@ -45,12 +46,20 @@ artifacts unless intentionally regenerating evidence.
 
 See `REPRODUCIBILITY.md` for the artifact map, expected outputs, known expensive
 runs, and commands used for the paper evidence. A machine-readable SHA-256
-manifest is written to `data/results/artifact_manifest.json`.
+manifest is written to `data/results/artifact_manifest.json` with:
+
+```powershell
+py -3.11 scripts\write_artifact_manifest.py
+py -3.11 scripts\write_artifact_manifest.py --check
+```
 
 Historical experiment metadata may contain `git_head: null` because those runs
-predated the first commit. The refreshed manifest records the current scoped file
-set and working-tree hashes at generation time. The manifest intentionally does
-not include an entry for itself.
+predated the first commit. The refreshed manifest uses
+`git_head_at_generation`, `git_head_semantics`, and
+`working_tree_status_at_generation` to make commit provenance explicit. A
+committed manifest necessarily records the HEAD before the final manifest commit;
+the file hashes and byte counts are the authoritative artifact identities. The
+manifest intentionally does not include an entry for itself.
 
 ## Main Commands
 
@@ -230,7 +239,7 @@ The current CSV records `nfev=5929` and runtime about 1833.6 s.
 The `tail_coast_all_single_t5_portfolio` and
 `tail_coast_all_two_segment_t5_portfolio` rows remain provenance/scope rows for
 the separate one- and two-segment cases. This package does not establish fuel
-optimality, production-grade optimal control, high-fidelity validation, broader
+optimality, certified flight-design recovery, high-fidelity validation, broader
 outage-family robustness beyond the configured one/two masks, or quantum
 advantage.
 

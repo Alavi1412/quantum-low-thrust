@@ -1,10 +1,36 @@
 {
-  "manifest_version": 2,
-  "generated_utc": "2026-06-16T15:35:01Z",
-  "note": "Scoped-file artifact manifest for paper reproducibility; includes tracked files and visible untracked evidence files from git ls-files -co --exclude-standard. Excludes the manifest itself, .venv, caches, logs, and LaTeX auxiliary files. File hashes and byte counts reflect the working tree at generated_utc.",
-  "git_head": "db16f9e4d1651f7ca3e0d36217f2c6f5c526a418",
-  "git_status_note": "git_head records the current HEAD before the manifest-refresh commit; file hashes and byte counts reflect the working tree at generated_utc.",
-  "file_count": 526,
+  "manifest_version": 3,
+  "generated_utc": "2026-06-16T16:29:31Z",
+  "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
+  "git_head_at_generation": "4269e3e77a78bab4753a255f8576910b0c90ad25",
+  "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
+  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/phase_shift_cardinality_30seed/main_method_statistics_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/references.bib\n M scripts/run_main_method_statistics.py\n M scripts/run_qaoa_depth_ablation.py\n M tables/phase_shift_cardinality_30seed/main_method_statistics_table.tex\n M tests/test_smoke.py\n?? paper/supplement.pdf\n?? paper/supplement.tex\n?? scripts/write_artifact_manifest.py",
+  "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
+  "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
+  "exclusions": {
+    "directories": [
+      ".git",
+      ".pytest_cache",
+      ".venv",
+      "__pycache__",
+      "logs"
+    ],
+    "suffixes": [
+      ".aux",
+      ".bbl",
+      ".blg",
+      ".fdb_latexmk",
+      ".fls",
+      ".log",
+      ".out",
+      ".spl",
+      ".synctex.gz"
+    ],
+    "explicit": [
+      "data/results/artifact_manifest.json"
+    ]
+  },
+  "file_count": 529,
   "files": [
     {
       "path": ".gitignore",
@@ -13,13 +39,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "81beae97334e7c6fa7db69511e33d70bdba04b5107004a343dceb321570287ab",
-      "bytes": 14147
+      "sha256": "47372d822ec7490ea364b6ff1eb96a5cffc66bf97d5a5380518185ff3f42691e",
+      "bytes": 14558
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "14989ca85e6bfdc2e2444833b88b8d5d63efe3f4e753b38b5cd8b239ddee64ad",
-      "bytes": 20235
+      "sha256": "537c06ad88a43e3e078f209277d020ef09840d5cb99fe0aaee2e55324f1c8e7c",
+      "bytes": 20848
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -628,8 +654,8 @@
     },
     {
       "path": "data/results/phase_shift_cardinality_30seed/main_method_statistics_metadata.json",
-      "sha256": "509886f98caefa254e9751cebb66f731ddfef8d3f795ae9ba9f58392e1ca5d93",
-      "bytes": 9744
+      "sha256": "1539ca86f38af536163db2aa46b45e21d7970badc3852bd1247726205832b547",
+      "bytes": 9691
     },
     {
       "path": "data/results/phase_shift_cardinality_30seed/paired_comparisons.csv",
@@ -2198,18 +2224,28 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "0fd421e208f682e47ed52f2d2e6ce3d10875a766c6ff48da480eedeed3fcee14",
-      "bytes": 629787
+      "sha256": "77d5fb24d6c1b5e246dab21c9d5c2b4121e5658040ed07802156159968142a67",
+      "bytes": 587209
     },
     {
       "path": "paper/main.tex",
-      "sha256": "a332d5eaa111b27c3721d49821d83e85d4987ff02a807ede72746fdb23754928",
-      "bytes": 115851
+      "sha256": "3885af88ac631ac2d214b731f6ed751e6fc3ce981ac3ae7076636ab244176af4",
+      "bytes": 118075
     },
     {
       "path": "paper/references.bib",
-      "sha256": "11ed79dcf87a93f93ee1972bd1854f197309f2aad4fdc8c92a26ad5b84f5274b",
-      "bytes": 4666
+      "sha256": "b344f6e1a58c5030bad4fb186b6e751c58f43fd8eb88a256eb6116792875bff1",
+      "bytes": 8061
+    },
+    {
+      "path": "paper/supplement.pdf",
+      "sha256": "9da083d4e2a6caf14224db679425c155b02befb728bdc402fad1f9b17151d01a",
+      "bytes": 120461
+    },
+    {
+      "path": "paper/supplement.tex",
+      "sha256": "5a22516dfbac1e8b8d217812f84a491809ba515b0d50f4fa7580b8fe95486a4a",
+      "bytes": 2272
     },
     {
       "path": "requirements-lock.txt",
@@ -2298,8 +2334,8 @@
     },
     {
       "path": "scripts/run_main_method_statistics.py",
-      "sha256": "ef941d8c9baf23ab01627772971fe6db601512059b2b62104db5f185b5e74368",
-      "bytes": 24762
+      "sha256": "4c063f1b39d3947162bf33c0943c4e33bcbd4ce0336c980cc31f6ee8f2e8fda7",
+      "bytes": 25169
     },
     {
       "path": "scripts/run_multiple_shooting_feasibility.py",
@@ -2308,8 +2344,8 @@
     },
     {
       "path": "scripts/run_qaoa_depth_ablation.py",
-      "sha256": "bdc0d0f06a970f467ca694d8aff3658d8905dde773e83f33a39b33eb2f8e972b",
-      "bytes": 29202
+      "sha256": "85f6d9b8edf98493ebe23980f66c7b5d95eb030bff051d8e885e1f94c59ee228",
+      "bytes": 29677
     },
     {
       "path": "scripts/run_robust_margin_suite.py",
@@ -2320,6 +2356,11 @@
       "path": "scripts/run_tail_coast_recovery.py",
       "sha256": "c61298bc83254bd880a80a1f715334b73b260ef68aa1af115a3e1a8ae3abf802",
       "bytes": 37208
+    },
+    {
+      "path": "scripts/write_artifact_manifest.py",
+      "sha256": "486f85fdbace1b853e9afe3ca60a63db9ca21dcb1a87a4dbf63d71da20fafbcc",
+      "bytes": 6660
     },
     {
       "path": "src/qlt/__init__.py",
@@ -2513,8 +2554,8 @@
     },
     {
       "path": "tables/phase_shift_cardinality_30seed/main_method_statistics_table.tex",
-      "sha256": "cddf22383d5e5d2968a09189061fbd5d2793d3331181fabc13315eab9369218b",
-      "bytes": 1223
+      "sha256": "fad38d2baa64c6a662e823417845f47e87d66631a0e46230c275e1b91fc4fe69",
+      "bytes": 1239
     },
     {
       "path": "tables/phase_shift_cardinality_30seed/recovery_table.tex",
@@ -2628,8 +2669,8 @@
     },
     {
       "path": "tests/test_smoke.py",
-      "sha256": "fdd96651f8fcc3a72ba4a800b58e31bb2313339d76e0b7403aaa5bfb0280f52c",
-      "bytes": 137039
+      "sha256": "aa1ce7161f77e28cb71cd902906ae2414cfd60cb12cf746500df7488225faf3a",
+      "bytes": 138418
     },
     {
       "path": "tests/test_tail_coast_recovery.py",

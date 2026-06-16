@@ -734,6 +734,33 @@ def test_write_metadata_keeps_manifest_anchor_when_git_unavailable(monkeypatch, 
     assert len(data["project_manifest_hash"]) == 64
 
 
+def test_artifact_manifest_writer_excludes_self_and_checks_hashes(tmp_path):
+    module = load_script_module(
+        "write_artifact_manifest_test",
+        ROOT / "scripts" / "write_artifact_manifest.py",
+    )
+    root = tmp_path
+    (root / "data" / "results").mkdir(parents=True)
+    (root / "src").mkdir()
+    (root / ".venv").mkdir()
+    (root / "logs").mkdir()
+    (root / "paper").mkdir()
+    (root / "src" / "example.py").write_text("print('ok')\n", encoding="utf-8")
+    (root / ".venv" / "ignored.py").write_text("ignored\n", encoding="utf-8")
+    (root / "logs" / "ignored.log").write_text("ignored\n", encoding="utf-8")
+    (root / "paper" / "main.aux").write_text("ignored\n", encoding="utf-8")
+    output = root / "data" / "results" / "artifact_manifest.json"
+
+    manifest = module.write_manifest(root, output)
+
+    paths = {row["path"] for row in manifest["files"]}
+    assert "src/example.py" in paths
+    assert "data/results/artifact_manifest.json" not in paths
+    assert not any(path.startswith(".venv/") for path in paths)
+    assert not any(path.startswith("logs/") for path in paths)
+    assert module.check_manifest(root, output) == []
+
+
 def test_regeneration_scripts_respect_output_subdir_config():
     plot_results = load_script_module("plot_results_test", ROOT / "scripts" / "plot_results.py")
     generate_tables = load_script_module("generate_tables_test", ROOT / "scripts" / "generate_tables.py")
@@ -2815,6 +2842,8 @@ def test_qaoa_depth_ablation_writes_formal_statistical_artifacts(tmp_path):
         "run_qaoa_depth_ablation_statistics_test",
         ROOT / "scripts" / "run_qaoa_depth_ablation.py",
     )
+    assert module.format_pvalue(1.86e-9) == "1.86e-09"
+    assert module.format_pvalue(1.0e-4) == "0.0001"
     raw = pd.DataFrame(
         [
             {"seed": 1, "method": "surrogate_qubo_sa", "refinement_success": True, "refined_selected_worst_error": 0.10},
@@ -3267,6 +3296,8 @@ def test_main_method_statistics_writes_formal_statistical_artifacts(tmp_path):
         "run_main_method_statistics_test",
         ROOT / "scripts" / "run_main_method_statistics.py",
     )
+    assert module.format_pvalue(1.86e-9) == "1.86e-09"
+    assert module.format_pvalue(0.1849) == "0.1849"
     raw = pd.DataFrame(
         [
             # all_windows_continuous (baseline 1)

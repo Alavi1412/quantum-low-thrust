@@ -14,8 +14,11 @@ not a flight-ready trajectory design tool.
 - The repository now has commits. Some historical experiment metadata record
   `git_head: null` because those runs predated the first commit. For the current
   snapshot, use git history together with `data/results/artifact_manifest.json`.
-  The refreshed manifest records the current scoped file set and working-tree
-  hashes at generation time. The manifest intentionally has no self-entry.
+  The refreshed manifest records `git_head_at_generation`,
+  `git_head_semantics`, `working_tree_status_at_generation`, scoped file hashes,
+  and byte counts. A committed manifest necessarily records the HEAD before the
+  final manifest commit; the file hashes are authoritative for artifact identity.
+  The manifest intentionally has no self-entry.
 
 ## Quick Verification
 
@@ -24,6 +27,7 @@ py -3.11 -m pip install -r requirements-lock.txt
 py -3.11 -m pytest tests -q
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
 ```
 
 The pytest suite and LaTeX build are the intended short clean-clone verification
@@ -34,7 +38,7 @@ regenerated; use the recorded artifacts for normal verification.
 
 | Evidence family | Command | Key inputs | Key outputs | Runtime note |
 | --- | --- | --- | --- | --- |
-| Paper PDF | `latexmk -pdf paper/main.tex` or equivalent local LaTeX build | `paper/main.tex`, `paper/references.bib`, generated `tables/`, `figures/` | `paper/main.pdf` | Build time depends on local TeX install; not an experiment. |
+| Paper PDFs | `latexmk -pdf paper/main.tex` and `latexmk -pdf paper/supplement.tex` or equivalent local LaTeX build | `paper/main.tex`, `paper/supplement.tex`, `paper/references.bib`, generated `tables/`, `figures/` | `paper/main.pdf`, `paper/supplement.pdf` | Build time depends on local TeX install; not an experiment. |
 | Smoke tests | `python -m pytest tests` | `tests/test_smoke.py`, `src/qlt/*`, `configs/smoke.yaml` | pytest pass/fail output | Short. |
 | Phase-shift benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift.yaml` | `configs/q1_phase_shift.yaml`, `data/source_states.json` | `data/results/phase_shift/*`, `figures/phase_shift/*`, `tables/phase_shift/*` | Moderate; metadata records package versions but no total runtime field. |
 | Phase-shift cardinality benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift_cardinality.yaml` | `configs/q1_phase_shift_cardinality.yaml`, `data/source_states.json` | `data/results/phase_shift_cardinality/*`, `figures/phase_shift_cardinality/*`, `tables/phase_shift_cardinality/*` | Moderate to expensive; 10 seeds with branch recovery. |
@@ -162,6 +166,14 @@ not the current 30-seed QAOA-depth evidence for the manuscript.
 ## Integrity Manifest
 
 `data/results/artifact_manifest.json` records scoped SHA-256 hashes for key
-source, configuration, manuscript, result, table, and figure files. It excludes
-`.venv`, caches, logs, exhaustive generated intermediates, and the manifest
-file itself.
+source, configuration, manuscript, result, table, and figure files. It is
+generated and checked with:
+
+```powershell
+py -3.11 scripts\write_artifact_manifest.py
+py -3.11 scripts\write_artifact_manifest.py --check
+```
+
+It excludes `.venv`, caches, logs, LaTeX auxiliary files, and the manifest file
+itself. The `git_head_at_generation` field is an audit snapshot, not the final
+commit identifier after the manifest is committed.

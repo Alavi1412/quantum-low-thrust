@@ -1,5 +1,5 @@
 {
-  "command": "scripts\\run_main_method_statistics.py --config configs\\q1_phase_shift_cardinality_30seed.yaml",
+  "command": "scripts\\run_main_method_statistics.py --config configs\\q1_phase_shift_cardinality_30seed.yaml --no-figure",
   "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
   "packages": {
     "numpy": "2.4.6",
@@ -8,19 +8,19 @@
     "pandas": "3.0.3",
     "pyyaml": "6.0.3"
   },
-  "git_head": "1f920b8c7187b4b6de35271587cbbccad4efcb40",
-  "git_status_short": "M src/qlt/direct_collocation.py\n M tests/test_smoke.py\n?? configs/hermite_simpson_continuation_baseline.yaml\n?? configs/q1_phase_shift_cardinality_30seed.yaml\n?? data/results/hermite_simpson_continuation_baseline/\n?? data/results/phase_shift_cardinality_30seed/\n?? figures/hermite_simpson_continuation_baseline/\n?? figures/phase_shift_cardinality_30seed/\n?? scripts/run_hermite_simpson_continuation.py\n?? scripts/run_main_method_statistics.py\n?? tables/hermite_simpson_continuation_baseline/\n?? tables/phase_shift_cardinality_30seed/\n?? tests/test_hermite_simpson_continuation.py",
-  "tracked_file_count": 386,
-  "untracked_file_count": 100,
+  "git_head": "4269e3e77a78bab4753a255f8576910b0c90ad25",
+  "git_status_short": "M README.md\n M REPRODUCIBILITY.md\n M data/results/qaoa_depth_ablation_30seed/paired_comparisons.csv\n M data/results/qaoa_depth_ablation_30seed/paired_comparisons.json\n M data/results/qaoa_depth_ablation_30seed/paired_success_deltas.csv\n M paper/main.tex\n M paper/references.bib\n M scripts/run_main_method_statistics.py\n M scripts/run_qaoa_depth_ablation.py\n M tables/phase_shift_cardinality_30seed/main_method_statistics_table.tex\n M tests/test_smoke.py\n?? paper/supplement.tex\n?? scripts/write_artifact_manifest.py",
+  "tracked_file_count": 527,
+  "untracked_file_count": 2,
   "project_manifest_roots": [
     "src",
     "scripts",
     "configs",
     "tests"
   ],
-  "project_manifest_file_count": 89,
-  "project_manifest_total_bytes": 2630256,
-  "project_manifest_hash": "b0ea2ab6e7d2d940a49abeb9038bc406c309b1de410654e34a3a3db06ba11c8c",
+  "project_manifest_file_count": 119,
+  "project_manifest_total_bytes": 3711996,
+  "project_manifest_hash": "6aca4eecc12838676b22bd7a733050bd09206f6af2378dba9d87aea5dafbdbfd",
   "config": "configs\\q1_phase_shift_cardinality_30seed.yaml",
   "raw_results_csv": "data\\results\\phase_shift_cardinality_30seed\\raw_results.csv",
   "raw_results_validation": {
@@ -273,7 +273,7 @@
     "paired_comparisons_json": "data\\results\\phase_shift_cardinality_30seed\\paired_comparisons.json",
     "statistics_table_tex": "tables\\phase_shift_cardinality_30seed\\main_method_statistics_table.tex"
   },
-  "runtime_seconds": 2.639266800004407,
+  "runtime_seconds": 2.844627800019225,
   "interpretation_limits": [
     "This is a controlled CR3BP benchmark; not flight-ready trajectory optimization.",
     "QUBO/QAOA methods share 96 training evaluations; classical methods receive equal total true-objective budget.",

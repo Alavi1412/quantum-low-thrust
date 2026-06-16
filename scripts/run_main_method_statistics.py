@@ -113,6 +113,21 @@ def exact_sign_test_pvalue(
     return wins, losses, ties, float(min(1.0, 2.0 * tail))
 
 
+def format_pvalue(value: float) -> str:
+    """Format exact p-values without rounding very small values to literal zero."""
+    try:
+        pvalue = float(value)
+    except (TypeError, ValueError):
+        return ""
+    if not math.isfinite(pvalue):
+        return ""
+    if pvalue == 0.0:
+        return "<1e-300"
+    if abs(pvalue) < 1e-4:
+        return f"{pvalue:.2e}"
+    return f"{pvalue:.4f}"
+
+
 def bootstrap_ci(
     values: np.ndarray,
     *,
@@ -294,8 +309,8 @@ def write_statistics_latex(
                     f"[{c['selected_worst_error_diff_mean_bootstrap95_lower']:+.4f}, "
                     f"{c['selected_worst_error_diff_mean_bootstrap95_upper']:+.4f}]"
                 )
-                row[f"sign_p_{prefix}"] = (
-                    f"{c['selected_worst_error_sign_test_p_two_sided']:.4f}"
+                row[f"sign_p_{prefix}"] = format_pvalue(
+                    c["selected_worst_error_sign_test_p_two_sided"]
                 )
             else:
                 row[f"delta_success_{prefix}"] = ""

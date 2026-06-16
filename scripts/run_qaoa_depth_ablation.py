@@ -299,6 +299,21 @@ def exact_sign_test_pvalue(differences: np.ndarray, tolerance: float = 1e-12) ->
     return wins, losses, ties, float(min(1.0, 2.0 * tail))
 
 
+def format_pvalue(value: float) -> str:
+    """Format exact p-values without rounding very small values to literal zero."""
+    try:
+        pvalue = float(value)
+    except (TypeError, ValueError):
+        return ""
+    if not math.isfinite(pvalue):
+        return ""
+    if pvalue == 0.0:
+        return "<1e-300"
+    if abs(pvalue) < 1e-4:
+        return f"{pvalue:.2e}"
+    return f"{pvalue:.4f}"
+
+
 def bootstrap_ci(
     values: np.ndarray,
     *,
@@ -454,7 +469,9 @@ def write_statistics_latex(success: pd.DataFrame, comparisons: pd.DataFrame, tab
                 f"[{cmp_row['selected_worst_error_diff_mean_bootstrap95_lower']:+.4f}, "
                 f"{cmp_row['selected_worst_error_diff_mean_bootstrap95_upper']:+.4f}]"
             )
-            table_row["sign_p_vs_sa"] = f"{cmp_row['selected_worst_error_sign_test_p_two_sided']:.4f}"
+            table_row["sign_p_vs_sa"] = format_pvalue(
+                cmp_row["selected_worst_error_sign_test_p_two_sided"]
+            )
         if len(vs_random):
             cmp_row = vs_random.iloc[0]
             table_row["delta_success_vs_random_qaoa"] = f"{cmp_row['paired_success_delta_mean']:+.2f}"
@@ -463,7 +480,9 @@ def write_statistics_latex(success: pd.DataFrame, comparisons: pd.DataFrame, tab
                 f"[{cmp_row['selected_worst_error_diff_mean_bootstrap95_lower']:+.4f}, "
                 f"{cmp_row['selected_worst_error_diff_mean_bootstrap95_upper']:+.4f}]"
             )
-            table_row["sign_p_vs_random_qaoa"] = f"{cmp_row['selected_worst_error_sign_test_p_two_sided']:.4f}"
+            table_row["sign_p_vs_random_qaoa"] = format_pvalue(
+                cmp_row["selected_worst_error_sign_test_p_two_sided"]
+            )
         rows.append(table_row)
     pd.DataFrame(rows).to_latex(
         tables_dir / "qaoa_depth_ablation_statistics_table.tex",
