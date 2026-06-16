@@ -192,8 +192,35 @@ error `1.398973`. The h6 portfolio row optimizes all 14 one-segment outage
 masks against the delayed target with variants `regularized_001` and
 `terminal_only`; it charges all variant evaluations and reaches selected/all
 delayed worst error `0.004040`, max control norm `1.0`, zero reported bound
-violation, and `branch_optimizer_all_success=true`. Two-segment outage families
-and fixed-final-time all-single recovery remain unresolved.
+violation, and `branch_optimizer_all_success=true`. This delayed-arrival
+package does not by itself establish fixed-final-time recovery and does not
+cover two-segment outage families.
+
+For the fixed-final-time tail-coast hard-catalog recovery diagnostic:
+
+```powershell
+py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --resume
+```
+
+The tail-coast package writes
+`data/results/hard_catalog_tail_coast_recovery/*`,
+`tables/hard_catalog_tail_coast_recovery/*`, and
+`figures/hard_catalog_tail_coast_recovery/*`. It is continuous-backend
+fixed-final-time evidence only, not QUBO, QAOA, quantum evidence, or a
+fuel-optimality result. The nominal is solved and then re-refined with the final
+five nominal controls fixed exactly to zero; the tail-coast nominal error is
+`0.02299233817855882`. The nominal-only row runs no branch optimizer, so its
+all-mask masked-nominal diagnostic remains `27.835075017369785`. The
+`tail_coast_all_single_t5_portfolio` row selects all 14 one-segment masks,
+keeps the original target and original final time, and reaches selected/all
+fixed-final-time worst error `0.02299233817855882`, so the all-single
+one-segment scope meets the configured thresholds in this diagnostic. Fallback
+starts are declared and charged; only mask 7 evaluates fallbacks
+(`fallback_evals=[0,0,0,0,0,0,0,2,0,0,0,0,0,0]`) and its accepted fallback is
+`constant_y_minus_0p5`. The late-tail mask 13 has no recovery variables and is
+labeled `no_recovery_variables`, so `branch_optimizer_all_success=false` even
+though the row is threshold-feasible. Two-segment outage families remain
+unresolved.
 
 For the continuation-extension continuous-backend baseline:
 

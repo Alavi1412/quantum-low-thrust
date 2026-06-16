@@ -53,6 +53,7 @@ regenerated; use the recorded artifacts for normal verification.
 | Selected-outage hard-catalog envelope | `python scripts/run_catalog_feasibility_envelope.py --config configs/hard_catalog_selected_outage_envelope.yaml --resume` | `configs/hard_catalog_selected_outage_envelope.yaml`, `data/source_states.json` | `data/results/hard_catalog_selected_outage_envelope/*`, `figures/hard_catalog_selected_outage_envelope/*`, `tables/hard_catalog_selected_outage_envelope/*` | Expensive if regenerated; negative robustness probe. Selected recovery errors are small for chosen masks, but nominal thresholds fail, optimizer/backend success is false, and all-mask diagnostics remain high. |
 | Locked-nominal hard-catalog branch recovery | `py -3.11 scripts\run_locked_nominal_recovery.py --config configs\hard_catalog_locked_nominal_recovery.yaml --resume` | `configs/hard_catalog_locked_nominal_recovery.yaml`, `src/qlt/locked_recovery.py`, `data/source_states.json` | `data/results/hard_catalog_locked_nominal_recovery/*`, `figures/hard_catalog_locked_nominal_recovery/*`, `tables/hard_catalog_locked_nominal_recovery/*` | Expensive if regenerated; continuous-backend diagnostic only, not quantum evidence. Freezes a feasible nominal control and optimizes each selected branch independently. The bounded one-segment, six-recovery-segment subset (`locked_hard_single_min6_selected8`) meets thresholds but is not optimizer-converged; selected one/two-segment and all-single-outage scopes fail. The all-mask column is a diagnostic, not a robustness claim. |
 | Delayed-arrival locked-nominal hard-catalog portfolio recovery | `py -3.11 scripts\run_delayed_locked_recovery.py --config configs\hard_catalog_delayed_recovery.yaml --resume` | `configs/hard_catalog_delayed_recovery.yaml`, `src/qlt/delayed_recovery.py`, `scripts/run_delayed_locked_recovery.py`, `data/source_states.json` | `data/results/hard_catalog_delayed_recovery/*`, `figures/hard_catalog_delayed_recovery/*`, `tables/hard_catalog_delayed_recovery/*` | Expensive if regenerated; the recorded h6 portfolio row took about 2639.7 s. Continuous-backend delayed-arrival horizon evidence only, not fixed-final-time, fuel-optimal, quantum, QUBO, or QAOA evidence. The h6 portfolio recovers all one-segment masks against the delayed target; the h4 regularized all-single row fails; two-segment outage families remain unresolved. |
+| Tail-coast fixed-final-time hard-catalog recovery | `py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --resume` | `configs/hard_catalog_tail_coast_recovery.yaml`, `src/qlt/tail_coast_recovery.py`, `scripts/run_tail_coast_recovery.py`, `data/source_states.json` | `data/results/hard_catalog_tail_coast_recovery/*`, `figures/hard_catalog_tail_coast_recovery/*`, `tables/hard_catalog_tail_coast_recovery/*` | Expensive if regenerated; recorded all-single row took about 1145.7 s. Continuous-backend fixed-final-time evidence only, not fuel-optimal, quantum, QUBO, or QAOA evidence. The all-single portfolio row recovers all 14 one-segment masks at the original target/final time with selected/all fixed-time worst error `0.02299233817855882`; two-segment outage families remain unresolved. |
 | Multiple-shooting feasibility | `python scripts/run_multiple_shooting_feasibility.py --config configs/q1_candidate.yaml --resume --max-cases 0` | `configs/q1_candidate.yaml` | `data/results/multiple_shooting_feasibility.csv`, `data/results/multiple_shooting_feasibility_metadata.json`, `figures/multiple_shooting_feasibility.*`, `tables/multiple_shooting_feasibility_table.tex` | Resume-only command is short; full case recorded 294.7 s. |
 | Catalog collocation feasibility | `python scripts/run_catalog_collocation_feasibility.py --resume --max-cases 0` | catalog collocation settings encoded by the script and metadata | `data/results/catalog_collocation_feasibility/*`, `figures/catalog_collocation_feasibility/*`, `tables/catalog_collocation_feasibility/*` | Resume-only command is short; full collocation search is expensive and currently has no feasible case. |
 
@@ -134,11 +135,20 @@ regenerated; use the recorded artifacts for normal verification.
 - Delayed-arrival hard-catalog h6 portfolio recovery diagnostic
   (continuous-backend delayed-arrival horizon evidence only; all 14
   one-segment masks pass against the delayed target, h4 regularized all-single
-  fails, and fixed-final-time plus two-segment recovery remain unresolved):
+  fails, and two-segment recovery remains unresolved):
   `data/results/hard_catalog_delayed_recovery/delayed_locked_recovery_metadata.json`,
   `data/results/hard_catalog_delayed_recovery/delayed_locked_recovery.csv`,
   `tables/hard_catalog_delayed_recovery/delayed_locked_recovery_table.tex`,
   and `figures/hard_catalog_delayed_recovery/delayed_locked_recovery.*`.
+- Tail-coast fixed-final-time hard-catalog recovery diagnostic
+  (continuous-backend evidence only; final five nominal controls fixed exactly
+  zero; all 14 one-segment masks pass at the original target/final time; mask 7
+  uses the `constant_y_minus_0p5` fallback; mask 13 is
+  `no_recovery_variables`; two-segment recovery remains unresolved):
+  `data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery_metadata.json`,
+  `data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery.csv`,
+  `tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex`,
+  and `figures/hard_catalog_tail_coast_recovery/tail_coast_recovery.*`.
 
 Legacy 10-seed QAOA-depth artifacts remain under `data/results/qaoa_depth_ablation/`,
 `tables/qaoa_depth_ablation/`, and `figures/qaoa_depth_ablation/`, but they are

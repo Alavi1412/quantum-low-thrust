@@ -1,0 +1,105 @@
+run:
+  label: hard_catalog_tail_coast_recovery
+  output_subdir: hard_catalog_tail_coast_recovery
+  evidence_level: "hard catalog-DRO fixed-final-time mixed-regularized tail-coast locked-nominal continuous branch-recovery evidence; not quantum evidence, not delayed-arrival evidence, not fuel optimality"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: catalog_dro_phase
+  transfer_time: 4.0
+  segments: 14
+  substeps_per_segment: 7
+  amax: 1.0
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1]
+tail_coast_recovery:
+  runtime_budget_seconds: 2400
+  tail_coast_segments: 5
+  nominal:
+    max_nfev: 140
+    node_initialization: linear
+    node_initialization_blend: 0.5
+    residual_weights:
+      initial: 10.0
+      defect: 1.0
+      terminal: 4.0
+      branch_terminal: 4.0
+      branch_start: 5.0
+      control: 0.01
+      smooth: 0.01
+  tail_nominal:
+    max_nfev: 220
+    weights:
+      terminal: 4.0
+      control: 0.005
+      smooth: 0.005
+      continuity: 0.0
+  branch:
+    max_nfev: 220
+    xtol: 1.0e-4
+    ftol: 1.0e-4
+    gtol: 1.0e-4
+    weights:
+      terminal: 4.0
+      control: 0.01
+      smooth: 0.01
+      continuity: 0.0
+  cases:
+    - case_id: tail_coast_nominal_only_t5
+      purpose: "Hard catalog-DRO fixed-final-time mixed-regularized tail-coast locked nominal provenance with the final five nominal control segments fixed exactly to zero; no branch optimizer is run."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      tail_coast_segments: 5
+      outage_lengths: [1]
+      selected_outages: 0
+      nominal_max_nfev: 140
+      tail_nominal_max_nfev: 220
+      branch_max_nfev: 0
+    - case_id: tail_coast_all_single_t5_portfolio
+      purpose: "Hard catalog-DRO fixed-final-time recovery for all one-segment missed-thrust masks using a mixed-regularized five-segment exact-zero nominal tail coast, regularized/terminal-only branch residual portfolio variants, and deterministic constant-vector branch-start fallbacks."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      tail_coast_segments: 5
+      outage_lengths: [1]
+      selected_outages: all_single
+      nominal_max_nfev: 140
+      tail_nominal_max_nfev: 220
+      branch_max_nfev: 220
+      branch:
+        xtol: 1.0e-4
+        ftol: 1.0e-4
+        gtol: 1.0e-4
+        fallback_initializations:
+          - label: constant_y_plus_0p5
+            vector: [0.0, 0.5, 0.0]
+          - label: constant_y_minus_0p5
+            vector: [0.0, -0.5, 0.0]
+        weight_variants:
+          - label: regularized_001
+            weights:
+              terminal: 4.0
+              control: 0.01
+              smooth: 0.01
+              continuity: 0.0
+          - label: terminal_only
+            weights:
+              terminal: 4.0
+              control: 0.0
+              smooth: 0.0
+              continuity: 0.0
