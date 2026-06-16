@@ -210,28 +210,28 @@ fixed-final-time evidence only, not QUBO, QAOA, quantum evidence, or a
 fuel-optimality result. The nominal is solved and then re-refined with the final
 five nominal controls fixed exactly to zero; the tail-coast nominal error is
 `0.02299233817855882`. The nominal-only row runs no branch optimizer, so its
-all-mask masked-nominal diagnostic remains `27.835075017369785`. The
-`tail_coast_all_single_t5_portfolio` row selects all 14 one-segment masks,
-keeps the original target and original final time, and reaches selected/all
-fixed-final-time worst error `0.02299233817855882`, so the all-single
-one-segment scope meets the configured thresholds in this diagnostic. Fallback
-starts are declared and charged; only mask 7 evaluates fallbacks
-(`fallback_evals=[0,0,0,0,0,0,0,2,0,0,0,0,0,0]`) and its accepted fallback is
-`constant_y_minus_0p5`. The late-tail mask 13 has no recovery variables and is
-labeled `no_recovery_variables`, so `branch_optimizer_all_success=false` even
-though the row is threshold-feasible. The
-`tail_coast_all_two_segment_t5_portfolio` row separately selects all 13
-two-segment masks via `all_configured`, keeps the same original target/final
-time, and reaches selected/all fixed-final-time worst error
-`0.0936063931709301`, so the configured two-segment scope also meets thresholds
-within this tail-coast continuous-backend diagnostic. Fallback starts are
-evaluated for masks 0, 6, and 7 and the accepted fallback labels are
-`constant_y_minus_0p5`, `constant_x_minus_0p5`, and
-`constant_x_plus_0p5`; mask 12 is `no_recovery_variables`, so the row is
-threshold-feasible while `branch_optimizer_all_success=false`. This package
-does not establish fuel optimality, a combined one/two simultaneous suite,
-broader outage-family robustness beyond the configured `[1]` and `[2]` rows,
-production-grade optimal control, high-fidelity validation, or quantum
+all-mask masked-nominal diagnostic remains `27.835075017369785`.
+
+The main row is now `tail_coast_all_one_two_segment_t5_portfolio`. It uses
+`outage_lengths=[1,2]`, `selected_outage_policy=all_configured`,
+`outage_count=27`, and `selected_outage_count=27`, so the configured one- and
+two-segment masks are selected/evaluated together in one fixed-final-time case
+row. It reaches selected/all fixed-final-time worst error
+`0.0936063931709301` with all five final nominal controls fixed to zero, so it
+meets the configured thresholds with nominal tail-coast error
+`0.02299233817855882`. Fallback starts are declared and charged;
+`branch_fallback_initialization_evaluated_branch_count=4` and accepted count is
+also `4`. The branch recovery segments include the one-segment `[13..0]` and
+two-segment `[12..0]` sequences, giving two `no_recovery_variables` late-tail
+branches. Those branches are threshold-feasible direct evaluations rather than
+optimizer-converged branch solves, so `branch_optimizer_all_success=false`.
+The current CSV records `nfev=5929` and runtime about 1833.6 s.
+
+The `tail_coast_all_single_t5_portfolio` and
+`tail_coast_all_two_segment_t5_portfolio` rows remain provenance/scope rows for
+the separate one- and two-segment cases. This package does not establish fuel
+optimality, production-grade optimal control, high-fidelity validation, broader
+outage-family robustness beyond the configured one/two masks, or quantum
 advantage.
 
 For the continuation-extension continuous-backend baseline:

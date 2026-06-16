@@ -551,9 +551,9 @@ def write_table(df: pd.DataFrame, tables_dir: Path) -> None:
     if df.empty:
         path.write_text("% No tail-coast recovery rows.\n", encoding="utf-8")
         return
-    sorted_df = df.sort_values("suite_case_id").copy()
-    sorted_df["no_recovery_branch_count"] = sorted_df["branch_recovery_segments"].map(_count_zero_recovery_branches)
-    table = sorted_df[
+    table_df = df.copy()
+    table_df["no_recovery_branch_count"] = table_df["branch_recovery_segments"].map(_count_zero_recovery_branches)
+    table = table_df[
         [
             "suite_case_id",
             "selected_outage_policy",
@@ -637,6 +637,8 @@ def regenerate(
     cases: list[dict],
     resume_rejected_rows: list[dict],
     skipped_cases: list[dict],
+    artifact_refresh_command: str | None = None,
+    evidence_replay_command: str | None = None,
 ) -> None:
     df = pd.DataFrame(df, columns=TAIL_COAST_COLUMNS)
     df.to_csv(results_dir / "tail_coast_recovery.csv", index=False)
@@ -647,6 +649,8 @@ def regenerate(
         "feasible_row_count": int(df["meets_thresholds"].astype(bool).sum()) if not df.empty else 0,
         "expected_case_count": int(len(cases)),
         "completed_case_count": int(len(df)),
+        "artifact_refresh_command": artifact_refresh_command or command,
+        "evidence_replay_command": evidence_replay_command or command,
         "resume_rejected_rows": resume_rejected_rows,
         "skipped_cases": skipped_cases,
         "implementation_identities": _implementation_identities(),
@@ -691,6 +695,50 @@ def regenerate(
     write_metadata(results_dir / "tail_coast_recovery_metadata.json", command, config, extra)
 
 
+def _order_rows_by_cases(df: pd.DataFrame, cases: list[dict]) -> pd.DataFrame:
+    df = pd.DataFrame(df, columns=TAIL_COAST_COLUMNS)
+    if df.empty:
+        return df
+    order = {str(case["suite_case_id"]): int(case["case_order"]) for case in cases}
+    df["_case_order"] = df["suite_case_id"].map(order).fillna(len(order))
+    return df.sort_values("_case_order").drop(columns=["_case_order"]).reset_index(drop=True)
+
+
+def _command_part(value: object) -> str:
+    text = str(value)
+    if not text:
+        return '""'
+    if any(character.isspace() for character in text):
+        return '"' + text.replace('"', '\\"') + '"'
+    return text
+
+
+def _evidence_replay_command(args) -> str:
+    parts: list[object] = ["py", "-3.11", r"scripts\run_tail_coast_recovery.py", "--config", args.config, "--resume"]
+    if Path(args.source_states) != Path("data/source_states.json"):
+        parts.extend(["--source-states", args.source_states])
+    if args.max_cases is not None:
+        parts.extend(["--max-cases", int(args.max_cases)])
+    return " ".join(_command_part(part) for part in parts)
+
+
+def _missing_compatible_cases(df: pd.DataFrame, cases: list[dict], expected: dict[str, dict]) -> list[dict]:
+    completed = set(str(value) for value in df["suite_case_id"].dropna().tolist()) if "suite_case_id" in df else set()
+    missing = []
+    for case in cases:
+        case_id = str(case["suite_case_id"])
+        if case_id in completed:
+            continue
+        missing.append(
+            {
+                "suite_case_id": case_id,
+                "reason": "no compatible existing row for regenerate-artifacts-only",
+                "expected_settings_fingerprint": expected[case_id]["settings_fingerprint"],
+            }
+        )
+    return missing
+
+
 def _runtime_budget(args, config: dict) -> float | None:
     if args.runtime_budget_seconds is not None:
         return float(args.runtime_budget_seconds)
@@ -710,6 +758,27 @@ def run(args) -> pd.DataFrame:
     cases = _suite_cases(config)
     if args.max_cases is not None:
         cases = cases[: int(args.max_cases)]
+    command = " ".join(sys.argv)
+    evidence_replay_command = _evidence_replay_command(args)
+    if args.regenerate_artifacts_only:
+        expected = _expected_index(config, args, cases)
+        df, resume_rejected_rows = _compatible_existing_rows(_load_existing(csv_path), expected)
+        df = _order_rows_by_cases(df, cases)
+        skipped_cases = _missing_compatible_cases(df, cases, expected)
+        regenerate(
+            df,
+            results_dir=results_dir,
+            figures_dir=figures_dir,
+            tables_dir=tables_dir,
+            config=config,
+            command=command,
+            cases=cases,
+            resume_rejected_rows=resume_rejected_rows,
+            skipped_cases=skipped_cases,
+            artifact_refresh_command=command,
+            evidence_replay_command=evidence_replay_command,
+        )
+        return df
     expected = _expected_index(config, args, cases)
     if args.resume:
         df, resume_rejected_rows = _compatible_existing_rows(_load_existing(csv_path), expected)
@@ -717,7 +786,6 @@ def run(args) -> pd.DataFrame:
         df = pd.DataFrame(columns=TAIL_COAST_COLUMNS)
         resume_rejected_rows = []
     completed = set(str(value) for value in df["settings_fingerprint"].dropna().tolist())
-    command = " ".join(sys.argv)
     skipped_cases: list[dict] = []
     budget = _runtime_budget(args, config)
     started = time.perf_counter()
@@ -742,6 +810,8 @@ def run(args) -> pd.DataFrame:
             cases=cases,
             resume_rejected_rows=resume_rejected_rows,
             skipped_cases=skipped_cases,
+            artifact_refresh_command=command,
+            evidence_replay_command=evidence_replay_command,
         )
         print(
             f"case {case['suite_case_id']} tail={row['tail_coast_segments']} policy={row['selected_outage_policy']} "
@@ -753,11 +823,7 @@ def run(args) -> pd.DataFrame:
             f"nfev={row['nfev']}, runtime={row['runtime_seconds']:.1f}s",
             flush=True,
         )
-    df = pd.DataFrame(df, columns=TAIL_COAST_COLUMNS)
-    if not df.empty:
-        order = {str(case["suite_case_id"]): int(case["case_order"]) for case in cases}
-        df["_case_order"] = df["suite_case_id"].map(order)
-        df = df.sort_values("_case_order").drop(columns=["_case_order"]).reset_index(drop=True)
+    df = _order_rows_by_cases(df, cases)
     regenerate(
         df,
         results_dir=results_dir,
@@ -768,6 +834,8 @@ def run(args) -> pd.DataFrame:
         cases=cases,
         resume_rejected_rows=resume_rejected_rows,
         skipped_cases=skipped_cases,
+        artifact_refresh_command=command,
+        evidence_replay_command=evidence_replay_command,
     )
     return df
 
@@ -779,6 +847,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--max-cases", type=int, default=None)
     parser.add_argument("--runtime-budget-seconds", type=float, default=None)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--regenerate-artifacts-only", action="store_true", help="Refresh CSV ordering, table, figure, and metadata from the existing CSV without launching optimization.")
     return parser
 
 

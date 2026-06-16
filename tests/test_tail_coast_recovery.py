@@ -56,6 +56,308 @@ def load_script_module(name: str, path: Path):
     return module
 
 
+def test_hard_catalog_combined_one_two_segment_tail_coast_case_selects_all_configured_masks():
+    script = load_script_module(
+        "run_tail_coast_recovery_combined_case_test",
+        ROOT / "scripts" / "run_tail_coast_recovery.py",
+    )
+    config = yaml.safe_load((ROOT / "configs" / "hard_catalog_tail_coast_recovery.yaml").read_text(encoding="utf-8"))
+
+    cases = {case["suite_case_id"]: case for case in script._suite_cases(config)}
+    case = cases["tail_coast_all_one_two_segment_t5_portfolio"]
+
+    assert case["transfer_time"] == 4.0
+    assert case["amax"] == 1.0
+    assert case["segments"] == 14
+    assert case["tail_coast_segments"] == 5
+    assert case["outage_lengths"] == [1, 2]
+    assert case["selected_outage_policy"] == "all_configured"
+    assert case["outage_count"] == 27
+    assert case["selected_outage_count"] == 27
+    assert len(outage_masks(case["segments"], tuple(case["outage_lengths"]))) == 27
+
+    branch = case["case_raw"]["branch"]
+    assert branch["xtol"] == 1.0e-4
+    assert branch["ftol"] == 1.0e-4
+    assert branch["gtol"] == 1.0e-4
+    assert [fallback["label"] for fallback in branch["fallback_initializations"]] == [
+        "constant_y_plus_0p5",
+        "constant_y_minus_0p5",
+        "constant_x_plus_0p5",
+        "constant_x_minus_0p5",
+        "constant_y_plus_1",
+        "constant_y_minus_1",
+    ]
+    assert [variant["label"] for variant in branch["weight_variants"]] == ["regularized_001", "terminal_only"]
+
+
+def test_tail_coast_table_preserves_input_case_order(tmp_path):
+    script = load_script_module(
+        "run_tail_coast_recovery_table_order_test",
+        ROOT / "scripts" / "run_tail_coast_recovery.py",
+    )
+    tables_dir = tmp_path / "tables"
+    tables_dir.mkdir()
+    df = pd.DataFrame(
+        [
+            {
+                "suite_case_id": "tail_coast_z_config_order_first",
+                "selected_outage_policy": "all_single",
+                "outage_lengths": "[1]",
+                "selected_outage_count": 1,
+                "tail_coast_segments": 2,
+                "branch_portfolio_variant_count": 1,
+                "branch_fallback_initialization_evaluated_branch_count": 0,
+                "branch_fallback_initialization_accepted_branch_count": 0,
+                "branch_recovery_segments": "[1]",
+                "nominal_tail_coast_error": 0.01,
+                "selected_worst_error": 0.02,
+                "all_mask_worst_error": 0.03,
+                "control_max_norm": 0.04,
+                "control_bound_violation": 0.0,
+                "nfev": 10,
+                "meets_thresholds": True,
+                "branch_optimizer_ran": True,
+                "branch_optimizer_all_success": True,
+            },
+            {
+                "suite_case_id": "tail_coast_a_config_order_second",
+                "selected_outage_policy": "all_configured",
+                "outage_lengths": "[1, 2]",
+                "selected_outage_count": 2,
+                "tail_coast_segments": 2,
+                "branch_portfolio_variant_count": 1,
+                "branch_fallback_initialization_evaluated_branch_count": 0,
+                "branch_fallback_initialization_accepted_branch_count": 0,
+                "branch_recovery_segments": "[1, 0]",
+                "nominal_tail_coast_error": 0.01,
+                "selected_worst_error": 0.02,
+                "all_mask_worst_error": 0.03,
+                "control_max_norm": 0.04,
+                "control_bound_violation": 0.0,
+                "nfev": 20,
+                "meets_thresholds": True,
+                "branch_optimizer_ran": True,
+                "branch_optimizer_all_success": False,
+            },
+        ]
+    )
+
+    script.write_table(df, tables_dir)
+
+    text = (tables_dir / "tail_coast_recovery_table.tex").read_text(encoding="utf-8")
+    first = text.index("tail\\_coast\\_z\\_config\\_order\\_first")
+    second = text.index("tail\\_coast\\_a\\_config\\_order\\_second")
+    assert first < second
+    assert "tail\\_coast\\_a\\_config\\_order\\_second & all\\_configured & [1, 2] & 2 & 2 & 1 & 0 & 0 & 1" in text
+
+
+def test_regenerate_artifacts_only_uses_existing_csv_without_running_backend(monkeypatch, tmp_path):
+    script = load_script_module(
+        "run_tail_coast_recovery_regenerate_only_test",
+        ROOT / "scripts" / "run_tail_coast_recovery.py",
+    )
+    config = {
+        "run": {"label": "tail_test", "output_subdir": "tail_test"},
+        "benchmark": {
+            "target_mode": "catalog_dro_phase",
+            "transfer_time": 0.1,
+            "segments": 3,
+            "substeps_per_segment": 1,
+            "amax": 0.2,
+        },
+        "objective": {"thresholds": {"nominal_success": 0.09, "robust_success": 0.17}},
+        "outages": {"block_lengths": [1]},
+        "tail_coast_recovery": {
+            "tail_coast_segments": 1,
+            "cases": [
+                {"case_id": "tail_z_config_order_first", "selected_outages": 0},
+                {"case_id": "tail_a_config_order_second", "selected_outages": 0},
+            ],
+        },
+    }
+    config_path = tmp_path / "tail_config.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    results_dir = tmp_path / "data" / "results" / "tail_test"
+    results_dir.mkdir(parents=True)
+    monkeypatch.chdir(tmp_path)
+    args = script.build_parser().parse_args(["--config", str(config_path), "--regenerate-artifacts-only"])
+    cases = script._suite_cases(config)
+    expected = script._expected_index(config, args, cases)
+
+    def row(case_id: str, nfev: int) -> dict:
+        expected_row = expected[case_id]
+        out = {column: None for column in script.TAIL_COAST_COLUMNS}
+        out.update(
+            {
+                "suite_case_id": case_id,
+                "selected_outage_policy": "0",
+                "outage_lengths": "[1]",
+                "selected_outage_count": 0,
+                "tail_coast_segments": 1,
+                "branch_portfolio_variant_count": 1,
+                "branch_fallback_initialization_evaluated_branch_count": 0,
+                "branch_fallback_initialization_accepted_branch_count": 0,
+                "branch_recovery_segments": "[]",
+                "nominal_tail_coast_error": 0.01,
+                "selected_worst_error": 0.02,
+                "all_mask_worst_error": 0.03,
+                "control_max_norm": 0.04,
+                "control_bound_violation": 0.0,
+                "nfev": nfev,
+                "meets_thresholds": True,
+                "branch_optimizer_ran": False,
+                "branch_optimizer_all_success": False,
+                "settings_fingerprint": expected_row["settings_fingerprint"],
+                "config_hash": expected_row["config_hash"],
+                "source_states_id": expected_row["source_states_id"],
+                "nominal_threshold": 0.09,
+                "selected_worst_threshold": 0.17,
+            }
+        )
+        return out
+
+    pd.DataFrame(
+        [
+            row("tail_a_config_order_second", 20),
+            row("tail_z_config_order_first", 10),
+        ],
+        columns=script.TAIL_COAST_COLUMNS,
+    ).to_csv(results_dir / "tail_coast_recovery.csv", index=False)
+    monkeypatch.setattr(
+        script,
+        "run_case",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("backend should not run")),
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["scripts\\run_tail_coast_recovery.py", "--config", str(config_path), "--regenerate-artifacts-only"],
+    )
+
+    df = script.run(args)
+
+    assert df["suite_case_id"].tolist() == ["tail_z_config_order_first", "tail_a_config_order_second"]
+    csv_df = pd.read_csv(results_dir / "tail_coast_recovery.csv")
+    assert csv_df["suite_case_id"].tolist() == ["tail_z_config_order_first", "tail_a_config_order_second"]
+    table = (tmp_path / "tables" / "tail_test" / "tail_coast_recovery_table.tex").read_text(encoding="utf-8")
+    assert table.index("tail\\_z\\_config\\_order\\_first") < table.index("tail\\_a\\_config\\_order\\_second")
+    metadata = json.loads((results_dir / "tail_coast_recovery_metadata.json").read_text(encoding="utf-8"))
+    assert metadata["resume_rejected_rows"] == []
+    assert metadata["skipped_cases"] == []
+    assert metadata["artifact_refresh_command"] == metadata["command"]
+    assert "--regenerate-artifacts-only" in metadata["artifact_refresh_command"]
+    assert "--resume" in metadata["evidence_replay_command"]
+    assert "--regenerate-artifacts-only" not in metadata["evidence_replay_command"]
+
+
+def test_regenerate_artifacts_only_rejects_stale_rows_and_records_provenance(monkeypatch, tmp_path):
+    script = load_script_module(
+        "run_tail_coast_recovery_regenerate_only_stale_test",
+        ROOT / "scripts" / "run_tail_coast_recovery.py",
+    )
+    config = {
+        "run": {"label": "tail_test", "output_subdir": "tail_test"},
+        "benchmark": {
+            "target_mode": "catalog_dro_phase",
+            "transfer_time": 0.1,
+            "segments": 3,
+            "substeps_per_segment": 1,
+            "amax": 0.2,
+        },
+        "objective": {"thresholds": {"nominal_success": 0.09, "robust_success": 0.17}},
+        "outages": {"block_lengths": [1]},
+        "tail_coast_recovery": {
+            "tail_coast_segments": 1,
+            "cases": [
+                {"case_id": "tail_keep", "selected_outages": 0},
+                {"case_id": "tail_stale", "selected_outages": 0},
+            ],
+        },
+    }
+    config_path = tmp_path / "tail_config.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    results_dir = tmp_path / "data" / "results" / "tail_test"
+    results_dir.mkdir(parents=True)
+    monkeypatch.chdir(tmp_path)
+    args = script.build_parser().parse_args(["--config", str(config_path), "--regenerate-artifacts-only"])
+    cases = script._suite_cases(config)
+    expected = script._expected_index(config, args, cases)
+
+    def row(case_id: str, nfev: int, **overrides) -> dict:
+        expected_row = expected[case_id]
+        out = {column: None for column in script.TAIL_COAST_COLUMNS}
+        out.update(
+            {
+                "suite_case_id": case_id,
+                "selected_outage_policy": "0",
+                "outage_lengths": "[1]",
+                "selected_outage_count": 0,
+                "tail_coast_segments": 1,
+                "branch_portfolio_variant_count": 1,
+                "branch_fallback_initialization_evaluated_branch_count": 0,
+                "branch_fallback_initialization_accepted_branch_count": 0,
+                "branch_recovery_segments": "[]",
+                "nominal_tail_coast_error": 0.01,
+                "selected_worst_error": 0.02,
+                "all_mask_worst_error": 0.03,
+                "control_max_norm": 0.04,
+                "control_bound_violation": 0.0,
+                "nfev": nfev,
+                "meets_thresholds": True,
+                "branch_optimizer_ran": False,
+                "branch_optimizer_all_success": False,
+                "settings_fingerprint": expected_row["settings_fingerprint"],
+                "config_hash": expected_row["config_hash"],
+                "source_states_id": expected_row["source_states_id"],
+                "nominal_threshold": 0.09,
+                "selected_worst_threshold": 0.17,
+            }
+        )
+        out.update(overrides)
+        return out
+
+    pd.DataFrame(
+        [
+            row("tail_stale", 30, settings_fingerprint="stale-fingerprint"),
+            row("tail_stale", 31, config_hash="stale-config", source_states_id="stale-source"),
+            row("tail_keep", 10),
+        ],
+        columns=script.TAIL_COAST_COLUMNS,
+    ).to_csv(results_dir / "tail_coast_recovery.csv", index=False)
+    monkeypatch.setattr(
+        script,
+        "run_case",
+        lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError("backend should not run")),
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        ["scripts\\run_tail_coast_recovery.py", "--config", str(config_path), "--regenerate-artifacts-only"],
+    )
+
+    df = script.run(args)
+
+    assert df["suite_case_id"].tolist() == ["tail_keep"]
+    csv_df = pd.read_csv(results_dir / "tail_coast_recovery.csv")
+    assert csv_df["suite_case_id"].tolist() == ["tail_keep"]
+    metadata = json.loads((results_dir / "tail_coast_recovery_metadata.json").read_text(encoding="utf-8"))
+    assert metadata["row_count"] == 1
+    assert metadata["completed_case_count"] == 1
+    assert metadata["expected_case_count"] == 2
+    assert [case["suite_case_id"] for case in metadata["skipped_cases"]] == ["tail_stale"]
+    assert metadata["skipped_cases"][0]["reason"] == "no compatible existing row for regenerate-artifacts-only"
+    assert len(metadata["resume_rejected_rows"]) == 2
+    assert metadata["resume_rejected_rows"][0]["reason"] == "settings_fingerprint missing or mismatched"
+    assert metadata["resume_rejected_rows"][1]["reason"] == "provenance field mismatch"
+    assert metadata["resume_rejected_rows"][1]["mismatched_fields"] == ["config_hash", "source_states_id"]
+    assert metadata["artifact_refresh_command"] == metadata["command"]
+    assert "--regenerate-artifacts-only" in metadata["artifact_refresh_command"]
+    assert metadata["evidence_replay_command"].startswith("py -3.11 scripts\\run_tail_coast_recovery.py --config ")
+    assert "--resume" in metadata["evidence_replay_command"]
+    assert "--regenerate-artifacts-only" not in metadata["evidence_replay_command"]
+
+
 def test_tail_controls_are_exact_zero_and_reported(monkeypatch):
     cfg = small_cfg(n_segments=5, tf=0.1, amax=0.05)
     state0, target = state_pair()
