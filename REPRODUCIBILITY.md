@@ -2,7 +2,9 @@
 
 This package captures the current paper artifacts for the normalized Earth-Moon
 CR3BP low-thrust initialization benchmark. It is a research benchmark package,
-not a flight-ready trajectory design tool.
+not a flight-ready trajectory design tool. The manuscript is currently framed
+for `Astrodynamics` as a focused astrodynamics benchmark paper with explicit
+negative evidence and provenance.
 
 ## Provenance Snapshot
 
@@ -18,21 +20,34 @@ not a flight-ready trajectory design tool.
   `git_head_semantics`, `working_tree_status_at_generation`, scoped file hashes,
   and byte counts. A committed manifest necessarily records the HEAD before the
   final manifest commit; the file hashes are authoritative for artifact identity.
-  The manifest intentionally has no self-entry.
+  The manifest intentionally has no self-entry. Historical long-run metadata may
+  also contain dirty-state records; final submission provenance should be
+  checked from clean git status after final commit, manifest `--check`, tests,
+  and local LaTeX builds.
 
 ## Quick Verification
 
 ```powershell
 py -3.11 -m pip install -r requirements-lock.txt
-py -3.11 -m pytest tests -q
+git status --short
+py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
+cd ..
+py -3.11 scripts\write_artifact_manifest.py --check
+git diff --check
 ```
 
-The pytest suite and LaTeX build are the intended short clean-clone verification
-path. Do not rerun the long experiments unless the paper artifacts need to be
-regenerated; use the recorded artifacts for normal verification.
+The smoke test, manifest check, and LaTeX builds are the intended short
+reviewer-facing verification path. A broader local check can run
+`py -3.11 -m pytest tests -q`. Do not rerun the long experiments unless the
+paper artifacts need to be regenerated; use the recorded artifacts for normal
+verification. The primary review artifacts are `paper/main.pdf`,
+`paper/supplement.pdf`, `data/results/phase_shift_cardinality_30seed/*`,
+`data/results/qaoa_depth_ablation_30seed/*`,
+`data/results/hard_catalog_tail_coast_recovery/*`, and
+`data/results/artifact_manifest.json`.
 
 ## Artifact Map
 
@@ -175,5 +190,10 @@ py -3.11 scripts\write_artifact_manifest.py --check
 ```
 
 It excludes `.venv`, caches, logs, LaTeX auxiliary files, and the manifest file
-itself. The `git_head_at_generation` field is an audit snapshot, not the final
-commit identifier after the manifest is committed.
+itself. The manifest hashes and byte counts are authoritative for artifact
+identity. The `git_head_at_generation` field is an audit snapshot, not the final
+commit identifier after the manifest is committed; a committed manifest records
+the parent/pre-final state by construction. Historical long-run metadata may
+predate the repository or contain dirty-state records, so final submission
+provenance should be established from clean git status after final commit,
+manifest `--check`, tests, and local LaTeX builds.

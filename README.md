@@ -1,12 +1,14 @@
 # Robust Low-Thrust Cislunar Initialization Benchmark
 
 Research-code scaffold for the controlled CR3BP initialization benchmark:
-"Robust Low-Thrust Cislunar Maneuver Initialization Under Missed-Thrust Events:
-A Reproducible Binary-Schedule Benchmark".
+"A Reproducible Binary-Schedule Benchmark for Robust Low-Thrust Cislunar
+Initialization Under Missed-Thrust Events".
 
 This is not a flight-ready trajectory design tool. It is a reproducible
 normalized Earth-Moon CR3BP benchmark for comparing binary thrust-window
-initialization methods under missed-thrust outages.
+initialization methods under missed-thrust outages. The manuscript is framed
+for `Astrodynamics` as a benchmark, negative-evidence, and reproducibility
+paper rather than as a quantum-advantage claim.
 
 ## Environment
 
@@ -31,16 +33,27 @@ python -m pip install -r requirements-lock.txt
 
 ## Short Verification
 
+Reviewer-facing checklist for the current artifact snapshot:
+
 ```powershell
-py -3.11 -m pytest tests -q
+git status --short
+py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
+cd ..
+py -3.11 scripts\write_artifact_manifest.py --check
+git diff --check
 ```
 
-This is the intended clean-clone verification path after installing the pinned
-dependencies. The long experiment commands below are expensive; use the recorded
-artifacts unless intentionally regenerating evidence.
+For a broader local check, run `py -3.11 -m pytest tests -q` after installing
+the pinned dependencies. The long experiment commands below are expensive; use
+the recorded artifacts unless intentionally regenerating evidence. The primary
+review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
+`data/results/phase_shift_cardinality_30seed/*`,
+`data/results/qaoa_depth_ablation_30seed/*`,
+`data/results/hard_catalog_tail_coast_recovery/*`, and
+`data/results/artifact_manifest.json`.
 
 ## Reproducibility Manifest
 
@@ -59,7 +72,11 @@ predated the first commit. The refreshed manifest uses
 `working_tree_status_at_generation` to make commit provenance explicit. A
 committed manifest necessarily records the HEAD before the final manifest commit;
 the file hashes and byte counts are the authoritative artifact identities. The
-manifest intentionally does not include an entry for itself.
+manifest intentionally does not include an entry for itself. Historical long-run
+metadata may also contain dirty-state records; the current submission snapshot
+should be checked by clean git status after final commit, manifest `--check`,
+pytest, and local LaTeX builds rather than by treating old run metadata as final
+repository provenance.
 
 ## Main Commands
 

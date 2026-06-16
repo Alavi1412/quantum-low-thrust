@@ -7,45 +7,45 @@
 \usepackage{siunitx}
 \setlength{\emergencystretch}{3em}
 
-\journal{Acta Astronautica}
+\journal{Astrodynamics}
 
 \begin{document}
 
 \begin{frontmatter}
 
-\title{Robust Low-Thrust Cislunar Maneuver Initialization Under Missed-Thrust Events: A Reproducible Binary-Schedule Benchmark}
+\title{A Reproducible Binary-Schedule Benchmark for Robust Low-Thrust Cislunar Initialization Under Missed-Thrust Events}
 
 \author[aff1]{Anonymous Author}
 \address[aff1]{Manuscript prepared for review; affiliation omitted in this draft}
 
 \begin{abstract}
-This paper presents a reproducible normalized Earth--Moon CR3BP benchmark for robust low-thrust maneuver initialization under missed-thrust events. Binary thrust-window schedules are evaluated under configured one- and two-segment outage masks, used to fit surrogate QUBOs, sampled by classical heuristics, surrogate-QUBO simulated annealing, and statevector QAOA, and then passed to norm-bounded continuous recovery backends. The study is a benchmark and failure-mode analysis, not a claim of quantum advantage or a replacement for mature cislunar trajectory design methods. The main negative findings are that unrepaired binary samplers often fail on the hard catalog-derived case and sparse phase-shift schedules, the configured statevector QAOA initializer is weaker than the strongest classical initializers in the 30-seed main-method package, and optimized-angle simulated QAOA does not establish superiority over surrogate-QUBO simulated annealing. The main positive findings are that bounded multiple shooting, continuation, compact direct collocation, and Hermite--Simpson diagnostics solve limited non-teacher phase-shift rows, and that a duty-cycle prior lets several classical methods and surrogate-QUBO simulated annealing find refinable high-duty one-coast schedules. For the hard catalog-DRO fixed-final-time tail-coast diagnostic, the combined configured one/two-segment row selects and evaluates all 27 configured masks, reaches nominal tail-coast error $0.022992$ and selected/all fixed-time worst error $0.093606$ under the $0.09/0.17$ screening thresholds, and records the two late-tail no-recovery-variable branches as threshold-feasible direct evaluations rather than optimizer-converged branches. The limitations are explicit: all experiments use normalized CR3BP dynamics, screening tolerances rather than flight navigation tolerances, research-grade continuous backends, configured outage families, and recorded artifacts rather than new mission-design certification.
+This paper defines a reproducible normalized Earth--Moon CR3BP missed-thrust benchmark for robust low-thrust cislunar initialization. It is a preliminary-design algorithm benchmark, not high-fidelity validation or flight targeting: the configured terminal-error thresholds are normalized screening tolerances. Under equal true trajectory-evaluation budgets, the benchmark compares classical direct-objective initializers, surrogate-QUBO sampling, simulated statevector QAOA, and continuous recovery diagnostics. The primary negative result is that the evidence does not support quantum or QAOA superiority: the configured QAOA initializer is weaker than the strongest classical initializers in the 30-seed main-method package, and optimized simulated QAOA is not statistically superior to surrogate-QUBO simulated annealing in the focused ablation. The primary positive result is narrower and useful for trajectory-optimization researchers: a duty-cycle prior steers several samplers toward refinable high-duty schedules, while a scoped locked-nominal tail-coast continuous backend meets the configured one- and two-segment mask screening thresholds. That tail-coast result uses a final-five-segment coast, deterministic fallback starts, and two late-tail direct evaluations without recovery variables; it is continuous-backend evidence only, not fuel optimality, high-fidelity robustness, or quantum evidence.
 \end{abstract}
 
 \begin{keyword}
-Low-thrust trajectory optimization \sep cislunar dynamics \sep missed-thrust events \sep robust initialization \sep binary schedules \sep QUBO \sep QAOA \sep CR3BP
+Trajectory optimization benchmark \sep low-thrust trajectory optimization \sep cislunar dynamics \sep missed-thrust recovery \sep robust initialization \sep binary schedules \sep CR3BP \sep QUBO
 \end{keyword}
 
 \end{frontmatter}
 
 \section{Introduction}
 
-Electric low-thrust propulsion enables propellant-efficient cislunar and interplanetary transfers, but it also turns maneuver planning into a long-horizon nonlinear optimal-control problem. A practical low-thrust design must choose continuous thrust magnitudes and directions while also choosing a qualitative maneuver structure: which time intervals should thrust, coast, or recover from an outage. The continuous part is usually handled by direct transcription, collocation, multiple shooting, sequential convex programming, or indirect methods. The discrete structure is rarely searched exhaustively, yet it strongly affects whether a deterministic optimizer converges.
+Electric low-thrust propulsion enables propellant-efficient cislunar transfers, but it also makes trajectory design highly sensitive to the initial guess supplied to a nonlinear optimizer. A practical design must determine both continuous thrust magnitudes and directions and a qualitative maneuver structure: which intervals thrust, coast, or recover after an interruption. For astrodynamics researchers, this creates a reproducibility problem as much as an algorithm problem. A proposed initializer is difficult to interpret unless the schedule objective, missed-thrust masks, continuous recovery backend, evaluation budget, and failure cases are all visible.
 
-This initialization sensitivity is especially important for robust low-thrust design. Missed-thrust events caused by safe modes, propulsion interruptions, or operational constraints can invalidate an otherwise efficient transfer. Grebow and McCarty show that including missed-thrust branches in low-thrust cislunar design can greatly reduce recovery propellant for week-scale outages \cite{grebow2020missed}. Sinha and Beeson identify initial-guess generation as a bottleneck for low-thrust trajectory design with missed-thrust robustness \cite{sinha2025initial}. These results motivate the central question of this paper:
+Missed-thrust robustness is a demanding test of that pipeline. Safe modes, propulsion interruptions, or operations-driven thrust outages can invalidate a nominal low-thrust transfer. Grebow and McCarty show that including missed-thrust branches in low-thrust cislunar design can greatly reduce recovery propellant for week-scale outages \cite{grebow2020missed}. Sinha and Beeson identify initial-guess generation as a bottleneck for low-thrust trajectory design with missed-thrust robustness \cite{sinha2025initial}. This paper therefore asks a benchmark question rather than a quantum-performance question:
 \begin{quote}
-Can a reproducible binary-schedule benchmark reveal when discrete missed-thrust initializers help, when they fail, and how QUBO/QAOA initializers compare with classical samplers after continuous recovery is applied?
+Can a reproducible binary-schedule benchmark reveal which missed-thrust initializers produce refinable schedules, which failure modes are caused by the continuous backend, and how surrogate-QUBO and simulated-QAOA initializers compare with strong classical samplers under equal trajectory-evaluation budgets?
 \end{quote}
 
-The question is timely because low-thrust trajectory optimization has recently been mapped into binary formulations suitable for QUBO and quantum-annealing studies. De Grossi et al. transcribed an Earth--Mars low-thrust trajectory optimization problem into a binary/QUBO form and tested D-Wave quantum and hybrid solvers, while emphasizing present hardware limits \cite{degrossi2025transcription}. Moretta and Casasola studied quantum-assisted initialization for Earth--Moon low-thrust trajectories using binary thrust-activation patterns as seeds for deterministic solvers \cite{moretta2026quantum}. The present paper treats QUBO and QAOA as evaluated initializer families inside a broader benchmark. It differs by making missed-thrust recovery part of the initialization objective and by reporting negative and controlled-feasible evidence side by side.
+Binary and QUBO formulations are included because they are a natural way to encode thrust-window availability, and because recent low-thrust studies have explored binary/QUBO and quantum-assisted formulations \cite{degrossi2025transcription,moretta2026quantum}. They are not the headline claim. In this paper QUBO and QAOA are evaluated initializer families inside a broader robust-trajectory benchmark; the continuous trajectory remains a classical optimal-control problem, and negative evidence is reported as part of the contribution.
 
-The paper makes four contributions.
-First, it defines a robust missed-thrust binary-schedule benchmark in the normalized Earth--Moon CR3BP and ships the configurations, source-state records, generated tables, figures, and hash manifest needed to audit the evidence.
-Second, it gives an equal-budget sampler comparison that includes classical direct-objective heuristics, surrogate-QUBO simulated annealing, and statevector QAOA as one initializer family rather than the central claim.
-Third, it reports continuous-backend diagnostics for the same benchmark family, including bounded multiple shooting, direct-collocation and Hermite--Simpson probes, continuation warm starts, and a combined fixed-final-time tail-coast recovery row that evaluates all configured one- and two-segment masks.
-Fourth, it provides a failure-mode taxonomy and claim boundary for future quantum-assisted initialization work: where binary schedules are too sparse, where dense continuous-control initialization dominates, where surrogate/QAOA evidence remains inconclusive, and which hard-catalog recovery claims are only scoped continuous-backend diagnostics.
+The paper makes four contributions for a trajectory-optimization audience.
+First, it defines and archives a normalized Earth--Moon CR3BP missed-thrust binary-schedule benchmark with source states, configurations, generated tables, figures, result metadata, and an artifact manifest.
+Second, it reports an equal-budget 30-seed comparison of classical direct-objective initializers, surrogate-QUBO simulated annealing, simulated statevector QAOA, and all-windows continuous refinement.
+Third, it separates initializer evidence from continuous-backend evidence, led by a scoped fixed-final-time tail-coast hard-catalog diagnostic that evaluates all configured one- and two-segment masks within a locked-nominal setup.
+Fourth, it records failure modes and claim boundaries: sparse schedules can be unrefinable, duty-cycle priors can recover high-duty schedule classes, all-windows continuous refinement can dominate selected-worst error, and the tested QAOA variants do not establish superiority over classical samplers.
 
-The claims are intentionally narrow. The experiments do not show quantum advantage, do not solve high-fidelity mission design, and do not demonstrate universal missed-thrust robustness. They test whether binary discrete initializers can be integrated into a robust low-thrust initialization pipeline, whether the continuous backend can solve any non-teacher cislunar case, and where the present pipeline fails.
+The claims are intentionally narrow. The experiments use normalized CR3BP dynamics, screening thresholds, configured outage families, and research-grade continuous backends. They do not establish quantum advantage, high-fidelity mission validation, fuel-optimal recovery, certified flight design, or universal missed-thrust robustness.
 
 \section{Related Work}
 
@@ -156,6 +156,7 @@ s_0=[1.0324985738,0,-0.1884844917,0,-0.1249781287,0].
 This state is NRHO-like in the sense that it lies in the L2 southern halo family, but the paper treats it as a normalized benchmark state, not a certified operational NRHO.
 
 \subsection{Dimensional scale and threshold interpretation}
+\label{sec:dimensional-scale}
 
 The normalized Earth--Moon scale is used only to interpret orders of magnitude. Taking the public NASA average Earth--Moon distance as $1$ LU $\approx 384{,}400$ km \cite{nasaSpacePlaceMoonDistance}, the recorded CR3BP normalization gives $1$ TU $\approx 375{,}190.259$ s $=4.34248$ days, velocity unit $\approx 1.02455$ km/s, and acceleration unit $\approx 2.73074$ mm/s$^2$. Thus the main phase-shift transfer time $T=0.5$ TU is about $2.17$ days, while the hard-catalog tail-coast recovery case with $T=4.0$ TU is about $17.37$ days. The acceleration bounds used in the phase-shift and high-thrust diagnostics correspond to $a_{\max}=0.2\approx 0.546$ mm/s$^2$ and $a_{\max}=1.0\approx 2.731$ mm/s$^2$, respectively.
 
@@ -165,176 +166,35 @@ The terminal-error thresholds are screening tolerances in the normalized metric
 \end{equation}
 not flight navigation or operational targeting tolerances. If velocity error is zero, the nominal threshold $0.09$ corresponds to a position-only error of about $34{,}596$ km, and the selected-recovery threshold $0.17$ corresponds to about $65{,}348$ km. If position error is zero, the same thresholds correspond to velocity-only errors of about $32.3$ m/s and $61.0$ m/s under the configured velocity scale. This scale is the reason the manuscript frames the results as preliminary design and initializer benchmarking rather than operational targeting.
 
-\subsection{Hard catalog-derived benchmark}
+\subsection{Benchmark families}
 
-The hard benchmark uses a distant retrograde orbit seed from an Earth--Moon DRO query with period in $[2.0,3.0]$ TU and Jacobi constant in $[2.9,3.1]$:
+Two benchmark families define the main evidence path. The harder catalog-derived family uses a distant retrograde orbit seed from an Earth--Moon DRO query,
 \begin{equation}
-s_{\mathrm{DRO}}=[0.8161260827,0,0,0,0.5076556931,0].
+s_{\mathrm{DRO}}=[0.8161260827,0,0,0,0.5076556931,0],
 \end{equation}
-The fixed target is generated by ballistic propagation of this DRO seed for the transfer time. The main catalog-derived run uses $T=2.7$ TU, $N=12$, $a_{\max}=0.055$, one- and two-segment outage masks, two pilot seeds, and threshold values selected before the feasibility sweep. This case is intentionally retained even though it is hard for the current pipeline, because it prevents the paper from reporting only a constructed favorable target.
+and generates the target by ballistic propagation of that seed. The original catalog-derived schedule run uses $T=2.7$ TU, $N=12$, $a_{\max}=0.055$, and one- and two-segment outage masks. It remains negative evidence in the supplement. The main hard-catalog result instead reports a later locked-nominal tail-coast continuous-backend diagnostic at $T=4.0$ TU, $N=14$, and $a_{\max}=1.0$, where the final five nominal control segments are constrained to zero and all configured one- and two-segment masks are selected and evaluated in one fixed-final-time row.
 
-\subsection{Catalog halo phase-shift benchmark}
-
-To separate continuous-backend feasibility from teacher-generated feasibility, the repository also includes non-teacher phase-shift benchmarks derived from the same JPL L2 southern halo source state. The target is generated by zero-thrust CR3BP propagation of $s_0$ for a phase time of $0.3$ TU, while the transfer is required to arrive at that target after $T=0.5$ TU. Thus the target is catalog/dynamics-derived rather than produced by a low-thrust teacher, but the spacecraft must correct a phase mismatch. The first configuration uses $N=8$, $a_{\max}=0.2$, one-segment outage masks, and the same nominal and selected robust thresholds as the other experiments. A zero-thrust trajectory has normalized nominal terminal error $0.3758$, so the case is not a do-nothing pass. This benchmark is easier than the NRHO-like to DRO-phase transfer and is included to test whether the present continuous refinement can solve at least one non-teacher cislunar case.
-
-The second phase-shift configuration uses $N=12$ and adds a duty-cycle prior to the binary objective:
+The non-teacher phase-shift family is derived from the same JPL L2 southern halo source state $s_0$. The target is generated by zero-thrust CR3BP propagation of $s_0$ for a phase time of $0.3$ TU, while the transfer must arrive at that target after $T=0.5$ TU. A zero-thrust trajectory has normalized terminal error $0.3758$, so the case is not a do-nothing pass. The primary initializer benchmark uses $N=12$, $a_{\max}=0.2$, one-segment outage masks, and a duty-cycle prior
 \begin{equation}
 J_{\rho}(x)=w_{\rho}\left(\frac{1}{N}\sum_{i=1}^{N}x_i-\rho\right)^2,
 \end{equation}
-with $\rho=11/12$ and $w_{\rho}=12$. This prior is not an oracle trajectory correction. It encodes a mission-design preference for one coast window while retaining a dense low-thrust arc, and it is included because the unrepaired $N=8$ objective over-rewards sparse late thrust before continuous refinement.
+with $\rho=11/12$ and $w_{\rho}=12$. This prior is not an oracle trajectory correction; it encodes a preference for one coast window while preserving a dense low-thrust arc.
 
-\subsection{Feasibility and multiple-shooting stress tests}
-
-To test whether the hard catalog-derived failure is mainly a search issue or a refinement-capability issue, the repository includes a feasibility sweep over transfer time, thrust limit, segment count, and least-squares budget. It also includes direct multiple-shooting diagnostics with nominal and selected-outage branch states and controls, RK4 segment defects, linear state-node initialization, optional nominal-first homotopy, and row-level settings fingerprints for resumed mixed runs. The newest bounded-projected variant applies the acceleration-ball projection inside the residual unpacking path, so defect propagation, terminal residuals, control penalties, smoothness penalties, evaluation, and reported controls all use the same norm-bounded accelerations. A final targeted catalog feasibility attempt uses stronger multistart branch recovery at $T=4.0$ TU, $a_{\max}=0.3$, $N=14$, and a 250-evaluation limit. A selected-outage hard-catalog envelope then probes whether higher thrust and one or three optimized outage branches close the robustness gap for the same target. These tests are not used to claim a best trajectory; they are used to locate the boundary of the present implementation.
-
-\subsection{Teacher-controlled feasible benchmark}
-
-The teacher-controlled benchmark generates the target by forward propagation from $s_0$ under a disclosed deterministic bounded low-thrust policy. The active schedule is
-\begin{equation}
-0000011110101010,
-\end{equation}
-with active fraction $0.4375$, transfer time $T=4.0$ TU, $N=16$, $a_{\max}=0.065$, teacher maximum control norm $0.039$, and teacher fuel $0.0625147492$ in normalized acceleration-time units. The generated target is
-\begin{equation}
-\begin{split}
-s_f=[&0.9072480273,-0.0480603610,-0.1216659997,\\
-&-0.1816901396,-0.0351710714,0.1330325296].
-\end{split}
-\end{equation}
-The teacher reproduces its own target with zero propagation error under the same integrator, while its worst one- or two-segment missed-thrust outage without recovery is $0.6049$ under the configured error norm. This benchmark is therefore feasible by construction but not trivial under outages. It is included to test whether the initialization/refinement architecture can recover a known feasible low-thrust transfer without hiding the construction. The oracle diagnostic initializes the refinement directly with the teacher continuous controls and is labeled separately from the normal method comparison.
+The supplement preserves the secondary diagnostic families: the catalog pilot and QUBO fit diagnostics, feasibility and direct multiple-shooting stress tests, locked-nominal and delayed-arrival hard-catalog recovery packages, bounded phase-suite and robust-margin rows, direct-collocation and Hermite--Simpson baselines, dense-repair and legacy cardinality ablations, and the teacher-controlled feasible benchmark. These diagnostics explain provenance and failure modes but are not promoted to headline evidence in the main article.
 
 \subsection{Metrics}
 
-The primary metrics are refined nominal terminal error, refined selected missed-thrust worst error, all-mask diagnostic worst error, schedule active fraction, nominal and recovery fuel, total true trajectory evaluations, and refinement success rate. When schedule repair is enabled, the tables separately report the solver's best schedule, the schedule selected for refinement, the repaired refined schedule, and their active fractions, so that a sparse candidate cannot be confused with a dense refined envelope. The $N=8$ phase-shift experiments use five deterministic seeds. The $N=12$ cardinality-prior experiment uses ten deterministic seeds, 96 shared QUBO-training evaluations, and 24 post-QUBO candidate evaluations for QUBO/QAOA methods; equal-budget classical methods receive 120 true objective evaluations, matching the QUBO methods after shared training is charged. A 30-seed main-method statistics package repeats all seven configured methods over 30 deterministic seeds, for 210 raw method--seed rows, and reports Wilson success intervals, paired per-seed success differences, bootstrap confidence intervals for mean selected-worst-error differences, and exact two-sided sign tests against all-windows continuous refinement and surrogate-QUBO simulated annealing. A separate focused QAOA-depth statistical package repeats the QUBO-derived methods over 30 deterministic seeds, for 150 raw method--seed rows, to isolate QAOA angle optimization and depth. The teacher-controlled experiment uses three deterministic seeds.
+The primary metrics are refined nominal terminal error, refined selected missed-thrust worst error, all-mask diagnostic worst error, schedule active fraction, nominal and recovery fuel, total true trajectory evaluations, and refinement success rate. A run is counted as a robust refinement success only when both the nominal terminal error and the selected missed-thrust worst error are below the configured thresholds. Unless otherwise stated, those thresholds are $0.09$ for nominal success and $0.17$ for selected robust recovery success.
 
-Unless otherwise stated, the thresholds are $0.09$ for nominal success and $0.17$ for selected robust recovery success. The robust-margin suite uses the same thresholds. It includes a thrust-margin selected-branch grid at phase time $0.2$, $T=0.5$ TU, and $N=12$, and an all-one-segment-outage branch suite at $N=8$, $a_{\max}=0.3$, and $T=0.5$ TU. In the latter suite, all-outage means all configured one-segment outage masks only; no two-segment outage branches are included. The fixed-final-time tail-coast package uses the same thresholds. Its combined \texttt{tail\_coast\_all\_one\_two\_segment\_t5\_portfolio} row covers the configured one- and two-segment masks in one case row with \texttt{outage\_lengths=[1,2]}, \texttt{outage\_count=27}, and \texttt{selected\_outage\_count=27}; the separate all-single and all-two-segment rows remain provenance/scope rows. Its \texttt{meets\_thresholds} flag is based on tail-coast nominal error and selected fixed-final-time worst error; optimizer convergence is reported separately so no-recovery-variable late-tail branches can be threshold-feasible without being counted as optimizer successes. The continuation-extension suite also uses these thresholds but is a continuous-backend direct multiple-shooting baseline: warm rows reuse persisted nominal controls from a source row, and the saved control sidecars record nominal controls, provenance, and hashes. The first Hermite--Simpson continuation baseline is a continuous-backend diagnostic with constant controls over each segment. The independent-midpoint-control Hermite--Simpson package adds separate midpoint control variables for nominal and selected recovery arcs; its sidecars persist both endpoint and midpoint nominal controls so warm-start provenance reproduces the reported trajectory and fuel diagnostics.
+The main $N=12$ duty-cycle-prior statistics package repeats seven methods over 30 deterministic seeds, for 210 raw method--seed rows, and reports Wilson success intervals, paired per-seed success differences, bootstrap confidence intervals for mean selected-worst-error differences, and exact two-sided sign tests. A separate focused QAOA-depth package repeats the QUBO-derived methods over 30 deterministic seeds, for 150 raw method--seed rows. The hard-catalog tail-coast row \texttt{tail\_coast\_all\_one\_two\_segment\_t5\_portfolio} uses the same thresholds, selects all configured one- and two-segment masks in one case row, and reports optimizer convergence separately from threshold feasibility so late-tail direct evaluations without recovery variables are not mistaken for optimizer-converged branch solves.
 
 \section{Results}
 
-The results are organized to separate primary claims from diagnostics. The primary reader path is Table~\ref{tab:claim_evidence_hierarchy} for the claim boundary, Tables~\ref{tab:phase_shift_cardinality_30seed}--\ref{tab:phase_shift_cardinality_30seed_statistics} for equal-budget initializer statistics, Table~\ref{tab:qaoa_depth_statistics} for the focused QAOA/QUBO ablation, and Table~\ref{tab:tail_coast_recovery} for the strongest hard-catalog fixed-final-time tail-coast recovery evidence. Tables~\ref{tab:catalog_results}--\ref{tab:catalog_feasibility_envelope}, \ref{tab:bounded_collocation}--\ref{tab:independent_hs_continuation}, and the teacher-controlled tables are diagnostics: they explain failure modes, backend limits, and provenance rather than supporting a broad superiority claim.
+The main results are screening evidence for a normalized CR3BP benchmark. The dimensional caveat in Section~\ref{sec:dimensional-scale} applies to every table: the $0.09/0.17$ thresholds correspond to large position-only or velocity-only errors and should not be read as operational targeting tolerances. Secondary tables and figures are retained in the supplement so that the main article follows the primary claim path.
 
-\subsection{Catalog-derived schedule benchmark remains challenging}
+\subsection{Claim hierarchy}
 
-Table~\ref{tab:catalog_results} reports the catalog-derived pilot. QUBO simulated annealing and QAOA produce competitive pre-refinement schedules in this small run, but after fair accounting they require shared QUBO-training evaluations, and no method satisfies the configured post-refinement robust success thresholds. This is a negative result: a binary schedule sampler is not enough when the continuous recovery optimizer cannot turn the schedule into a feasible robust trajectory.
-
-\begin{table}[t]
-\centering
-\caption{Catalog-derived pilot results. Values are medians across the generated pilot seeds. This benchmark did not meet the robust refinement thresholds.}
-\label{tab:catalog_results}
-\resizebox{\textwidth}{!}{\input{../tables/results_table.tex}}
-\end{table}
-
-The QUBO diagnostics in Table~\ref{tab:catalog_qubo} also show overfitting risk. With a full quadratic model and a small training set, the training fit is much stronger than the validation behavior. This motivates reporting QUBO fit quality as a first-order result rather than assuming that a learned quadratic model preserves the true trajectory ranking.
-
-\begin{table}[t]
-\centering
-\caption{Catalog-derived QUBO surrogate fit diagnostics.}
-\label{tab:catalog_qubo}
-\resizebox{\textwidth}{!}{\input{../tables/ablation_table.tex}}
-\end{table}
-
-\subsection{Feasibility stress tests expose the refinement boundary}
-
-Table~\ref{tab:feasibility} shows the best completed points from the feasibility sweep. The best nominal error found in the sweep is $0.1229$--$0.2008$ depending on the point, but selected outage errors remain above the $0.17$ robust threshold and all-mask diagnostics remain much larger. Increasing thrust or transfer time does not monotonically fix the problem because the nonlinear dynamics and local least-squares convergence interact with the initialization.
-
-\begin{table}[t]
-\centering
-\caption{Feasibility sweep stress test for the catalog-derived benchmark. None of the completed cases met both nominal and selected robust thresholds.}
-\label{tab:feasibility}
-\resizebox{\textwidth}{!}{\input{../tables/feasibility_table.tex}}
-\end{table}
-
-The direct multiple-shooting diagnostics in Table~\ref{tab:multiple_shooting} extend this stress test to seven completed catalog-derived rows. The high-thrust nominal-first selected-outage row, with $T=4.0$ TU, $a_{\max}=1.0$, $N=14$, one selected outage, blend node initialization, and nominal-first homotopy enabled, drives the selected recovery worst error to $0.0004$. It still fails the nominal threshold with nominal error $0.1714$, retains an all-mask diagnostic worst error of $8.1180$, and reaches the 220-evaluation cap with optimizer and backend success false. The best nominal-only row, $T=5.0$ TU and $a_{\max}=0.5$, reaches nominal error $0.5154$ but has an all-mask diagnostic worst error of $55.2845$. None of the rows satisfies the $0.09$ nominal and $0.17$ selected-recovery thresholds. The conservative interpretation is that selected branch success can coexist with nominal and all-mask diagnostic failure; this does not prove that multiple shooting is unsuitable, but it shows that the present sparse least-squares implementation and budget are insufficient for the hard catalog-derived case.
-
-\begin{table}[t]
-\centering
-\caption{Catalog-derived direct multiple-shooting diagnostics. Rows with zero selected outages are nominal-only diagnostics; all-outage diagnostic errors are still reported.}
-\label{tab:multiple_shooting}
-\resizebox{\textwidth}{!}{\input{../tables/catalog_collocation_feasibility/multiple_shooting_feasibility_table.tex}}
-\end{table}
-
-Table~\ref{tab:catalog_targeted} reports the stronger targeted catalog attempt. Despite a larger thrust bound, multistart initialization, bang-bang feedback starts, and a 250-evaluation limit, the best completed case misses both thresholds. The optimizer selected a low-control solution with nominal error $0.3055$ and selected recovery worst error $1.3513$. A $N=18$ variant was terminated after more than nine minutes without a completed row. This negative result strengthens the interpretation that the present continuous backend is not a mature catalog-transfer optimizer.
-
-\begin{table}[t]
-\centering
-\caption{Targeted catalog-derived feasibility attempt with stronger multistart branch recovery. Thresholds were not relaxed.}
-\label{tab:catalog_targeted}
-\resizebox{\textwidth}{!}{\input{../tables/catalog_targeted_feasibility/feasibility_table.tex}}
-\end{table}
-
-Table~\ref{tab:catalog_feasibility_envelope} reports the selected-outage hard-catalog envelope. The selected recovery branches can be made small for the selected masks: the high-thrust one-outage row has selected-worst error $0.0009$, the high-thrust three-outage row has selected-worst error $0.0150$, and the mid-thrust one-outage row has selected-worst error $0.0360$. These are not robust success cases. All three rows fail the nominal threshold, with nominal errors $0.8020$, $1.6580$, and $0.3535$, respectively. All three hit the 180-evaluation cap, report optimizer/backend success as false, and retain high all-mask diagnostics of $9.3644$, $8.7872$, and $21.8255$. The package is therefore useful negative evidence: selected recovery controls can overfit the chosen outage masks while the nominal trajectory and unselected outage family remain unresolved.
-
-\begin{table}[t]
-\centering
-\caption{Selected-outage hard-catalog feasibility-envelope diagnostics. Selected recovery branches are optimized for the listed masks, but all rows fail the nominal threshold and all-mask values are diagnostics, not robustness claims.}
-\label{tab:catalog_feasibility_envelope}
-\resizebox{\textwidth}{!}{\input{../tables/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_table.tex}}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.72\linewidth]{../figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.pdf}
-\caption{Selected-outage hard-catalog envelope. Small selected-outage errors do not imply robust success because nominal errors fail and all-mask diagnostics remain high.}
-\label{fig:catalog_selected_outage_envelope}
-\end{figure}
-
-\subsection{Locked-nominal hard-catalog branch recovery narrows but does not close the blocker}
-
-Table~\ref{tab:locked_nominal_recovery} and Figure~\ref{fig:locked_nominal_recovery} add a locked-nominal hard-catalog branch-recovery diagnostic on the same NRHO-like to DRO-phase benchmark at $a_{\max}=1.0$, $N=14$. Unlike the selected-outage envelope, this package first solves a single all-windows nominal multiple-shooting trajectory, then freezes that nominal control sequence. Each selected missed-thrust mask is optimized independently: controls before the outage are exactly the locked nominal controls with the missed segment(s) zeroed, and only the post-outage recovery controls are variables. The locked nominal trajectory itself reaches nominal error $0.0131$, well below the $0.09$ nominal threshold, so unlike the selected-outage envelope the nominal control is no longer the failing component. The all-mask column is a diagnostic: it evaluates every configured outage mask, using optimized recovery branches for selected masks and masked locked nominal controls for unselected masks, so it is not a robustness claim over the unselected family. This is a continuous-backend baseline, not QUBO, QAOA, or quantum evidence.
-
-The row-level pattern is deliberately mixed. The \texttt{locked\_hard\_nominal\_only} row runs no branch recovery, so its selected-worst error equals the nominal error $0.0131$ by construction and it meets the thresholds only as a nominal-only diagnostic while the all-mask value stays at $8.5410$. The \texttt{locked\_hard\_selected1} row optimizes the single hardest one/two-segment mask to selected-worst error $0.1973$ and the \texttt{locked\_hard\_selected3} row optimizes the three hardest masks to the same worst error $0.1973$; both exceed the $0.17$ robust threshold and fail, and two of the three branches in the latter row hit the 120-evaluation cap with optimizer success false. The \texttt{locked\_hard\_all\_single} row optimizes all 14 one-segment masks but the latest-outage masks leave too few recovery segments, so its selected-worst error is $0.8044$ and it fails. The one positive row is \texttt{locked\_hard\_single\_min6\_selected8}: restricting the scope to one-segment outages with at least six remaining recovery segments and selecting the eight hardest eligible masks yields selected-worst error $0.1580$ and all-mask diagnostic worst error $1.4982$, meeting both thresholds. The caveat is explicit: \texttt{optimizer\_success} is false for that row because several selected branches reached the 120-evaluation cap even though their terminal-error metrics already pass, so the row is reported as threshold-feasible but not optimizer-converged. The package therefore narrows the hard-catalog blocker---a bounded, early-enough one-segment outage scope is recoverable once the nominal control is feasible---without eliminating it, because the broader selected one/two-segment and all-single-outage scopes still fail.
-
-\begin{table}[t]
-\centering
-\caption{Locked-nominal hard-catalog branch-recovery diagnostics on the NRHO-like to DRO-phase benchmark. The nominal control is solved once and frozen; each selected missed-thrust branch is optimized independently after the outage. The all-mask column is a diagnostic over every configured mask, not a robustness claim. The \texttt{locked\_hard\_single\_min6\_selected8} row meets the thresholds but is not optimizer-converged.}
-\label{tab:locked_nominal_recovery}
-\resizebox{\textwidth}{!}{\input{../tables/hard_catalog_locked_nominal_recovery/locked_nominal_recovery_table.tex}}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.72\linewidth]{../figures/hard_catalog_locked_nominal_recovery/locked_nominal_recovery.pdf}
-\caption{Locked-nominal hard-catalog branch recovery. With the nominal control held feasible, a bounded one-segment, six-recovery-segment selected subset meets the thresholds, while selected one/two-segment and all-single-outage scopes remain above the robust threshold.}
-\label{fig:locked_nominal_recovery}
-\end{figure}
-
-\subsection{Delayed-arrival hard-catalog portfolio recovery solves all one-segment masks}
-
-Table~\ref{tab:delayed_locked_recovery} and Figure~\ref{fig:delayed_locked_recovery} add a delayed-arrival variant of the locked-nominal hard-catalog diagnostic. The nominal all-windows control is still solved once to the original target at $T=4.0$ TU and then frozen. For each selected outage branch, controls before \texttt{outage\_end(mask)} are locked nominal controls with the missed segment zeroed. The branch optimizer then controls the remaining original segments plus $h$ additional recovery segments of the same duration $\Delta t=T/N$. The delayed branch target is not the original target at $T$; it is the original target propagated ballistically by $h\Delta t$. Therefore these rows test delayed-arrival recovery horizon feasibility, not fixed-final-time robustness.
-
-The three recorded rows deliberately separate provenance, a regularized negative, and the portfolio result. The nominal-only row uses $h=4$ and runs no branch optimizer; it reports nominal original-target error $0.013133$ and a delayed-coast selected metric $0.025525$, while the all-mask delayed diagnostic remains $7.310180$. The \texttt{delayed\_hard\_all\_single\_h4\_regularized} row optimizes all 14 one-segment outage masks with the regularized branch residual and fails, with selected/all delayed worst error $1.398973$. The \texttt{delayed\_hard\_all\_single\_h6\_portfolio} row uses a six-segment arrival delay and a two-variant branch residual portfolio, \texttt{regularized\_001} and \texttt{terminal\_only}. Every variant is charged in the branch evaluation accounting, and the accepted branch candidate is selected by the recorded portfolio rule: optimizer-converged candidates that already meet the robust threshold are preferred, then ranked by terminal error and fuel. This h6 portfolio row optimizes all 14 one-segment hard-catalog outage branches and reaches selected/all delayed worst error $0.004040$, nominal error $0.013133$, maximum control norm $1.0$, zero reported bound violation, \texttt{branch\_optimizer\_all\_success=true}, 2253 total function evaluations, and runtime about $2639.7$ s.
-
-This is strong hard-catalog branch-recovery evidence, but the caveats are essential. The result is continuous-backend evidence only; it is not QUBO, QAOA, quantum, or schedule-sampling evidence. It is not fuel-optimal because the residual portfolio is a feasibility diagnostic and includes a terminal-only branch residual. It does not by itself solve fixed-final-time recovery, and it does not include two-segment outage families. Thus the nuanced hard-catalog conclusion from this package alone is that a six-segment delayed-arrival horizon with an explicitly charged branch residual portfolio recovers every one-segment outage mask in the recorded hard catalog-DRO case.
-
-\begin{table}[t]
-\centering
-\caption{Delayed-arrival locked-nominal hard-catalog branch-recovery diagnostics. Branch duration is $(N+h)\Delta t$ and the branch target is the original target propagated ballistically by $h\Delta t$. The h6 portfolio row optimizes all 14 one-segment masks, charges all residual variants, and is delayed-arrival feasibility evidence only.}
-\label{tab:delayed_locked_recovery}
-\resizebox{\textwidth}{!}{\input{../tables/hard_catalog_delayed_recovery/delayed_locked_recovery_table.tex}}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.72\linewidth]{../figures/hard_catalog_delayed_recovery/delayed_locked_recovery.pdf}
-\caption{Delayed-arrival locked-nominal hard-catalog recovery. The h4 regularized all-single row fails, while the h6 branch-residual portfolio recovers all one-segment masks against the delayed target.}
-\label{fig:delayed_locked_recovery}
-\end{figure}
-
-\subsection{Tail-coast fixed-final-time thresholds over configured masks}
-
-Table~\ref{tab:tail_coast_recovery} reports the fixed-final-time tail-coast hard-catalog diagnostic. The setup again solves and freezes a locked nominal control, but then refines it with the final five nominal control segments constrained to exact zero. This mixed-regularized tail nominal uses control and smoothness weights of $0.005$ and a 220-evaluation tail-nominal budget. Branches keep the original target and original final time; no delayed target or added recovery horizon is used. The nominal-only provenance row has tail-coast nominal error $0.022992$ and therefore meets the threshold rule as nominal provenance, but with no selected branch recovery its masked-nominal all-mask diagnostic remains $27.8351$.
-
-The main result is now the combined \texttt{tail\_coast\_all\_one\_two\_segment\_t5\_portfolio} row. It sets \texttt{outage\_lengths=[1,2]}, selects all configured masks with \texttt{selected\_outage\_policy=all\_configured}, and evaluates all 27 selected masks in one fixed-final-time case row. The row reaches tail-coast nominal error $0.02299233817855882$, selected fixed-time worst error $0.0936063931709301$, and all-mask fixed-time diagnostic worst error $0.0936063931709301$, so it meets the $0.09/0.17$ threshold rule. Its branch portfolio evaluates and accepts deterministic fallback starts for four branches, charges $5929$ function evaluations, and records runtime about $1833.6$ s in the current CSV. The branch-recovery accounting contains the one-segment recovery-count sequence $[13,\ldots,0]$ and the two-segment sequence $[12,\ldots,0]$, so two late-tail branches have no post-outage recovery variables. Those two branches are direct fixed-final-time threshold evaluations, not optimizer-converged branch solves; consequently \texttt{branch\_optimizer\_all\_success=false} even though \texttt{meets\_thresholds=true}.
-
-The separate \texttt{tail\_coast\_all\_single\_t5\_portfolio} and \texttt{tail\_coast\_all\_two\_segment\_t5\_portfolio} rows remain useful provenance rows. The all-single row selects all 14 one-segment masks and reaches selected/all fixed-final-time worst error $0.02299233817855882$; it evaluates fallbacks only for mask 7, accepting \texttt{constant\_y\_minus\_0p5}, and has one no-recovery-variable late-tail mask. The all-two-segment row selects all 13 configured two-segment masks and reaches selected/all fixed-final-time worst error $0.0936063931709301$; it evaluates accepted fallbacks \texttt{constant\_y\_minus\_0p5}, \texttt{constant\_x\_minus\_0p5}, and \texttt{constant\_x\_plus\_0p5} for masks 0, 6, and 7, and has one no-recovery-variable late-tail mask. The combined row supersedes the earlier split-scope interpretation for the configured one/two fixed-final-time tail-coast diagnostic. It does not establish fuel optimality, a certified flight-design solution, high-fidelity validation, quantum advantage, or robustness to outage families beyond the configured one- and two-segment masks in this locked-nominal continuous-backend setup.
-
-\begin{table}[t]
-\centering
-\caption{Fixed-final-time tail-coast locked-nominal hard-catalog recovery. The combined row selects/evaluates all 27 configured one- and two-segment masks in one fixed-final-time case row; separate all-single and all-two-segment rows are retained as provenance/scope rows. Branches with post-outage recovery variables are optimized. No-recovery-variable late-tail branches are direct threshold evaluations, so false branch optimizer all-success flags are accounting caveats rather than threshold failures.}
-\label{tab:tail_coast_recovery}
-\resizebox{\textwidth}{!}{\input{../tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex}}
-\end{table}
-
-Because these results mix negative sampler evidence, continuous-backend feasibility diagnostics, and scoped hard-catalog recovery rows, Table~\ref{tab:claim_evidence_hierarchy} records the claim hierarchy used for the rest of the manuscript.
+Table~\ref{tab:claim_evidence_hierarchy} records the claim boundary used throughout the paper. It separates the benchmark contribution, the equal-budget initializer comparison, continuous-backend diagnostics, and claims that remain outside the evidence.
 
 \begin{table}[t]
 \centering
@@ -347,150 +207,29 @@ Claim layer & Artifact map & Defensible interpretation & Explicit boundary \\
 \midrule
 Binary-schedule benchmark & Source states, configs, result CSV/JSON, generated tables/figures, and artifact manifest & The paper provides an auditable normalized CR3BP missed-thrust initialization benchmark & Preliminary-design screening only; not operational targeting or flight certification \\
 Equal-budget initializer comparison & Duty-cycle-prior 30-seed raw results, success intervals, paired comparisons, and tables & Several classical and surrogate-QUBO samplers find refinable high-duty schedules; configured statevector QAOA is weaker than the strongest classical rows & No quantum advantage or QAOA superiority; all-windows continuous refinement remains lower-error on paired selected-worst comparisons \\
-Continuous-backend diagnostics & Bounded multiple shooting, continuation, direct collocation, Hermite--Simpson, and sidecar metadata packages & Several non-teacher normalized CR3BP phase-shift rows are feasible with norm-bounded continuous controls & Research-grade direct shooting/collocation/SCP-adjacent diagnostics only; not certified flight-design tools \\
-Hard-catalog tail-coast recovery & Tail-coast CSV, table, and metadata rows, led by the combined configured [1,2] case & Within the locked-nominal tail-coast continuous-backend diagnostic, the combined row selects/evaluates all 27 configured one- and two-segment masks and meets fixed-final-time thresholds & Not quantum evidence, not fuel optimality, not high-fidelity validation, and not broader outage-family robustness \\
-Open claims and failure modes & Negative hard-catalog envelopes, limitations, metadata, and supplement diagnostics & The package records unresolved cases and failure modes rather than promoting every diagnostic to a headline result & Requires stronger continuous-control initialization, broader validation, high-fidelity dynamics, and statistically significant improvement over strong classical initializers \\
+Continuous-backend diagnostics & Bounded multiple shooting, continuation, direct collocation, Hermite--Simpson, and sidecar metadata packages & Several non-teacher normalized CR3BP phase-shift rows are feasible with norm-bounded continuous controls & Research-grade shooting, collocation, and SCP-adjacent diagnostics only; not certified flight-design tools \\
+Hard-catalog tail-coast recovery & Tail-coast CSV, table, and metadata rows, led by the combined configured one/two case & Within the locked-nominal tail-coast continuous-backend diagnostic, the combined row selects/evaluates all 27 configured one- and two-segment masks and meets fixed-final-time screening thresholds & Not quantum evidence, not fuel optimality, not high-fidelity validation, and not broader outage-family robustness \\
+Open claims and failure modes & Negative hard-catalog envelopes, limitations, metadata, and supplementary diagnostics & The package records unresolved cases and failure modes rather than promoting every diagnostic to a headline result & Requires stronger continuous-control initialization, broader validation, high-fidelity dynamics, and statistically significant improvement over strong classical initializers \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-\subsection{Bounded projected multiple shooting solves limited non-teacher phase-shift cases}
+\subsection{Tail-coast hard-catalog diagnostic}
 
-Table~\ref{tab:bounded_collocation} reports the compact bounded-projected multiple-shooting benchmark on the catalog halo phase-shift target. The positive row uses $N=12$, $a_{\max}=0.2$, one selected outage branch, linear node initialization, and a 40-evaluation cap. It reaches nominal error $0.0479$, selected recovery worst error $0.0619$, and all-mask diagnostic worst error $0.0752$, all below the configured thresholds. The reported maximum acceleration norm is $0.2$, and the largest bound violation is $5.6\times10^{-17}$, i.e., numerical roundoff.
+Table~\ref{tab:tail_coast_recovery} reports the strongest hard-catalog fixed-final-time result. The setup solves and freezes a locked nominal control, then refines it with the final five nominal control segments constrained to exact zero. Branches keep the original target and original final time; no delayed target or added recovery horizon is used. The nominal-only provenance row has tail-coast nominal error $0.022992$ and therefore passes the nominal screening threshold, while its masked-nominal all-mask diagnostic remains $27.8351$ because no branch recovery is run.
 
-This result is a backend result rather than a quantum-sampling result. The selected outage branch, index 6 in the saved metadata, is optimized with branch recovery. The all-mask diagnostic evaluates every one-segment outage; unselected outages use the nominal controls with the outage mask applied, not separately optimized recovery branches. The diagnostic is therefore stricter than selected-branch success in one sense, because every unselected one-segment outage remains below threshold without its own recovery solve, but it is not the same as optimizing all outage branches. The rows selecting all one-segment outage branches at $N=8$ and $N=12$ fail the robust threshold under their smaller completed budgets, with selected/all-mask worst errors $0.3378$ and $0.3904$, respectively. Thus the bounded projected backend fixes a real control-bound inconsistency and provides a limited non-teacher positive result, but it does not close the hard catalog-transfer gap.
+The headline row is \texttt{tail\_coast\_all\_one\_two\_segment\_t5\_portfolio}. It sets \texttt{outage\_lengths=[1,2]}, selects all configured masks, and evaluates all 27 selected masks in one fixed-final-time case row. The row reaches tail-coast nominal error $0.02299233817855882$, selected fixed-time worst error $0.0936063931709301$, and all-mask fixed-time diagnostic worst error $0.0936063931709301$, so it meets the configured $0.09/0.17$ screening thresholds. The branch portfolio evaluates deterministic fallback starts for four branches, charges $5929$ function evaluations, and records runtime about $1833.6$ s in the current CSV. Two late-tail masks have no post-outage recovery variables; they are direct fixed-final-time threshold evaluations rather than optimizer-converged branch solves. Therefore \texttt{branch\_optimizer\_all\_success=false} even though \texttt{meets\_thresholds=true}.
 
-Table~\ref{tab:bounded_phase_suite} extends this backend diagnostic across phase times $0.2$, $0.3$, and $0.4$ with row-level settings fingerprints, configuration hashes, and source-state identifiers so that resumed rows cannot be silently reused after a settings change. Two of the three selected-branch rows meet the thresholds. The phase-time $0.4$ row is the strongest completed case, with nominal error $0.0260$, selected recovery worst error $0.0083$, and all-mask diagnostic worst error $0.0274$. The phase-time $0.2$ row fails both thresholds, and an all-outage-selected diagnostic at phase time $0.3$ fails with selected/all-mask worst error $0.3581$. The broader suite therefore strengthens the continuous-backend evidence while preserving the main limitation: selected-branch feasibility over one outage does not imply successful simultaneous optimization over every outage branch.
-
-Table~\ref{tab:direct_collocation} adds a separate bounded projected trapezoidal direct-collocation baseline on the same phase-shift suite. The direct-collocation variables include nominal state nodes, nominal controls, selected outage branch nodes, and selected branch recovery controls; the residual enforces trapezoidal dynamics defects and terminal conditions while projecting every reported and evaluated control vector to $\|u_i\|\le a_{\max}$. This baseline succeeds only for phase time $0.4$, with nominal error $0.0357$, selected recovery worst error $0.0191$, all-mask diagnostic worst error $0.0602$, and maximum control norm $0.1483$. It fails at phase times $0.2$ and $0.3$ under the compact 30-evaluation budget. The result addresses the missing-continuous-baseline concern in a limited way: a recognizable direct transcription agrees that the easier phase-time $0.4$ case is solvable, but the compact implementation is a research-grade collocation diagnostic rather than a certified flight-design workflow and does not solve the harder phase-shift rows.
+This result is deliberately scoped. It is fixed-final-time continuous-backend evidence with a locked nominal control, final-five-segment coast, configured one- and two-segment masks, fallback starts, and late-tail no-recovery-variable accounting. It is not a binary-sampler result, not QUBO/QAOA evidence, not fuel optimality, not high-fidelity validation, and not robustness to outage families beyond the configured masks.
 
 \begin{table}[t]
 \centering
-\caption{Bounded-projected multiple-shooting diagnostics on the non-teacher catalog halo phase-shift target. Controls are projected to $\|u_i\|\le a_{\max}$ inside the residual and evaluation paths.}
-\label{tab:bounded_collocation}
-\resizebox{\textwidth}{!}{\input{../tables/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility_table.tex}}
+\caption{Fixed-final-time tail-coast locked-nominal hard-catalog recovery. The combined row selects/evaluates all 27 configured one- and two-segment masks in one fixed-final-time case row; separate all-single and all-two-segment rows are retained as provenance/scope rows. Branches with post-outage recovery variables are optimized. No-recovery-variable late-tail branches are direct threshold evaluations, so false branch optimizer all-success flags are accounting caveats rather than threshold failures.}
+\label{tab:tail_coast_recovery}
+\resizebox{\textwidth}{!}{\input{../tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex}}
 \end{table}
 
-\begin{table}[t]
-\centering
-\caption{Bounded-projected multiple-shooting phase-suite diagnostics on non-teacher catalog halo phase-shift targets. The selected-branch rows optimize one outage branch; the all-outage-selected row optimizes all one-segment outage branches and remains infeasible.}
-\label{tab:bounded_phase_suite}
-\resizebox{\textwidth}{!}{\input{../tables/bounded_phase_suite/bounded_phase_suite_table.tex}}
-\end{table}
-
-\begin{table}[t]
-\centering
-\caption{Compact bounded projected trapezoidal direct-collocation baseline on the non-teacher catalog halo phase-shift suite. Rows optimize one selected outage branch and report all-mask diagnostics separately.}
-\label{tab:direct_collocation}
-\resizebox{\textwidth}{!}{\input{../tables/direct_collocation_baseline/direct_collocation_baseline_table.tex}}
-\end{table}
-
-Table~\ref{tab:robust_margin_suite} adds the robust-margin suite. In the selected-branch thrust-margin grid at phase time $0.2$, $T=0.5$ TU, and $N=12$, only one of the 12 one-segment outage masks is optimized. At $a_{\max}=0.20$, the row has nominal error $0.193922$, selected worst error $0.216827$, and all-mask diagnostic worst error $0.228764$, so it fails both thresholds. At $a_{\max}=0.25$, the row has nominal error $0.113567$, selected worst error $0.141845$, and all-mask diagnostic worst error $0.154253$; it fails only because the nominal error remains above $0.09$. At $a_{\max}=0.30$, the row passes with nominal error $0.053774$, selected worst error $0.073781$, and all-mask diagnostic worst error $0.086309$. This isolates phase-time $0.2$ as thrust-margin sensitive rather than categorically infeasible for the bounded-projected backend.
-
-The same table also optimizes all configured one-segment outage branches in a smaller $N=8$, $a_{\max}=0.3$ suite. Here, all-outage refers only to all one-segment outage masks; two-segment outage families are not part of this suite. The phase-time $0.2$ row has nominal error $0.047231$ but selected/all-mask worst error $0.252269$, so it fails the robust threshold. The phase-time $0.3$ row has nominal error $0.055472$ and selected/all-mask worst error $0.035816$, so it is threshold-feasible, but it reached the $60$-evaluation limit and is not reported as optimizer-converged. The phase-time $0.4$ row passes with nominal error $0.053086$ and selected/all-mask worst error $0.014963$. These rows partially address the selected-branch-only critique by showing all one-segment outage branch optimization in smaller higher-thrust cases, while leaving the hard catalog-DRO benchmark and larger outage families unresolved.
-
-\begin{table}[t]
-\centering
-\caption{Robust-margin suite on non-teacher catalog halo phase-shift targets. The thrust-margin rows optimize one selected one-segment outage branch and report all one-segment masks diagnostically. The all-single-outage rows optimize every one-segment outage mask for that row; this does not include two-segment outage families.}
-\label{tab:robust_margin_suite}
-\resizebox{\textwidth}{!}{\input{../tables/robust_margin_suite/robust_margin_suite_table.tex}}
-\end{table}
-
-Table~\ref{tab:continuation_extension_suite} adds the continuation-extension continuous-backend package. Warm rows reuse persisted nominal controls from a source row as direct multiple-shooting warm starts, and the control sidecars store the nominal controls together with provenance and hashes. This is not a quantum, QUBO, QAOA, or discrete schedule-sampling result.
-
-For the $N=8$ all-single-outage rows, all eight one-segment outage masks are selected for optimization. The phase-time $0.3$ cold row has nominal error $0.055474$ and selected/all-mask worst error $0.035126$, and the phase-time $0.4$ row warm-started from the phase-time $0.3$ nominal controls has nominal error $0.053098$ and selected/all-mask worst error $0.013913$. Both rows satisfy the thresholds with optimizer and backend success. For one- and two-segment outage masks, the extension suite selects all configured masks. The $N=6$ phase-time $0.3$ cold row selects all 11 masks and meets thresholds with nominal error $0.059163$ and selected/all-mask worst error $0.069048$. The $N=8$ phase-time $0.3$ cold row selects all 15 one- and two-segment masks and meets thresholds with nominal error $0.061201$ and selected/all-mask worst error $0.043491$. The remaining $N=6$ phase-time $0.2$ row, warm-started from the phase-time $0.3$ nominal controls and allowed 160 function evaluations, has nominal error $0.065112$ but selected/all-mask worst error $0.219306$, so it fails the robust threshold and reports optimizer/backend failure.
-
-The interpretation is deliberately limited. The extension suite gives four optimizer-converged feasible continuous-backend rows out of five and broadens all-selected outage evidence to one- and two-segment masks at $N=8$, phase time $0.3$. It does not solve the phase-time $0.2$ one/two-segment diagnostic, does not solve the hard NRHO-like to DRO-phase benchmark, does not prove quantum advantage, and reinforces that continuous-control initialization can dominate schedule sampling.
-
-\begin{table}[t]
-\centering
-\caption{Continuation-extension continuous-backend diagnostics on normalized CR3BP catalog halo phase-shift targets. This is a direct multiple-shooting continuation result, not a quantum, QUBO, QAOA, or discrete-sampler result. The all-single-outage rows select all 8 one-segment masks; the one/two-segment rows select all configured one- and two-segment masks for their segment count.}
-\label{tab:continuation_extension_suite}
-\resizebox{\textwidth}{!}{\input{../tables/continuation_extension_suite/continuation_margin_suite_table.tex}}
-\end{table}
-
-\subsection{Constant-control Hermite--Simpson continuation probe narrows but does not close the backend gap}
-
-Table~\ref{tab:hermite_simpson_continuation} and Figure~\ref{fig:hermite_simpson_continuation} add a constant-control Hermite--Simpson direct-collocation continuation baseline/probe on the catalog halo phase-shift target family. Warm rows reuse persisted nominal controls from the phase-time $0.3$ cold row, giving trajectory-stacking semantics similar in spirit to collocation continuation workflows. The qualifier constant-control is important: the transcription uses Hermite--Simpson state defects, but controls are held constant over each segment and no independent midpoint control variables are optimized. This is a continuous-backend diagnostic, not QUBO, QAOA, discrete, or quantum evidence.
-
-The row-level pattern is useful because it is not uniformly positive. The phase-time $0.3$ cold row meets the nominal and selected-worst thresholds with nominal error $0.0376$ and selected worst error $0.0287$, but it stops at the 50-evaluation cap and therefore reports optimizer success false. The phase-time $0.2$ warm row fails the nominal threshold, with nominal error $0.1069$, even though the selected-worst error is $0.1208$. The phase-time $0.4$ warm row meets both thresholds with optimizer success true after seven function evaluations. The \texttt{hs\_hard\_p04\_amax02\_warm\_from\_p03} row also meets both thresholds at $a_{\max}=0.2$ with optimizer success true, but its target mode is still \texttt{catalog\_halo\_phase\_shift}. It is a lower-thrust phase-shift stress probe, not the unresolved hard NRHO-like to DRO-phase catalog benchmark.
-
-The interpretation is therefore conservative. Constant-control Hermite--Simpson continuation provides another independently parameterized continuous-backend check and confirms that the easier phase-time $0.4$ phase-shift target is not an artifact of one multiple-shooting implementation. It does not solve the phase-time $0.2$ diagnostic, does not optimize all one- and two-segment outage families, and does not change the negative conclusion for the hard catalog-derived benchmark.
-
-\begin{table}[t]
-\centering
-\caption{Constant-control Hermite--Simpson continuation baseline/probe on normalized CR3BP catalog halo phase-shift targets. Warm rows reuse persisted nominal-control sidecars. This is continuous-backend evidence only; the lower-thrust stress row is not the hard NRHO-like catalog benchmark.}
-\label{tab:hermite_simpson_continuation}
-\resizebox{\textwidth}{!}{\input{../tables/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_table.tex}}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.72\linewidth]{../figures/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline.pdf}
-\caption{Constant-control Hermite--Simpson continuation baseline/probe summary. Threshold-feasible phase-shift rows remain continuous-backend diagnostics and should not be read as quantum or hard-catalog transfer success.}
-\label{fig:hermite_simpson_continuation}
-\end{figure}
-
-\subsection{Independent-midpoint-control Hermite--Simpson closes the midpoint-control transcription critique}
-
-Table~\ref{tab:independent_hs_continuation} and Figure~\ref{fig:independent_hs_continuation} add an independent-midpoint-control Hermite--Simpson direct-collocation evidence package. Each segment optimizes an endpoint/segment control and a separate midpoint control; the Hermite--Simpson defect uses the endpoint control in $f_{\mathrm{left}}$ and $f_{\mathrm{right}}$ and the independent midpoint control in $f_{\mathrm{mid}}$. Reporting propagation uses RK4 substeps with quadratic endpoint--midpoint--endpoint control interpolation. The nominal-control sidecars persist both endpoint and midpoint controls, with separate endpoint, midpoint, and combined sidecar hashes, so warm-start rows can reproduce the reported midpoint-control trajectory, fuel, and terminal-error diagnostics.
-
-The result directly addresses the specific criticism that the earlier Hermite--Simpson probe was constant-control and had no independent midpoint controls, but it does not turn the continuous evidence into quantum or discrete-sampler evidence. Three rows meet the configured thresholds: the phase-time $0.3$ cold row, the phase-time $0.4$ warm row, and the lower-thrust phase-time $0.4$ stress row. The phase-time $0.2$ warm row remains unresolved, with nominal error $0.0976$ above the $0.09$ nominal threshold even though selected-worst error is below the robust threshold. The true catalog-DRO selected-outage diagnostic is retained as a negative row: nominal error $4.2644$, selected-worst error $11.0843$, optimizer/backend success false, and $50$ function evaluations. Thus independent midpoint controls strengthen the continuous baseline and close the midpoint-control objection, while preserving the main scientific caveats.
-
-\begin{table}[t]
-\centering
-\caption{Independent-midpoint-control Hermite--Simpson continuation evidence. Warm rows reuse persisted endpoint and midpoint nominal-control sidecars when available. This is continuous-backend evidence only; the catalog-DRO row is a bounded selected-outage negative diagnostic.}
-\label{tab:independent_hs_continuation}
-\resizebox{\textwidth}{!}{\input{../tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex}}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.72\linewidth]{../figures/independent_hs_continuation_baseline/independent_hs_continuation_baseline.pdf}
-\caption{Independent-midpoint-control Hermite--Simpson continuation summary. The package strengthens the continuous-backend comparison but keeps the phase-time $0.2$ and catalog-DRO diagnostics unresolved.}
-\label{fig:independent_hs_continuation}
-\end{figure}
-
-\subsection{Non-teacher phase-shift benchmark is solved only by the continuous all-windows baseline}
-
-Table~\ref{tab:phase_shift} reports the catalog halo phase-shift benchmark. This case removes the teacher-generation objection: the target is a zero-thrust CR3BP phase point of the JPL L2 southern halo source state, and the saved metadata records \texttt{teacher\_generated=false}. The all-windows continuous baseline succeeds in all five seeds, with median nominal error $0.0418$, median selected recovery worst error $0.0750$, and median all-mask diagnostic worst error $0.0887$. The result also exposes a different limitation: none of the tested binary schedule samplers finds a schedule that refines to the thresholds in this five-seed run. QAOA gives the best median among the discrete initializers, but its median selected recovery error remains $0.2625$, above the $0.17$ threshold.
-
-\begin{table}[t]
-\centering
-\caption{Catalog halo phase-shift benchmark. The target is generated by ballistic CR3BP phase propagation of the JPL source state, not by a low-thrust teacher.}
-\label{tab:phase_shift}
-\resizebox{\textwidth}{!}{\input{../tables/phase_shift/results_table.tex}}
-\end{table}
-
-The phase-shift QUBO surrogate is not the limiting factor in the same way as in the teacher benchmark. Across five seeds, validation $R^2$ ranges from $0.321$ to $0.955$ and validation Spearman correlation ranges from $0.310$ to $1.000$. The remaining failure is therefore more structural: the robust binary objective and the tested samplers prefer sparse late-thrust schedules such as \texttt{00000111} or \texttt{00001111}, while the successful baseline uses all thrust windows and lets the continuous optimizer shape the acceleration. In this case, the evidence favors continuous-control freedom over sparse binary schedule selection.
-
-\subsection{Dense schedule repair exposes the sparsity bottleneck}
-
-Table~\ref{tab:phase_shift_repair} reports a deterministic schedule-repair ablation on the same non-teacher phase-shift benchmark. The repair is \texttt{prefix\_to\_last\_active}: before continuous refinement, every window through the last active solver window is made available for thrust, while later zeros are preserved. This is a heuristic dense-availability envelope, not an oracle continuous control and not a quantum routine.
-
-\begin{table}[t]
-\centering
-\caption{Catalog halo phase-shift benchmark with deterministic dense-schedule repair. The table exposes the solver schedule, refinement candidate schedule, repaired refined schedule, and active fractions to show that all repaired methods collapse to the same all-windows refinement envelope.}
-\label{tab:phase_shift_repair}
-\resizebox{\textwidth}{!}{\input{../tables/phase_shift_repair/results_table.tex}}
-\end{table}
-
-With repair enabled, every tested initializer succeeds in 5/5 seeds and attains the same median refined errors as the all-windows continuous baseline: nominal error $0.0418$, selected recovery worst error $0.0750$, and all-mask diagnostic worst error $0.0887$. The provenance columns are the important result. Repaired methods enter refinement with sparse candidate active fractions, typically $0.375$ and $0.500$, but every method refines the same dense schedule \texttt{11111111} with refined active fraction $1.0$. Therefore, this ablation does not rank the samplers and does not establish a quantum advantage. It shows that the current binary objective can place thrust late enough for a deterministic dense repair to recover a useful all-windows envelope, while the unrepaired binary encoding is too sparse for the continuous backend.
-
-\subsection{Duty-cycle prior yields a positive non-teacher discrete-initialization result}
-
-Table~\ref{tab:phase_shift_cardinality} reports the $N=12$ phase-shift benchmark with the active-fraction prior $J_{\rho}$ set to $\rho=11/12$. This is the first non-teacher case in the paper where the discrete layer contributes a useful refinement structure rather than only diagnosing failure. Cross-entropy, genetic search, true-objective simulated annealing, and surrogate-QUBO simulated annealing each succeed in 10/10 seeds and select one-coast schedules with median refined active fraction $0.9167$. Random search succeeds in 2/10 seeds and QAOA succeeds in 4/10 seeds under the same total true-evaluation budget.
-
-\begin{table}[t]
-\centering
-\caption{Catalog halo phase-shift benchmark with a 12-segment duty-cycle prior targeting one coast window. QUBO/QAOA totals include 96 shared QUBO-training evaluations and 24 post-QUBO true candidate evaluations.}
-\label{tab:phase_shift_cardinality}
-\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality/results_table.tex}}
-\end{table}
-
-The result is a tradeoff, not a dominance claim. The all-windows continuous baseline also succeeds in 10/10 seeds and has lower terminal errors: median nominal error $0.0386$ and selected recovery worst error $0.0601$. The one-coast methods have higher but feasible errors, with surrogate-QUBO simulated annealing at median nominal error $0.0690$ and selected recovery worst error $0.0941$. Their apparent benefit against the default all-windows setting is lower nominal fuel: $0.0917$ versus $0.1000$, an $8.33\%$ reduction in this normalized fixed-time metric. The QUBO surrogate is well aligned with the modified objective in this benchmark, with mean validation $R^2=0.969$, mean validation Spearman correlation $0.962$, mean pairwise order accuracy $0.935$, and mean top-$k$ recall $0.86$ across ten seeds. Thus, the evidence supports a narrow claim: a duty-cycle-aware QUBO objective can recover a refinable high-duty schedule class on a non-teacher cislunar benchmark, but strong classical heuristics match it and the initially tested shallow random-angle QAOA sampler does not.
-
-\subsection{Thirty-seed main-method statistics favor all-windows error over sampler ranking}
+\subsection{Thirty-seed main-method statistics}
 
 Tables~\ref{tab:phase_shift_cardinality_30seed} and~\ref{tab:phase_shift_cardinality_30seed_statistics}, together with Figure~\ref{fig:phase_shift_cardinality_30seed}, repeat the configured $N=12$ duty-cycle-prior method comparison over 30 deterministic seeds. The raw package contains 210 rows, i.e., 30 seeds times seven methods: random search, cross-entropy search, genetic search, true-objective simulated annealing, surrogate-QUBO simulated annealing, the configured statevector QAOA sampler, and all-windows continuous refinement.
 
@@ -521,20 +260,13 @@ This package therefore strengthens the statistics beyond a QAOA-only ablation wh
 \label{fig:phase_shift_cardinality_30seed}
 \end{figure}
 
-\subsection{Thirty-seed QAOA-depth statistics improve QAOA but do not support superiority}
+\subsection{Focused QAOA/QUBO ablation}
 
-Tables~\ref{tab:qaoa_depth_ablation} and~\ref{tab:qaoa_depth_statistics} isolate the QUBO-sampling step on the same $N=12$ duty-cycle-prior benchmark with 30 deterministic seeds. Each QUBO-derived method uses the same accounting per seed: 96 shared trajectory evaluations to train the QUBO and 24 true post-QUBO candidate evaluations. The resulting raw package contains 150 method--seed rows.
+Table~\ref{tab:qaoa_depth_statistics} and Figure~\ref{fig:qaoa_depth_ablation_30seed} isolate the QUBO-sampling step on the same $N=12$ duty-cycle-prior benchmark with 30 deterministic seeds. Each QUBO-derived method uses the same accounting per seed: 96 shared trajectory evaluations to train the QUBO and 24 true post-QUBO candidate evaluations. The resulting raw package contains 150 method--seed rows; the raw method summary table is in the supplement.
 
 The 30-seed success rates with Wilson 95\% intervals are $28/30=0.933$ $[0.787,0.982]$ for surrogate-QUBO simulated annealing, $28/30=0.933$ $[0.787,0.982]$ for exact evaluation of the top 24 QUBO bitstrings, $15/30=0.500$ $[0.332,0.668]$ for random-angle $p=1$ QAOA, $21/30=0.700$ $[0.521,0.833]$ for optimized $p=1$ QAOA, and $29/30=0.967$ $[0.833,0.994]$ for optimized $p=2$ QAOA. Optimized $p=2$ is competitive with the strongest classical QUBO sampler in this narrow statevector QUBO ablation, but it is not statistically supported as superior: versus surrogate-QUBO simulated annealing, its paired success delta is only $+0.033$, the mean selected-worst-error delta is $-0.00056$ with bootstrap 95\% confidence interval $[-0.00393,0.00236]$, and the exact sign-test $p$-value is $0.4545$.
 
 The useful positive result is narrower. Relative to random-angle $p=1$ QAOA, optimized $p=2$ QAOA increases success by $+0.467$ and reduces the mean selected-worst error by $0.0125$ with bootstrap interval $[-0.0188,-0.0060]$. The exact sign-test $p$-value is still not significant at conventional levels ($p=0.2478$), so the evidence should be read as practical improvement in this ablation rather than a formal dominance claim. No quantum advantage is claimed.
-
-\begin{table}[t]
-\centering
-\caption{QAOA depth and angle-optimization ablation on the $N=12$ duty-cycle-prior phase-shift benchmark. All rows use 96 shared QUBO-training trajectory evaluations and 24 true post-QUBO candidate evaluations per seed.}
-\label{tab:qaoa_depth_ablation}
-\resizebox{\textwidth}{!}{\input{../tables/qaoa_depth_ablation_30seed/qaoa_depth_ablation_table.tex}}
-\end{table}
 
 \begin{table}[t]
 \centering
@@ -550,234 +282,43 @@ The useful positive result is narrower. Relative to random-angle $p=1$ QAOA, opt
 \label{fig:qaoa_depth_ablation_30seed}
 \end{figure}
 
-\subsection{Cardinality ablation and fuel-error Pareto check}
+\subsection{Supplementary diagnostics}
 
-Table~\ref{tab:phase_shift_cardinality_ablation} places the duty-cycle result in context by exhaustively refining high-duty schedule classes. All 12 one-coast schedules are feasible, and 41 of 66 two-coast schedules are feasible. This means the duty-cycle prior is not discovering a rare one-coast structure; it is steering the search into a broad feasible high-duty region. Within the one-coast class, surrogate-QUBO simulated annealing selects feasible schedules in 10/10 runs, but none of those schedules lies on the one-coast Pareto frontier used by the ablation, and its median selected-worst gap to the best one-coast schedule is $0.0108$.
-
-\begin{table}[t]
-\centering
-\caption{Exhaustive high-duty cardinality ablation for the $N=12$ phase-shift benchmark.}
-\label{tab:phase_shift_cardinality_ablation}
-\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality_ablation/high_duty_table.tex}}
-\end{table}
-
-Table~\ref{tab:phase_shift_fuel_pareto} then checks whether the one-coast fuel reduction survives a stronger continuous all-windows baseline. It does not. Increasing the all-windows fuel residual weight to $0.05$ keeps the trajectory feasible, with nominal error $0.0773$, selected recovery worst error $0.1100$, all-mask worst error $0.1122$, and nominal fuel $0.0846$, lower than the one-coast median fuel $0.0917$. The Pareto interpretation is therefore that binary duty-cycle control finds a feasible high-duty schedule class, while continuous fuel regularization inside all available windows is currently more effective at trading terminal error for fuel in this benchmark.
-
-\begin{table}[t]
-\centering
-\caption{All-windows fuel-regularization sweep for the $N=12$ phase-shift benchmark.}
-\label{tab:phase_shift_fuel_pareto}
-\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality_ablation/fuel_pareto_table.tex}}
-\end{table}
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.72\linewidth]{../figures/phase_shift_cardinality_ablation/fuel_error_pareto.pdf}
-\caption{Fuel-error Pareto view for the duty-cycle-prior ablation. Lower fuel is achievable with all-windows fuel regularization while retaining feasibility, so the one-coast result should be read as a schedule-structure feasibility result rather than a fuel-optimality result.}
-\label{fig:phase_shift_fuel_pareto}
-\end{figure}
-
-\subsection{Teacher-controlled benchmark demonstrates selected-branch recovery}
-
-Table~\ref{tab:teacher_results} reports the teacher-controlled benchmark. Random search succeeds in 2/3 seeds. Cross-entropy, surrogate QUBO simulated annealing, and QAOA each succeed in 1/3 seeds. Genetic search, true-objective simulated annealing, the all-windows continuous baseline, and the teacher-seeded binary schedule do not meet the selected-branch thresholds in this three-seed run. The teacher-controls oracle diagnostic succeeds in 3/3 seeds, with median nominal error $0.0067$ and selected recovery worst error $0.0080$, but it is not a valid competing initializer because it receives the hidden continuous controls used to generate the benchmark target.
-
-\begin{table}[t]
-\centering
-\caption{Teacher-controlled benchmark results. Values are medians across three seeds. QUBO and QAOA totals include the shared QUBO-training trajectory evaluations.}
-\label{tab:teacher_results}
-\resizebox{\textwidth}{!}{\input{../tables/teacher_feasible/results_table.tex}}
-\end{table}
-
-The result has two interpretations. The positive interpretation is that the proposed architecture can produce selected-branch robust refinements on a feasible low-thrust transfer, including through QUBO and QAOA initializers. The limiting interpretation is more important for publication: random search currently has the highest non-oracle success rate, all-mask diagnostic errors remain much larger than selected-branch errors, and the oracle result shows that continuous-control initialization can dominate the outcome. Therefore the present data support feasibility of the pipeline and diagnose a bottleneck, not superiority of QUBO/QAOA sampling.
-
-The seed counts outside the 30-seed packages are still small. Wilson 95\% intervals are wide: the phase-shift all-windows success rate of 5/5 has interval approximately $[0.57,1.00]$, the unrepaired phase-shift discrete-method rates of 0/5 have intervals approximately $[0,0.43]$, and the repaired phase-shift method rates of 5/5 again have intervals approximately $[0.57,1.00]$ but are method-collapsed by the deterministic repair. In the legacy 10-seed cardinality-prior comparison, 10/10 rates have intervals approximately $[0.72,1.00]$, random search at 2/10 has interval approximately $[0.06,0.51]$, and the shallow QAOA row at 4/10 has interval approximately $[0.17,0.69]$. The 30-seed main-method package narrows these intervals for the duty-cycle-prior comparison: random search is $11/30$ with interval $[0.219,0.545]$, the configured statevector QAOA row is $13/30$ with interval $[0.274,0.608]$, and the strongest classical high-duty samplers plus all-windows continuous refinement are $30/30$ with interval $[0.886,1.000]$. The 30-seed QAOA-depth package improves statistical rigor for the QUBO-derived samplers, but even there paired comparisons do not show statistically supported superiority of optimized $p=2$ QAOA over surrogate-QUBO simulated annealing. The teacher random-search rate of 2/3 has interval approximately $[0.21,0.94]$, and the teacher QUBO/QAOA rates of 1/3 have intervals approximately $[0.06,0.79]$. These intervals are reported to prevent overinterpretation; they do not support a statistically significant ranking of all stochastic initializers or any quantum-advantage claim.
-
-Table~\ref{tab:recovery_fuel} reports nominal and recovery fuel. QAOA has the lowest median fuel among methods with nonzero recovery success, but its selected robust error and success rate are worse than random search. Fuel therefore cannot be evaluated independently of feasibility.
-
-\begin{table}[t]
-\centering
-\caption{Teacher-controlled recovery fuel and refinement effort. Fuel is reported in normalized acceleration-time units.}
-\label{tab:recovery_fuel}
-\resizebox{0.95\textwidth}{!}{\input{../tables/teacher_feasible/recovery_table.tex}}
-\end{table}
-
-\subsection{Surrogate quality remains a bottleneck}
-
-Table~\ref{tab:teacher_qubo} shows teacher-controlled QUBO diagnostics. Validation $R^2$ varies from negative to moderately positive across only three seeds. Rank diagnostics are more favorable but still not decisive: validation Spearman correlation is $0.57$--$0.71$, pairwise order accuracy is $0.68$--$0.79$, and top-2 recall is $0.5$--$1.0$ on only eight validation samples. This is too weak for a final surrogate-generalization claim and likely contributes to the lack of QUBO/QAOA dominance. A submission-ready version needs larger training sets, cross-validated regularization, ranking-oriented validation, or a structured surrogate with trajectory-informed features.
-
-\begin{table}[t]
-\centering
-\caption{Teacher-controlled QUBO surrogate fit diagnostics.}
-\label{tab:teacher_qubo}
-\resizebox{\textwidth}{!}{\input{../tables/teacher_feasible/ablation_table.tex}}
-\end{table}
-
-Secondary figure-only diagnostics for the teacher-controlled benchmark and feasibility sweep are retained in the supplement so the main manuscript can emphasize the claim hierarchy and statistical tables.
+The supplement preserves the evidence that explains how the headline results were reached and where they fail. This includes the original catalog pilot and QUBO fit, feasibility sweeps, direct multiple-shooting and targeted catalog attempts, selected-outage hard-catalog envelope, locked-nominal and delayed-arrival hard-catalog recovery packages, bounded phase-suite and robust-margin rows, direct-collocation and Hermite--Simpson baselines, unrepaired and repaired $N=8$ phase-shift evidence, legacy 10-seed cardinality-prior summaries, cardinality and fuel ablations, and the teacher-controlled benchmark. These artifacts support the failure-mode discussion, but the main claims do not depend on promoting them to primary results.
 
 \section{Discussion}
 
-The experiments support fifteen conclusions.
-First, robust low-thrust initialization can be represented as a binary scheduling problem with trajectory-evaluated missed-thrust penalties and then approximated by a QUBO.
-Second, the phase-shift benchmark shows that the present branch-recovery backend can solve limited non-teacher catalog/dynamics-derived cases under the configured thresholds, although most positive rows still optimize selected outage branches and report unselected masks diagnostically.
-Third, enforcing the acceleration bound inside the multiple-shooting residual removes an important implementation inconsistency and produces limited positive non-teacher backend results.
-Fourth, the robust-margin suite partially addresses the selected-branch-only criticism: in the smaller higher-thrust $N=8$, $a_{\max}=0.3$ setting, all one-segment outage branches are optimized and the phase-time $0.3$ and $0.4$ rows meet the thresholds, while the non-continuation phase-time $0.2$ all-single-outage row remains robust-infeasible.
-Fifth, continuation extension diagnostics give four optimizer-converged feasible continuous-backend rows out of five, including all-selected $N=8$ one- and two-segment masks at phase time $0.3$, but the $N=6$ one/two-segment phase-time $0.2$ diagnostic still fails the robust threshold.
-Sixth, the constant-control Hermite--Simpson continuation probe provides another continuous-backend check: phase-time $0.4$ warm continuation and a lower-thrust phase-shift stress row converge and meet thresholds, while the phase-time $0.2$ warm row fails the nominal threshold and the phase-time $0.3$ cold row reaches the evaluation cap despite meeting thresholds.
-Seventh, the independent-midpoint-control Hermite--Simpson package closes the specific no-independent-midpoint-control critique: it optimizes midpoint controls, persists endpoint and midpoint sidecars, and keeps three threshold-feasible phase-shift rows, but it still fails the phase-time $0.2$ nominal threshold and the bounded catalog-DRO selected-outage diagnostic.
-Eighth, the phase-time $0.2$ thrust-margin grid shows clear sensitivity to available thrust: the selected-branch row fails at $a_{\max}=0.20$, fails by nominal error only at $a_{\max}=0.25$, and passes at $a_{\max}=0.30$.
-Ninth, a separate bounded trapezoidal direct-collocation baseline succeeds on the easiest phase-suite row and fails on the two harder rows, supporting the interpretation that backend capability is strongly case-dependent.
-Tenth, that same phase-shift benchmark shows that the tested binary schedule samplers can fail even when the continuous all-windows baseline succeeds; the discrete layer is currently too sparse and too dependent on the steering-law objective.
-Eleventh, deterministic dense-schedule repair can make the phase-shift benchmark refinable for all samplers, but only by collapsing them to the same all-windows refined envelope, so the repair is diagnostic rather than discriminating.
-Twelfth, adding a duty-cycle prior creates a positive but limited non-teacher result: the QUBO-ready objective can select one-coast schedules that remain robustly refinable, although exhaustive cardinality and all-windows fuel-regularization ablations show that this is a broad feasible schedule class rather than a superior Pareto frontier.
-Thirteenth, the 30-seed main-method statistics confirm that several high-duty samplers are reliably feasible, but all-windows continuous refinement has lower paired selected-worst error than every sampled method, and the configured statevector QAOA row does not match the strongest classical methods.
-Fourteenth, the 30-seed QAOA-depth statistics show that optimized-angle $p=2$ QAOA materially improves over random-angle $p=1$ QAOA and is competitive with the best classical QUBO sampler, but paired tests do not support superiority over surrogate-QUBO simulated annealing.
-Fifteenth, the hard NRHO-like to DRO-phase catalog-derived case exposes the gap between this research scaffold and mature cislunar low-thrust design: selected outage branch errors can be made small for chosen masks at higher thrust, but nominal feasibility and broad outage-family recovery remain difficult. A locked-nominal branch-recovery diagnostic, in which the nominal control is solved once and frozen so that nominal feasibility is no longer the failing component, narrows this blocker: a bounded one-segment selected subset with at least six recovery segments meets the thresholds, while the selected one/two-segment and all-single-outage scopes in that earlier fixed-final-time diagnostic still fail. The delayed-arrival h6 portfolio diagnostic then recovers all 14 one-segment masks against a delayed target with selected/all delayed worst error $0.004040$ and optimizer-converged accepted branches. The updated tail-coast fixed-final-time diagnostic resolves the configured one/two hard-catalog tail-coast scope within its locked-nominal continuous-backend setup: the combined \texttt{tail\_coast\_all\_one\_two\_segment\_t5\_portfolio} row selects and evaluates all 27 configured one- and two-segment masks at the original target and original final time, after forcing the final five nominal controls to exact zero, and reaches nominal tail-coast error $0.022992$ and selected/all fixed-time worst error $0.093606$. Branches with post-outage recovery variables are optimized, while two no-recovery-variable late-tail masks are threshold-feasible direct evaluations rather than optimizer-converged branches; this is why \texttt{branch\_optimizer\_all\_success=false} despite threshold feasibility. The separate all-one-segment and all-two-segment rows remain provenance rows. This resolves the configured one/two fixed-final-time tail-coast diagnostic only within the locked-nominal continuous-backend setup; it is not fuel-optimal, not a binary-sampler result, not QUBO/QAOA/quantum evidence, not a certified flight-design result, not high-fidelity validation, and not evidence for outage families beyond the configured one- and two-segment masks.
+The central result is a benchmark result, not a sampler-performance claim. Binary thrust-window schedules can be embedded in a reproducible missed-thrust initialization workflow, but the usefulness of a schedule is controlled by the continuous recovery basin. The supplementary diagnostics show both sides: sparse binary schedules can fail even when all-windows continuous refinement succeeds, while duty-cycle priors can preserve enough thrust availability for several samplers to find refinable high-duty schedules.
 
-The teacher diagnostics are particularly revealing. Even when the binary schedule that generated the teacher target is supplied, the branch-recovery optimizer does not recover a successful selected-outage solution under the current feedback initialization. The oracle continuous-control diagnostic then succeeds on every seed. This pair of results indicates that schedule structure alone is insufficient and that the present feedback control initializer can place the least-squares refinement outside the useful basin. Continuous thrust initialization, branch selection, least-squares scaling, and recovery parameterization all need improvement before the discrete initializer can be judged fairly.
+The 30-seed main-method package is the most relevant initializer evidence. Cross-entropy search, genetic search, true-objective simulated annealing, surrogate-QUBO simulated annealing, and all-windows continuous refinement all succeed in 30/30 seeds on the duty-cycle-prior benchmark, whereas the configured statevector QAOA row succeeds in 13/30 seeds. The paired selected-worst-error tests favor all-windows continuous refinement over every sampled method. Thus the paper supports duty-cycle-aware robust initialization as a useful benchmark mechanism, but not a claim that a binary sampler improves the continuous trajectory beyond a strong dense-control baseline.
 
-The phase-shift diagnostics point to a complementary failure mode. There, the continuous all-windows baseline succeeds without teacher controls, and the bounded-projected multiple-shooting rows confirm that a consistent norm-bounded residual can solve selected-branch versions while keeping all one-segment outage diagnostics below threshold in the successful rows. The robust-margin suite strengthens this point but also narrows it: all one-segment outage branch optimization is demonstrated in the smaller $N=8$, $a_{\max}=0.3$ phase-time $0.3$ and $0.4$ rows, while the non-continuation phase-time $0.2$ all-single-outage row fails. The continuation-extension suite then broadens the all-selected evidence: all-single-outage $N=8$ rows at phase times $0.3$ and $0.4$ meet thresholds with optimizer convergence, and one/two-segment rows at phase time $0.3$ meet thresholds for both $N=6$ and $N=8$. The same extension still fails for the $N=6$ one/two-segment phase-time $0.2$ row. The trapezoidal direct-collocation baseline independently solves the phase-time $0.4$ row but fails at $0.2$ and $0.3$. The constant-control Hermite--Simpson continuation probe also supports phase-time $0.4$ feasibility and a lower-thrust phase-shift stress row, but it preserves the same caution because the phase-time $0.2$ warm row fails the nominal threshold and the feasible phase-time $0.3$ cold row is not optimizer-converged. The independent-midpoint-control Hermite--Simpson package strengthens this comparison by removing the constant-control midpoint limitation and reproducing warm starts from endpoint-plus-midpoint sidecars; nevertheless, its phase-time $0.2$ row still fails the nominal threshold and its catalog-DRO selected-outage row is a clear negative result. The continuous-backend concern is therefore narrowed further but not eliminated. The unrepaired binary samplers still do not select enough useful thrust windows. The dense-repair ablation confirms the interpretation: when sparse late-window candidates are expanded into the all-windows envelope, the same continuous backend succeeds, but the repair removes any meaningful method ranking. The cardinality-prior experiment then shows one way to make the binary layer useful: explicitly encode a desired duty cycle so that the sampler preserves enough low-thrust availability while still removing one window. The 30-seed main-method package strengthens that conclusion but also limits it: cross-entropy, genetic search, true-objective simulated annealing, and surrogate-QUBO simulated annealing match all-windows continuous refinement on success, while all-windows continuous refinement is better on paired selected-worst error. The separate 30-seed optimized-QAOA ablation improves the QAOA initializer itself: moving from random $p=1$ angles to optimized $p=2$ angles raises success from 15/30 to 29/30 under the same post-QUBO candidate budget. However, the paired comparison with surrogate-QUBO simulated annealing is inconclusive, the main-method statevector QAOA row is weaker than the strongest classical methods, the exhaustive ablation shows that all one-coast schedules and many two-coast schedules are feasible, and the all-windows fuel sweep shows that continuous fuel regularization is a stronger Pareto mechanism in this case. This suggests that the present binary encoding is too coarse without additional trajectory-shaping information. A stronger formulation may need multi-level thrust availability, direction classes, learned repair policies with held-out validation, or a two-stage objective that preserves dense low-thrust arcs while optimizing fuel in continuous control space.
+The focused QAOA/QUBO ablation provides a more favorable but still bounded view of QAOA. Optimizing the angles and increasing simulated depth to $p=2$ improves QAOA relative to random-angle $p=1$ QAOA and is competitive with classical QUBO sampling in that narrow statevector study. The paired comparisons do not support superiority over surrogate-QUBO simulated annealing, and the result is not hardware evidence. For this benchmark, QAOA is best interpreted as a measured initializer family with negative and inconclusive comparisons, not as the contribution itself.
 
-For a space-systems methods audience, the present package is best framed as a benchmark-and-evidence paper rather than a claim of superior quantum sampling performance. It documents a realistic hybrid architecture, non-teacher solvable control cases, compact direct-collocation comparisons, robust-margin, direct multiple-shooting continuation, constant-control and independent-midpoint-control Hermite--Simpson sensitivity studies, a negative selected-outage hard-catalog envelope, fixed-final-time and delayed-arrival hard-catalog recovery diagnostics, one duty-cycle-aware discrete-initialization result, 30-seed main-method statistics, a 30-seed optimized-QAOA improvement over random-angle QAOA that remains statistically inconclusive against the best classical QUBO sampler, and several failure modes with reproducible provenance. The practical aerospace takeaway is that mission-design researchers should first secure dense continuous-control feasibility and mature continuation/collocation baselines before interpreting binary or quantum schedule sampling. Duty-cycle priors can help locate feasible high-duty schedules, but all-windows continuous fuel regularization remains stronger in this benchmark. To support a stronger performance claim, a later version would need statistically meaningful improvement over strong classical initializers under equal total trajectory-evaluation budgets, stronger QUBO/QAOA studies beyond shallow simulated sampling, and a more mature continuous optimal-control backend with larger-scale independent-control Hermite--Simpson continuation, sequential convex programming, or comparable certified flight-design machinery.
+The hard-catalog tail-coast diagnostic addresses a different reviewer concern: whether any hard-catalog missed-thrust recovery case can meet the configured fixed-final-time thresholds once nominal feasibility is locked. The combined one/two-segment row does meet those thresholds, but only within a carefully scoped continuous-backend setup. The final-five-segment coast, locked nominal control, fallback starts, and no-recovery-variable late-tail branches are part of the result. This narrows a backend blocker and records useful recovery provenance, but it does not establish fuel-optimality, high-fidelity robustness, broader outage-family robustness, or quantum evidence.
+
+The practical implication for astrodynamics researchers is that binary schedule benchmarks should report continuous-backend diagnostics and negative evidence as first-class artifacts. A stronger future initializer claim would need better trajectory-shaped binary encodings, mature continuous optimal-control baselines such as production collocation or sequential convex programming workflows, high-fidelity validation, and statistically significant improvements over strong classical initializers under equal total trajectory-evaluation budgets.
 
 \section{Limitations}
 
-The main limitations are as follows. The phase-shift benchmarks are non-teacher and not do-nothing passes, but they are still short normalized CR3BP retargeting cases and are easier than the NRHO-like to DRO-phase transfer. The bounded-projected multiple-shooting, direct-collocation, selected-outage hard-catalog envelope, continuation-extension, Hermite--Simpson continuation, locked-nominal, delayed-arrival, and tail-coast recovery results are continuous-backend improvements or stress tests, not binary or quantum-sampling results, and many positive selected-branch rows optimize one selected outage branch while reporting unselected outages as diagnostics using masked nominal controls. The robust-margin suite partly reduces this concern by optimizing all one-segment outage branches in the smaller $N=8$, $a_{\max}=0.3$ phase-time $0.3$ and $0.4$ rows, but it does not include two-segment outage families, and the phase-time $0.3$ threshold-feasible row reached the maximum function-evaluation limit rather than optimizer convergence. The continuation-extension suite further reduces the selected-branch concern by optimizing all configured one- and two-segment outage masks in feasible $N=6$ and $N=8$ phase-time $0.3$ rows, but the result is still a continuous-control initialization baseline and the $N=6$ one/two-segment phase-time $0.2$ diagnostic fails the robust threshold. The selected-outage hard-catalog envelope is negative evidence: selected recovery branch errors are small for selected masks, but every row fails the nominal threshold, reaches the evaluation cap with optimizer/backend success false, and retains high all-mask diagnostics.
+The normalized CR3BP experiments are preliminary-design algorithm studies. They omit ephemeris dynamics, mass depletion, eclipse constraints, navigation uncertainty, thrust pointing limits beyond the acceleration norm, operational constraints, and high-fidelity force modeling. The terminal-error thresholds are screening tolerances; their dimensional interpretation is deliberately large and not comparable to flight targeting requirements.
 
-For the hard-catalog recovery packages, the earlier fixed-final-time locked-nominal diagnostic narrows the blocker without eliminating it: it freezes a feasible nominal control and shows that a bounded one-segment selected subset with at least six recovery segments meets the thresholds, but the one positive row is threshold-feasible rather than optimizer-converged, the all-mask column is a diagnostic rather than a robustness claim, and the selected one/two-segment and all-single-outage scopes in that package still fail. The delayed-arrival h6 portfolio row optimizes all one-segment hard-catalog masks and meets thresholds with optimizer-converged accepted branches, but it changes the arrival time, uses a feasibility-oriented residual portfolio, is not fuel-optimal, and does not by itself cover fixed-final-time recovery or two-segment outage families. The tail-coast fixed-final-time diagnostic now resolves the combined configured one/two fixed-final-time tail-coast scope within its own locked-nominal continuous-backend setup, but its nominal is a locked tail-coast design with the final five controls fixed to exact zero, two late-tail no-recovery-variable branches do not count as optimizer convergence, and deterministic fallback starts are declared branch-initialization devices rather than quantum or discrete-sampler mechanisms. These hard-catalog recovery packages remain continuous-backend evidence, not quantum evidence, not fuel-optimality evidence, not certified flight-design evidence, not high-fidelity validation, and not evidence for outage families beyond the configured one- and two-segment masks.
+The continuous backends are research-grade direct shooting, compact direct collocation, Hermite--Simpson, and continuation diagnostics. They are useful for comparing initializer behavior and exposing failure modes, but they are not certified flight-design tools. Many supplementary rows optimize selected outage branches and report unselected outage masks diagnostically; only rows that explicitly select all configured masks should be read as all-configured-mask evidence.
 
-The direct-collocation phase-shift baseline is trapezoidal and compact, not a certified continuation workflow; it succeeds on only one of the three phase-suite rows. The constant-control Hermite--Simpson continuation baseline has no independent midpoint controls; its phase-time $0.3$ cold row meets thresholds but not optimizer success, its phase-time $0.2$ warm row fails the nominal threshold, and its lower-thrust stress row remains a catalog halo phase-shift probe rather than the hard NRHO-like tail-coast fixed-final-time result. The independent-midpoint-control Hermite--Simpson package closes that specific transcription critique and persists endpoint-plus-midpoint sidecars, but it is still continuous-backend evidence, its phase-time $0.2$ warm row fails the nominal threshold, and its bounded catalog-DRO selected-outage diagnostic remains a negative result. The earlier all-outage-selected bounded phase-suite row remains infeasible. The unrepaired $N=8$ success comes from the all-windows continuous baseline, not from the QUBO/QAOA schedule samplers. The dense-repair ablation succeeds by converting sparse candidates to \texttt{11111111}, so it should be read as an encoding diagnostic rather than a competitive result.
+The hard-catalog tail-coast result is scoped to a locked-nominal continuous-backend setup with final-five-segment coast, configured one- and two-segment masks, deterministic fallback starts, and late-tail no-recovery-variable direct evaluations. It does not prove fuel-optimal recovery, high-fidelity robustness, certified flight design, or broader outage-family robustness.
 
-The $N=12$ duty-cycle-prior result is positive but narrow: it demonstrates refinable high-duty schedules, not lower terminal error than all-windows, not a Pareto fuel advantage over all-windows with stronger fuel regularization, and not superiority over strong classical CEM, genetic search, or true-objective simulated annealing. The 30-seed main-method package improves statistical rigor and confirms that several high-duty samplers can be feasible, but it also shows that all-windows continuous refinement has lower paired selected-worst error than every sampled method and that the configured statevector QAOA row has lower success than the strongest classical methods. Optimized-angle QAOA is tested only in statevector simulation with $p\leq2$ and a reduced optimizer budget of one restart and ten iterations; the separate QAOA-depth 30-seed package shows improvement over random-angle QAOA, but paired tests do not support superiority over surrogate-QUBO simulated annealing. The teacher-controlled benchmark is feasible by construction and should not be confused with an operational transfer. The hard catalog-derived benchmark remains unresolved for fuel-optimal recovery, certified flight-design recovery, high-fidelity validation, outage families beyond the configured one/two tail-coast masks, and any quantum-advantage claim under the present evidence. Five $N=8$ phase-shift seeds, three teacher-controlled seeds, and legacy 10-seed cardinality-prior summaries are still insufficient for strong statistical claims outside the focused 30-seed packages. The QUBO surrogate has mixed validation performance across benchmarks. Branch recovery is evaluated against all masks separately unless all configured masks are explicitly selected for optimization. The all-windows, multiple-shooting, compact direct-collocation, constant-control and independent-midpoint-control Hermite--Simpson, and continuation baselines are research-grade direct shooting/collocation/SCP-adjacent diagnostics, not certified flight-design tools. The oracle diagnostic is intentionally not a valid competing initializer. The experiments are normalized CR3BP studies without ephemeris dynamics, mass depletion, eclipse constraints, navigation uncertainty, thrust pointing limits beyond acceleration norm, or operational constraints.
+The discrete-initializer conclusions are also bounded. The 30-seed packages improve statistical rigor, but QAOA is simulated with shallow depths and limited optimizer budgets, and the evidence does not support quantum advantage or QAOA superiority. Smaller supplementary packages, including teacher-controlled and legacy 10-seed results, are retained as diagnostics rather than as strong stochastic rankings.
 
 \section{Reproducibility}
 
-The repository contains Python source, configurations, source-state metadata, generated tables, figures, and result metadata. The catalog-derived pilot command is:
-\begin{verbatim}
-py -3.11 scripts\run_experiment.py --config
-configs\pilot_replicated.yaml
-\end{verbatim}
-The stronger catalog-derived candidate command is:
-\begin{verbatim}
-py -3.11 -m scripts.run_experiment --config
-configs/q1_candidate.yaml
-\end{verbatim}
-The feasibility sweep command is:
-\begin{verbatim}
-py -3.11 -m scripts.run_feasibility_sweep
-\end{verbatim}
-The catalog multiple-shooting diagnostic artifacts are regenerated without new solves by:
-\begin{verbatim}
-py -3.11 scripts\run_catalog_collocation_feasibility.py
---resume --max-cases 0
-\end{verbatim}
-The selected-outage hard-catalog envelope package command is:
-\begin{verbatim}
-py -3.11 scripts\run_catalog_feasibility_envelope.py
---config configs\hard_catalog_selected_outage_envelope.yaml
---resume
-\end{verbatim}
-The locked-nominal hard-catalog branch-recovery diagnostic command is:
-\begin{verbatim}
-py -3.11 scripts\run_locked_nominal_recovery.py
---config configs\hard_catalog_locked_nominal_recovery.yaml
---resume
-\end{verbatim}
-The delayed-arrival hard-catalog locked-nominal portfolio diagnostic command is:
-\begin{verbatim}
-py -3.11 scripts\run_delayed_locked_recovery.py
---config configs\hard_catalog_delayed_recovery.yaml
---resume
-\end{verbatim}
-The fixed-final-time tail-coast hard-catalog locked-nominal recovery command is:
-\begin{verbatim}
-py -3.11 scripts\run_tail_coast_recovery.py
---config configs\hard_catalog_tail_coast_recovery.yaml
---resume
-\end{verbatim}
-The bounded-projected multiple-shooting phase-shift diagnostic command that reproduces the positive row is:
-\begin{verbatim}
-py -3.11 scripts\run_bounded_collocation_benchmark.py
---resume --segments 12 --selected-outages 1
---min-recovery-segments 1 --max-nfev 40
-\end{verbatim}
-The bounded-projected phase-suite command is:
-\begin{verbatim}
-py -3.11 scripts\run_bounded_phase_suite.py --resume
-\end{verbatim}
-The robust-margin suite command is:
-\begin{verbatim}
-py -3.11 scripts\run_robust_margin_suite.py --resume
-\end{verbatim}
-The continuation-extension suite command is:
-\begin{verbatim}
-py -3.11 scripts\run_continuation_margin_suite.py
---config configs\continuation_extension_suite.yaml --resume
-\end{verbatim}
-The compact trapezoidal direct-collocation baseline command is:
-\begin{verbatim}
-py -3.11 scripts\run_direct_collocation_baseline.py
-\end{verbatim}
-The constant-control Hermite--Simpson continuation baseline/probe command is:
-\begin{verbatim}
-py -3.11 scripts\run_hermite_simpson_continuation.py --resume
-\end{verbatim}
-The independent-midpoint-control Hermite--Simpson continuation evidence command is:
-\begin{verbatim}
-py -3.11 scripts\run_independent_hs_continuation.py
---config configs\independent_hs_continuation_baseline.yaml
---source-states data\source_states.json --resume
-\end{verbatim}
-The targeted catalog feasibility command used in the additional negative test is:
-\begin{verbatim}
-py -3.11 -m scripts.run_feasibility_sweep --config
-configs/catalog_targeted_feasibility.yaml --transfer-times 4.0
---amax 0.3 --segments 14 --max-nfev 250 --multistart
---random-starts 3 --include-bang-bang --min-recovery-segments 4
-\end{verbatim}
-The non-teacher catalog halo phase-shift benchmark command is:
-\begin{verbatim}
-py -3.11 scripts\run_experiment.py --config
-configs\q1_phase_shift.yaml
-\end{verbatim}
-The deterministic dense-schedule repair ablation for the same benchmark is:
-\begin{verbatim}
-py -3.11 scripts\run_experiment.py --config
-configs\q1_phase_shift_repair.yaml
-\end{verbatim}
-The 12-segment duty-cycle-prior phase-shift benchmark command is:
-\begin{verbatim}
-py -3.11 scripts\run_experiment.py --config
-configs\q1_phase_shift_cardinality.yaml
-\end{verbatim}
-The 30-seed main-method duty-cycle-prior package commands are:
-\begin{verbatim}
-py -3.11 scripts\run_experiment.py --config
-configs\q1_phase_shift_cardinality_30seed.yaml
-py -3.11 scripts\run_main_method_statistics.py --config
-configs\q1_phase_shift_cardinality_30seed.yaml
-\end{verbatim}
-The duty-cycle ablation and all-windows fuel-regularization sweep command is:
-\begin{verbatim}
-py -3.11 scripts\run_cardinality_ablation.py
-\end{verbatim}
-The 30-seed optimized-angle QAOA depth ablation command is:
-\begin{verbatim}
-py -3.11 scripts\run_qaoa_depth_ablation.py
---config configs\qaoa_depth_ablation_30seed.yaml
---angle-restarts 1 --maxiter 10
-\end{verbatim}
-The legacy 10-seed QAOA depth artifacts are retained in \path{data/results/qaoa_depth_ablation/}, \path{tables/qaoa_depth_ablation/}, and \path{figures/qaoa_depth_ablation/}, but the QAOA-depth statistical result uses the 30-seed package above.
+The repository contains Python source, configurations, source-state metadata, generated tables, figures, result metadata, and PDFs. The primary artifacts for the main claims are the 30-seed main-method package in \path{data/results/phase_shift_cardinality_30seed/}, the 30-seed QAOA/QUBO package in \path{data/results/qaoa_depth_ablation_30seed/}, and the hard-catalog tail-coast package in \path{data/results/hard_catalog_tail_coast_recovery/}. The supplement and \path{REPRODUCIBILITY.md} map the secondary diagnostics to their tables, figures, commands, and known caveats.
 
-The teacher-controlled benchmark command is:
-\begin{verbatim}
-py -3.11 -m scripts.run_experiment --config
-configs/q1_teacher_feasible.yaml
-\end{verbatim}
-The run metadata record Python version, package versions, operating system, configuration, target-state generation, true-evaluation accounting, norm-bounded refinement, and claims limitations. The bounded phase-suite, robust-margin suite, selected-outage hard-catalog envelope package, locked-nominal hard-catalog branch-recovery diagnostic, delayed-arrival hard-catalog portfolio diagnostic, tail-coast fixed-final-time recovery diagnostic, continuation-extension suite, constant-control and independent-midpoint-control Hermite--Simpson baselines, direct-collocation metadata, 30-seed main-method statistics, and 30-seed QAOA metadata also record per-row settings fingerprints, configuration hashes, source-state identifiers, or statistical procedure details so that resumed rows and paired comparisons are traceable. The locked-nominal recovery metadata in \path{data/results/hard_catalog_locked_nominal_recovery/locked_nominal_recovery_metadata.json} records the locked-nominal/branch-recovery semantics, threshold rule, and per-case settings fingerprints alongside the \path{locked_nominal_recovery.csv} rows. The delayed-arrival metadata in \path{data/results/hard_catalog_delayed_recovery/delayed_locked_recovery_metadata.json} records the delayed-target semantics, portfolio acceptance rule, implementation identities, and per-case branch weight variants alongside \path{delayed_locked_recovery.csv}. The tail-coast metadata in \path{data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery_metadata.json} records fixed-final-time semantics, exact-zero tail-coast nominal controls, the combined all-configured one/two-segment case row, provenance all-single and all-two-segment rows, branch portfolio and fallback accounting, no-recovery-variable branch semantics, and implementation identities alongside \path{tail_coast_recovery.csv}. The continuation-extension and constant-control Hermite--Simpson control sidecars record persisted nominal endpoint controls and control hashes used for warm-start provenance; the independent-midpoint-control Hermite--Simpson sidecars persist endpoint and midpoint nominal controls and record endpoint, midpoint, and combined sidecar hashes. A scoped artifact manifest with SHA-256 hashes is stored in \path{data/results/artifact_manifest.json} and generated by \path{scripts/write_artifact_manifest.py}. It records \texttt{git\_head\_at\_generation}, \texttt{git\_head\_semantics}, and \texttt{working\_tree\_status\_at\_generation}; the file hashes and byte counts are authoritative because a committed manifest necessarily records the HEAD before the final manifest commit. The pinned direct-dependency set is stored in \path{requirements-lock.txt}. The short clean-clone verification path is the Python 3.11 pytest suite and a local LaTeX build; long experiments should use the recorded artifacts unless regenerating evidence. The test suite checks objective/QUBO finiteness, target-mode metadata, teacher control norm bounds, norm-bounded refinement controls, branch-recovery accounting, delayed-recovery portfolio accounting, tail-coast recovery fallback and no-recovery-variable accounting, direct-collocation control bounds and resume fingerprints, QAOA angle optimization, statistical p-value formatting, manifest hash checking, and table-generation behavior.
+The reviewer-facing verification path is: start from a clean worktree, rebuild \path{paper/main.pdf} and \path{paper/supplement.pdf} with \texttt{latexmk}, run the smoke tests with Python 3.11, refresh \path{data/results/artifact_manifest.json}, run the manifest checker, and run \texttt{git diff --check}. Long experiment jobs are not part of the short verification path; recorded artifacts should be used unless evidence is intentionally regenerated.
+
+The manifest is generated by \path{scripts/write_artifact_manifest.py}. Its scoped SHA-256 hashes and byte counts are the authoritative artifact identities. The field \texttt{git\_head\_at\_generation} records the repository state when the manifest was produced; for a committed manifest this necessarily refers to the parent/pre-final state rather than the final commit containing the refreshed manifest. Historical long-run metadata may predate the repository or contain dirty-state records. The current submission snapshot is verified by clean git status after final commit, manifest checking, tests, and local LaTeX builds rather than by interpreting old experiment metadata as final provenance.
 
 \section{Conclusion}
 
-This paper formulates robust maneuver initialization for low-thrust cislunar transfers as a binary scheduling problem with missed-thrust penalties embedded in the schedule objective. The proposed workflow keeps the split between discrete schedule initialization, including QUBO/QAOA variants, and classical continuous trajectory optimization explicit. The generated evidence now includes non-teacher catalog halo phase-shift benchmarks that bounded-projected multiple shooting, compact trapezoidal direct collocation, constant-control Hermite--Simpson continuation, independent-midpoint-control Hermite--Simpson continuation, and direct multiple-shooting continuation solve with selected-branch recovery models in limited cases. The continuation-extension suite gives four optimizer-converged feasible continuous-backend rows out of five, including an $N=8$ all-selected one/two-segment phase-time $0.3$ row, while the phase-time $0.2$ one/two-segment diagnostic remains robust-infeasible. The constant-control Hermite--Simpson probe adds threshold-feasible phase-time $0.3$ and $0.4$ rows plus a lower-thrust phase-shift stress row, but one feasible row is not optimizer-converged, the phase-time $0.2$ row fails the nominal threshold, and the stress row is not the hard NRHO-like tail-coast fixed-final-time result. The independent-midpoint-control Hermite--Simpson package addresses the specific midpoint-control transcription critique and preserves endpoint-plus-midpoint sidecar provenance, but it still leaves the phase-time $0.2$ diagnostic and bounded catalog-DRO selected-outage row unresolved. The selected-outage hard-catalog envelope shows an important fixed-final-time failure mode: selected recovery errors can be small for chosen masks, but nominal errors fail, optimizer/backend success is false at the evaluation cap, and all-mask diagnostics remain high. An earlier locked-nominal fixed-final-time branch-recovery diagnostic narrows this gap by freezing a feasible nominal control and recovering a bounded one-segment, six-recovery-segment selected subset under the thresholds, while broader selected one/two-segment and all-single-outage scopes in that package still fail. A delayed-arrival h6 portfolio diagnostic recovers all 14 one-segment hard-catalog masks against a delayed target, but it is a feasibility-horizon result rather than fixed-final-time robustness or fuel optimality. The updated tail-coast fixed-final-time diagnostic then resolves the configured one/two fixed-final-time tail-coast scope within its locked-nominal continuous-backend setup: the combined row selects/evaluates all 27 configured one- and two-segment masks at the original target and final time, with recovery-variable branches optimized, two late-tail no-recovery-variable masks treated as threshold-feasible direct evaluations rather than optimizer convergence, final-five-segment nominal coast, nominal tail-coast error $0.022992$, selected/all fixed-time worst error $0.093606$, and explicit fallback/no-recovery-variable accounting. These continuous-backend diagnostics address selected-branch-only and mature-baseline criticisms more directly, but they do not establish fuel-optimal recovery, certified flight-design recovery, high-fidelity robustness, broader outage-family robustness beyond the configured one/two masks, or quantum advantage. The same benchmark family shows that the tested unrepaired binary schedule samplers can fail to identify a refinable thrust-window structure. A deterministic dense-schedule repair makes the phase-shift case refinable for all samplers, but only by converting their sparse candidates to the same \texttt{11111111} all-windows envelope, so it is a diagnostic of encoding sparsity rather than a performance win. A duty-cycle-prior variant gives a more constructive but still limited result: a QUBO-ready active-fraction prior lets surrogate-QUBO simulated annealing and strong classical heuristics find one-coast schedules that remain robustly refinable. The 30-seed main-method statistics confirm that result for cross-entropy, genetic search, true-objective simulated annealing, and surrogate-QUBO simulated annealing, but also show that all-windows continuous refinement has lower paired selected-worst error and that the configured statevector QAOA row is not competitive with the strongest classical methods. A separate 30-seed QAOA-depth package shows that optimized-angle statevector QAOA improves over random-angle QAOA and is competitive with the best classical QUBO sampler in that narrow ablation, but paired tests do not support superiority over surrogate-QUBO simulated annealing. Exhaustive cardinality and fuel-regularization ablations show that the one-coast schedules are one part of a broad high-duty feasible region and are not Pareto-superior to all-windows continuous refinement with stronger fuel regularization. The teacher-controlled benchmark shows that selected-branch robust recovery can be achieved by several initializers, but random search currently has the highest non-oracle success rate and the oracle diagnostic shows that continuous-control initialization can dominate the outcome. The defensible conclusion is therefore that mission-design work should secure dense continuous-control feasibility and mature continuation/collocation baselines before interpreting binary or quantum schedule sampling. A stronger claim would require duty-cycle-aware binary encodings that preserve dense low-thrust arcs while adding trajectory-shaping value, stronger continuous-control initialization, stronger surrogate and QAOA generalization, and statistically significant improvement over robust classical initializers on non-constructed benchmarks under equal total trajectory-evaluation budgets.
+This paper contributes a reproducible normalized CR3BP benchmark for robust low-thrust cislunar initialization under missed-thrust events. Its main finding is conservative: duty-cycle-aware binary schedules can help locate refinable high-duty candidates, but all-windows continuous refinement remains lower-error in paired selected-worst comparisons, and the tested simulated QAOA variants do not establish superiority over classical initializers. A scoped tail-coast continuous backend meets the configured fixed-final-time one/two mask screening thresholds in the hard-catalog package, but only under the locked-nominal assumptions and caveats stated above. The useful outcome is therefore an auditable benchmark with negative evidence, failure modes, and provenance, not a claim of quantum advantage or flight-ready robustness.
 
 \section*{Declaration of Competing Interest}
 The author declares no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.

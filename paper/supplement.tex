@@ -1,55 +1,447 @@
 \documentclass[11pt]{article}
 
 \usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{siunitx}
+\setlength{\emergencystretch}{3em}
 
-\title{Supplementary Diagnostics for Robust Low-Thrust Cislunar Maneuver Initialization Under Missed-Thrust Events}
+\title{Supplementary Diagnostics for a Reproducible Binary-Schedule Low-Thrust Cislunar Benchmark}
 \author{Anonymous Author}
 \date{}
 
 \begin{document}
 \maketitle
+\tableofcontents
 
 \section*{Purpose}
+\addcontentsline{toc}{section}{Purpose}
 
-This supplement preserves figure-only diagnostics that are secondary to the main manuscript's claim hierarchy. The main paper reports the tables, statistics, and claim-to-artifact map; the figures here support visual inspection of selected diagnostics without changing the recorded data values.
+This supplement preserves secondary diagnostics, implementation-heavy tables, and small-seed evidence for the normalized Earth--Moon CR3BP missed-thrust benchmark. The main article reports the primary claim path: the claim hierarchy, the 30-seed duty-cycle-prior initializer comparison, the focused 30-seed QAOA/QUBO ablation statistics, and the strongest scoped hard-catalog tail-coast continuous-backend diagnostic. The evidence below is retained to make failure modes, provenance, caveats, and small-sample results auditable without making the main article a full artifact audit.
 
-\section*{Teacher-Controlled Diagnostics}
+\section{Catalog-Derived Schedule and QUBO Diagnostics}
 
-\begin{figure}[h]
+The original catalog-derived pilot remains negative evidence. QUBO simulated annealing and QAOA can produce competitive pre-refinement schedules in the small pilot, but no method meets the configured post-refinement robust thresholds after continuous recovery. The QUBO fit diagnostics show why surrogate validation is a first-order artifact rather than an assumption: with a full quadratic model and a small training set, training fit is much stronger than validation behavior.
+
+\begin{table}[htbp]
 \centering
-\includegraphics[width=0.78\linewidth]{../figures/teacher_feasible/refinement_success.pdf}
-\caption{Teacher-controlled selected-branch refinement success rates. The result demonstrates nonzero recovery success but not quantum advantage.}
-\label{fig:supp_teacher_success}
+\caption{Catalog-derived pilot results. Values are medians across the generated pilot seeds. This benchmark did not meet the robust refinement thresholds.}
+\label{tab:supp_catalog_results}
+\resizebox{\textwidth}{!}{\input{../tables/results_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Catalog-derived QUBO surrogate fit diagnostics.}
+\label{tab:supp_catalog_qubo}
+\resizebox{\textwidth}{!}{\input{../tables/ablation_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/qubo_fit.pdf}
+\caption{Catalog-derived QUBO fit diagnostic. The fit is reported as a diagnostic, not as evidence that the learned quadratic surrogate preserves the true trajectory ranking.}
+\label{fig:supp_catalog_qubo_fit}
 \end{figure}
 
-\begin{figure}[h]
+\clearpage
+
+\section{Catalog Feasibility and Multiple-Shooting Diagnostics}
+
+The feasibility sweep, direct multiple-shooting rows, targeted catalog attempt, and selected-outage envelope explain why the hard catalog-derived transfer is not promoted as a solved trajectory-design case. Selected recovery errors can be made small for chosen masks, but nominal errors, optimizer/backend success, and all-mask diagnostics remain limiting.
+
+\begin{table}[htbp]
 \centering
-\includegraphics[width=0.78\linewidth]{../figures/teacher_feasible/recovery_fuel.pdf}
-\caption{Teacher-controlled nominal and recovery fuel summaries. Fuel differences must be interpreted together with feasibility and missed-thrust error.}
-\label{fig:supp_teacher_fuel}
-\end{figure}
+\caption{Feasibility sweep stress test for the catalog-derived benchmark. None of the completed cases met both nominal and selected robust thresholds.}
+\label{tab:supp_feasibility}
+\resizebox{\textwidth}{!}{\input{../tables/feasibility_table.tex}}
+\end{table}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.78\linewidth]{../figures/teacher_feasible/trajectory_example.pdf}
-\caption{Example trajectory from the teacher-controlled benchmark. The case is a normalized CR3BP algorithm benchmark, not a flight-ready trajectory.}
-\label{fig:supp_teacher_traj}
-\end{figure}
-
-\section*{Catalog-Derived Feasibility Diagnostic}
-
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=0.78\linewidth]{../figures/feasibility_heatmap.pdf}
 \caption{Feasibility sweep heatmap for the catalog-derived benchmark. The completed cases remain outside the configured robust success thresholds.}
 \label{fig:supp_feasibility}
 \end{figure}
 
-\section*{Artifact Pointer}
+\begin{table}[htbp]
+\centering
+\caption{Catalog-derived direct multiple-shooting diagnostics. Rows with zero selected outages are nominal-only diagnostics; all-outage diagnostic errors are still reported.}
+\label{tab:supp_multiple_shooting}
+\resizebox{\textwidth}{!}{\input{../tables/catalog_collocation_feasibility/multiple_shooting_feasibility_table.tex}}
+\end{table}
 
-The machine-readable manifest \path{../data/results/artifact_manifest.json} records hashes for the manuscript, supplement, source code, generated tables, figures, and result artifacts. It excludes itself, virtual environments, caches, logs, and LaTeX auxiliary files.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/catalog_collocation_feasibility/multiple_shooting_feasibility.pdf}
+\caption{Catalog-derived multiple-shooting feasibility diagnostics. Selected-branch improvement does not remove the nominal and all-mask failure modes.}
+\label{fig:supp_multiple_shooting}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Targeted catalog-derived feasibility attempt with stronger multistart branch recovery. Thresholds were not relaxed.}
+\label{tab:supp_catalog_targeted}
+\resizebox{\textwidth}{!}{\input{../tables/catalog_targeted_feasibility/feasibility_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/catalog_targeted_feasibility/feasibility_heatmap.pdf}
+\caption{Targeted catalog-derived feasibility attempt. The stronger multistart attempt remains outside the configured thresholds.}
+\label{fig:supp_catalog_targeted}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Selected-outage hard-catalog feasibility-envelope diagnostics. Selected recovery branches are optimized for the listed masks, but all rows fail the nominal threshold and all-mask values are diagnostics, not robustness claims.}
+\label{tab:supp_catalog_feasibility_envelope}
+\resizebox{\textwidth}{!}{\input{../tables/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope.pdf}
+\caption{Selected-outage hard-catalog envelope. Small selected-outage errors do not imply robust success because nominal errors fail and all-mask diagnostics remain high.}
+\label{fig:supp_catalog_selected_outage_envelope}
+\end{figure}
+
+\clearpage
+
+\section{Hard-Catalog Recovery Diagnostics}
+
+The locked-nominal, delayed-arrival, and tail-coast packages are continuous-backend diagnostics. They are not QUBO, QAOA, quantum, or discrete-sampler evidence. They are retained here to show the progression from selected-mask overfitting, to locked-nominal branch recovery, to delayed-arrival feasibility, and finally to the scoped fixed-final-time tail-coast row used in the main article.
+
+\begin{table}[htbp]
+\centering
+\caption{Locked-nominal hard-catalog branch-recovery diagnostics on the NRHO-like to DRO-phase benchmark. The nominal control is solved once and frozen; each selected missed-thrust branch is optimized independently after the outage. The all-mask column is a diagnostic over every configured mask, not a robustness claim. The \texttt{locked\_hard\_single\_min6\_selected8} row meets the thresholds but is not optimizer-converged.}
+\label{tab:supp_locked_nominal_recovery}
+\resizebox{\textwidth}{!}{\input{../tables/hard_catalog_locked_nominal_recovery/locked_nominal_recovery_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/hard_catalog_locked_nominal_recovery/locked_nominal_recovery.pdf}
+\caption{Locked-nominal hard-catalog branch recovery. With the nominal control held feasible, a bounded one-segment, six-recovery-segment selected subset meets the thresholds, while selected one/two-segment and all-single-outage scopes remain above the robust threshold.}
+\label{fig:supp_locked_nominal_recovery}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Delayed-arrival locked-nominal hard-catalog branch-recovery diagnostics. Branch duration is $(N+h)\Delta t$ and the branch target is the original target propagated ballistically by $h\Delta t$. The h6 portfolio row optimizes all 14 one-segment masks, charges all residual variants, and is delayed-arrival feasibility evidence only.}
+\label{tab:supp_delayed_locked_recovery}
+\resizebox{\textwidth}{!}{\input{../tables/hard_catalog_delayed_recovery/delayed_locked_recovery_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/hard_catalog_delayed_recovery/delayed_locked_recovery.pdf}
+\caption{Delayed-arrival locked-nominal hard-catalog recovery. The h4 regularized all-single row fails, while the h6 branch-residual portfolio recovers all one-segment masks against the delayed target.}
+\label{fig:supp_delayed_locked_recovery}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/hard_catalog_tail_coast_recovery/tail_coast_recovery.pdf}
+\caption{Tail-coast fixed-final-time hard-catalog recovery. The main article reports the table; this visual diagnostic is retained for the recovery-error pattern.}
+\label{fig:supp_tail_coast_recovery}
+\end{figure}
+
+\clearpage
+
+\section{Phase-Shift Continuous-Backend Diagnostics}
+
+The following tables and figures document the non-teacher phase-shift continuous-backend evidence. These rows show that some normalized CR3BP phase-shift cases are feasible with research-grade continuous backends, but they do not establish certified trajectory-design capability or quantum evidence.
+
+\begin{table}[htbp]
+\centering
+\caption{Bounded-projected multiple-shooting diagnostics on the non-teacher catalog halo phase-shift target. Controls are projected to $\|u_i\|\le a_{\max}$ inside the residual and evaluation paths.}
+\label{tab:supp_bounded_collocation}
+\resizebox{\textwidth}{!}{\input{../tables/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/bounded_collocation_phase_or_catalog/multiple_shooting_feasibility.pdf}
+\caption{Bounded-projected multiple-shooting diagnostics for the non-teacher phase-shift target.}
+\label{fig:supp_bounded_collocation}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Bounded-projected multiple-shooting phase-suite diagnostics on non-teacher catalog halo phase-shift targets. The selected-branch rows optimize one outage branch; the all-outage-selected row optimizes all one-segment outage branches and remains infeasible.}
+\label{tab:supp_bounded_phase_suite}
+\resizebox{\textwidth}{!}{\input{../tables/bounded_phase_suite/bounded_phase_suite_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/bounded_phase_suite/bounded_phase_suite.pdf}
+\caption{Bounded phase-suite diagnostics on non-teacher catalog halo phase-shift targets.}
+\label{fig:supp_bounded_phase_suite}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Robust-margin suite on non-teacher catalog halo phase-shift targets. The thrust-margin rows optimize one selected one-segment outage branch and report all one-segment masks diagnostically. The all-single-outage rows optimize every one-segment outage mask for that row; this does not include two-segment outage families.}
+\label{tab:supp_robust_margin_suite}
+\resizebox{\textwidth}{!}{\input{../tables/robust_margin_suite/robust_margin_suite_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/robust_margin_suite/robust_margin_suite.pdf}
+\caption{Robust-margin suite summary. The phase-time $0.2$ case is thrust-margin sensitive, while higher-thrust smaller cases can meet screening thresholds.}
+\label{fig:supp_robust_margin_suite}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Continuation-extension continuous-backend diagnostics on normalized CR3BP catalog halo phase-shift targets. This is a direct multiple-shooting continuation result, not a quantum, QUBO, QAOA, or discrete-sampler result.}
+\label{tab:supp_continuation_extension_suite}
+\resizebox{\textwidth}{!}{\input{../tables/continuation_extension_suite/continuation_margin_suite_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/continuation_extension_suite/continuation_margin_suite.pdf}
+\caption{Continuation-extension continuous-backend diagnostics. Warm-start sidecars record nominal-control provenance.}
+\label{fig:supp_continuation_extension_suite}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Compact bounded projected trapezoidal direct-collocation baseline on the non-teacher catalog halo phase-shift suite. Rows optimize one selected outage branch and report all-mask diagnostics separately.}
+\label{tab:supp_direct_collocation}
+\resizebox{\textwidth}{!}{\input{../tables/direct_collocation_baseline/direct_collocation_baseline_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/direct_collocation_baseline/direct_collocation_baseline.pdf}
+\caption{Direct-collocation baseline summary. The compact transcription solves the easiest phase-suite row and fails the harder rows.}
+\label{fig:supp_direct_collocation}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Constant-control Hermite--Simpson continuation baseline/probe on normalized CR3BP catalog halo phase-shift targets. Warm rows reuse persisted nominal-control sidecars. This is continuous-backend evidence only.}
+\label{tab:supp_hermite_simpson_continuation}
+\resizebox{\textwidth}{!}{\input{../tables/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline.pdf}
+\caption{Constant-control Hermite--Simpson continuation baseline/probe summary.}
+\label{fig:supp_hermite_simpson_continuation}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Independent-midpoint-control Hermite--Simpson continuation evidence. Warm rows reuse persisted endpoint and midpoint nominal-control sidecars when available. This is continuous-backend evidence only; the catalog-DRO row is a bounded selected-outage negative diagnostic.}
+\label{tab:supp_independent_hs_continuation}
+\resizebox{\textwidth}{!}{\input{../tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/independent_hs_continuation_baseline/independent_hs_continuation_baseline.pdf}
+\caption{Independent-midpoint-control Hermite--Simpson continuation summary. The package strengthens the continuous-backend comparison but keeps the phase-time $0.2$ and catalog-DRO diagnostics unresolved.}
+\label{fig:supp_independent_hs_continuation}
+\end{figure}
+
+\clearpage
+
+\section{Phase-Shift Schedule Diagnostics and Small-Seed Evidence}
+
+The unrepaired $N=8$ phase-shift benchmark, deterministic dense-repair ablation, and legacy 10-seed duty-cycle-prior package explain the schedule-encoding failure mode behind the main 30-seed result. The unrepaired samplers can choose sparse late-thrust schedules that do not refine, while dense repair collapses methods to the same all-windows envelope. The 10-seed cardinality-prior package is retained as historical small-seed evidence; the main article uses the 30-seed package for claims.
+
+\begin{table}[htbp]
+\centering
+\caption{Catalog halo phase-shift benchmark. The target is generated by ballistic CR3BP phase propagation of the JPL source state, not by a low-thrust teacher.}
+\label{tab:supp_phase_shift}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift/results_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/phase_shift/method_comparison.pdf}
+\caption{Unrepaired phase-shift method comparison. The all-windows continuous baseline succeeds where sparse binary schedules do not.}
+\label{fig:supp_phase_shift_method_comparison}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Catalog halo phase-shift benchmark with deterministic dense-schedule repair. The table exposes the solver schedule, refinement candidate schedule, repaired refined schedule, and active fractions to show that repaired methods collapse to the same all-windows refinement envelope.}
+\label{tab:supp_phase_shift_repair}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift_repair/results_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/phase_shift_repair/method_comparison.pdf}
+\caption{Dense-repair phase-shift comparison. The repair is an encoding diagnostic, not a competitive method-ranking result.}
+\label{fig:supp_phase_shift_repair_method_comparison}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{Legacy 10-seed $N=12$ duty-cycle-prior phase-shift benchmark. QUBO/QAOA totals include 96 shared QUBO-training evaluations and 24 post-QUBO true candidate evaluations.}
+\label{tab:supp_phase_shift_cardinality}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality/results_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Legacy 10-seed duty-cycle-prior recovery fuel and refinement effort. Fuel is reported in normalized acceleration-time units.}
+\label{tab:supp_phase_shift_cardinality_recovery}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality/recovery_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Legacy 10-seed duty-cycle-prior QUBO surrogate diagnostics.}
+\label{tab:supp_phase_shift_cardinality_qubo}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality/ablation_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/phase_shift_cardinality/method_comparison.pdf}
+\caption{Legacy 10-seed duty-cycle-prior method comparison. The main article uses the 30-seed package for statistical claims.}
+\label{fig:supp_phase_shift_cardinality_method_comparison}
+\end{figure}
+
+\clearpage
+
+\section{Cardinality and Fuel Ablations}
+
+The duty-cycle-prior result is positive but narrow. The high-duty ablations show that one-coast schedules belong to a broad feasible region, and the fuel sweep shows that stronger all-windows continuous fuel regularization can reduce fuel while retaining feasibility. These checks prevent overclaiming one-coast schedules as Pareto-superior.
+
+\begin{table}[htbp]
+\centering
+\caption{Exhaustive high-duty cardinality ablation for the $N=12$ phase-shift benchmark.}
+\label{tab:supp_phase_shift_cardinality_ablation}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality_ablation/high_duty_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{One-coast method selections compared with the refined one-coast frontier.}
+\label{tab:supp_phase_shift_method_vs_frontier}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality_ablation/method_vs_frontier_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{One-coast refined schedule diagnostics for the duty-cycle-prior ablation.}
+\label{tab:supp_phase_shift_one_coast}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality_ablation/one_coast_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{All-windows fuel-regularization sweep for the $N=12$ phase-shift benchmark.}
+\label{tab:supp_phase_shift_fuel_pareto}
+\resizebox{\textwidth}{!}{\input{../tables/phase_shift_cardinality_ablation/fuel_pareto_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/phase_shift_cardinality_ablation/fuel_error_pareto.pdf}
+\caption{Fuel-error Pareto view for the duty-cycle-prior ablation. Lower fuel is achievable with all-windows fuel regularization while retaining feasibility, so the one-coast result should be read as a schedule-structure feasibility result rather than a fuel-optimality result.}
+\label{fig:supp_phase_shift_fuel_pareto}
+\end{figure}
+
+\clearpage
+
+\section{Focused QAOA/QUBO Raw Summary and Legacy QAOA Artifacts}
+
+The main article reports the 30-seed QAOA/QUBO statistical diagnostics. The raw 30-seed method summary is retained here. Legacy 10-seed QAOA-depth artifacts remain in the repository for provenance but are not the current statistical evidence.
+
+\begin{table}[htbp]
+\centering
+\caption{QAOA depth and angle-optimization ablation on the $N=12$ duty-cycle-prior phase-shift benchmark. All rows use 96 shared QUBO-training trajectory evaluations and 24 true post-QUBO candidate evaluations per seed.}
+\label{tab:supp_qaoa_depth_ablation}
+\resizebox{\textwidth}{!}{\input{../tables/qaoa_depth_ablation_30seed/qaoa_depth_ablation_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Legacy 10-seed QAOA-depth ablation retained for provenance. The manuscript's QAOA-depth statistical result uses the 30-seed package.}
+\label{tab:supp_legacy_qaoa_depth_ablation}
+\resizebox{\textwidth}{!}{\input{../tables/qaoa_depth_ablation/qaoa_depth_ablation_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/qaoa_depth_ablation/qaoa_depth_ablation_summary.pdf}
+\caption{Legacy 10-seed QAOA-depth summary retained as provenance.}
+\label{fig:supp_legacy_qaoa_depth_ablation}
+\end{figure}
+
+\clearpage
+
+\section{Teacher-Controlled Diagnostics}
+
+The teacher-controlled benchmark is feasible by construction and should not be confused with an operational transfer. It is retained because it diagnoses whether the architecture can recover a known feasible low-thrust target and because the oracle continuous-control diagnostic shows that continuous initialization can dominate the outcome. The teacher-controlled tables are small-seed evidence and do not support a statistically significant method ranking.
+
+\begin{table}[htbp]
+\centering
+\caption{Teacher-controlled benchmark results. Values are medians across three seeds. QUBO and QAOA totals include the shared QUBO-training trajectory evaluations.}
+\label{tab:supp_teacher_results}
+\resizebox{\textwidth}{!}{\input{../tables/teacher_feasible/results_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Teacher-controlled recovery fuel and refinement effort. Fuel is reported in normalized acceleration-time units.}
+\label{tab:supp_teacher_recovery_fuel}
+\resizebox{0.95\textwidth}{!}{\input{../tables/teacher_feasible/recovery_table.tex}}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Teacher-controlled QUBO surrogate fit diagnostics.}
+\label{tab:supp_teacher_qubo}
+\resizebox{\textwidth}{!}{\input{../tables/teacher_feasible/ablation_table.tex}}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/teacher_feasible/refinement_success.pdf}
+\caption{Teacher-controlled selected-branch refinement success rates. The result demonstrates nonzero recovery success but not quantum advantage.}
+\label{fig:supp_teacher_success}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/teacher_feasible/recovery_fuel.pdf}
+\caption{Teacher-controlled nominal and recovery fuel summaries. Fuel differences must be interpreted together with feasibility and missed-thrust error.}
+\label{fig:supp_teacher_fuel}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/teacher_feasible/trajectory_example.pdf}
+\caption{Example trajectory from the teacher-controlled benchmark. The case is a normalized CR3BP algorithm benchmark, not a flight-ready trajectory.}
+\label{fig:supp_teacher_traj}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.78\linewidth]{../figures/teacher_feasible/qubo_fit.pdf}
+\caption{Teacher-controlled QUBO fit diagnostic. Surrogate quality remains mixed across the small teacher-controlled seeds.}
+\label{fig:supp_teacher_qubo_fit}
+\end{figure}
+
+\clearpage
+
+\section{Artifact and Provenance Notes}
+
+The machine-readable manifest \path{../data/results/artifact_manifest.json} records scoped SHA-256 hashes and byte counts for source, configuration, manuscript, result, table, and figure artifacts. The hashes and byte counts are authoritative for artifact identity. The manifest intentionally excludes itself, virtual environments, caches, logs, and LaTeX auxiliary files. Its \texttt{git\_head\_at\_generation} field records the repository state when the manifest was generated; a committed manifest necessarily records the parent/pre-final state rather than the final commit containing the refreshed manifest. Historical experiment metadata may predate the repository or contain dirty-state records, so current submission provenance is verified by clean git status after final commit, manifest checking, tests, and local LaTeX builds.
 
 \end{document}

@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-16T16:29:31Z",
+  "generated_utc": "2026-06-16T17:10:01Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "4269e3e77a78bab4753a255f8576910b0c90ad25",
+  "git_head_at_generation": "264128745edb9f80b9ed34b4680581270d6dde62",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/phase_shift_cardinality_30seed/main_method_statistics_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/references.bib\n M scripts/run_main_method_statistics.py\n M scripts/run_qaoa_depth_ablation.py\n M tables/phase_shift_cardinality_30seed/main_method_statistics_table.tex\n M tests/test_smoke.py\n?? paper/supplement.pdf\n?? paper/supplement.tex\n?? scripts/write_artifact_manifest.py",
+  "working_tree_status_at_generation": "M .gitignore\n M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/write_artifact_manifest.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -24,7 +24,8 @@
       ".log",
       ".out",
       ".spl",
-      ".synctex.gz"
+      ".synctex.gz",
+      ".toc"
     ],
     "explicit": [
       "data/results/artifact_manifest.json"
@@ -34,18 +35,18 @@
   "files": [
     {
       "path": ".gitignore",
-      "sha256": "38e524c2e104eff85c7a07796c8aeaa07fba0993a2024381ccdfde7afcbc7ea3",
-      "bytes": 158
+      "sha256": "61a19a54027575168eec4e0d58d46e70cc9d146c14a94e56aab49c239acfbbd1",
+      "bytes": 170
     },
     {
       "path": "README.md",
-      "sha256": "47372d822ec7490ea364b6ff1eb96a5cffc66bf97d5a5380518185ff3f42691e",
-      "bytes": 14558
+      "sha256": "0cc1a6e0f057b0f2d76bccf40976644b568bdc393d6ed15d2d778effb83af71d",
+      "bytes": 15444
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "537c06ad88a43e3e078f209277d020ef09840d5cb99fe0aaee2e55324f1c8e7c",
-      "bytes": 20848
+      "sha256": "e4986bee718cb7cf571e02d132c3cf14c489e6f6d17879ccc0c34f627d329d8c",
+      "bytes": 22062
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -2224,13 +2225,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "77d5fb24d6c1b5e246dab21c9d5c2b4121e5658040ed07802156159968142a67",
-      "bytes": 587209
+      "sha256": "a495feb07dbf6515049f92372be119b155ca340ea23ee31ad5583ef12d04ae76",
+      "bytes": 377189
     },
     {
       "path": "paper/main.tex",
-      "sha256": "3885af88ac631ac2d214b731f6ed751e6fc3ce981ac3ae7076636ab244176af4",
-      "bytes": 118075
+      "sha256": "0c66b6ff2af991d304f197de9ccc73d67790083b65e464c39b11a0b1b35349a3",
+      "bytes": 42877
     },
     {
       "path": "paper/references.bib",
@@ -2239,13 +2240,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "9da083d4e2a6caf14224db679425c155b02befb728bdc402fad1f9b17151d01a",
-      "bytes": 120461
+      "sha256": "aae75cb165ed6b14792407571869e81ea143ca711f0bbad4fd3e75ff5df3de95",
+      "bytes": 466065
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "5a22516dfbac1e8b8d217812f84a491809ba515b0d50f4fa7580b8fe95486a4a",
-      "bytes": 2272
+      "sha256": "05149b2fc4a67d35c1f8a3bf05c3e5f18bb7fb2c0656e6b86fa06d3eddfeef6c",
+      "bytes": 24192
     },
     {
       "path": "requirements-lock.txt",
@@ -2359,8 +2360,8 @@
     },
     {
       "path": "scripts/write_artifact_manifest.py",
-      "sha256": "486f85fdbace1b853e9afe3ca60a63db9ca21dcb1a87a4dbf63d71da20fafbcc",
-      "bytes": 6660
+      "sha256": "c180cee0c65e8706cbf0164429520fe1edb82a548c48bc4b3bef90a43c7d43ca",
+      "bytes": 6672
     },
     {
       "path": "src/qlt/__init__.py",
