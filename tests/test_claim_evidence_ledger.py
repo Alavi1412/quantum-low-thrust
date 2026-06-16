@@ -24,9 +24,9 @@ def test_claim_evidence_ledger_rows_and_semantics():
     )
 
     ledger = module.build_claim_evidence_ledger()
+    has_replay = module.tail_coast_branch_control_replay_artifacts_available()
 
-    assert len(ledger) == 8
-    assert ledger["claim_id"].tolist() == [
+    expected_claims = [
         "phase_shift_main_method_30seed_selected_branch",
         "phase_shift_qaoa_qubo_30seed_selected_branch",
         "phase_shift_continuation_all_single_p04_all_configured",
@@ -36,6 +36,10 @@ def test_claim_evidence_ledger_rows_and_semantics():
         "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
         "catalog_dro_delayed_h6_all_single_delayed_arrival",
     ]
+    if has_replay:
+        expected_claims.insert(7, "catalog_dro_tail_coast_branch_control_replay_accepted_controls")
+    assert len(ledger) == len(expected_claims)
+    assert ledger["claim_id"].tolist() == expected_claims
 
     def row(claim_id: str) -> pd.Series:
         return ledger.loc[ledger["claim_id"] == claim_id].iloc[0]
@@ -92,6 +96,17 @@ def test_claim_evidence_ledger_rows_and_semantics():
     assert delayed["target_mode"] == "catalog_dro_phase"
     assert "14/14 configured one-segment masks" in delayed["mask_scope"]
     assert "Delayed-arrival evidence only" in delayed["explicit_boundary"]
+
+    if has_replay:
+        replay = row("catalog_dro_tail_coast_branch_control_replay_accepted_controls")
+        assert replay["all_configured_mask_evidence"] == "True"
+        assert replay["target_mode"] == "catalog_dro_phase"
+        assert "27/27 persisted accepted branch-control sidecars" in replay["mask_scope"]
+        assert "max branch replay delta" in replay["selected_worst_error"]
+        assert "Accepted-control replay only" in replay["explicit_boundary"]
+        assert "high-fidelity validation" in replay["explicit_boundary"]
+    else:
+        assert "catalog_dro_tail_coast_branch_control_replay_accepted_controls" not in ledger["claim_id"].tolist()
 
 
 def test_tail_coast_threshold_audit_statuses():
@@ -154,7 +169,7 @@ def test_tail_coast_branch_audit_counts():
     assert "regularized_001=6" in row["accepted_weight_variant_counts"]
     assert "no_recovery_variables=2" in row["accepted_initialization_kind_counts"]
     assert row["branch_control_replay_claim"] == "False"
-    assert "not branch-control replay" in row["audit_semantics"]
+    assert "separate ledger row" in row["audit_semantics"]
 
 
 def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimization(tmp_path):
@@ -179,6 +194,9 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         "branch_table": first["tail_coast_branch_audit_table_tex"].read_bytes(),
     }
     second = module.write_artifacts(**kwargs)
+    has_replay = module.tail_coast_branch_control_replay_artifacts_available()
+    expected_rows = 9 if has_replay else 8
+    expected_inputs = 13 if has_replay else 10
 
     assert second["ledger_path"].read_bytes() == first_bytes["ledger"]
     assert second["metadata_path"].read_bytes() == first_bytes["metadata"]
@@ -192,18 +210,18 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["optimization_rerun"] is False
     assert metadata["uses_recorded_artifacts_only"] is True
     assert metadata["high_fidelity_claim"] is False
-    assert metadata["branch_control_replay"] is False
+    assert metadata["branch_control_replay"] is has_replay
     assert metadata["fuel_optimality_claim"] is False
     assert metadata["quantum_advantage_claim"] is False
-    assert metadata["row_count"] == 8
+    assert metadata["row_count"] == expected_rows
     assert metadata["tail_coast_threshold_audit_row_count"] == 5
     assert metadata["tail_coast_branch_audit_row_count"] == 1
     assert "no trajectory optimization" in metadata["source_mode"]
-    assert "accepted branch controls are not persisted" in " ".join(metadata["interpretation_limits"])
-    assert len(metadata["input_artifacts"]) == 10
+    assert metadata["branch_control_replay_artifacts_available"] is has_replay
+    assert len(metadata["input_artifacts"]) == expected_inputs
 
     ledger = pd.read_csv(second["ledger_path"])
-    assert len(ledger) == 8
+    assert len(ledger) == expected_rows
     threshold = pd.read_csv(second["threshold_audit_path"])
     assert len(threshold) == 5
     branch = pd.read_csv(second["branch_audit_path"])
@@ -211,4 +229,8 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
 
     table = second["claim_evidence_ledger_table_tex"].read_text(encoding="utf-8")
     assert "catalog\\_dro\\_tail\\_coast\\_all\\_one\\_two\\_segment\\_t5\\_all\\_configured" in table
+    if has_replay:
+        assert "catalog\\_dro\\_tail\\_coast\\_branch\\_control\\_replay\\_accepted\\_controls" in table
+    else:
+        assert "catalog\\_dro\\_tail\\_coast\\_branch\\_control\\_replay\\_accepted\\_controls" not in table
     assert "No sampled-method or QAOA superiority" in table

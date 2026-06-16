@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import hashlib
 import json
 import sys
 import time
@@ -23,7 +24,7 @@ from qlt.direct_collocation import config_hash, file_identity, settings_fingerpr
 from qlt.experiment import load_configured_states, make_objective_config, output_directories
 from qlt.locked_recovery import BranchRecoveryWeights, normalize_selected_outage_policy, selected_outage_count_for_policy
 from qlt.objective import outage_masks
-from qlt.reporting import write_metadata
+from qlt.reporting import sanitize_json, write_metadata
 from qlt.tail_coast_recovery import (
     normalize_tail_coast_branch_initialization_fallbacks,
     run_tail_coast_recovery_baseline,
@@ -62,6 +63,12 @@ TAIL_COAST_COLUMNS = [
     "settings_fingerprint",
     "config_hash",
     "source_states_id",
+    "nominal_control_path",
+    "nominal_control_sha256",
+    "branch_control_manifest_path",
+    "branch_control_manifest_sha256",
+    "branch_control_sidecar_count",
+    "branch_control_replay_ready",
     "mode",
     "method_type",
     "nominal_seed_error",
@@ -176,6 +183,88 @@ TAIL_COAST_COLUMNS = [
 
 def _json_list(value) -> str:
     return json.dumps(value, sort_keys=False)
+
+
+def _json_bytes(data: object) -> bytes:
+    text = json.dumps(sanitize_json(data), indent=2, sort_keys=True, ensure_ascii=True, allow_nan=False)
+    return (text + "\n").encode("utf-8")
+
+
+def _write_json_with_sha256(path: Path, data: object) -> str:
+    payload = _json_bytes(data)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(payload)
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _artifact_path(path: Path) -> str:
+    resolved = path.resolve()
+    for base in (Path.cwd(), ROOT):
+        try:
+            return resolved.relative_to(base.resolve()).as_posix()
+        except ValueError:
+            continue
+    return str(path)
+
+
+def _resolve_artifact_path(value: object) -> Path:
+    text = str(value).strip()
+    if not text:
+        raise RuntimeError("expected artifact path, got blank")
+    path = Path(text)
+    if path.is_absolute():
+        return path
+    for base in (Path.cwd(), ROOT):
+        candidate = base / path
+        if candidate.exists():
+            return candidate
+    return Path.cwd() / path
+
+
+def _safe_file_stem(value: object) -> str:
+    text = str(value)
+    return "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in text)
+
+
+def _control_norm_diagnostics(controls: np.ndarray, amax: float) -> dict[str, object]:
+    array = np.asarray(controls, dtype=float)
+    if array.size == 0:
+        norms = np.zeros(0, dtype=float)
+    else:
+        array = array.reshape((-1, 3))
+        norms = np.linalg.norm(array, axis=1)
+    max_norm = float(np.max(norms)) if norms.size else 0.0
+    return {
+        "control_norms": norms.astype(float).tolist(),
+        "control_norm_min": float(np.min(norms)) if norms.size else 0.0,
+        "control_norm_mean": float(np.mean(norms)) if norms.size else 0.0,
+        "control_norm_max": max_norm,
+        "control_bound_violation": float(max(0.0, max_norm - float(amax))),
+    }
+
+
+def _float_or_default(value: object, default: float) -> float:
+    if value is None:
+        return float(default)
+    try:
+        if bool(pd.isna(value)):
+            return float(default)
+    except (TypeError, ValueError):
+        pass
+    return float(value)
+
+
+def _branch_control_replay_limitations() -> list[str]:
+    return [
+        "Branch-control replay repropagates persisted accepted controls in the normalized CR3BP model only.",
+        "Replay does not rerun least-squares optimization, branch portfolio selection, fallback search, or schedule search.",
+        "Replay is not high-fidelity validation, production solver parity, fuel optimality evidence, or quantum advantage evidence.",
+        "The evidence scope is the configured fixed-final-time target, outage masks, thresholds, and CR3BP integration settings.",
+    ]
 
 
 def _json_array(value) -> list:
@@ -455,6 +544,427 @@ def _effective_settings(config: dict, args, case: dict) -> dict:
     }
 
 
+def _empty_sidecar_columns() -> dict[str, object]:
+    return {
+        "nominal_control_path": None,
+        "nominal_control_sha256": None,
+        "branch_control_manifest_path": None,
+        "branch_control_manifest_sha256": None,
+        "branch_control_sidecar_count": 0,
+        "branch_control_replay_ready": False,
+    }
+
+
+def _branch_control_records(result: dict) -> list[dict]:
+    records = result.get("accepted_branch_control_results")
+    if records is None:
+        records = result.get("accepted_branch_controls")
+    if records is None:
+        records = []
+    return [dict(record) for record in list(records)]
+
+
+class BranchControlSidecarStore:
+    def __init__(
+        self,
+        *,
+        results_dir: Path,
+        case: dict,
+        case_config: dict,
+        states,
+        cfg,
+        masks: np.ndarray,
+        expected: dict,
+    ) -> None:
+        self.results_dir = results_dir
+        self.case = case
+        self.case_config = case_config
+        self.states = states
+        self.cfg = cfg
+        self.masks = np.asarray(masks)
+        self.expected = expected
+        self.case_id = str(case["suite_case_id"])
+        self.safe_case_id = _safe_file_stem(self.case_id)
+        self.controls_dir = results_dir / "controls"
+        self.nominal_path = self.controls_dir / f"{self.safe_case_id}_nominal_controls.json"
+        self.manifest_path = self.controls_dir / f"{self.safe_case_id}_branch_control_manifest.json"
+        self.progress_csv_path = self.controls_dir / f"{self.safe_case_id}_branch_control_progress.csv"
+        self.nominal_sha: str | None = None
+        self.branch_entries: list[dict[str, object]] = []
+        self.common = self._common_metadata()
+
+    def _common_metadata(self) -> dict[str, object]:
+        return {
+            "suite_case_id": self.case_id,
+            "settings_fingerprint": self.expected["settings_fingerprint"],
+            "config_hash": self.expected["config_hash"],
+            "source_states_id": self.expected["source_states_id"],
+            "target_mode": str(self.case_config["benchmark"].get("target_mode", "catalog_dro_phase")),
+            "target_state": np.asarray(self.states.target, dtype=float).tolist(),
+            "thresholds": dict(self.case_config["objective"]["thresholds"]),
+            "transfer_time": float(self.cfg.tf),
+            "segments": int(self.cfg.n_segments),
+            "substeps_per_segment": int(self.cfg.substeps),
+            "amax": float(self.cfg.amax),
+            "tail_coast_segments": int(self.case["tail_coast_segments"]),
+            "outage_lengths": [int(value) for value in self.case["outage_lengths"]],
+            "replay_semantics": (
+                "Normalized CR3BP replay of persisted accepted controls only; no optimization rerun, "
+                "no high-fidelity validation, no fuel-optimality claim, and no quantum-advantage claim."
+            ),
+            "limitations": _branch_control_replay_limitations(),
+        }
+
+    def _compatible_manifest(self, manifest: dict) -> bool:
+        for key in ("suite_case_id", "settings_fingerprint", "config_hash", "source_states_id"):
+            if str(manifest.get(key, "")) != str(self.common[key]):
+                return False
+        for key in ("segments", "substeps_per_segment", "tail_coast_segments"):
+            if int(manifest.get(key, -1)) != int(self.common[key]):
+                return False
+        for key in ("transfer_time", "amax"):
+            if abs(float(manifest.get(key, float("nan"))) - float(self.common[key])) > 0.0:
+                return False
+        return True
+
+    def _read_json_verified(self, path_text: object, expected_sha256: object | None = None) -> tuple[dict, Path, str]:
+        path = _resolve_artifact_path(path_text)
+        if not path.is_file():
+            raise RuntimeError(f"sidecar not found: {path}")
+        actual = _sha256(path)
+        if expected_sha256 not in (None, "") and str(expected_sha256).strip() != actual:
+            raise RuntimeError(f"sha256 mismatch for {path}: expected {expected_sha256}, got {actual}")
+        return json.loads(path.read_text(encoding="utf-8")), path, actual
+
+    def _progress_rows(self, *, completed: bool) -> list[dict[str, object]]:
+        rows: list[dict[str, object]] = []
+        if self.nominal_sha:
+            rows.append(
+                {
+                    "suite_case_id": self.case_id,
+                    "record_type": "nominal",
+                    "branch_order": "",
+                    "mask_index": "",
+                    "path": _artifact_path(self.nominal_path),
+                    "sha256": self.nominal_sha,
+                    "status": "complete",
+                }
+            )
+        for entry in sorted(self.branch_entries, key=lambda item: int(item["branch_order"])):
+            rows.append(
+                {
+                    "suite_case_id": self.case_id,
+                    "record_type": "branch",
+                    "branch_order": int(entry["branch_order"]),
+                    "mask_index": int(entry["mask_index"]),
+                    "path": str(entry["path"]),
+                    "sha256": str(entry["sha256"]),
+                    "status": "complete",
+                }
+            )
+        if not completed and rows:
+            rows[-1]["status"] = "last_completed_checkpoint"
+        return rows
+
+    def _write_progress_csv(self, *, completed: bool) -> str | None:
+        rows = self._progress_rows(completed=completed)
+        if not rows:
+            return None
+        self.progress_csv_path.parent.mkdir(parents=True, exist_ok=True)
+        pd.DataFrame(
+            rows,
+            columns=["suite_case_id", "record_type", "branch_order", "mask_index", "path", "sha256", "status"],
+        ).to_csv(self.progress_csv_path, index=False)
+        return _sha256(self.progress_csv_path)
+
+    def _expected_branch_count(self, result: dict | None = None) -> int:
+        if result is not None:
+            if result.get("selected_outage_count") is not None:
+                return int(result["selected_outage_count"])
+            if result.get("selected_outage_indices") is not None:
+                return int(len(list(result["selected_outage_indices"])))
+            records = _branch_control_records(result)
+            if records:
+                return int(len(records))
+        return int(self.case["selected_outage_count"])
+
+    def write_nominal(self, result: dict, *, completed: bool = False) -> str:
+        nominal_controls = np.asarray(result.get("nominal_controls", result.get("controls")), dtype=float)
+        nominal_controls = nominal_controls.reshape((int(self.cfg.n_segments), 3))
+        self.nominal_sha = _write_json_with_sha256(
+            self.nominal_path,
+            {
+                "schema_version": 1,
+                "sidecar_type": "tail_coast_nominal_controls",
+                **self.common,
+                "nominal_accepted_candidate": str(result.get("nominal_accepted_candidate", "")),
+                "nominal_error": float(result.get("nominal_error", result.get("nominal_tail_coast_error", float("nan")))),
+                "nominal_tail_coast_error": float(
+                    result.get("nominal_tail_coast_error", result.get("nominal_error", float("nan")))
+                ),
+                "nominal_seed_error": float(result.get("nominal_seed_error", float("nan"))),
+                "nominal_fuel": float(result.get("nominal_fuel", float("nan"))),
+                "nominal_dt": float(result.get("nominal_dt", float(self.cfg.tf) / float(self.cfg.n_segments))),
+                "controls": nominal_controls.tolist(),
+                "control_norm_diagnostics": _control_norm_diagnostics(nominal_controls, float(self.cfg.amax)),
+            },
+        )
+        self.write_manifest(completed=completed)
+        return self.nominal_sha
+
+    def write_branch(self, record: dict, branch_order: int, *, completed: bool = False) -> str:
+        mask_index = int(record["mask_index"])
+        if mask_index < 0 or mask_index >= int(self.masks.shape[0]):
+            raise ValueError(f"branch sidecar mask_index {mask_index} outside configured mask array")
+        outage_mask = np.asarray(self.masks[mask_index], dtype=int)
+        branch_controls = np.asarray(record["branch_controls"], dtype=float).reshape((int(self.cfg.n_segments), 3))
+        recovery_controls = record.get("recovery_controls")
+        if recovery_controls is not None:
+            recovery_controls = np.asarray(recovery_controls, dtype=float).reshape((-1, 3))
+        branch_path = self.controls_dir / f"{self.safe_case_id}_branch_{int(branch_order):03d}_mask_{mask_index:03d}_controls.json"
+        branch_norms = _control_norm_diagnostics(branch_controls, float(self.cfg.amax))
+        robust_threshold = float(self.case_config["objective"]["thresholds"]["robust_success"])
+        branch_data = {
+            "schema_version": 1,
+            "sidecar_type": "tail_coast_branch_controls",
+            **self.common,
+            "branch_order": int(branch_order),
+            "mask_index": mask_index,
+            "outage_mask": outage_mask.astype(int).tolist(),
+            "recovery_start": int(record["recovery_start"]),
+            "recovery_segments": int(record["recovery_segments"]),
+            "branch_control_count": int(record.get("branch_control_count", branch_controls.shape[0])),
+            "nominal_dt": float(record.get("nominal_dt", float(self.cfg.tf) / float(self.cfg.n_segments))),
+            "branch_total_duration": float(record.get("branch_total_duration", self.cfg.tf)),
+            "accepted_candidate": str(record.get("accepted_candidate", "")),
+            "optimizer_ran": bool(record.get("optimizer_ran", False)),
+            "optimizer_success": bool(record.get("optimizer_success", False)),
+            "no_recovery_variable_threshold_feasible": bool(
+                record.get("no_recovery_variable_threshold_feasible", False)
+            ),
+            "message": str(record.get("message", "")),
+            "nfev": int(record.get("nfev", 0)),
+            "runtime_seconds": float(record.get("runtime_seconds", 0.0)),
+            "accepted_variant_nfev": int(record.get("accepted_variant_nfev", record.get("nfev", 0))),
+            "accepted_variant_runtime_seconds": float(
+                record.get("accepted_variant_runtime_seconds", record.get("runtime_seconds", 0.0))
+            ),
+            "terminal_error": float(record["terminal_error"]),
+            "branch_fuel": float(record["branch_fuel"]),
+            "accepted_branch_weight_variant_label": str(record.get("accepted_branch_weight_variant_label", "")),
+            "accepted_branch_weight_variant_index": int(record.get("accepted_branch_weight_variant_index", 0)),
+            "accepted_branch_weights": dict(record.get("accepted_branch_weights", record.get("branch_weights", {}))),
+            "accepted_branch_initialization_label": str(record.get("accepted_branch_initialization_label", "")),
+            "accepted_branch_initialization_index": int(record.get("accepted_branch_initialization_index", 0)),
+            "accepted_branch_initialization_is_fallback": bool(
+                record.get("accepted_branch_initialization_is_fallback", False)
+            ),
+            "accepted_branch_initialization_kind": str(record.get("accepted_branch_initialization_kind", "")),
+            "accepted_branch_initialization_vector": record.get("accepted_branch_initialization_vector"),
+            "branch_weight_variants": list(record.get("branch_weight_variants", [])),
+            "branch_initialization_fallbacks": list(record.get("branch_initialization_fallbacks", [])),
+            "branch_portfolio_enabled": bool(record.get("branch_portfolio_enabled", False)),
+            "branch_portfolio_variant_count": int(record.get("branch_portfolio_variant_count", 1)),
+            "portfolio_acceptance_rule": str(record.get("portfolio_acceptance_rule", "")),
+            "portfolio_robust_threshold": _float_or_default(record.get("portfolio_robust_threshold"), robust_threshold),
+            "portfolio_converged_threshold_feasible_candidate_count": int(
+                record.get("portfolio_converged_threshold_feasible_candidate_count", 0)
+            ),
+            "portfolio_nominal_converged_threshold_feasible_candidate_count": int(
+                record.get("portfolio_nominal_converged_threshold_feasible_candidate_count", 0)
+            ),
+            "branch_portfolio_candidate_count": int(record.get("branch_portfolio_candidate_count", 0)),
+            "branch_portfolio_candidate_optimizer_success_count": int(
+                record.get("branch_portfolio_candidate_optimizer_success_count", 0)
+            ),
+            "branch_portfolio_candidate_all_optimizer_success": bool(
+                record.get("branch_portfolio_candidate_all_optimizer_success", False)
+            ),
+            "branch_fallback_initialization_enabled": bool(record.get("branch_fallback_initialization_enabled", False)),
+            "branch_fallback_initialization_configured_count": int(
+                record.get("branch_fallback_initialization_configured_count", 0)
+            ),
+            "branch_fallback_initialization_evaluated_count": int(
+                record.get("branch_fallback_initialization_evaluated_count", 0)
+            ),
+            "branch_fallback_initialization_candidate_count": int(
+                record.get("branch_fallback_initialization_candidate_count", 0)
+            ),
+            "branch_nominal_initialization_candidate_count": int(
+                record.get("branch_nominal_initialization_candidate_count", 1)
+            ),
+            "branch_initialization_variant_count": int(record.get("branch_initialization_variant_count", 1)),
+            "branch_portfolio_candidate_results": list(record.get("branch_portfolio_candidate_results", [])),
+            "branch_controls_remove_zero_nominal": bool(record.get("branch_controls_remove_zero_nominal", False)),
+            "branch_missed_tail_indices": list(record.get("branch_missed_tail_indices", [])),
+            "branch_note": str(record.get("branch_note", "")),
+            "control_max_norm": float(record.get("control_max_norm", branch_norms["control_norm_max"])),
+            "control_bound_violation": float(record.get("control_bound_violation", branch_norms["control_bound_violation"])),
+            "branch_controls": branch_controls.tolist(),
+            "branch_control_norm_diagnostics": branch_norms,
+        }
+        if recovery_controls is not None:
+            branch_data["recovery_controls"] = recovery_controls.tolist()
+            branch_data["recovery_control_norm_diagnostics"] = _control_norm_diagnostics(
+                recovery_controls,
+                float(self.cfg.amax),
+            )
+        for key in (
+            "branch_weights",
+            "target_error_semantics",
+            "cost",
+            "accepted_cost",
+            "optimality",
+            "accepted_optimality",
+            "optimizer_cost",
+            "optimizer_optimality",
+        ):
+            if key in record:
+                branch_data[key] = record[key]
+        branch_sha = _write_json_with_sha256(branch_path, branch_data)
+        branch_entry = {
+            "branch_order": int(branch_order),
+            "mask_index": mask_index,
+            "outage_mask": outage_mask.astype(int).tolist(),
+            "recovery_start": int(record["recovery_start"]),
+            "recovery_segments": int(record["recovery_segments"]),
+            "terminal_error": float(record["terminal_error"]),
+            "branch_fuel": float(record["branch_fuel"]),
+            "optimizer_ran": bool(record.get("optimizer_ran", False)),
+            "optimizer_success": bool(record.get("optimizer_success", False)),
+            "path": _artifact_path(branch_path),
+            "sha256": branch_sha,
+        }
+        self.branch_entries = [
+            entry
+            for entry in self.branch_entries
+            if not (
+                int(entry.get("branch_order", -1)) == int(branch_order)
+                or int(entry.get("mask_index", -1)) == mask_index
+            )
+        ]
+        self.branch_entries.append(branch_entry)
+        self.branch_entries = sorted(self.branch_entries, key=lambda item: int(item["branch_order"]))
+        self.write_manifest(completed=completed)
+        return branch_sha
+
+    def write_manifest(self, result: dict | None = None, *, completed: bool = False) -> str | None:
+        if not self.nominal_sha and not self.branch_entries:
+            return None
+        progress_sha = self._write_progress_csv(completed=completed)
+        expected_branch_count = self._expected_branch_count(result)
+        complete = bool(completed and len(self.branch_entries) == expected_branch_count)
+        manifest_data = {
+            "schema_version": 1,
+            "sidecar_type": "tail_coast_branch_control_manifest",
+            **self.common,
+            "nominal_control_path": _artifact_path(self.nominal_path) if self.nominal_sha else None,
+            "nominal_control_sha256": self.nominal_sha,
+            "progress_csv_path": _artifact_path(self.progress_csv_path) if progress_sha else None,
+            "progress_csv_sha256": progress_sha,
+            "progress_state": "complete" if complete else "in_progress",
+            "expected_branch_count": expected_branch_count,
+            "branch_count": int(len(self.branch_entries)),
+            "branch_control_sidecar_count": int(len(self.branch_entries)),
+            "branch_control_replay_ready": complete,
+            "selected_outage_count": expected_branch_count,
+            "selected_outage_indices": list(result.get("selected_outage_indices", [])) if result is not None else [],
+            "nominal_error": (
+                float(result.get("nominal_error", result.get("nominal_tail_coast_error", float("nan"))))
+                if result is not None
+                else None
+            ),
+            "selected_worst_error": float(result.get("selected_worst_error", float("nan"))) if result is not None else None,
+            "all_mask_worst_error": float(result.get("all_mask_worst_error", float("nan"))) if result is not None else None,
+            "meets_thresholds": bool(result.get("meets_thresholds", False)) if result is not None else None,
+            "resume_semantics": (
+                "On --resume, compatible completed branch sidecars are loaded by mask_index and the corresponding "
+                "branch optimizations are skipped; remaining branches are optimized and checkpointed incrementally."
+            ),
+            "branch_control_sidecars": self.branch_entries,
+        }
+        return _write_json_with_sha256(self.manifest_path, manifest_data)
+
+    def load_completed_branch_records(self) -> dict[int, dict]:
+        if not self.manifest_path.is_file():
+            return {}
+        manifest = json.loads(self.manifest_path.read_text(encoding="utf-8"))
+        if not self._compatible_manifest(manifest):
+            return {}
+        if manifest.get("nominal_control_sha256"):
+            self.nominal_sha = str(manifest["nominal_control_sha256"])
+        loaded: dict[int, dict] = {}
+        entries = sorted(list(manifest.get("branch_control_sidecars", [])), key=lambda item: int(item["branch_order"]))
+        for entry in entries:
+            branch, _, branch_sha = self._read_json_verified(entry["path"], entry.get("sha256"))
+            if not self._compatible_manifest(branch):
+                continue
+            branch_order = int(branch["branch_order"])
+            mask_index = int(branch["mask_index"])
+            branch["branch_controls"] = np.asarray(branch["branch_controls"], dtype=float)
+            if branch.get("recovery_controls") is not None:
+                branch["recovery_controls"] = np.asarray(branch["recovery_controls"], dtype=float)
+            loaded[mask_index] = branch
+            self.branch_entries.append(
+                {
+                    "branch_order": branch_order,
+                    "mask_index": mask_index,
+                    "outage_mask": [int(value) for value in branch["outage_mask"]],
+                    "recovery_start": int(branch["recovery_start"]),
+                    "recovery_segments": int(branch["recovery_segments"]),
+                    "terminal_error": float(branch["terminal_error"]),
+                    "branch_fuel": float(branch["branch_fuel"]),
+                    "optimizer_ran": bool(branch.get("optimizer_ran", False)),
+                    "optimizer_success": bool(branch.get("optimizer_success", False)),
+                    "path": str(entry["path"]),
+                    "sha256": branch_sha,
+                }
+            )
+        self.branch_entries = sorted(self.branch_entries, key=lambda item: int(item["branch_order"]))
+        return loaded
+
+    def finalize(self, result: dict) -> dict[str, object]:
+        branch_records = _branch_control_records(result)
+        if not branch_records:
+            return _empty_sidecar_columns()
+        self.write_nominal(result, completed=False)
+        for branch_order, record in enumerate(branch_records):
+            self.write_branch(record, int(branch_order), completed=False)
+        manifest_sha = self.write_manifest(result, completed=True)
+        expected_branch_count = self._expected_branch_count(result)
+        return {
+            "nominal_control_path": _artifact_path(self.nominal_path),
+            "nominal_control_sha256": self.nominal_sha,
+            "branch_control_manifest_path": _artifact_path(self.manifest_path),
+            "branch_control_manifest_sha256": manifest_sha,
+            "branch_control_sidecar_count": int(len(self.branch_entries)),
+            "branch_control_replay_ready": bool(len(self.branch_entries) == expected_branch_count),
+        }
+
+
+def _write_control_sidecars(
+    *,
+    results_dir: Path,
+    case: dict,
+    case_config: dict,
+    states,
+    cfg,
+    masks: np.ndarray,
+    result: dict,
+    expected: dict,
+) -> dict[str, object]:
+    store = BranchControlSidecarStore(
+        results_dir=results_dir,
+        case=case,
+        case_config=case_config,
+        states=states,
+        cfg=cfg,
+        masks=masks,
+        expected=expected,
+    )
+    return store.finalize(result)
+
+
 def _expected_index(config: dict, args, cases: list[dict]) -> dict[str, dict]:
     expected = {}
     for case in cases:
@@ -562,7 +1072,16 @@ def _artifact_refresh_rows_by_case(
     return pd.DataFrame(kept, columns=TAIL_COAST_COLUMNS), rejected, accepted_fingerprint_mismatches
 
 
-def _row_from_result(case: dict, case_config: dict, states, cfg, result: dict, expected: dict, config: dict) -> dict:
+def _row_from_result(
+    case: dict,
+    case_config: dict,
+    states,
+    cfg,
+    result: dict,
+    expected: dict,
+    config: dict,
+    sidecar_columns: dict[str, object] | None = None,
+) -> dict:
     weights = _branch_weights(config, case["case_raw"])
     variants = _branch_weight_variants(config, case["case_raw"])
     fallback_initializations = _branch_initialization_fallbacks(config, case["case_raw"])
@@ -583,6 +1102,7 @@ def _row_from_result(case: dict, case_config: dict, states, cfg, result: dict, e
         "settings_fingerprint": expected["settings_fingerprint"],
         "config_hash": expected["config_hash"],
         "source_states_id": expected["source_states_id"],
+        **(sidecar_columns or _empty_sidecar_columns()),
         "original_target_state": _json_list(np.asarray(result["original_target_state"], dtype=float).tolist()),
         "branch_weight_variants": _json_list(variants),
         "branch_fallback_initialization_enabled": bool(fallback_initializations),
@@ -599,12 +1119,22 @@ def _row_from_result(case: dict, case_config: dict, states, cfg, result: dict, e
     return {column: row.get(column) for column in TAIL_COAST_COLUMNS}
 
 
-def run_case(config: dict, args, case: dict, expected: dict) -> dict:
+def run_case(config: dict, args, case: dict, expected: dict, results_dir: Path) -> dict:
     case_config = _case_config(config, case)
     states = load_configured_states(Path.cwd(), case_config, args.source_states)
     cfg = make_objective_config(case_config, states.mu)
     masks = outage_masks(cfg.n_segments, cfg.outage_lengths)
     tolerances = _tolerances(config, case["case_raw"])
+    sidecar_store = BranchControlSidecarStore(
+        results_dir=results_dir,
+        case=case,
+        case_config=case_config,
+        states=states,
+        cfg=cfg,
+        masks=masks,
+        expected=expected,
+    )
+    branch_result_overrides = sidecar_store.load_completed_branch_records() if bool(getattr(args, "resume", False)) else {}
     result = run_tail_coast_recovery_baseline(
         state0=states.initial,
         target=states.target,
@@ -623,9 +1153,13 @@ def run_case(config: dict, args, case: dict, expected: dict) -> dict:
         branch_initialization_fallbacks=_branch_initialization_fallback_config(config, case["case_raw"]),
         node_initialization=str(case["node_initialization"]),
         node_initialization_blend=float(case["node_initialization_blend"]),
+        accepted_nominal_callback=sidecar_store.write_nominal,
+        accepted_branch_callback=sidecar_store.write_branch,
+        branch_result_overrides=branch_result_overrides,
         **tolerances,
     )
-    return _row_from_result(case, case_config, states, cfg, result, expected, config)
+    sidecar_columns = sidecar_store.finalize(result)
+    return _row_from_result(case, case_config, states, cfg, result, expected, config, sidecar_columns)
 
 
 def write_table(df: pd.DataFrame, tables_dir: Path) -> None:
@@ -730,9 +1264,20 @@ def regenerate(
         df.to_csv(results_dir / "tail_coast_recovery.csv", index=False)
     write_table(df, tables_dir)
     write_plot(df, figures_dir)
+    sidecar_counts = (
+        pd.to_numeric(df["branch_control_sidecar_count"], errors="coerce").fillna(0)
+        if "branch_control_sidecar_count" in df
+        else pd.Series(dtype=float)
+    )
     extra = {
         "row_count": int(len(df)),
         "feasible_row_count": int(df["meets_thresholds"].astype(bool).sum()) if not df.empty else 0,
+        "branch_control_replay_ready_row_count": (
+            int(df["branch_control_replay_ready"].fillna(False).astype(bool).sum())
+            if "branch_control_replay_ready" in df and not df.empty
+            else 0
+        ),
+        "branch_control_sidecar_count": int(sidecar_counts.sum()) if len(sidecar_counts) else 0,
         "expected_case_count": int(len(cases)),
         "completed_case_count": int(len(df)),
         "raw_csv_written": bool(write_csv),
@@ -770,6 +1315,11 @@ def regenerate(
                 "the nominal-start portfolio has no optimizer-converged threshold-feasible candidate; all evaluated "
                 "fallback nfev/runtime are charged. The row-level portfolio_acceptance_rule summarizes whether any "
                 "selected branch evaluated or accepted fallbacks; branch_results retains each branch-specific rule."
+            ),
+            "branch_control_sidecars": (
+                "Rows with accepted branch-control records write deterministic JSON sidecars for the nominal controls, "
+                "each accepted full branch-control schedule, and a SHA-256 manifest. Sidecars support normalized CR3BP "
+                "accepted-control replay only and are not high-fidelity validation or fuel-optimality evidence."
             ),
         },
         "limitations": [
@@ -900,7 +1450,7 @@ def run(args) -> pd.DataFrame:
         if budget is not None and elapsed >= budget:
             skipped_cases.append({"suite_case_id": str(case["suite_case_id"]), "reason": "runtime budget reached before launching case"})
             continue
-        row = run_case(config, args, case, expected_row)
+        row = run_case(config, args, case, expected_row, results_dir)
         df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
         completed.add(str(row["settings_fingerprint"]))
         regenerate(

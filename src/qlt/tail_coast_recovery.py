@@ -812,6 +812,36 @@ def tail_coast_branch_summary_for_json(branch: dict) -> dict:
     return summary
 
 
+def tail_coast_branch_control_record_for_json(branch: dict) -> dict:
+    record = tail_coast_branch_summary_for_json(branch)
+    branch_controls = np.asarray(branch["branch_controls"], dtype=float)
+    record.update(
+        {
+            "branch_controls": branch_controls.tolist(),
+            "control_max_norm": float(branch.get("control_max_norm", 0.0)),
+            "control_bound_violation": float(branch.get("control_bound_violation", 0.0)),
+            "branch_control_norms": np.linalg.norm(branch_controls, axis=1).astype(float).tolist(),
+        }
+    )
+    if branch.get("recovery_controls") is not None:
+        recovery_controls = np.asarray(branch["recovery_controls"], dtype=float)
+        record["recovery_controls"] = recovery_controls.tolist()
+        record["recovery_control_norms"] = np.linalg.norm(recovery_controls, axis=1).astype(float).tolist()
+    for key in (
+        "branch_weights",
+        "target_error_semantics",
+        "cost",
+        "accepted_cost",
+        "optimality",
+        "accepted_optimality",
+        "optimizer_cost",
+        "optimizer_optimality",
+    ):
+        if key in branch:
+            record[key] = branch[key]
+    return record
+
+
 def tail_coast_row_portfolio_acceptance_rule(branches: list[dict]) -> str:
     branch_count = int(len(branches))
     if branch_count <= 0:
@@ -878,6 +908,9 @@ def run_tail_coast_recovery_baseline(
     xtol: float = 1e-5,
     ftol: float = 1e-5,
     gtol: float = 1e-5,
+    accepted_nominal_callback=None,
+    accepted_branch_callback=None,
+    branch_result_overrides: dict[int, dict] | None = None,
 ) -> dict:
     start_time = time.perf_counter()
     tail = normalize_tail_coast_segments(tail_coast_segments, cfg)
@@ -926,6 +959,25 @@ def run_tail_coast_recovery_baseline(
     if tail:
         nominal_controls[-tail:] = 0.0
     nominal_error = terminal_error(state0, target, cfg, nominal_controls)
+    nominal_fuel = control_fuel(nominal_controls, cfg.tf)
+    if accepted_nominal_callback is not None:
+        accepted_nominal_callback(
+            {
+                "controls": nominal_controls.copy(),
+                "nominal_controls": nominal_controls.copy(),
+                "nominal_error": float(nominal_error),
+                "nominal_tail_coast_error": float(nominal_error),
+                "nominal_seed_error": float(nominal_seed_error),
+                "nominal_baseline_error": float(seed_result.get("nominal_error", nominal_seed_error)),
+                "nominal_lock_error_delta": float(
+                    abs(nominal_error - float(tail_result.get("nominal_error", nominal_error)))
+                ),
+                "nominal_accepted_candidate": str(tail_result.get("accepted_candidate", "optimizer")),
+                "nominal_fuel": float(nominal_fuel),
+                "nominal_dt": float(nominal_segment_duration(cfg)),
+                "original_target_state": np.asarray(target, dtype=float).copy(),
+            }
+        )
     selected, nominal_mask_errors, selection_semantics = select_tail_coast_outage_indices(
         policy=selected_outages,
         state0=state0,
@@ -937,10 +989,16 @@ def run_tail_coast_recovery_baseline(
 
     nominal_threshold = float(thresholds["nominal_success"])
     selected_threshold = float(thresholds["robust_success"])
+    branch_overrides = {
+        int(mask_index): dict(branch)
+        for mask_index, branch in (branch_result_overrides or {}).items()
+    }
     branches: list[dict] = []
-    for index in selected.astype(int).tolist():
-        branches.append(
-            optimize_tail_coast_recovery_branch_portfolio(
+    for branch_order, index in enumerate(selected.astype(int).tolist()):
+        if int(index) in branch_overrides:
+            branch = branch_overrides[int(index)]
+        else:
+            branch = optimize_tail_coast_recovery_branch_portfolio(
                 state0=state0,
                 target=target,
                 cfg=cfg,
@@ -957,7 +1015,9 @@ def run_tail_coast_recovery_baseline(
                 ftol=ftol,
                 gtol=gtol,
             )
-        )
+            if accepted_branch_callback is not None:
+                accepted_branch_callback(branch, int(branch_order))
+        branches.append(branch)
 
     selected_errors = [float(branch["terminal_error"]) for branch in branches]
     selected_worst = float(np.max(selected_errors)) if selected_errors else float(nominal_error)
@@ -967,7 +1027,6 @@ def run_tail_coast_recovery_baseline(
     all_worst = float(np.max(all_errors)) if all_errors else selected_worst
     branch_controls = [np.asarray(branch["branch_controls"], dtype=float) for branch in branches]
     branch_fuels = [float(branch["branch_fuel"]) for branch in branches]
-    nominal_fuel = control_fuel(nominal_controls, cfg.tf)
     diagnostics = control_norm_diagnostics([nominal_controls, *branch_controls], cfg.amax)
     tail_controls = nominal_controls[-tail:] if tail else np.zeros((0, 3), dtype=float)
     nominal_tail_zero_max_abs = float(np.max(np.abs(tail_controls))) if tail_controls.size else 0.0
@@ -1008,6 +1067,7 @@ def run_tail_coast_recovery_baseline(
     seed_runtime = float(seed_result.get("runtime_seconds", 0.0) or 0.0)
     tail_runtime = float(tail_result.get("runtime_seconds", 0.0) or 0.0)
     branch_summaries = [tail_coast_branch_summary_for_json(branch) for branch in branches]
+    branch_control_records = [tail_coast_branch_control_record_for_json(branch) for branch in branches]
     branch_remove_zero = [bool(branch.get("branch_controls_remove_zero_nominal", False)) for branch in branches]
 
     return {
@@ -1105,6 +1165,7 @@ def run_tail_coast_recovery_baseline(
         "control_bound_violation": float(diagnostics["control_bound_violation"]),
         "controls": nominal_controls,
         "nominal_controls": nominal_controls,
+        "accepted_branch_control_results": branch_control_records,
         "selected_outage_indices": selected.astype(int).tolist(),
         "selected_outage_errors": selected_errors,
         "all_outage_errors": all_errors,

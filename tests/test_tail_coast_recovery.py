@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -54,6 +55,13 @@ def load_script_module(name: str, path: Path):
     assert spec is not None and spec.loader is not None
     spec.loader.exec_module(module)
     return module
+
+
+def write_deterministic_json(path: Path, data: dict) -> str:
+    payload = (json.dumps(data, indent=2, sort_keys=True, ensure_ascii=True, allow_nan=False) + "\n").encode("utf-8")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(payload)
+    return hashlib.sha256(payload).hexdigest()
 
 
 def test_hard_catalog_combined_one_two_segment_tail_coast_case_selects_all_configured_masks():
@@ -1237,6 +1245,571 @@ def test_runner_artifact_generation_with_fake_backend(monkeypatch, tmp_path):
     assert "Fixed-final-time" in metadata["semantics"]["backend"]
 
 
+def test_runner_writes_branch_control_sidecars_with_fake_backend(monkeypatch, tmp_path):
+    script = load_script_module("run_tail_coast_recovery_sidecar_test", ROOT / "scripts" / "run_tail_coast_recovery.py")
+    config = {
+        "run": {"label": "tail_sidecar_test", "output_subdir": "tail_sidecar_test"},
+        "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_dro_phase",
+            "transfer_time": 0.1,
+            "segments": 3,
+            "substeps_per_segment": 1,
+            "amax": 0.2,
+            "steering": {"kr": 0.75, "kv": 1.45},
+        },
+        "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+                "nominal": 1.0,
+                "robust_worst": 0.85,
+                "robust_degradation": 0.55,
+                "active_fraction": 0.08,
+                "smoothness": 0.04,
+            },
+            "thresholds": {"nominal_success": 0.09, "robust_success": 0.17},
+        },
+        "outages": {"block_lengths": [1]},
+        "tail_coast_recovery": {
+            "tail_coast_segments": 1,
+            "nominal": {"max_nfev": 1, "node_initialization": "linear", "node_initialization_blend": 0.5},
+            "tail_nominal": {"max_nfev": 1, "weights": {"terminal": 1.0, "control": 0.0, "smooth": 0.0, "continuity": 0.0}},
+            "branch": {"max_nfev": 1, "weights": {"terminal": 1.0, "control": 0.0, "smooth": 0.0, "continuity": 0.0}},
+            "cases": [
+                {
+                    "case_id": "tail_sidecar_unit",
+                    "purpose": "unit sidecar test",
+                    "transfer_time": 0.1,
+                    "amax": 0.2,
+                    "segments": 3,
+                    "tail_coast_segments": 1,
+                    "selected_outages": "all_configured",
+                    "nominal_max_nfev": 1,
+                    "tail_nominal_max_nfev": 1,
+                    "branch_max_nfev": 1,
+                }
+            ],
+        },
+    }
+    config_path = tmp_path / "tail_sidecar_config.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+
+    def fake_load_states(root, case_config, source_states_path):
+        del root, case_config, source_states_path
+        return SimpleNamespace(
+            mu=0.01215058560962404,
+            initial=np.zeros(6, dtype=float),
+            target=np.ones(6, dtype=float) * 0.01,
+            target_metadata={"target_state_generation": "fixture"},
+        )
+
+    def fake_backend(**kwargs):
+        cfg = kwargs["cfg"]
+        nominal = np.array(
+            [
+                [0.01, 0.0, 0.0],
+                [0.0, 0.02, 0.0],
+                [0.0, 0.0, 0.0],
+            ],
+            dtype=float,
+        )
+        branch0 = nominal.copy()
+        branch0[0] = 0.0
+        branch1 = nominal.copy()
+        branch1[1:] = np.array([[0.03, 0.0, 0.0], [0.0, 0.0, 0.0]])
+        branch_records = [
+            {
+                "mask_index": 0,
+                "recovery_start": 1,
+                "recovery_segments": 2,
+                "tail_coast_segments": 1,
+                "branch_control_count": cfg.n_segments,
+                "nominal_dt": cfg.tf / cfg.n_segments,
+                "branch_total_duration": cfg.tf,
+                "terminal_error": 0.03,
+                "branch_fuel": 0.001,
+                "nfev": 2,
+                "runtime_seconds": 0.01,
+                "optimizer_ran": True,
+                "optimizer_success": True,
+                "accepted_candidate": "optimizer",
+                "message": "fixture branch 0",
+                "accepted_branch_weight_variant_label": "regularized_001",
+                "accepted_branch_weight_variant_index": 0,
+                "accepted_branch_weights": {"terminal": 1.0, "control": 0.0, "smooth": 0.0, "continuity": 0.0},
+                "accepted_branch_initialization_label": "nominal_post_outage",
+                "accepted_branch_initialization_index": 0,
+                "accepted_branch_initialization_is_fallback": False,
+                "accepted_branch_initialization_kind": "nominal_post_outage",
+                "accepted_variant_nfev": 2,
+                "accepted_variant_runtime_seconds": 0.01,
+                "branch_controls": branch0,
+                "recovery_controls": branch0[1:],
+                "control_max_norm": 0.02,
+                "control_bound_violation": 0.0,
+            },
+            {
+                "mask_index": 1,
+                "recovery_start": 2,
+                "recovery_segments": 1,
+                "tail_coast_segments": 1,
+                "branch_control_count": cfg.n_segments,
+                "nominal_dt": cfg.tf / cfg.n_segments,
+                "branch_total_duration": cfg.tf,
+                "terminal_error": 0.04,
+                "branch_fuel": 0.002,
+                "nfev": 3,
+                "runtime_seconds": 0.02,
+                "optimizer_ran": True,
+                "optimizer_success": True,
+                "accepted_candidate": "optimizer",
+                "message": "fixture branch 1",
+                "accepted_branch_weight_variant_label": "terminal_only",
+                "accepted_branch_weight_variant_index": 1,
+                "accepted_branch_weights": {"terminal": 1.0, "control": 0.0, "smooth": 0.0, "continuity": 0.0},
+                "accepted_branch_initialization_label": "constant_y_plus_0p5",
+                "accepted_branch_initialization_index": 1,
+                "accepted_branch_initialization_is_fallback": True,
+                "accepted_branch_initialization_kind": "constant_vector",
+                "accepted_branch_initialization_vector": [0.0, 0.5, 0.0],
+                "accepted_variant_nfev": 3,
+                "accepted_variant_runtime_seconds": 0.02,
+                "branch_controls": branch1,
+                "recovery_controls": branch1[2:],
+                "control_max_norm": 0.03,
+                "control_bound_violation": 0.0,
+            },
+        ]
+        branch_results = [
+            {key: value for key, value in record.items() if key not in {"branch_controls", "recovery_controls"}}
+            for record in branch_records
+        ]
+        return {
+            "success": True,
+            "backend_success": True,
+            "mode": "fixed_final_time_tail_coast_locked_nominal_independent_branch_recovery",
+            "method_type": "fixed_final_time_tail_coast_locked_nominal_independent_branch_recovery",
+            "optimizer_success": True,
+            "optimizer_success_semantics": "fixture optimizer success",
+            "nominal_optimizer_success": True,
+            "nominal_seed_optimizer_success": True,
+            "nominal_tail_optimizer_success": True,
+            "nominal_backend_success": True,
+            "branch_optimizer_success": True,
+            "branch_optimizer_all_success": True,
+            "branch_optimizer_ran": True,
+            "branch_portfolio_enabled": True,
+            "branch_portfolio_variant_count": 2,
+            "branch_portfolio_variant_labels": ["regularized_001", "terminal_only"],
+            "branch_portfolio_all_success": True,
+            "branch_portfolio_all_success_semantics": "fixture",
+            "portfolio_acceptance_rule": "fixture",
+            "branch_portfolio_converged_threshold_feasible_candidate_counts": [1, 1],
+            "branch_portfolio_candidate_counts": [2, 2],
+            "branch_portfolio_candidate_optimizer_success_counts": [2, 2],
+            "branch_portfolio_candidate_all_optimizer_success": True,
+            "branch_portfolio_candidate_all_optimizer_success_by_branch": [True, True],
+            "message": "fixture ok",
+            "nominal_message": "fixture nominal ok",
+            "nominal_seed_message": "fixture seed ok",
+            "nominal_accepted_candidate": "fixture",
+            "nominal_error": 0.01,
+            "nominal_tail_coast_error": 0.01,
+            "nominal_seed_error": 0.02,
+            "nominal_baseline_error": 0.02,
+            "nominal_lock_error_delta": 0.0,
+            "tail_coast_segments": 1,
+            "optimized_nominal_segments": cfg.n_segments - 1,
+            "nominal_tail_zero_max_abs": 0.0,
+            "nominal_tail_control_norm_max": 0.0,
+            "nominal_dt": cfg.tf / cfg.n_segments,
+            "branch_total_duration": cfg.tf,
+            "branch_control_count": cfg.n_segments,
+            "original_target_state": np.ones(6, dtype=float) * 0.01,
+            "worst_error_semantics": "fixture worst",
+            "worst_error": 0.04,
+            "selected_recovery_worst_error": 0.04,
+            "selected_worst_error": 0.04,
+            "all_outage_worst_error": 0.04,
+            "all_mask_worst_error": 0.04,
+            "nominal_threshold": 0.09,
+            "selected_recovery_threshold": 0.17,
+            "selected_worst_threshold": 0.17,
+            "meets_nominal_threshold": True,
+            "meets_selected_recovery_threshold": True,
+            "meets_selected_worst_threshold": True,
+            "meets_thresholds": True,
+            "nominal_fuel": 0.001,
+            "recovery_fuel_mean": 0.0015,
+            "recovery_fuel_max": 0.002,
+            "control_max_norm": 0.03,
+            "control_bound_violation": 0.0,
+            "controls": nominal,
+            "nominal_controls": nominal,
+            "accepted_branch_control_results": branch_records,
+            "selected_outage_indices": [0, 1],
+            "selected_outage_errors": [0.03, 0.04],
+            "all_outage_errors": [0.03, 0.04, 0.02],
+            "nominal_masked_outage_errors": [0.2, 0.18, 0.16],
+            "branch_results": branch_results,
+            "branch_nfev": [2, 3],
+            "branch_runtime_seconds": [0.01, 0.02],
+            "branch_optimizer_success_by_branch": [True, True],
+            "branch_optimizer_ran_by_branch": [True, True],
+            "branch_accepted_weight_variant_labels": ["regularized_001", "terminal_only"],
+            "branch_accepted_weight_variant_indices": [0, 1],
+            "branch_accepted_weights": [
+                {"terminal": 1.0, "control": 0.0, "smooth": 0.0, "continuity": 0.0},
+                {"terminal": 1.0, "control": 0.0, "smooth": 0.0, "continuity": 0.0},
+            ],
+            "branch_accepted_initialization_labels": ["nominal_post_outage", "constant_y_plus_0p5"],
+            "branch_accepted_initialization_indices": [0, 1],
+            "branch_accepted_initialization_is_fallback": [False, True],
+            "branch_accepted_initialization_kinds": ["nominal_post_outage", "constant_vector"],
+            "branch_accepted_variant_nfev": [2, 3],
+            "branch_accepted_variant_runtime_seconds": [0.01, 0.02],
+            "branch_recovery_starts": [1, 2],
+            "branch_recovery_segments": [2, 1],
+            "branch_control_counts": [3, 3],
+            "branch_controls_remove_zero_nominal": [False, False],
+            "total_branch_nfev": 5,
+            "total_branch_runtime_seconds": 0.03,
+            "nominal_seed_nfev": 1,
+            "nominal_tail_nfev": 1,
+            "nominal_nfev": 2,
+            "nominal_seed_runtime_seconds": 0.01,
+            "nominal_tail_runtime_seconds": 0.01,
+            "nominal_runtime_seconds": 0.02,
+            "nfev": 7,
+            "runtime_seconds": 0.05,
+            "cost": 0.0,
+            "optimality": 0.0,
+            "nominal_cost": 0.0,
+            "nominal_optimality": 0.0,
+            "backend_semantics": "fixture backend fixed-final-time",
+            "selection_semantics": "fixture selection",
+            "selected_branch_semantics": "fixture selected",
+            "all_mask_diagnostic_semantics": "fixture all mask",
+            "control_bound_semantics": "fixture bound",
+            "nominal_lock_semantics": "fixture lock",
+            "fixed_final_time_semantics": "fixture fixed final time",
+        }
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(script, "load_configured_states", fake_load_states)
+    monkeypatch.setattr(script, "run_tail_coast_recovery_baseline", fake_backend)
+    args = script.build_parser().parse_args(["--config", str(config_path), "--source-states", str(source_states), "--resume"])
+    df = script.run(args)
+
+    results_dir = tmp_path / "data" / "results" / "tail_sidecar_test"
+    csv_df = pd.read_csv(results_dir / "tail_coast_recovery.csv")
+    row = csv_df.iloc[0]
+    assert len(df) == 1
+    assert int(row["branch_control_sidecar_count"]) == 2
+    assert str(row["branch_control_replay_ready"]).lower() == "true"
+    assert len(str(row["nominal_control_sha256"])) == 64
+    assert len(str(row["branch_control_manifest_sha256"])) == 64
+
+    nominal_path = tmp_path / str(row["nominal_control_path"])
+    manifest_path = tmp_path / str(row["branch_control_manifest_path"])
+    assert hashlib.sha256(nominal_path.read_bytes()).hexdigest() == row["nominal_control_sha256"]
+    assert hashlib.sha256(manifest_path.read_bytes()).hexdigest() == row["branch_control_manifest_sha256"]
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["branch_count"] == 2
+    assert manifest["branch_control_replay_ready"] is True
+    assert "no high-fidelity validation" in manifest["replay_semantics"]
+    assert manifest["nominal_control_sha256"] == row["nominal_control_sha256"]
+    assert len(manifest["branch_control_sidecars"]) == 2
+    first_sidecar = manifest["branch_control_sidecars"][0]
+    first_path = tmp_path / first_sidecar["path"]
+    assert hashlib.sha256(first_path.read_bytes()).hexdigest() == first_sidecar["sha256"]
+    first_branch = json.loads(first_path.read_text(encoding="utf-8"))
+    assert first_branch["mask_index"] == 0
+    assert first_branch["outage_mask"] == [0, 1, 1]
+    assert first_branch["recovery_start"] == 1
+    assert first_branch["recovery_segments"] == 2
+    assert first_branch["branch_controls"][0] == [0.0, 0.0, 0.0]
+    assert first_branch["recovery_controls"] == first_branch["branch_controls"][1:]
+    assert first_branch["optimizer_ran"] is True
+    assert first_branch["optimizer_success"] is True
+
+
+def test_runner_resume_reuses_incremental_branch_sidecars(monkeypatch, tmp_path):
+    script = load_script_module(
+        "run_tail_coast_recovery_incremental_resume_test",
+        ROOT / "scripts" / "run_tail_coast_recovery.py",
+    )
+    config = {
+        "run": {"label": "tail_resume_test", "output_subdir": "tail_resume_test"},
+        "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_dro_phase",
+            "transfer_time": 0.12,
+            "segments": 3,
+            "substeps_per_segment": 1,
+            "amax": 0.2,
+            "steering": {"kr": 0.75, "kv": 1.45},
+        },
+        "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+                "nominal": 1.0,
+                "robust_worst": 0.85,
+                "robust_degradation": 0.55,
+                "active_fraction": 0.08,
+                "smoothness": 0.04,
+            },
+            "thresholds": {"nominal_success": 0.09, "robust_success": 0.17},
+        },
+        "outages": {"block_lengths": [1]},
+        "tail_coast_recovery": {
+            "tail_coast_segments": 1,
+            "cases": [
+                {
+                    "case_id": "tail_resume_unit",
+                    "purpose": "unit resume",
+                    "transfer_time": 0.12,
+                    "amax": 0.2,
+                    "segments": 3,
+                    "tail_coast_segments": 1,
+                    "selected_outages": 2,
+                    "nominal_max_nfev": 1,
+                    "tail_nominal_max_nfev": 1,
+                    "branch_max_nfev": 1,
+                }
+            ],
+        },
+    }
+    config_path = tmp_path / "tail_resume_config.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+    cfg = script.make_objective_config(config, 0.01215058560962404)
+    nominal = np.array([[0.01, 0.0, 0.0], [0.0, 0.01, 0.0], [0.0, 0.0, 0.0]], dtype=float)
+    branch0 = np.array([[0.0, 0.0, 0.0], [0.01, 0.0, 0.0], [0.0, 0.02, 0.0]], dtype=float)
+    branch1 = np.array([[0.01, 0.0, 0.0], [0.0, 0.0, 0.0], [0.03, 0.0, 0.0]], dtype=float)
+
+    def branch_record(mask_index: int, controls: np.ndarray, terminal_error: float, nfev: int) -> dict:
+        return {
+            "mask_index": mask_index,
+            "recovery_start": mask_index + 1,
+            "recovery_segments": cfg.n_segments - (mask_index + 1),
+            "tail_coast_segments": 1,
+            "branch_control_count": cfg.n_segments,
+            "nominal_dt": cfg.tf / cfg.n_segments,
+            "branch_total_duration": cfg.tf,
+            "accepted_candidate": "optimizer",
+            "optimizer_ran": True,
+            "optimizer_success": True,
+            "message": "fixture branch",
+            "nfev": nfev,
+            "runtime_seconds": 0.1 * nfev,
+            "terminal_error": terminal_error,
+            "branch_fuel": 0.001 * (nfev + 1),
+            "accepted_branch_weight_variant_label": "fixture",
+            "accepted_branch_weight_variant_index": 0,
+            "accepted_branch_weights": {"terminal": 1.0, "control": 0.0, "smooth": 0.0, "continuity": 0.0},
+            "accepted_branch_initialization_label": "nominal_post_outage",
+            "accepted_branch_initialization_index": 0,
+            "accepted_branch_initialization_is_fallback": False,
+            "accepted_branch_initialization_kind": "nominal_post_outage",
+            "accepted_variant_nfev": nfev,
+            "accepted_variant_runtime_seconds": 0.1 * nfev,
+            "branch_controls": controls,
+            "recovery_controls": controls[mask_index + 1 :],
+            "control_max_norm": float(np.linalg.norm(controls, axis=1).max()),
+            "control_bound_violation": 0.0,
+            "branch_controls_remove_zero_nominal": False,
+            "branch_missed_tail_indices": [],
+            "branch_note": "fixture",
+        }
+
+    branch0_record = branch_record(0, branch0, 0.03, 2)
+    branch1_record = branch_record(1, branch1, 0.04, 3)
+
+    def make_result(records: list[dict]) -> dict:
+        branch_results = [
+            {key: value for key, value in record.items() if key not in {"branch_controls", "recovery_controls"}}
+            for record in records
+        ]
+        return {
+            "success": True,
+            "backend_success": True,
+            "mode": "fixed_final_time_tail_coast_locked_nominal_independent_branch_recovery",
+            "method_type": "fixed_final_time_tail_coast_locked_nominal_independent_branch_recovery",
+            "optimizer_success": True,
+            "optimizer_success_semantics": "fixture",
+            "nominal_optimizer_success": True,
+            "nominal_seed_optimizer_success": True,
+            "nominal_tail_optimizer_success": True,
+            "nominal_backend_success": True,
+            "branch_optimizer_success": True,
+            "branch_optimizer_all_success": True,
+            "branch_optimizer_ran": bool(records),
+            "branch_portfolio_enabled": False,
+            "branch_portfolio_variant_count": 1,
+            "branch_portfolio_variant_labels": ["fixture"],
+            "branch_portfolio_all_success": True,
+            "branch_portfolio_all_success_semantics": "fixture",
+            "portfolio_acceptance_rule": "fixture",
+            "branch_portfolio_converged_threshold_feasible_candidate_counts": [1 for _ in records],
+            "branch_portfolio_candidate_counts": [1 for _ in records],
+            "branch_portfolio_candidate_optimizer_success_counts": [1 for _ in records],
+            "branch_portfolio_candidate_all_optimizer_success": True,
+            "branch_portfolio_candidate_all_optimizer_success_by_branch": [True for _ in records],
+            "message": "fixture ok",
+            "nominal_message": "fixture nominal",
+            "nominal_seed_message": "fixture seed",
+            "nominal_accepted_candidate": "fixture",
+            "nominal_error": 0.01,
+            "nominal_tail_coast_error": 0.01,
+            "nominal_seed_error": 0.02,
+            "nominal_baseline_error": 0.02,
+            "nominal_lock_error_delta": 0.0,
+            "tail_coast_segments": 1,
+            "optimized_nominal_segments": cfg.n_segments - 1,
+            "nominal_tail_zero_max_abs": 0.0,
+            "nominal_tail_control_norm_max": 0.0,
+            "nominal_dt": cfg.tf / cfg.n_segments,
+            "branch_total_duration": cfg.tf,
+            "branch_control_count": cfg.n_segments,
+            "original_target_state": np.ones(6, dtype=float) * 0.01,
+            "worst_error_semantics": "fixture",
+            "worst_error": max([float(record["terminal_error"]) for record in records], default=0.01),
+            "selected_recovery_worst_error": max([float(record["terminal_error"]) for record in records], default=0.01),
+            "selected_worst_error": max([float(record["terminal_error"]) for record in records], default=0.01),
+            "all_outage_worst_error": max([float(record["terminal_error"]) for record in records], default=0.01),
+            "all_mask_worst_error": max([float(record["terminal_error"]) for record in records], default=0.01),
+            "nominal_threshold": 0.09,
+            "selected_recovery_threshold": 0.17,
+            "selected_worst_threshold": 0.17,
+            "meets_nominal_threshold": True,
+            "meets_selected_recovery_threshold": True,
+            "meets_selected_worst_threshold": True,
+            "meets_thresholds": True,
+            "nominal_fuel": 0.001,
+            "recovery_fuel_mean": 0.002,
+            "recovery_fuel_max": 0.003,
+            "control_max_norm": 0.03,
+            "control_bound_violation": 0.0,
+            "controls": nominal,
+            "nominal_controls": nominal,
+            "accepted_branch_control_results": records,
+            "selected_outage_count": 2,
+            "selected_outage_indices": [0, 1],
+            "selected_outage_errors": [float(record["terminal_error"]) for record in records],
+            "all_outage_errors": [0.03, 0.04, 0.02],
+            "nominal_masked_outage_errors": [0.2, 0.18, 0.16],
+            "branch_results": branch_results,
+            "branch_nfev": [int(record["nfev"]) for record in records],
+            "branch_runtime_seconds": [float(record["runtime_seconds"]) for record in records],
+            "branch_optimizer_success_by_branch": [True for _ in records],
+            "branch_optimizer_ran_by_branch": [True for _ in records],
+            "branch_accepted_weight_variant_labels": ["fixture" for _ in records],
+            "branch_accepted_weight_variant_indices": [0 for _ in records],
+            "branch_accepted_weights": [
+                {"terminal": 1.0, "control": 0.0, "smooth": 0.0, "continuity": 0.0}
+                for _ in records
+            ],
+            "branch_accepted_initialization_labels": ["nominal_post_outage" for _ in records],
+            "branch_accepted_initialization_indices": [0 for _ in records],
+            "branch_accepted_initialization_is_fallback": [False for _ in records],
+            "branch_accepted_initialization_kinds": ["nominal_post_outage" for _ in records],
+            "branch_accepted_variant_nfev": [int(record["nfev"]) for record in records],
+            "branch_accepted_variant_runtime_seconds": [float(record["runtime_seconds"]) for record in records],
+            "branch_recovery_starts": [int(record["recovery_start"]) for record in records],
+            "branch_recovery_segments": [int(record["recovery_segments"]) for record in records],
+            "branch_control_counts": [cfg.n_segments for _ in records],
+            "branch_controls_remove_zero_nominal": [False for _ in records],
+            "total_branch_nfev": sum(int(record["nfev"]) for record in records),
+            "total_branch_runtime_seconds": sum(float(record["runtime_seconds"]) for record in records),
+            "nominal_seed_nfev": 1,
+            "nominal_tail_nfev": 1,
+            "nominal_nfev": 2,
+            "nominal_seed_runtime_seconds": 0.01,
+            "nominal_tail_runtime_seconds": 0.01,
+            "nominal_runtime_seconds": 0.02,
+            "nfev": 2 + sum(int(record["nfev"]) for record in records),
+            "runtime_seconds": 0.02 + sum(float(record["runtime_seconds"]) for record in records),
+            "cost": 0.0,
+            "optimality": 0.0,
+            "nominal_cost": 0.0,
+            "nominal_optimality": 0.0,
+            "backend_semantics": "fixture",
+            "selection_semantics": "fixture",
+            "selected_branch_semantics": "fixture",
+            "all_mask_diagnostic_semantics": "fixture",
+            "control_bound_semantics": "fixture",
+            "nominal_lock_semantics": "fixture",
+            "fixed_final_time_semantics": "fixture",
+        }
+
+    def fake_load_states(root, case_config, source_states_path):
+        del root, case_config, source_states_path
+        return SimpleNamespace(
+            mu=0.01215058560962404,
+            initial=np.zeros(6, dtype=float),
+            target=np.ones(6, dtype=float) * 0.01,
+            target_metadata={"target_state_generation": "fixture"},
+        )
+
+    def interrupted_backend(**kwargs):
+        assert kwargs["branch_result_overrides"] == {}
+        kwargs["accepted_nominal_callback"](make_result([]))
+        kwargs["accepted_branch_callback"](branch0_record, 0)
+        raise RuntimeError("fixture interrupt")
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(script, "load_configured_states", fake_load_states)
+    monkeypatch.setattr(script, "run_tail_coast_recovery_baseline", interrupted_backend)
+    args = script.build_parser().parse_args(["--config", str(config_path), "--source-states", str(source_states), "--resume"])
+    with pytest.raises(RuntimeError, match="fixture interrupt"):
+        script.run(args)
+
+    results_dir = tmp_path / "data" / "results" / "tail_resume_test"
+    controls_dir = results_dir / "controls"
+    manifest_path = controls_dir / "tail_resume_unit_branch_control_manifest.json"
+    progress_path = controls_dir / "tail_resume_unit_branch_control_progress.csv"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["progress_state"] == "in_progress"
+    assert manifest["branch_control_replay_ready"] is False
+    assert manifest["branch_control_sidecar_count"] == 1
+    progress = pd.read_csv(progress_path)
+    assert progress["record_type"].tolist() == ["nominal", "branch"]
+    assert progress.iloc[-1]["status"] == "last_completed_checkpoint"
+
+    resume_seen = {"mask0_override": False}
+
+    def resumed_backend(**kwargs):
+        overrides = kwargs["branch_result_overrides"]
+        assert sorted(overrides) == [0]
+        assert int(overrides[0]["mask_index"]) == 0
+        resume_seen["mask0_override"] = True
+        kwargs["accepted_nominal_callback"](make_result([]))
+        kwargs["accepted_branch_callback"](branch1_record, 1)
+        return make_result([overrides[0], branch1_record])
+
+    monkeypatch.setattr(script, "run_tail_coast_recovery_baseline", resumed_backend)
+    df = script.run(args)
+
+    assert resume_seen["mask0_override"] is True
+    row = df.iloc[0]
+    assert int(row["branch_control_sidecar_count"]) == 2
+    assert str(row["branch_control_replay_ready"]).lower() == "true"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["progress_state"] == "complete"
+    assert manifest["branch_control_replay_ready"] is True
+    assert manifest["branch_control_sidecar_count"] == 2
+    progress = pd.read_csv(progress_path)
+    assert progress["record_type"].tolist() == ["nominal", "branch", "branch"]
+    assert progress["status"].tolist() == ["complete", "complete", "complete"]
+
+
 def test_runner_effective_settings_include_implementation_config_and_variant_settings(tmp_path):
     script = load_script_module("run_tail_coast_recovery_settings_test", ROOT / "scripts" / "run_tail_coast_recovery.py")
     config = {
@@ -1300,3 +1873,215 @@ def test_runner_effective_settings_include_implementation_config_and_variant_set
     changed_fallback_case = script._suite_cases(changed_fallback)[0]
     changed_fallback_settings = script._effective_settings(changed_fallback, args, changed_fallback_case)
     assert script.settings_fingerprint(settings) != script.settings_fingerprint(changed_fallback_settings)
+
+
+def test_tail_coast_branch_control_replay_script_with_generated_sidecars(monkeypatch, tmp_path):
+    replay = load_script_module(
+        "run_tail_coast_branch_control_replay_unit",
+        ROOT / "scripts" / "run_tail_coast_branch_control_replay.py",
+    )
+    config = {
+        "run": {"label": "tail_replay_test", "output_subdir": "tail_replay_test"},
+        "benchmark": {
+            "mu": 0.01215058560962404,
+            "target_mode": "catalog_dro_phase",
+            "transfer_time": 0.1,
+            "segments": 2,
+            "substeps_per_segment": 1,
+            "amax": 0.2,
+            "steering": {"kr": 0.75, "kv": 1.45},
+        },
+        "objective": {
+            "position_scale": 1.0,
+            "velocity_scale": 0.35,
+            "weights": {
+                "nominal": 1.0,
+                "robust_worst": 0.85,
+                "robust_degradation": 0.55,
+                "active_fraction": 0.08,
+                "smoothness": 0.04,
+            },
+            "thresholds": {"nominal_success": 0.09, "robust_success": 0.17},
+        },
+        "outages": {"block_lengths": [1]},
+        "tail_coast_recovery": {
+            "tail_coast_segments": 1,
+            "cases": [
+                {
+                    "case_id": "tail_replay_unit",
+                    "purpose": "unit replay",
+                    "transfer_time": 0.1,
+                    "amax": 0.2,
+                    "segments": 2,
+                    "tail_coast_segments": 1,
+                    "selected_outages": "all_configured",
+                    "nominal_max_nfev": 1,
+                    "tail_nominal_max_nfev": 1,
+                    "branch_max_nfev": 1,
+                }
+            ],
+        },
+    }
+    config_path = tmp_path / "tail_replay_config.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+    results_dir = tmp_path / "data" / "results" / "tail_replay_test"
+    controls_dir = results_dir / "controls"
+    controls_dir.mkdir(parents=True)
+
+    cfg = replay.make_objective_config(config, 0.01215058560962404)
+    initial = np.array([1.02, 0.01, 0.0, 0.0, 0.03, 0.0], dtype=float)
+    nominal_controls = np.array([[0.01, 0.0, 0.0], [0.0, 0.0, 0.0]], dtype=float)
+    target = replay.propagate_controls_batch(initial, nominal_controls, cfg.mu, cfg.tf, cfg.substeps)[0][0]
+    branch0_controls = np.array([[0.0, 0.0, 0.0], [0.015, 0.0, 0.0]], dtype=float)
+    branch1_controls = np.array([[0.01, 0.0, 0.0], [0.0, 0.02, 0.0]], dtype=float)
+    nominal_error = replay._replay_terminal_error(initial, target, cfg, nominal_controls)
+    branch0_error = replay._replay_terminal_error(initial, target, cfg, branch0_controls)
+    branch1_error = replay._replay_terminal_error(initial, target, cfg, branch1_controls)
+
+    nominal_path = controls_dir / "tail_replay_unit_nominal_controls.json"
+    nominal_sha = write_deterministic_json(
+        nominal_path,
+        {
+            "schema_version": 1,
+            "sidecar_type": "tail_coast_nominal_controls",
+            "suite_case_id": "tail_replay_unit",
+            "target_state": target.tolist(),
+            "thresholds": config["objective"]["thresholds"],
+            "nominal_error": nominal_error,
+            "controls": nominal_controls.tolist(),
+        },
+    )
+    branch_entries = []
+    for order, (mask_index, mask, controls, error, recovery_start, recovery_segments) in enumerate(
+        [
+            (0, [0, 1], branch0_controls, branch0_error, 1, 1),
+            (1, [1, 0], branch1_controls, branch1_error, 2, 0),
+        ]
+    ):
+        branch_path = controls_dir / f"tail_replay_unit_branch_{order:03d}_mask_{mask_index:03d}_controls.json"
+        branch_sha = write_deterministic_json(
+            branch_path,
+            {
+                "schema_version": 1,
+                "sidecar_type": "tail_coast_branch_controls",
+                "suite_case_id": "tail_replay_unit",
+                "branch_order": order,
+                "mask_index": mask_index,
+                "outage_mask": mask,
+                "target_state": target.tolist(),
+                "thresholds": config["objective"]["thresholds"],
+                "recovery_start": recovery_start,
+                "recovery_segments": recovery_segments,
+                "optimizer_ran": recovery_segments > 0,
+                "optimizer_success": recovery_segments > 0,
+                "accepted_candidate": "optimizer" if recovery_segments > 0 else "no_recovery_variables",
+                "accepted_branch_weight_variant_label": "fixture",
+                "accepted_branch_initialization_label": "fixture",
+                "terminal_error": error,
+                "branch_fuel": 0.0,
+                "branch_controls": controls.tolist(),
+                "recovery_controls": controls[recovery_start:].tolist() if recovery_start < controls.shape[0] else [],
+            },
+        )
+        branch_entries.append(
+            {
+                "branch_order": order,
+                "mask_index": mask_index,
+                "outage_mask": mask,
+                "recovery_start": recovery_start,
+                "recovery_segments": recovery_segments,
+                "terminal_error": error,
+                "branch_fuel": 0.0,
+                "optimizer_ran": recovery_segments > 0,
+                "optimizer_success": recovery_segments > 0,
+                "path": f"data/results/tail_replay_test/controls/{branch_path.name}",
+                "sha256": branch_sha,
+            }
+        )
+
+    manifest_path = controls_dir / "tail_replay_unit_branch_control_manifest.json"
+    manifest_sha = write_deterministic_json(
+        manifest_path,
+        {
+            "schema_version": 1,
+            "sidecar_type": "tail_coast_branch_control_manifest",
+            "suite_case_id": "tail_replay_unit",
+            "target_mode": "catalog_dro_phase",
+            "target_state": target.tolist(),
+            "thresholds": config["objective"]["thresholds"],
+            "settings_fingerprint": "fixture-fingerprint",
+            "nominal_control_path": f"data/results/tail_replay_test/controls/{nominal_path.name}",
+            "nominal_control_sha256": nominal_sha,
+            "branch_count": 2,
+            "branch_control_sidecar_count": 2,
+            "branch_control_replay_ready": True,
+            "branch_control_sidecars": branch_entries,
+            "limitations": ["fixture normalized CR3BP replay only"],
+        },
+    )
+    pd.DataFrame(
+        [
+            {
+                "suite_case_id": "tail_replay_unit",
+                "target_mode": "catalog_dro_phase",
+                "nominal_error": nominal_error,
+                "selected_worst_error": max(branch0_error, branch1_error),
+                "all_mask_worst_error": max(branch0_error, branch1_error),
+                "nominal_threshold": 0.09,
+                "selected_worst_threshold": 0.17,
+                "meets_thresholds": True,
+                "branch_control_manifest_path": f"data/results/tail_replay_test/controls/{manifest_path.name}",
+                "branch_control_manifest_sha256": manifest_sha,
+                "nominal_control_path": f"data/results/tail_replay_test/controls/{nominal_path.name}",
+                "nominal_control_sha256": nominal_sha,
+                "branch_control_sidecar_count": 2,
+                "branch_control_replay_ready": True,
+            }
+        ]
+    ).to_csv(results_dir / "tail_coast_recovery.csv", index=False)
+
+    def fake_load_states(root, case_config, source_states_path):
+        del root, case_config, source_states_path
+        return SimpleNamespace(
+            mu=0.01215058560962404,
+            initial=initial,
+            target=target,
+            target_metadata={"target_state_generation": "fixture"},
+        )
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(replay, "load_configured_states", fake_load_states)
+    args = replay.build_parser().parse_args(["--config", str(config_path), "--source-states", str(source_states)])
+    df = replay.run(args)
+
+    metadata = json.loads((results_dir / "tail_coast_branch_control_replay_metadata.json").read_text(encoding="utf-8"))
+    assert len(df) == 3
+    assert int((df["record_type"] == "branch").sum()) == 2
+    assert metadata["optimization_rerun"] is False
+    assert metadata["branch_control_replay"] is True
+    assert metadata["high_fidelity_validation"] is False
+    assert metadata["branch_row_count"] == 2
+    assert metadata["max_branch_terminal_error_delta"] <= 1.0e-12
+    assert metadata["passes_tolerance"] is True
+    assert (results_dir / "tail_coast_branch_control_replay.csv").exists()
+    assert (tmp_path / "tables" / "tail_replay_test" / "tail_coast_branch_control_replay_table.tex").exists()
+
+
+def test_real_tail_coast_branch_control_replay_package_metadata_when_present():
+    metadata_path = (
+        ROOT
+        / "data"
+        / "results"
+        / "hard_catalog_tail_coast_branch_control_replay"
+        / "tail_coast_branch_control_replay_metadata.json"
+    )
+    if not metadata_path.exists():
+        pytest.skip("focused branch-control replay package has not been generated")
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    assert metadata["optimization_rerun"] is False
+    assert metadata["branch_control_replay"] is True
+    assert metadata["high_fidelity_validation"] is False
+    assert metadata["branch_row_count"] == 27
+    assert metadata["passes_tolerance"] is True

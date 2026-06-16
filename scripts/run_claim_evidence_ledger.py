@@ -55,9 +55,41 @@ INDEPENDENT_HS_CSV = (
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
+TAIL_COAST_BRANCH_REPLAY_SOURCE_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "hard_catalog_tail_coast_branch_control_replay"
+    / "tail_coast_recovery.csv"
+)
+TAIL_COAST_BRANCH_REPLAY_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "hard_catalog_tail_coast_branch_control_replay"
+    / "tail_coast_branch_control_replay.csv"
+)
+TAIL_COAST_BRANCH_REPLAY_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "hard_catalog_tail_coast_branch_control_replay"
+    / "tail_coast_branch_control_replay_metadata.json"
+)
 DELAYED_RECOVERY_CSV = (
     ROOT / "data" / "results" / "hard_catalog_delayed_recovery" / "delayed_locked_recovery.csv"
 )
+
+
+def tail_coast_branch_control_replay_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            TAIL_COAST_BRANCH_REPLAY_SOURCE_CSV,
+            TAIL_COAST_BRANCH_REPLAY_CSV,
+            TAIL_COAST_BRANCH_REPLAY_METADATA,
+        )
+    )
 
 TAIL_COAST_COMBINED_CASE = "tail_coast_all_one_two_segment_t5_portfolio"
 
@@ -543,12 +575,86 @@ def _recorded_case_rows() -> list[dict[str, str]]:
     ]
 
 
-def build_claim_evidence_ledger() -> pd.DataFrame:
+def _tail_coast_branch_control_replay_ledger_row() -> dict[str, str]:
+    source_rows = _read_csv_rows(TAIL_COAST_BRANCH_REPLAY_SOURCE_CSV)
+    replay_rows = _read_csv_rows(TAIL_COAST_BRANCH_REPLAY_CSV)
+    metadata = _read_json(TAIL_COAST_BRANCH_REPLAY_METADATA)
+    source = _first_matching(
+        source_rows,
+        TAIL_COAST_BRANCH_REPLAY_SOURCE_CSV,
+        suite_case_id=TAIL_COAST_COMBINED_CASE,
+    )
+    branch_rows = [row for row in replay_rows if row.get("record_type") == "branch"]
+    nominal_rows = [row for row in replay_rows if row.get("record_type") == "nominal"]
+    if len(nominal_rows) != 1:
+        raise RuntimeError("expected exactly one nominal replay row for tail-coast branch-control replay")
+    branch_row_count = int(metadata["branch_row_count"])
+    if branch_row_count != len(branch_rows):
+        raise RuntimeError("branch-control replay metadata branch_row_count does not match replay CSV")
+    if branch_row_count <= 0:
+        raise RuntimeError("branch-control replay requires at least one branch row")
+    max_branch_delta = str(metadata["max_branch_terminal_error_delta"])
+    max_delta = str(metadata["max_terminal_error_delta"])
+    tolerance = str(metadata["tolerance"])
+    passes = bool(metadata["passes_tolerance"])
+    return {
+        "claim_id": "catalog_dro_tail_coast_branch_control_replay_accepted_controls",
+        "evidence_family": "hard-catalog tail-coast accepted branch-control replay",
+        "target_family": "catalog-DRO",
+        "target_mode": str(source["target_mode"]),
+        "source_case": TAIL_COAST_COMBINED_CASE,
+        "backend_or_method": "normalized CR3BP replay of persisted accepted full-control schedules",
+        "mask_scope": f"{branch_row_count}/27 persisted accepted branch-control sidecars replayed",
+        "selected_branch_semantics": (
+            "replays only accepted nominal and selected branch full-control schedules persisted by the focused tail-coast run"
+        ),
+        "all_mask_semantics": (
+            "the focused source row selected all configured one- and two-segment masks; replay does not rerun branch selection"
+        ),
+        "all_configured_mask_evidence": "True",
+        "nominal_error": (
+            f"recorded={nominal_rows[0]['recorded_terminal_error']}; "
+            f"replayed={nominal_rows[0]['replay_terminal_error']}; "
+            f"delta={nominal_rows[0]['terminal_error_delta']}"
+        ),
+        "selected_worst_error": (
+            f"source selected_worst={source['selected_worst_error']}; "
+            f"max branch replay delta={max_branch_delta}"
+        ),
+        "all_mask_worst_error": (
+            f"source all_mask_worst={source['all_mask_worst_error']}; "
+            "all configured masks were accepted-control replay rows, not new optimized branches"
+        ),
+        "thresholds": f"replay tolerance<={tolerance}; source nominal<={source['nominal_threshold']}; source selected/all<={source['selected_worst_threshold']}",
+        "passes_configured_thresholds": str(passes),
+        "primary_interpretation": (
+            f"Persisted accepted controls replay deterministically under the normalized CR3BP model "
+            f"with max terminal-error delta {max_delta} across nominal plus {branch_row_count} branch rows."
+        ),
+        "explicit_boundary": (
+            "Accepted-control replay only; no optimization rerun, high-fidelity validation, production solver parity, "
+            "fuel optimality, quantum, QUBO, or QAOA claim."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(TAIL_COAST_BRANCH_REPLAY_CSV)}; "
+            f"{_relative_or_absolute(TAIL_COAST_BRANCH_REPLAY_METADATA)}; "
+            f"{_relative_or_absolute(TAIL_COAST_BRANCH_REPLAY_SOURCE_CSV)}"
+        ),
+    }
+
+
+def build_claim_evidence_ledger(include_branch_control_replay: bool | None = None) -> pd.DataFrame:
+    if include_branch_control_replay is None:
+        include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
+    recorded_rows = _recorded_case_rows()
     rows = [
         _main_method_row(),
         _qaoa_ablation_row(),
-        *_recorded_case_rows(),
+        *recorded_rows[:5],
+        *recorded_rows[5:],
     ]
+    if include_branch_control_replay:
+        rows.insert(7, _tail_coast_branch_control_replay_ledger_row())
     return pd.DataFrame(rows, columns=LEDGER_COLUMNS)
 
 
@@ -634,8 +740,8 @@ def build_tail_coast_branch_audit() -> pd.DataFrame:
         "accepted_initialization_label_counts": _counter_text(label_counts),
         "branch_control_replay_claim": "False",
         "audit_semantics": (
-            "Summary of recorded branch_results JSON only; accepted branch controls are not persisted, "
-            "so this is not branch-control replay."
+            "Summary of recorded branch_results JSON from the historical four-row tail-coast package only; "
+            "the focused branch-control replay package is reported as a separate ledger row."
         ),
         "source_artifact": _relative_or_absolute(TAIL_COAST_CSV),
     }
@@ -734,7 +840,7 @@ def write_latex_tables(
 
 
 def _input_artifacts() -> list[Path]:
-    return [
+    paths = [
         MAIN_SUMMARY_CSV,
         MAIN_STATS_METADATA,
         MAIN_THRESHOLD_CSV,
@@ -746,6 +852,15 @@ def _input_artifacts() -> list[Path]:
         TAIL_COAST_CSV,
         DELAYED_RECOVERY_CSV,
     ]
+    if tail_coast_branch_control_replay_artifacts_available():
+        paths.extend(
+            [
+                TAIL_COAST_BRANCH_REPLAY_SOURCE_CSV,
+                TAIL_COAST_BRANCH_REPLAY_CSV,
+                TAIL_COAST_BRANCH_REPLAY_METADATA,
+            ]
+        )
+    return paths
 
 
 def write_artifacts(
@@ -754,7 +869,8 @@ def write_artifacts(
     tables_dir: Path,
     command: str,
 ) -> dict[str, object]:
-    ledger = build_claim_evidence_ledger()
+    branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
+    ledger = build_claim_evidence_ledger(include_branch_control_replay=branch_control_replay_available)
     threshold_audit = build_tail_coast_threshold_audit()
     branch_audit = build_tail_coast_branch_audit()
 
@@ -782,12 +898,17 @@ def write_artifacts(
         "optimization_rerun": False,
         "uses_recorded_artifacts_only": True,
         "high_fidelity_claim": False,
-        "branch_control_replay": False,
+        "branch_control_replay": branch_control_replay_available,
         "fuel_optimality_claim": False,
         "quantum_advantage_claim": False,
         "source_mode": (
             "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit "
             "are deterministic postprocessing outputs with no trajectory optimization rerun."
+            + (
+                " A branch-control replay ledger row is included because the focused replay package is present."
+                if branch_control_replay_available
+                else " No branch-control replay claim row is included because the focused replay package is absent."
+            )
         ),
         "determinism_note": (
             "Runtime and wall-clock timestamps are intentionally omitted so identical inputs and "
@@ -805,6 +926,7 @@ def write_artifacts(
                 "True only when the row selected/evaluated every configured mask within the stated mask family."
             ),
         },
+        "branch_control_replay_artifacts_available": branch_control_replay_available,
         "tail_coast_threshold_pairs": [
             {
                 "threshold_id": threshold_id,
@@ -831,7 +953,10 @@ def write_artifacts(
         },
         "interpretation_limits": [
             "This ledger clarifies evidence semantics; it does not add high-fidelity validation.",
-            "The branch audit summarizes recorded branch_results JSON only; accepted branch controls are not persisted and are not replayed.",
+            (
+                "The historical tail-coast branch audit summarizes recorded branch_results JSON only; "
+                "the focused replay row is included only when its real replay CSV and metadata exist."
+            ),
             "The tail-coast positive row is fixed-final-time locked-nominal continuous-backend evidence only.",
             "The QAOA/QUBO rows are simulated initializer evidence and do not support quantum advantage or superiority claims.",
         ],

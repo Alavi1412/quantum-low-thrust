@@ -9,13 +9,14 @@
   "branch_control_replay": false,
   "fuel_optimality_claim": false,
   "quantum_advantage_claim": false,
-  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun.",
+  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun. No branch-control replay claim row is included because the focused replay package is absent.",
   "determinism_note": "Runtime and wall-clock timestamps are intentionally omitted so identical inputs and command text produce byte-stable outputs.",
   "claim_semantics": {
     "selected_branch_evidence": "Rows where selected outage branches were optimized/evaluated and unselected masks, if present, remain diagnostics.",
     "all_mask_diagnostic": "All configured masks may be evaluated diagnostically without being selected for optimization.",
     "all_configured_mask_evidence": "True only when the row selected/evaluated every configured mask within the stated mask family."
   },
+  "branch_control_replay_artifacts_available": false,
   "tail_coast_threshold_pairs": [
     {
       "threshold_id": "configured_0p09_0p17",
@@ -116,7 +117,7 @@
   },
   "interpretation_limits": [
     "This ledger clarifies evidence semantics; it does not add high-fidelity validation.",
-    "The branch audit summarizes recorded branch_results JSON only; accepted branch controls are not persisted and are not replayed.",
+    "The historical tail-coast branch audit summarizes recorded branch_results JSON only; the focused replay row is included only when its real replay CSV and metadata exist.",
     "The tail-coast positive row is fixed-final-time locked-nominal continuous-backend evidence only.",
     "The QAOA/QUBO rows are simulated initializer evidence and do not support quantum advantage or superiority claims."
   ]

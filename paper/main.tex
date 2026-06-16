@@ -230,7 +230,7 @@ The ledger makes the claim boundaries auditable. The 30-seed initializer and QAO
 \resizebox{\textwidth}{!}{\input{../tables/claim_evidence_ledger/claim_evidence_ledger_table.tex}}
 \end{table}
 
-For practitioners, the reporting lesson is concrete: include the all-windows continuous control, do not collapse selected-branch and all-mask semantics, preserve negative QAOA/QUBO evidence, and archive provenance in machine-readable artifacts. Tables~\ref{tab:tail_coast_threshold_audit} and~\ref{tab:tail_coast_branch_audit} add the two reviewer-requested tail-coast checks. The combined hard-catalog tail-coast row passes recorded-error audits down to $(0.025,0.095)$, fails when the robust threshold is tightened to $0.09$, and also fails the very-tight $0.02$ nominal threshold. The branch audit records $27$ total branches, $25/25$ optimizer-converged eligible branches, two no-recovery-variable direct evaluations, and four accepted fallback starts; because accepted branch controls are not persisted, this is not branch-control replay.
+For practitioners, the reporting lesson is concrete: include the all-windows continuous control, do not collapse selected-branch and all-mask semantics, preserve negative QAOA/QUBO evidence, and archive provenance in machine-readable artifacts. Tables~\ref{tab:tail_coast_threshold_audit} and~\ref{tab:tail_coast_branch_audit} add two recorded-error tail-coast checks for the historical four-row package. The combined hard-catalog tail-coast row passes recorded-error audits down to $(0.025,0.095)$, fails when the robust threshold is tightened to $0.09$, and also fails the very-tight $0.02$ nominal threshold. The branch audit records $27$ total branches, $25/25$ optimizer-converged eligible branches, two no-recovery-variable direct evaluations, and four accepted fallback starts. The current artifact snapshot does not include a completed accepted branch-control replay package, so no branch-control replay claim row is reported.
 
 \begin{table}[t]
 \centering
@@ -241,7 +241,7 @@ For practitioners, the reporting lesson is concrete: include the all-windows con
 
 \begin{table}[t]
 \centering
-\caption{Tail-coast branch audit parsed from the recorded \texttt{branch\_results} JSON field. Counts summarize recorded branch outcomes only; accepted branch controls are not persisted and are not replayed.}
+\caption{Tail-coast branch audit parsed from the historical \texttt{branch\_results} JSON field. Counts summarize recorded branch outcomes only; the accepted-control sidecar replay is a separate focused package.}
 \label{tab:tail_coast_branch_audit}
 \resizebox{\textwidth}{!}{\input{../tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex}}
 \end{table}
@@ -286,6 +286,12 @@ This result is deliberately scoped. It is fixed-final-time continuous-backend ev
 \label{tab:tail_coast_recovery}
 \resizebox{\textwidth}{!}{\input{../tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex}}
 \end{table}
+
+\subsection{Accepted branch-control replay status}
+
+The repository includes checkpointed infrastructure for a focused accepted branch-control replay package for the same combined hard-catalog tail-coast case. The recovery runner can persist a nominal-control sidecar, one accepted full-control sidecar per selected branch, a progress CSV, and a manifest with SHA-256 hashes, target state, thresholds, settings fingerprint, and explicit limitations. The replay script then repropagates those persisted controls under the configured normalized CR3BP model without rerunning the nominal solve, branch optimizer, portfolio selection, fallback search, schedule search, or any high-fidelity force model.
+
+That long focused package is not present in the current artifact snapshot. Until the 27-branch checkpointed run and replay postprocessor have completed, the branch-control replay path is infrastructure only and is not used as manuscript evidence. The reported hard-catalog evidence remains the recorded fixed-final-time tail-coast CSV/table row and the branch-results audit above.
 
 \subsection{Thirty-seed main-method statistics}
 
@@ -369,7 +375,7 @@ The practical implication for astrodynamics researchers is that binary schedule 
 
 The normalized CR3BP experiments are preliminary-design algorithm studies. They omit ephemeris dynamics, mass depletion, eclipse constraints, navigation uncertainty, thrust pointing limits beyond the acceleration norm, operational constraints, and high-fidelity force modeling. The terminal-error thresholds are screening tolerances; their dimensional interpretation is deliberately large and not comparable to flight targeting requirements.
 
-The continuous backends are research-grade direct shooting, compact direct collocation, Hermite--Simpson, and continuation diagnostics. They are useful for comparing initializer behavior and exposing failure modes, but they are not certified flight-design tools. The recorded-control replay/stress table checks deterministic nominal sidecar replay only; it does not replay branch recovery controls, model ephemeris dynamics, or validate operational targeting. The claim evidence ledger clarifies selected-branch, all-mask diagnostic, and all-configured-mask semantics, but it does not add high-fidelity validation, production solver evidence, or branch-control replay. Many supplementary rows optimize selected outage branches and report unselected outage masks diagnostically; only rows that explicitly select all configured masks should be read as all-configured-mask evidence.
+The continuous backends are research-grade direct shooting, compact direct collocation, Hermite--Simpson, and continuation diagnostics. They are useful for comparing initializer behavior and exposing failure modes, but they are not certified flight-design tools. The recorded-control replay/stress table checks deterministic nominal sidecar replay only. The focused tail-coast branch-control replay infrastructure is checkpointed but not reported as evidence in this artifact snapshot because the completed replay CSV, metadata, and table are absent. The claim evidence ledger clarifies selected-branch, all-mask diagnostic, and all-configured-mask semantics, but it does not add high-fidelity validation. Many supplementary rows optimize selected outage branches and report unselected outage masks diagnostically; only rows that explicitly select all configured masks should be read as all-configured-mask evidence.
 
 The hard-catalog tail-coast result is scoped to a locked-nominal continuous-backend setup with final-five-segment coast, configured one- and two-segment masks, deterministic fallback starts, and late-tail no-recovery-variable direct evaluations. It does not prove fuel-optimal recovery, high-fidelity robustness, certified flight design, or broader outage-family robustness.
 
@@ -385,7 +391,7 @@ The manifest is generated by \path{scripts/write_artifact_manifest.py}. Its scop
 
 \section{Conclusion}
 
-This paper contributes a reproducible normalized CR3BP benchmark for robust low-thrust cislunar initialization under missed-thrust events. Its main finding is conservative: duty-cycle-aware binary schedules can help locate refinable high-duty candidates, but all-windows continuous refinement remains lower-error in paired selected-worst comparisons and remains more robust under stricter threshold checks, while the tested simulated QAOA variants do not establish superiority over classical initializers. Deterministic evidence-ledger, evidence-synthesis, and sidecar-replay layers make the broader validation axes explicit: all-mask continuation and compact collocation can provide phase-shift headroom, recorded nominal controls replay consistently, but the hard-catalog pass requires the scoped tail-coast backend. The useful outcome is therefore an auditable benchmark with negative evidence, failure modes, and provenance, not a claim of quantum advantage or flight-ready robustness.
+This paper contributes a reproducible normalized CR3BP benchmark for robust low-thrust cislunar initialization under missed-thrust events. Its main finding is conservative: duty-cycle-aware binary schedules can help locate refinable high-duty candidates, but all-windows continuous refinement remains lower-error in paired selected-worst comparisons and remains more robust under stricter threshold checks, while the tested simulated QAOA variants do not establish superiority over classical initializers. Deterministic evidence-ledger, evidence-synthesis, and sidecar-replay layers make the broader validation axes explicit: all-mask continuation and compact collocation can provide phase-shift headroom, recorded nominal controls replay consistently, and the hard-catalog pass still requires the scoped tail-coast backend. The accepted hard-catalog branch-control replay path is checkpointed infrastructure until the focused long run and replay postprocessor produce real artifacts. The useful outcome is therefore an auditable benchmark with negative evidence, failure modes, and provenance, not a claim of quantum advantage or flight-ready robustness.
 
 \section*{Declaration of Competing Interest}
 The author declares no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.

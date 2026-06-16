@@ -166,11 +166,13 @@ py -3.11 scripts\run_claim_evidence_ledger.py
 ```
 
 It reads recorded artifacts only and does not rerun trajectory optimization.
-The ledger separates selected-branch evidence, all-mask diagnostics, and
-all-configured-mask evidence. The tail-coast audit confirms the combined row
+The ledger separates selected-branch evidence, all-mask diagnostics,
+and all-configured-mask evidence. The focused accepted-control replay row is
+included only after its real replay CSV, metadata, and source CSV exist. The
+tail-coast audit confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
-JSON summary only; accepted branch controls are not persisted or replayed.
+JSON summary of the historical four-row package only.
 
 The evidence synthesis postprocessor writes
 `data/results/evidence_synthesis/evidence_synthesis.csv`,
@@ -198,6 +200,31 @@ rows. The source-substep baselines reproduce recorded nominal errors to within
 `1e-12`; refined substeps and direct +/-1% acceleration scaling are stress
 diagnostics only. It does not run least-squares optimization, replay branch
 recovery controls, or claim high-fidelity validation.
+
+The focused hard-catalog tail-coast accepted branch-control replay package is an
+optional long-run artifact path, not part of the current short verification
+snapshot. Generate it in two steps only when intentionally refreshing that
+evidence:
+
+```powershell
+py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml --resume
+py -3.11 scripts\run_tail_coast_branch_control_replay.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml
+```
+
+The first command reruns only the combined
+`tail_coast_all_one_two_segment_t5_portfolio` case into
+`data/results/hard_catalog_tail_coast_branch_control_replay/` and writes a
+nominal-control sidecar, incremental accepted full-control sidecars, a progress
+CSV, and a manifest with SHA-256 hashes. `--resume` reuses compatible completed
+branch sidecars by mask index and skips those branch optimizations. The second
+command repropagates the completed persisted controls under the configured
+normalized CR3BP model and writes
+`tail_coast_branch_control_replay.csv`,
+`tail_coast_branch_control_replay_metadata.json`, and
+`tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_table.tex`.
+It does not rerun optimization, branch portfolio selection, fallback search,
+high-fidelity validation, fuel-optimal analysis, or any QUBO/QAOA/quantum
+workflow.
 
 For the QAOA depth ablation:
 
@@ -332,6 +359,22 @@ the separate one- and two-segment cases. This package does not establish fuel
 optimality, certified flight-design recovery, high-fidelity validation, broader
 outage-family robustness beyond the configured one/two masks, or quantum
 advantage.
+
+For optional accepted branch-control persistence and replay without rewriting
+the historical four-row package, use the focused config:
+
+```powershell
+py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml --resume
+py -3.11 scripts\run_tail_coast_branch_control_replay.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml
+```
+
+This focused package keeps the same scientific setup and thresholds as the
+combined row, but writes only that case under
+`data/results/hard_catalog_tail_coast_branch_control_replay/`. It is not a
+reported manuscript claim until the completed recovery CSV, replay CSV,
+metadata, and table exist. The replay is a normalized CR3BP accepted-control
+replay only; it is not high-fidelity validation, production solver parity, fuel
+optimality, or quantum advantage evidence.
 
 For the continuation-extension continuous-backend baseline:
 

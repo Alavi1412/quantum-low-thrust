@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-16T20:06:10Z",
+  "generated_utc": "2026-06-16T21:59:12Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "cddab631abea7d3101d4803d0fbd366714e7d1d8",
+  "git_head_at_generation": "a9d0d42098e96c60668d13279a16e7a85400236c",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n?? data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n?? data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n?? data/results/claim_evidence_ledger/tail_coast_branch_audit.csv\n?? data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv\n?? scripts/run_claim_evidence_ledger.py\n?? tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n?? tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex\n?? tables/claim_evidence_ledger/tail_coast_threshold_audit_table.tex\n?? tests/test_claim_evidence_ledger.py",
+  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/claim_evidence_ledger/tail_coast_branch_audit.csv\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_tail_coast_recovery.py\n M src/qlt/tail_coast_recovery.py\n M tests/test_claim_evidence_ledger.py\n M tests/test_tail_coast_recovery.py\n?? configs/hard_catalog_tail_coast_branch_control_replay.yaml\n?? scripts/run_tail_coast_branch_control_replay.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 553,
+  "file_count": 555,
   "files": [
     {
       "path": ".gitignore",
@@ -40,13 +40,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "1c4b052d69011568fc5e6eee1030ca176d896e0362b6f9ee85bdc1ce38af8370",
-      "bytes": 19424
+      "sha256": "2b7aeb1f253ea6cf6a514a751ec858acb6b4ad90c2ece12581ee78789b02da9b",
+      "bytes": 21774
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "a933144e13504ae082f049345921a1c1735848e78ce0bd3f915ec5bd63fd5440",
-      "bytes": 27387
+      "sha256": "f7a583ebd912e190f19c5089d631ca0b90080929d280dd361f7e6c023320dc73",
+      "bytes": 29634
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -107,6 +107,11 @@
       "path": "configs/hard_catalog_selected_outage_envelope.yaml",
       "sha256": "54b4a80c64e6a78532932d3cdc4e5beaf2e05ff0cc401599807e9813b57dd12f",
       "bytes": 2481
+    },
+    {
+      "path": "configs/hard_catalog_tail_coast_branch_control_replay.yaml",
+      "sha256": "c06aa56991f6b9fbbe9e121843a7b804832595954b799552a0eb7ad0f07495d1",
+      "bytes": 3001
     },
     {
       "path": "configs/hard_catalog_tail_coast_recovery.yaml",
@@ -250,13 +255,13 @@
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
-      "sha256": "f3bb3c429abe9e7ec9c2a692ff7ee9f19dc41daea9fab45517cf4b7bfa3ec2de",
-      "bytes": 5832
+      "sha256": "ad5a424695bb1c618c369df17ea1d7d041d604facf40ab2d8f6bf234c989b106",
+      "bytes": 6022
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
-      "sha256": "96ed431d82c70da8f669f48070d41ded7b173c3119b39328a17e208a28ee871e",
-      "bytes": 1084
+      "sha256": "ebe2af00a788dc19eec476e4b19e712b1e0f3f2c588b76dc85ac5ab46dd2114b",
+      "bytes": 1128
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv",
@@ -2275,13 +2280,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "9d3ee7245a46afd48da1f46594d5c40d954a524e77455479eef701a7e1b49f8c",
-      "bytes": 419157
+      "sha256": "265dbd29082fa6f61aa97947c86ed2b204a2c83e96b55b69b8d3018b96050f2d",
+      "bytes": 420787
     },
     {
       "path": "paper/main.tex",
-      "sha256": "8e94e42f908e5369427ba8c45f6eaf77986129992cc71524da33ac1219e9af66",
-      "bytes": 54104
+      "sha256": "50cf2b9b9608ca92f3ebe92c961a8a77df9e2877457d57eb50657df5a44db2ef",
+      "bytes": 55483
     },
     {
       "path": "paper/references.bib",
@@ -2290,13 +2295,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "a5fa554d5b8a7df589da075d1b27dd9232523cbcd0c7bf35cd2d820787594244",
-      "bytes": 468723
+      "sha256": "0b6aab17e46dca996a64dee44a5fd59f9f45e50f79a6579fc08b31c759f956d1",
+      "bytes": 468949
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "828d0fc6d42162366cc6a1b451ac1c7c1a6a76f335ab2d3c09535a113e74fb50",
-      "bytes": 25939
+      "sha256": "25d2db27b09618518b9a1971d00cfe7cd6ab4fd92dc3c778460a63863b972681",
+      "bytes": 26202
     },
     {
       "path": "requirements-lock.txt",
@@ -2345,8 +2350,8 @@
     },
     {
       "path": "scripts/run_claim_evidence_ledger.py",
-      "sha256": "8944a467c460726227931dca79836557f812e9e43e773ac0841a392dbbad7fee",
-      "bytes": 37746
+      "sha256": "badfc7b3a31114352073705020cd53f3c1d0a18bdeb2a383430828e6e41f9a69",
+      "bytes": 43712
     },
     {
       "path": "scripts/run_continuation_margin_suite.py",
@@ -2419,9 +2424,14 @@
       "bytes": 27205
     },
     {
+      "path": "scripts/run_tail_coast_branch_control_replay.py",
+      "sha256": "fda8642e53d63e591b8aa14d98f9448651c5ac656b341bd75108b52ae2177b94",
+      "bytes": 17220
+    },
+    {
       "path": "scripts/run_tail_coast_recovery.py",
-      "sha256": "5e4ec3b96b64b3b282081daa03a331031341fa8581a66be57f7ff829dd98ebdc",
-      "bytes": 42564
+      "sha256": "73f5a49fcaaa7504bd769abcb565d46d0981afa172e64a7691d79237355cd5dd",
+      "bytes": 69642
     },
     {
       "path": "scripts/run_threshold_sensitivity.py",
@@ -2500,8 +2510,8 @@
     },
     {
       "path": "src/qlt/tail_coast_recovery.py",
-      "sha256": "781e53abf666b5e314a24565608e6c591094b2afbc4b3e0d717aae36d6a8562c",
-      "bytes": 61471
+      "sha256": "51685d79c6f602e83384aa4153835b53f93e7cbf2c6621b76d1feb9cc849ef8c",
+      "bytes": 64360
     },
     {
       "path": "tables/ablation_table.tex",
@@ -2755,8 +2765,8 @@
     },
     {
       "path": "tests/test_claim_evidence_ledger.py",
-      "sha256": "a215aadce556407378ab41c34e05291f277b83612689f0581e6e0a3848d79e7a",
-      "bytes": 10018
+      "sha256": "b2c4a5cd3fbdb1da835ca04b554ecee0f43231fe2043aea6fab8c5083302fb04",
+      "bytes": 11368
     },
     {
       "path": "tests/test_delayed_recovery.py",
@@ -2795,8 +2805,8 @@
     },
     {
       "path": "tests/test_tail_coast_recovery.py",
-      "sha256": "36bc1d42c7a42573dfcd9ce9735b5301f80231c586f735bfe67222c6ccc98636",
-      "bytes": 58968
+      "sha256": "41aab3d2dce4d7a1a9a7ae4b17bcf76c6a5bee10f0a988bfa82ae4f114cfcf1d",
+      "bytes": 96805
     }
   ]
 }
