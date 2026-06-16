@@ -173,6 +173,28 @@ it is threshold-feasible but not optimizer-converged because some selected
 branches hit the evaluation cap. The all-mask column is a diagnostic over every
 configured mask, not a robustness claim.
 
+For the delayed-arrival locked-nominal hard-catalog recovery diagnostic:
+
+```powershell
+py -3.11 scripts\run_delayed_locked_recovery.py --config configs\hard_catalog_delayed_recovery.yaml --resume
+```
+
+The delayed-arrival package writes
+`data/results/hard_catalog_delayed_recovery/*`,
+`tables/hard_catalog_delayed_recovery/*`, and
+`figures/hard_catalog_delayed_recovery/*`. It is continuous-backend
+delayed-arrival horizon evidence only, not fixed-final-time robustness, not
+QUBO, QAOA, or quantum evidence, and not a fuel-optimality result. The
+nominal-only row records provenance with nominal error `0.013133`, a delayed
+coast selected metric of `0.025525`, and no branch optimizer. The h4
+regularized all-single row is a negative case with selected/all delayed worst
+error `1.398973`. The h6 portfolio row optimizes all 14 one-segment outage
+masks against the delayed target with variants `regularized_001` and
+`terminal_only`; it charges all variant evaluations and reaches selected/all
+delayed worst error `0.004040`, max control norm `1.0`, zero reported bound
+violation, and `branch_optimizer_all_success=true`. Two-segment outage families
+and fixed-final-time all-single recovery remain unresolved.
+
 For the continuation-extension continuous-backend baseline:
 
 ```powershell

@@ -1,10 +1,10 @@
 {
   "manifest_version": 2,
-  "generated_utc": "2026-06-15T18:19:24Z",
-  "note": "Scoped-file artifact manifest for paper reproducibility; includes tracked files and untracked evidence files visible to git, excludes the manifest itself, .venv, caches, and logs. File hashes and byte counts reflect the working tree at generated_utc.",
-  "git_head": "f02e491dc31a6b465ad88940d31f5ce38802abbe",
+  "generated_utc": "2026-06-16T01:30:31Z",
+  "note": "Scoped-file artifact manifest for paper reproducibility; includes tracked files and visible untracked evidence files from git ls-files -co --exclude-standard. Excludes the manifest itself, .venv, caches, logs, and LaTeX auxiliary files. File hashes and byte counts reflect the working tree at generated_utc.",
+  "git_head": "70e7845db8a19b316f6cc66851c8fc496fa3f0a0",
   "git_status_note": "git_head records the current HEAD before the manifest-refresh commit; file hashes and byte counts reflect the working tree at generated_utc.",
-  "file_count": 508,
+  "file_count": 517,
   "files": [
     {
       "path": ".gitignore",
@@ -13,13 +13,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "f93b9b6815ce21d7566ae511da313cc4cb10a01f49baebe4dfd8c5176ad4ce89",
-      "bytes": 10740
+      "sha256": "747d50fb0ffafadd46a0d3d6ee62f26f1db4c4b458e46f90179edd9b30e6f60a",
+      "bytes": 11948
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "ac5ee434ca247ae24d70d1e1faad62d1e82baa1f8a4382105a2127d757994234",
-      "bytes": 16662
+      "sha256": "7ce59c0146d9ce83f19b09ba93924839da8d48b95461aab4bda76a160b62322b",
+      "bytes": 18091
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -65,6 +65,11 @@
       "path": "configs/direct_collocation_baseline.yaml",
       "sha256": "171b027e5c54cefb0fbec2597882bbc9013df55e6c4ec224a09c50e9ef13424c",
       "bytes": 1369
+    },
+    {
+      "path": "configs/hard_catalog_delayed_recovery.yaml",
+      "sha256": "82239abe192c49f561f518a97d60360eccec51cddd39d5a002c1745845cc209b",
+      "bytes": 3132
     },
     {
       "path": "configs/hard_catalog_locked_nominal_recovery.yaml",
@@ -295,6 +300,16 @@
       "path": "data/results/feasibility_sweep.csv",
       "sha256": "2a066ae2d92af5e4f63ca3581f9a8e98740be7d5225190796d4cb920372ab395",
       "bytes": 8305
+    },
+    {
+      "path": "data/results/hard_catalog_delayed_recovery/delayed_locked_recovery.csv",
+      "sha256": "a33866d7f4a6f6522734482d980dd4eb0adb84edc90693a6607162013cdec7ba",
+      "bytes": 79072
+    },
+    {
+      "path": "data/results/hard_catalog_delayed_recovery/delayed_locked_recovery_metadata.json",
+      "sha256": "2faf537ccd42b710e25033c7cb188c12107ed92c7c082c0be28032115dc575ec",
+      "bytes": 100196
     },
     {
       "path": "data/results/hard_catalog_locked_nominal_recovery/locked_nominal_recovery.csv",
@@ -1747,6 +1762,16 @@
       "bytes": 79856
     },
     {
+      "path": "figures/hard_catalog_delayed_recovery/delayed_locked_recovery.pdf",
+      "sha256": "59bb67d557f9aee67025a581d827fcf2ab5249b017d45baf77e4093c07419d11",
+      "bytes": 16054
+    },
+    {
+      "path": "figures/hard_catalog_delayed_recovery/delayed_locked_recovery.png",
+      "sha256": "66d68c9ba4aba3dfd660d1438ed4059dce06f204125ee875fb6c0be398f6a363",
+      "bytes": 75059
+    },
+    {
       "path": "figures/hard_catalog_locked_nominal_recovery/locked_nominal_recovery.pdf",
       "sha256": "7eb49416846953282e08c9995dff9f20b2204c94cbc5b33b809d7f2968004b92",
       "bytes": 14583
@@ -2148,13 +2173,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "9c06a27cbe2f4b4f483c1f829b78aa6ffac003c8ebb1a3d49786f099d7f90c81",
-      "bytes": 603743
+      "sha256": "e098b66ce601b5147387105043ab88529efe5645d5e614aca16da5792351c421",
+      "bytes": 623993
     },
     {
       "path": "paper/main.tex",
-      "sha256": "773585443d253e252983ec4292810b343dc8bc05a95855ad40f9afeb97d48183",
-      "bytes": 100982
+      "sha256": "f7b91856c002fe1d82f53285ede71a96ae3a3e2e221a13271b2fe4b0862024c7",
+      "bytes": 106923
     },
     {
       "path": "paper/references.bib",
@@ -2210,6 +2235,11 @@
       "path": "scripts/run_continuation_margin_suite.py",
       "sha256": "51f224c631e965cef789c06dc51b9ab0e909562a603d792ae65e0017c8d9116a",
       "bytes": 44171
+    },
+    {
+      "path": "scripts/run_delayed_locked_recovery.py",
+      "sha256": "d904a0b8c115c8f275e887c8cf7096f34aae4883096e70e11359d4bd3394d784",
+      "bytes": 37221
     },
     {
       "path": "scripts/run_direct_collocation_baseline.py",
@@ -2270,6 +2300,11 @@
       "path": "src/qlt/cr3bp.py",
       "sha256": "65fd1a4092a206e2af1c2ededbba0473f3d201281aa95ab9a0b20eec2d29a175",
       "bytes": 11154
+    },
+    {
+      "path": "src/qlt/delayed_recovery.py",
+      "sha256": "3961e1954bf3455a1085505102e6c3b633f9c1a2494f702263c29492f9fd6b21",
+      "bytes": 39612
     },
     {
       "path": "src/qlt/direct_collocation.py",
@@ -2370,6 +2405,11 @@
       "path": "tables/feasibility_table.tex",
       "sha256": "4b2ba9e8474b5e381396f25695a766bbf963ac41c7f915da958f8d7ed98802b6",
       "bytes": 998
+    },
+    {
+      "path": "tables/hard_catalog_delayed_recovery/delayed_locked_recovery_table.tex",
+      "sha256": "01faaebb93a44cab3b69d4455ae66a2b6f536a95fd9ee7f916e01603db6bd90e",
+      "bytes": 1209
     },
     {
       "path": "tables/hard_catalog_locked_nominal_recovery/locked_nominal_recovery_table.tex",
@@ -2525,6 +2565,11 @@
       "path": "tables/teacher_feasible/results_table.tex",
       "sha256": "0900df8aeaf4a7553bda9df658b80779997dc19cd2e0d759ecb29e6d48ae0b64",
       "bytes": 1565
+    },
+    {
+      "path": "tests/test_delayed_recovery.py",
+      "sha256": "37d98107f02d2040a18cf94011c2e774c78c1371b787c51476273711d89912c5",
+      "bytes": 27343
     },
     {
       "path": "tests/test_hermite_simpson_continuation.py",

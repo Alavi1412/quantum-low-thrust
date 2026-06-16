@@ -1,0 +1,9 @@
+\begin{tabular}{llllllllllllllllllllll}
+\toprule
+Case & Policy & Selected masks & Horizon segments & Portfolio & Variants & Nominal original error & Nominal delayed coast error & Selected delayed worst error & All-mask delayed diagnostic worst & Terminal weight & Control weight & Smooth weight & Continuity weight & Max ||u|| & Bound violation & nfev & Runtime (s) & Meets thresholds & Nominal optimizer success & Branch optimizer ran & Branch optimizer all success \\
+\midrule
+delayed\_hard\_all\_single\_h4\_regularized & all\_single & 14 & 4 & False & ["configured"] & 0.0131 & 0.0255 & 1.3990 & 1.3990 & 4.0000 & 0.0100 & 0.0100 & 0.0000 & 1.0000 & 0.0000 & 1338 & 1076.4599 & False & True & True & False \\
+delayed\_hard\_all\_single\_h6\_portfolio & all\_single & 14 & 6 & True & ["regularized\_001", "terminal\_only"] & 0.0131 & 0.0380 & 0.0040 & 0.0040 & 4.0000 & 0.0100 & 0.0100 & 0.0000 & 1.0000 & 0.0000 & 2253 & 2639.7199 & True & True & True & True \\
+delayed\_hard\_nominal\_only\_h4 & 0 & 0 & 4 & False & ["configured"] & 0.0131 & 0.0255 & 0.0255 & 7.3102 & 4.0000 & 0.0100 & 0.0100 & 0.0000 & 1.0000 & 0.0000 & 71 & 37.4396 & True & True & False & False \\
+\bottomrule
+\end{tabular}

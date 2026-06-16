@@ -1,0 +1,98 @@
+run:
+  label: hard_catalog_delayed_recovery
+  output_subdir: hard_catalog_delayed_recovery
+  evidence_level: "hard catalog-DRO delayed-arrival locked-nominal continuous branch-recovery horizon evidence; not quantum evidence and not fixed-final-time robustness"
+benchmark:
+  mu: 0.01215058560962404
+  target_mode: catalog_dro_phase
+  transfer_time: 4.0
+  segments: 14
+  substeps_per_segment: 7
+  amax: 1.0
+  steering:
+    kr: 0.75
+    kv: 1.45
+objective:
+  position_scale: 1.0
+  velocity_scale: 0.35
+  weights:
+    nominal: 1.0
+    robust_worst: 0.85
+    robust_degradation: 0.55
+    active_fraction: 0.08
+    smoothness: 0.04
+  thresholds:
+    nominal_success: 0.09
+    robust_success: 0.17
+outages:
+  block_lengths: [1]
+delayed_recovery:
+  runtime_budget_seconds: 2400
+  recovery_horizon_segments: 4
+  min_recovery_segments: 0
+  nominal:
+    max_nfev: 140
+    node_initialization: linear
+    node_initialization_blend: 0.5
+    residual_weights:
+      initial: 10.0
+      defect: 1.0
+      terminal: 4.0
+      branch_terminal: 4.0
+      branch_start: 5.0
+      control: 0.01
+      smooth: 0.01
+  branch:
+    max_nfev: 120
+    xtol: 1.0e-5
+    ftol: 1.0e-5
+    gtol: 1.0e-5
+    weights:
+      terminal: 4.0
+      control: 0.01
+      smooth: 0.01
+      continuity: 0.0
+  cases:
+    - case_id: delayed_hard_nominal_only_h4
+      purpose: "Hard catalog-DRO locked nominal solve with delayed target provenance; no branch optimizer is run and no fixed-final-time robustness is claimed."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      recovery_horizon_segments: 4
+      selected_outages: 0
+      nominal_max_nfev: 140
+      branch_max_nfev: 0
+    - case_id: delayed_hard_all_single_h4_regularized
+      purpose: "Regularized negative: hard catalog-DRO delayed-arrival recovery for all one-segment missed-thrust masks with a four-segment arrival delay using control/smoothness branch regularization; not fixed-final-time robustness."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      recovery_horizon_segments: 4
+      outage_lengths: [1]
+      selected_outages: all_single
+      nominal_max_nfev: 140
+      branch_max_nfev: 120
+    - case_id: delayed_hard_all_single_h6_portfolio
+      purpose: "Optimizer portfolio feasibility diagnostic: hard catalog-DRO delayed-arrival recovery for all one-segment missed-thrust masks with a six-segment arrival delay using regularized and terminal-only branch residual variants; accepted by terminal error with fuel tie-break, not fuel-optimal and not fixed-final-time robustness."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      recovery_horizon_segments: 6
+      outage_lengths: [1]
+      selected_outages: all_single
+      nominal_max_nfev: 140
+      branch_max_nfev: 160
+      branch:
+        weight_variants:
+          - label: regularized_001
+            weights:
+              terminal: 4.0
+              control: 0.01
+              smooth: 0.01
+              continuity: 0.0
+          - label: terminal_only
+            weights:
+              terminal: 4.0
+              control: 0.0
+              smooth: 0.0
+              continuity: 0.0
