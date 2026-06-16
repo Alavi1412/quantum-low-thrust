@@ -1,0 +1,740 @@
+{
+  "accepted_branch_initialization_index": 2,
+  "accepted_branch_initialization_is_fallback": true,
+  "accepted_branch_initialization_kind": "constant_vector",
+  "accepted_branch_initialization_label": "constant_y_minus_0p5",
+  "accepted_branch_initialization_vector": [
+    0.0,
+    -0.5,
+    0.0
+  ],
+  "accepted_branch_weight_variant_index": 1,
+  "accepted_branch_weight_variant_label": "terminal_only",
+  "accepted_branch_weights": {
+    "continuity": 0.0,
+    "control": 0.0,
+    "smooth": 0.0,
+    "terminal": 4.0
+  },
+  "accepted_candidate": "optimizer",
+  "accepted_cost": 1.931804384235161e-11,
+  "accepted_optimality": 1.9865683735129258e-05,
+  "accepted_variant_nfev": 20,
+  "accepted_variant_runtime_seconds": 5.158705400011968,
+  "amax": 1.0,
+  "branch_control_count": 14,
+  "branch_control_norm_diagnostics": {
+    "control_bound_violation": 0.0,
+    "control_norm_max": 1.0,
+    "control_norm_mean": 0.5696650089035966,
+    "control_norm_min": 0.0,
+    "control_norms": [
+      1.0,
+      0.8794827239561418,
+      0.9999999999999999,
+      0.6288628582057902,
+      0.8119648107046912,
+      0.8177366721850878,
+      0.46420650726100937,
+      0.0,
+      0.5379904200798307,
+      0.4699448851051531,
+      0.24884107355143667,
+      0.4900820749360014,
+      0.3658189676734458,
+      0.2603791309917637
+    ]
+  },
+  "branch_controls": [
+    [
+      0.04537849250061255,
+      -0.9894342176291927,
+      0.13769793536171537
+    ],
+    [
+      0.255008791197396,
+      -0.8024189699363963,
+      0.25413416699761315
+    ],
+    [
+      0.6209233378202801,
+      0.7774436128676528,
+      -0.10017802833662297
+    ],
+    [
+      0.2515364330260006,
+      -0.4248469009899892,
+      -0.3894907290430858
+    ],
+    [
+      0.7808746925148342,
+      -0.047700585967263405,
+      -0.2173619619688499
+    ],
+    [
+      0.5998330681851368,
+      0.29571759547024556,
+      -0.47057906782733444
+    ],
+    [
+      0.033204298486532294,
+      0.39709311206483316,
+      -0.23812227173481412
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      -0.06805468515502211,
+      -0.5232794737813269,
+      -0.10478952354725686
+    ],
+    [
+      0.016795935704791647,
+      -0.45434425739342943,
+      -0.11890074580888557
+    ],
+    [
+      0.008867240969117798,
+      -0.2417675496017142,
+      0.058238336887395506
+    ],
+    [
+      0.012837837990850896,
+      -0.46416121437678365,
+      0.15674819666448067
+    ],
+    [
+      -0.24263984812563924,
+      -0.2135401154233879,
+      -0.1713185346545974
+    ],
+    [
+      -0.03346596705469004,
+      0.15207398227580002,
+      -0.20868834375666526
+    ]
+  ],
+  "branch_controls_remove_zero_nominal": false,
+  "branch_fallback_initialization_candidate_count": 12,
+  "branch_fallback_initialization_configured_count": 6,
+  "branch_fallback_initialization_enabled": true,
+  "branch_fallback_initialization_evaluated_count": 6,
+  "branch_fuel": 2.2786600356143865,
+  "branch_initialization_fallbacks": [
+    {
+      "fallback_index": 0,
+      "index": 1,
+      "kind": "constant_vector",
+      "label": "constant_y_plus_0p5",
+      "vector": [
+        0.0,
+        0.5,
+        0.0
+      ]
+    },
+    {
+      "fallback_index": 1,
+      "index": 2,
+      "kind": "constant_vector",
+      "label": "constant_y_minus_0p5",
+      "vector": [
+        0.0,
+        -0.5,
+        0.0
+      ]
+    },
+    {
+      "fallback_index": 2,
+      "index": 3,
+      "kind": "constant_vector",
+      "label": "constant_x_plus_0p5",
+      "vector": [
+        0.5,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "fallback_index": 3,
+      "index": 4,
+      "kind": "constant_vector",
+      "label": "constant_x_minus_0p5",
+      "vector": [
+        -0.5,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "fallback_index": 4,
+      "index": 5,
+      "kind": "constant_vector",
+      "label": "constant_y_plus_1",
+      "vector": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "fallback_index": 5,
+      "index": 6,
+      "kind": "constant_vector",
+      "label": "constant_y_minus_1",
+      "vector": [
+        0.0,
+        -1.0,
+        0.0
+      ]
+    }
+  ],
+  "branch_initialization_variant_count": 7,
+  "branch_missed_tail_indices": [],
+  "branch_nominal_initialization_candidate_count": 2,
+  "branch_note": "missed outage includes nonzero optimized-prefix nominal controls",
+  "branch_order": 7,
+  "branch_portfolio_candidate_all_optimizer_success": false,
+  "branch_portfolio_candidate_count": 14,
+  "branch_portfolio_candidate_optimizer_success_count": 13,
+  "branch_portfolio_candidate_results": [
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.646984156421905,
+      "converged_threshold_feasible": false,
+      "initialization_index": 0,
+      "initialization_is_fallback": false,
+      "initialization_kind": "nominal_post_outage",
+      "initialization_label": "nominal_post_outage",
+      "message": "`xtol` termination condition is satisfied.",
+      "nfev": 4,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 0.7775675999873783,
+      "terminal_error": 2.034662219765584,
+      "threshold_feasible": false,
+      "variant_index": 0,
+      "variant_label": "regularized_001",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.01,
+        "smooth": 0.01,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.6469857333567663,
+      "converged_threshold_feasible": false,
+      "initialization_index": 0,
+      "initialization_is_fallback": false,
+      "initialization_kind": "nominal_post_outage",
+      "initialization_label": "nominal_post_outage",
+      "message": "`xtol` termination condition is satisfied.",
+      "nfev": 3,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 1.1937129000143614,
+      "terminal_error": 0.6709767218123194,
+      "threshold_feasible": false,
+      "variant_index": 1,
+      "variant_label": "terminal_only",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.0,
+        "smooth": 0.0,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.3261066144425406,
+      "converged_threshold_feasible": true,
+      "initialization_index": 1,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_y_plus_0p5",
+      "initialization_vector": [
+        0.0,
+        0.5,
+        0.0
+      ],
+      "message": "`gtol` termination condition is satisfied.",
+      "nfev": 45,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 14.115650100022322,
+      "terminal_error": 2.653478473315254e-05,
+      "threshold_feasible": true,
+      "variant_index": 0,
+      "variant_label": "regularized_001",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.01,
+        "smooth": 0.01,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.3702137944591084,
+      "converged_threshold_feasible": false,
+      "initialization_index": 1,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_y_plus_0p5",
+      "initialization_vector": [
+        0.0,
+        0.5,
+        0.0
+      ],
+      "message": "`xtol` termination condition is satisfied.",
+      "nfev": 7,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 1.855126200011,
+      "terminal_error": 0.7789115669646255,
+      "threshold_feasible": false,
+      "variant_index": 1,
+      "variant_label": "terminal_only",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.0,
+        "smooth": 0.0,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.1285351737879386,
+      "converged_threshold_feasible": true,
+      "initialization_index": 2,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_y_minus_0p5",
+      "initialization_vector": [
+        0.0,
+        -0.5,
+        0.0
+      ],
+      "message": "`ftol` termination condition is satisfied.",
+      "nfev": 142,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 44.56547259999206,
+      "terminal_error": 2.104784000864596e-05,
+      "threshold_feasible": true,
+      "variant_index": 0,
+      "variant_label": "regularized_001",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.01,
+        "smooth": 0.01,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.2786600356143865,
+      "converged_threshold_feasible": true,
+      "initialization_index": 2,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_y_minus_0p5",
+      "initialization_vector": [
+        0.0,
+        -0.5,
+        0.0
+      ],
+      "message": "`gtol` termination condition is satisfied.",
+      "nfev": 20,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 5.158705400011968,
+      "terminal_error": 1.5539483518746534e-06,
+      "threshold_feasible": true,
+      "variant_index": 1,
+      "variant_label": "terminal_only",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.0,
+        "smooth": 0.0,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.462702467308169,
+      "converged_threshold_feasible": false,
+      "initialization_index": 3,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_x_plus_0p5",
+      "initialization_vector": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "message": "`xtol` termination condition is satisfied.",
+      "nfev": 8,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 0.8527195999922697,
+      "terminal_error": 4.336265915633414,
+      "threshold_feasible": false,
+      "variant_index": 0,
+      "variant_label": "regularized_001",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.01,
+        "smooth": 0.01,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.621237365421916,
+      "converged_threshold_feasible": false,
+      "initialization_index": 3,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_x_plus_0p5",
+      "initialization_vector": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "message": "`xtol` termination condition is satisfied.",
+      "nfev": 10,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 1.2879988999920897,
+      "terminal_error": 1.7459838952071682,
+      "threshold_feasible": false,
+      "variant_index": 1,
+      "variant_label": "terminal_only",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.0,
+        "smooth": 0.0,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.668171249259645,
+      "converged_threshold_feasible": false,
+      "initialization_index": 4,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_x_minus_0p5",
+      "initialization_vector": [
+        -0.5,
+        0.0,
+        0.0
+      ],
+      "message": "The maximum number of function evaluations is exceeded.",
+      "nfev": 220,
+      "optimizer_ran": true,
+      "optimizer_success": false,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 62.4507221999811,
+      "terminal_error": 0.47752872239466704,
+      "threshold_feasible": false,
+      "variant_index": 0,
+      "variant_label": "regularized_001",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.01,
+        "smooth": 0.01,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 3.0609512203098834,
+      "converged_threshold_feasible": true,
+      "initialization_index": 4,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_x_minus_0p5",
+      "initialization_vector": [
+        -0.5,
+        0.0,
+        0.0
+      ],
+      "message": "`xtol` termination condition is satisfied.",
+      "nfev": 41,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 10.040769500017632,
+      "terminal_error": 9.619243998862024e-06,
+      "threshold_feasible": true,
+      "variant_index": 1,
+      "variant_label": "terminal_only",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.0,
+        "smooth": 0.0,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.2796156689153912,
+      "converged_threshold_feasible": true,
+      "initialization_index": 5,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_y_plus_1",
+      "initialization_vector": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "message": "`ftol` termination condition is satisfied.",
+      "nfev": 67,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 22.290164599980926,
+      "terminal_error": 2.3906185480217913e-05,
+      "threshold_feasible": true,
+      "variant_index": 0,
+      "variant_label": "regularized_001",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.01,
+        "smooth": 0.01,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.8702707647107464,
+      "converged_threshold_feasible": false,
+      "initialization_index": 5,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_y_plus_1",
+      "initialization_vector": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "message": "`ftol` termination condition is satisfied.",
+      "nfev": 128,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 37.60972050001146,
+      "terminal_error": 0.3020892802242203,
+      "threshold_feasible": false,
+      "variant_index": 1,
+      "variant_label": "terminal_only",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.0,
+        "smooth": 0.0,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.128451263916475,
+      "converged_threshold_feasible": true,
+      "initialization_index": 6,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_y_minus_1",
+      "initialization_vector": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "message": "`gtol` termination condition is satisfied.",
+      "nfev": 183,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 53.182494000007864,
+      "terminal_error": 1.895609305359245e-05,
+      "threshold_feasible": true,
+      "variant_index": 0,
+      "variant_label": "regularized_001",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.01,
+        "smooth": 0.01,
+        "terminal": 4.0
+      }
+    },
+    {
+      "accepted_candidate": "optimizer",
+      "branch_fuel": 2.6395386486304115,
+      "converged_threshold_feasible": true,
+      "initialization_index": 6,
+      "initialization_is_fallback": true,
+      "initialization_kind": "constant_vector",
+      "initialization_label": "constant_y_minus_1",
+      "initialization_vector": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "message": "`xtol` termination condition is satisfied.",
+      "nfev": 35,
+      "optimizer_ran": true,
+      "optimizer_success": true,
+      "robust_threshold": 0.17,
+      "runtime_seconds": 8.69993100001011,
+      "terminal_error": 4.5815931159778275e-06,
+      "threshold_feasible": true,
+      "variant_index": 1,
+      "variant_label": "terminal_only",
+      "weights": {
+        "continuity": 0.0,
+        "control": 0.0,
+        "smooth": 0.0,
+        "terminal": 4.0
+      }
+    }
+  ],
+  "branch_portfolio_enabled": true,
+  "branch_portfolio_variant_count": 2,
+  "branch_total_duration": 4.0,
+  "branch_weight_variants": [],
+  "branch_weights": {
+    "continuity": 0.0,
+    "control": 0.0,
+    "smooth": 0.0,
+    "terminal": 4.0
+  },
+  "config_hash": "d6f580e04bba77bc8ddf3d9e9b6dab942c914d4a19f31908a66cb5b62ceaaeed",
+  "control_bound_violation": 0.0,
+  "control_max_norm": 1.0,
+  "cost": 1.931804384235161e-11,
+  "limitations": [
+    "Branch-control replay repropagates persisted accepted controls in the normalized CR3BP model only.",
+    "Replay does not rerun least-squares optimization, branch portfolio selection, fallback search, or schedule search.",
+    "Replay is not high-fidelity validation, production solver parity, fuel optimality evidence, or quantum advantage evidence.",
+    "The evidence scope is the configured fixed-final-time target, outage masks, thresholds, and CR3BP integration settings."
+  ],
+  "mask_index": 7,
+  "message": "`gtol` termination condition is satisfied.",
+  "nfev": 913,
+  "no_recovery_variable_threshold_feasible": false,
+  "nominal_dt": 0.2857142857142857,
+  "optimality": 1.9865683735129258e-05,
+  "optimizer_ran": true,
+  "optimizer_success": true,
+  "outage_lengths": [
+    1,
+    2
+  ],
+  "outage_mask": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "portfolio_acceptance_rule": "nominal-start portfolio had no optimizer-converged threshold-feasible candidate; evaluated configured fallback initialization variants across all branch weight variants; preferred optimizer_success=True candidates with terminal_error <= robust_success; selected lowest terminal_error with fuel as tie-breaker",
+  "portfolio_converged_threshold_feasible_candidate_count": 7,
+  "portfolio_nominal_converged_threshold_feasible_candidate_count": 0,
+  "portfolio_robust_threshold": 0.17,
+  "recovery_control_norm_diagnostics": {
+    "control_bound_violation": 0.0,
+    "control_norm_max": 0.5379904200798307,
+    "control_norm_mean": 0.3955094253896052,
+    "control_norm_min": 0.24884107355143667,
+    "control_norms": [
+      0.5379904200798307,
+      0.4699448851051531,
+      0.24884107355143667,
+      0.4900820749360014,
+      0.3658189676734458,
+      0.2603791309917637
+    ]
+  },
+  "recovery_controls": [
+    [
+      -0.06805468515502211,
+      -0.5232794737813269,
+      -0.10478952354725686
+    ],
+    [
+      0.016795935704791647,
+      -0.45434425739342943,
+      -0.11890074580888557
+    ],
+    [
+      0.008867240969117798,
+      -0.2417675496017142,
+      0.058238336887395506
+    ],
+    [
+      0.012837837990850896,
+      -0.46416121437678365,
+      0.15674819666448067
+    ],
+    [
+      -0.24263984812563924,
+      -0.2135401154233879,
+      -0.1713185346545974
+    ],
+    [
+      -0.03346596705469004,
+      0.15207398227580002,
+      -0.20868834375666526
+    ]
+  ],
+  "recovery_segments": 6,
+  "recovery_start": 8,
+  "replay_semantics": "Normalized CR3BP replay of persisted accepted controls only; no optimization rerun, no high-fidelity validation, no fuel-optimality claim, and no quantum-advantage claim.",
+  "runtime_seconds": 264.08075510003255,
+  "schema_version": 1,
+  "segments": 14,
+  "settings_fingerprint": "0112b78a491fd243ad73dcf35245c74c2f76ed4e8fdad89f9136b8e0c0e92a80",
+  "sidecar_type": "tail_coast_branch_controls",
+  "source_states_id": "//nas/Projects/Papers/quantum-low-thrust/data/source_states.json|sha256=24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf",
+  "substeps_per_segment": 7,
+  "suite_case_id": "tail_coast_all_one_two_segment_t5_portfolio",
+  "tail_coast_segments": 5,
+  "target_error_semantics": "terminal_error is measured against the original target at the original fixed final time",
+  "target_mode": "catalog_dro_phase",
+  "target_state": [
+    1.189539279349344,
+    -0.26858144973580916,
+    0.0,
+    -0.06633294887425278,
+    -0.3152469277967268,
+    0.0
+  ],
+  "terminal_error": 1.5539483518746534e-06,
+  "thresholds": {
+    "nominal_success": 0.09,
+    "robust_success": 0.17
+  },
+  "transfer_time": 4.0
+}

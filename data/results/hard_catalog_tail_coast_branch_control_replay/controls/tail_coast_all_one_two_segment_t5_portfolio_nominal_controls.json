@@ -1,0 +1,137 @@
+{
+  "amax": 1.0,
+  "config_hash": "d6f580e04bba77bc8ddf3d9e9b6dab942c914d4a19f31908a66cb5b62ceaaeed",
+  "control_norm_diagnostics": {
+    "control_bound_violation": 0.0,
+    "control_norm_max": 1.0,
+    "control_norm_mean": 0.5239230014688331,
+    "control_norm_min": 0.0,
+    "control_norms": [
+      1.0,
+      0.8794827239561418,
+      0.9999999999999999,
+      0.6288628582057902,
+      0.8119648107046912,
+      0.8177366721850878,
+      0.46420650726100937,
+      0.7326684482509426,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "controls": [
+    [
+      0.04537849250061255,
+      -0.9894342176291927,
+      0.13769793536171537
+    ],
+    [
+      0.255008791197396,
+      -0.8024189699363963,
+      0.25413416699761315
+    ],
+    [
+      0.6209233378202801,
+      0.7774436128676528,
+      -0.10017802833662297
+    ],
+    [
+      0.2515364330260006,
+      -0.4248469009899892,
+      -0.3894907290430858
+    ],
+    [
+      0.7808746925148342,
+      -0.047700585967263405,
+      -0.2173619619688499
+    ],
+    [
+      0.5998330681851368,
+      0.29571759547024556,
+      -0.47057906782733444
+    ],
+    [
+      0.033204298486532294,
+      0.39709311206483316,
+      -0.23812227173481412
+    ],
+    [
+      -0.24462086104331127,
+      -0.28109242490822045,
+      -0.6308333679063668
+    ],
+    [
+      -0.043550626245286585,
+      -0.7782423570336868,
+      -0.6264520545678615
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "limitations": [
+    "Branch-control replay repropagates persisted accepted controls in the normalized CR3BP model only.",
+    "Replay does not rerun least-squares optimization, branch portfolio selection, fallback search, or schedule search.",
+    "Replay is not high-fidelity validation, production solver parity, fuel optimality evidence, or quantum advantage evidence.",
+    "The evidence scope is the configured fixed-final-time target, outage masks, thresholds, and CR3BP integration settings."
+  ],
+  "nominal_accepted_candidate": "optimizer",
+  "nominal_dt": 0.2857142857142857,
+  "nominal_error": 0.02299233817855882,
+  "nominal_fuel": 2.0956920058753323,
+  "nominal_seed_error": 0.013133232183359739,
+  "nominal_tail_coast_error": 0.02299233817855882,
+  "outage_lengths": [
+    1,
+    2
+  ],
+  "replay_semantics": "Normalized CR3BP replay of persisted accepted controls only; no optimization rerun, no high-fidelity validation, no fuel-optimality claim, and no quantum-advantage claim.",
+  "schema_version": 1,
+  "segments": 14,
+  "settings_fingerprint": "0112b78a491fd243ad73dcf35245c74c2f76ed4e8fdad89f9136b8e0c0e92a80",
+  "sidecar_type": "tail_coast_nominal_controls",
+  "source_states_id": "//nas/Projects/Papers/quantum-low-thrust/data/source_states.json|sha256=24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf",
+  "substeps_per_segment": 7,
+  "suite_case_id": "tail_coast_all_one_two_segment_t5_portfolio",
+  "tail_coast_segments": 5,
+  "target_mode": "catalog_dro_phase",
+  "target_state": [
+    1.189539279349344,
+    -0.26858144973580916,
+    0.0,
+    -0.06633294887425278,
+    -0.3152469277967268,
+    0.0
+  ],
+  "thresholds": {
+    "nominal_success": 0.09,
+    "robust_success": 0.17
+  },
+  "transfer_time": 4.0
+}

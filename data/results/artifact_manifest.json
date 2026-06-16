@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-16T21:59:12Z",
+  "generated_utc": "2026-06-16T22:57:04Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "a9d0d42098e96c60668d13279a16e7a85400236c",
+  "git_head_at_generation": "6c435d3f45de6b1ac414c31bd547aff2536c6e6d",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/claim_evidence_ledger/tail_coast_branch_audit.csv\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_tail_coast_recovery.py\n M src/qlt/tail_coast_recovery.py\n M tests/test_claim_evidence_ledger.py\n M tests/test_tail_coast_recovery.py\n?? configs/hard_catalog_tail_coast_branch_control_replay.yaml\n?? scripts/run_tail_coast_branch_control_replay.py",
+  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_000_mask_000_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_001_mask_001_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_002_mask_002_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_003_mask_003_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_004_mask_004_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_005_mask_005_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_006_mask_006_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_007_mask_007_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_008_mask_008_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_009_mask_009_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_010_mask_010_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_011_mask_011_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_012_mask_012_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_013_mask_013_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_014_mask_014_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_015_mask_015_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_016_mask_016_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_017_mask_017_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_018_mask_018_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_019_mask_019_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_020_mask_020_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_021_mask_021_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_022_mask_022_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_023_mask_023_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_024_mask_024_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_025_mask_025_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_026_mask_026_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_manifest.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_progress.csv\n?? data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_nominal_controls.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay.csv\n?? data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_metadata.json\n?? data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.csv\n?? data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery_metadata.json\n?? figures/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.pdf\n?? figures/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.png\n?? tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_table.tex\n?? tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery_table.tex",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 555,
+  "file_count": 593,
   "files": [
     {
       "path": ".gitignore",
@@ -40,13 +40,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "2b7aeb1f253ea6cf6a514a751ec858acb6b4ad90c2ece12581ee78789b02da9b",
-      "bytes": 21774
+      "sha256": "a272394d4aa2247217bef87b26995ab156ac0ec110261c6ab733a725980f1bc8",
+      "bytes": 22330
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "f7a583ebd912e190f19c5089d631ca0b90080929d280dd361f7e6c023320dc73",
-      "bytes": 29634
+      "sha256": "ea80b9e2221f963d0ef9edbcd5f0463b59dfc8bc8ff1b7ed6b82355fb4a1eec5",
+      "bytes": 29850
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -250,13 +250,13 @@
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
-      "sha256": "82b02c1d7b22bb97af157a969b8a53a6b362fc86cc00c26f37e8bc34178aafc0",
-      "bytes": 9064
+      "sha256": "b8abec8949ef96cbeddad654066121226c93d9c588a4b17ff0be9468139d681c",
+      "bytes": 10558
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
-      "sha256": "ad5a424695bb1c618c369df17ea1d7d041d604facf40ab2d8f6bf234c989b106",
-      "bytes": 6022
+      "sha256": "42b6731791870349c06ac8ba07911d6e55ae20d24197c507dd74d4cf377b729b",
+      "bytes": 6798
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
@@ -397,6 +397,176 @@
       "path": "data/results/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_metadata.json",
       "sha256": "72c17b0e168e6353a1707dc395c4517568be902a5b6cfa1642775f66c72547be",
       "bytes": 16354
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_000_mask_000_controls.json",
+      "sha256": "29ee001998ed326eda124d1a7cc3c36015bc7be21604e2daad3cd91e757d01d3",
+      "bytes": 11004
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_001_mask_001_controls.json",
+      "sha256": "2ac3ea5cf5870454b3cced8a57a48fb0bff50f845ef2887ad3d356d74ff138c2",
+      "bytes": 10808
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_002_mask_002_controls.json",
+      "sha256": "af4c45bf516a4979040b09e98c25f4c5f5f400e3ff1de4e2d47c1b457521577e",
+      "bytes": 10603
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_003_mask_003_controls.json",
+      "sha256": "3edba56d8ede21d879506f25e33b9a6f9e7d0217069e63895c0e3dc475e654e0",
+      "bytes": 10620
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_004_mask_004_controls.json",
+      "sha256": "9ebebca724e9d21f0fe3b1556fa59ebf191a0ea0cd129023fca9d9ae5e2c2c5d",
+      "bytes": 10360
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_005_mask_005_controls.json",
+      "sha256": "d8174ef523a3e0ad649e16446092fe1af22a1d948f1906a7226fa310005b43ff",
+      "bytes": 10409
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_006_mask_006_controls.json",
+      "sha256": "9a872cbc22dcc277fc2a22486591ca7a3588cbf75f0ee3f39f349c9216eb5f1d",
+      "bytes": 10302
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_007_mask_007_controls.json",
+      "sha256": "99a20f46082f43e92111505de31e75c38792cf5e33403923ba4fb237a4981512",
+      "bytes": 20963
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_008_mask_008_controls.json",
+      "sha256": "e748073e4e8afe834191bbec8946c37db11d5eda92ca7f8858a4ae651ee6783c",
+      "bytes": 10018
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_009_mask_009_controls.json",
+      "sha256": "bd698e9a952d2aa99661f45650d1b6a41546c4619b5eebcdbe859d9f1a75d89d",
+      "bytes": 9933
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_010_mask_010_controls.json",
+      "sha256": "9df5d8c8bad90c3e594a8980ad3e0750c6f4dd43ba9897db38fa972fb5f02460",
+      "bytes": 9728
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_011_mask_011_controls.json",
+      "sha256": "cc3e8780d7ecbb4eaf0e5618cb1cc18a410da08d2ad94ad4d4eaf3598596217d",
+      "bytes": 9517
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_012_mask_012_controls.json",
+      "sha256": "1c169ce2b326a03d694aecd3f4cdb35f08f90f86bd2eed774a9293978ef25465",
+      "bytes": 9353
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_013_mask_013_controls.json",
+      "sha256": "34a31b285f43f8ab0684e43993b7e0b82e12a50fd22344b89367e07041f2210b",
+      "bytes": 9252
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_014_mask_014_controls.json",
+      "sha256": "84bbd88511df35140ceddb6227e193a0d405fe6bcb6616ce0d4150469d13722b",
+      "bytes": 21746
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_015_mask_015_controls.json",
+      "sha256": "7a6e1db834b8ac8536692444cf394d78c3d41f9686ab82d1da077c58d68c45c5",
+      "bytes": 10636
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_016_mask_016_controls.json",
+      "sha256": "b0da49e520befc4d0a31270b759be89b086ac6b44e45c0833f3db3d102b84140",
+      "bytes": 10440
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_017_mask_017_controls.json",
+      "sha256": "225084c4e3c223c76a71f058d0f6093d7d70768255f0eb2559641e9432b979ab",
+      "bytes": 10409
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_018_mask_018_controls.json",
+      "sha256": "2ecf498e3ba4aebf4c3fe7283b2055cca7af7fd65732b180b4fe46d1e878c3d3",
+      "bytes": 10192
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_019_mask_019_controls.json",
+      "sha256": "120dec13316c394a7e11e9f409c2ce8467f76ce467f0347e83699a35b3c8936d",
+      "bytes": 10194
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_020_mask_020_controls.json",
+      "sha256": "e5fb1bcd25c8d6d1a67614c4933b5e9e6acd9b75327e00e0ffad6ec23038eea1",
+      "bytes": 20868
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_021_mask_021_controls.json",
+      "sha256": "1ba787bc23e4193dbbb4b8fb1102998dcfc62707f5ea8ccc8d799aaeb784b6b4",
+      "bytes": 20770
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_022_mask_022_controls.json",
+      "sha256": "85cd6ef61d77c183752b6de4f698049c8c7b61f6fe5a27c52c4bfff9df18162d",
+      "bytes": 9758
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_023_mask_023_controls.json",
+      "sha256": "e159301be65c1d3241a21720d1de76a6c76b7554693988ed648a6c4c1f7367eb",
+      "bytes": 9733
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_024_mask_024_controls.json",
+      "sha256": "90c2ab0d2d407a83d92adaa97da3a17f879b9e785fb03b43cd3cfa41b6ee3905",
+      "bytes": 9524
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_025_mask_025_controls.json",
+      "sha256": "d0173105a8cab9b54da962123b8bca27c81c5e76ebcd3f2e4eb25468d252a561",
+      "bytes": 9359
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_026_mask_026_controls.json",
+      "sha256": "e167db8bf69a67a62a57bd4986d96e0568909aedcc35474f023c4dffe4b8bee9",
+      "bytes": 9258
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_manifest.json",
+      "sha256": "7118ebb5255590e6b66b7f93513e0c1a73d4de18821eee9303af04409902922f",
+      "bytes": 21888
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_progress.csv",
+      "sha256": "0dc8dd48b46f01eca0a509d19a5644f8e29be03da0938a5682a2686291274e52",
+      "bytes": 7819
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_nominal_controls.json",
+      "sha256": "a837354a64fef991cbe32cc2ed8311f0e72f59d73250655e2bf89144da0d5ca4",
+      "bytes": 3404
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay.csv",
+      "sha256": "7674c2b4608a813ce1534953ead9afe7b686473041ca68a618a02d22209b63f7",
+      "bytes": 15075
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_metadata.json",
+      "sha256": "fc3280a312e266f7b2a75ab010ad889bc74f10ca92d93978395a08dab65afe16",
+      "bytes": 10895
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.csv",
+      "sha256": "9601d729da24ecd7c74fa467f85a80a20278e9923082371426102c92cac1c50f",
+      "bytes": 177885
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery_metadata.json",
+      "sha256": "ca697895d34d05048065ec01c7b44f92f2d6c437046b74f072082494101b59e5",
+      "bytes": 193374
     },
     {
       "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery.csv",
@@ -1889,6 +2059,16 @@
       "bytes": 63907
     },
     {
+      "path": "figures/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.pdf",
+      "sha256": "34447c981ec546f913c11bdf613e3ccda2ed37ffedf6ace645de08e0395ca882",
+      "bytes": 14734
+    },
+    {
+      "path": "figures/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.png",
+      "sha256": "5c8ac20360624a17466ee324dad2a00101d436e6cf87d857f60dfec2c7390db0",
+      "bytes": 68803
+    },
+    {
       "path": "figures/hard_catalog_tail_coast_recovery/tail_coast_recovery.pdf",
       "sha256": "4ca2b2e4483626d40703c667b44d75712784ca13e582fa7fd0bdc4d34f66a88c",
       "bytes": 14935
@@ -2280,13 +2460,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "265dbd29082fa6f61aa97947c86ed2b204a2c83e96b55b69b8d3018b96050f2d",
-      "bytes": 420787
+      "sha256": "205e295782bfd3bffdc9386fd6e51639ed6041ce7d636fc23caa4ad92eae7e05",
+      "bytes": 423011
     },
     {
       "path": "paper/main.tex",
-      "sha256": "50cf2b9b9608ca92f3ebe92c961a8a77df9e2877457d57eb50657df5a44db2ef",
-      "bytes": 55483
+      "sha256": "d47cbd2f9bce5a542815cdaa3cd7dbf38646767ce139118d2d44886d5a6e29c5",
+      "bytes": 56747
     },
     {
       "path": "paper/references.bib",
@@ -2295,13 +2475,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "0b6aab17e46dca996a64dee44a5fd59f9f45e50f79a6579fc08b31c759f956d1",
-      "bytes": 468949
+      "sha256": "1310d2e07323524e6bf90d83b0f1caac4074a7c101577d423da09387f9c59fa7",
+      "bytes": 479349
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "25d2db27b09618518b9a1971d00cfe7cd6ab4fd92dc3c778460a63863b972681",
-      "bytes": 26202
+      "sha256": "1af0f3fc6636220463dd631c7f87c897e51443d8a3b049513e2dfc4cbaca8790",
+      "bytes": 27920
     },
     {
       "path": "requirements-lock.txt",
@@ -2545,8 +2725,8 @@
     },
     {
       "path": "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
-      "sha256": "ae5720a2b221534a26409d3fe4a85418390b3b3102e9aee5760299c0557e3c9c",
-      "bytes": 3489
+      "sha256": "2dd78fe36466da0ba60801cb8eb83954a53c5b56512a9bc5880d50af1ab39bda",
+      "bytes": 4013
     },
     {
       "path": "tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex",
@@ -2602,6 +2782,16 @@
       "path": "tables/hard_catalog_selected_outage_envelope/catalog_feasibility_envelope_table.tex",
       "sha256": "79e468d6991d1f1ef0862e50a5d2fe9b740f782ba8ef25185d00f6c0d252b7aa",
       "bytes": 713
+    },
+    {
+      "path": "tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_table.tex",
+      "sha256": "d97f4d6b82b45c699ce93dc35eedbbbe40b97dde381931bb79da0eaaa02f34fe",
+      "bytes": 271
+    },
+    {
+      "path": "tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery_table.tex",
+      "sha256": "dcc2242ce7e95807710f77fedc8dfa002800bf187be93b9df69162f6bce974b0",
+      "bytes": 632
     },
     {
       "path": "tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex",

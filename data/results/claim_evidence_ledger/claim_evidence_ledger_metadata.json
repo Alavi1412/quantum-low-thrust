@@ -1,22 +1,22 @@
 {
   "command": "scripts\\run_claim_evidence_ledger.py",
-  "row_count": 8,
+  "row_count": 9,
   "tail_coast_threshold_audit_row_count": 5,
   "tail_coast_branch_audit_row_count": 1,
   "optimization_rerun": false,
   "uses_recorded_artifacts_only": true,
   "high_fidelity_claim": false,
-  "branch_control_replay": false,
+  "branch_control_replay": true,
   "fuel_optimality_claim": false,
   "quantum_advantage_claim": false,
-  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun. No branch-control replay claim row is included because the focused replay package is absent.",
+  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun. A branch-control replay ledger row is included because the focused replay package is present.",
   "determinism_note": "Runtime and wall-clock timestamps are intentionally omitted so identical inputs and command text produce byte-stable outputs.",
   "claim_semantics": {
     "selected_branch_evidence": "Rows where selected outage branches were optimized/evaluated and unselected masks, if present, remain diagnostics.",
     "all_mask_diagnostic": "All configured masks may be evaluated diagnostically without being selected for optimization.",
     "all_configured_mask_evidence": "True only when the row selected/evaluated every configured mask within the stated mask family."
   },
-  "branch_control_replay_artifacts_available": false,
+  "branch_control_replay_artifacts_available": true,
   "tail_coast_threshold_pairs": [
     {
       "threshold_id": "configured_0p09_0p17",
@@ -52,6 +52,7 @@
     "phase_shift_direct_collocation_p04_selected_branch_diagnostic",
     "phase_shift_independent_hs_p04_amax02_selected_branch_diagnostic",
     "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
+    "catalog_dro_tail_coast_branch_control_replay_accepted_controls",
     "catalog_dro_delayed_h6_all_single_delayed_arrival"
   ],
   "input_artifacts": [
@@ -104,6 +105,21 @@
       "path": "data/results/hard_catalog_delayed_recovery/delayed_locked_recovery.csv",
       "sha256": "a33866d7f4a6f6522734482d980dd4eb0adb84edc90693a6607162013cdec7ba",
       "bytes": 79072
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.csv",
+      "sha256": "9601d729da24ecd7c74fa467f85a80a20278e9923082371426102c92cac1c50f",
+      "bytes": 177885
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay.csv",
+      "sha256": "7674c2b4608a813ce1534953ead9afe7b686473041ca68a618a02d22209b63f7",
+      "bytes": 15075
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_metadata.json",
+      "sha256": "fc3280a312e266f7b2a75ab010ad889bc74f10ca92d93978395a08dab65afe16",
+      "bytes": 10895
     }
   ],
   "artifacts": {
