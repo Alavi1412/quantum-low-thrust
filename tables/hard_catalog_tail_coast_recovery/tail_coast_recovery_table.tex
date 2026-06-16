@@ -1,8 +1,9 @@
-\begin{tabular}{llllllllllllllllllll}
+\begin{tabular}{lllrrrrrrrrrrrrrrr}
 \toprule
-Case & Policy & Selected masks & Tail coast segments & Branch portfolio & Branch variants & Fallback starts & Accepted fallback by branch & Seed nominal error & Tail-coast nominal error & Selected fixed-time worst error & All-mask fixed-time diagnostic worst & Tail max |u| & Max ||u|| & Bound violation & nfev & Runtime (s) & Meets thresholds & Branch optimizer ran & Accepted branch optimizers converged \\
+Case & Policy & Outage lengths & Selected masks & Tail coast segments & Portfolio variants & Fallback eval branches & Accepted fallback branches & No-recovery branches & Tail-coast nominal error & Selected fixed-time worst error & All-mask fixed-time diagnostic worst & Max ||u|| & Bound violation & nfev & Meets thresholds & Branch optimizer ran & Accepted branch optimizers converged \\
 \midrule
-tail\_coast\_all\_single\_t5\_portfolio & all\_single & 14 & 5 & True & ["regularized\_001", "terminal\_only"] & ["constant\_y\_plus\_0p5", "constant\_y\_minus\_0p5"] & [false, false, false, false, false, false, false, true, false, false, false, false, false, false] & 0.0131 & 0.0230 & 0.0230 & 0.0230 & 0.0000 & 1.0000 & 0.0000 & 2057 & 1145.7074 & True & True & False \\
-tail\_coast\_nominal\_only\_t5 & 0 & 0 & 5 & False & ["configured"] & [] & [] & 0.0131 & 0.0230 & 0.0230 & 27.8351 & 0.0000 & 1.0000 & 0.0000 & 287 & 158.4524 & True & False & False \\
+tail\_coast\_all\_single\_t5\_portfolio & all\_single & [1] & 14 & 5 & 2 & 1 & 1 & 1 & 0.0230 & 0.0230 & 0.0230 & 1.0000 & 0.0000 & 2057 & True & True & False \\
+tail\_coast\_all\_two\_segment\_t5\_portfolio & all\_configured & [2] & 13 & 5 & 2 & 3 & 3 & 1 & 0.0230 & 0.0936 & 0.0936 & 1.0000 & 0.0000 & 3467 & True & True & False \\
+tail\_coast\_nominal\_only\_t5 & 0 & [1] & 0 & 5 & 1 & 0 & 0 & 0 & 0.0230 & 0.0230 & 27.8351 & 1.0000 & 0.0000 & 287 & True & False & False \\
 \bottomrule
 \end{tabular}

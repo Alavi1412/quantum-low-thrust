@@ -1,40 +1,40 @@
 {
   "manifest_version": 2,
-  "generated_utc": "2026-06-16T09:55:24Z",
+  "generated_utc": "2026-06-16T12:21:50Z",
   "note": "Scoped-file artifact manifest for paper reproducibility; includes tracked files and visible untracked evidence files from git ls-files -co --exclude-standard. Excludes the manifest itself, .venv, caches, logs, and LaTeX auxiliary files. File hashes and byte counts reflect the working tree at generated_utc.",
-  "git_head": "ac454851932c3c55522691adafba4d8840050551",
+  "git_head": "b5f84ef58067606c0a3dbf793154bcd1459b53b6",
   "git_status_note": "git_head records the current HEAD before the manifest-refresh commit; file hashes and byte counts reflect the working tree at generated_utc.",
   "file_count": 526,
   "files": [
     {
       "path": "configs/hard_catalog_tail_coast_recovery.yaml",
-      "sha256": "bf7fa6814c42fdce0378b3ecf07783e31d01cdcfe2d0ed4c6cdc0396929ca038",
-      "bytes": 3090
+      "sha256": "e709231d187cc9ab254b8a7d2f81a4907bdf5678052d541d1b8f2821e6bafd87",
+      "bytes": 4599
     },
     {
       "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery.csv",
-      "sha256": "4e4f7a3d5eba517f959076432d783b9271da0db960376adaf68f3114c9568d48",
-      "bytes": 77437
+      "sha256": "c75a494b4cdffd77fffdc1974639f10646ca77a1045693f521d9261e0297c27d",
+      "bytes": 174150
     },
     {
       "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery_metadata.json",
-      "sha256": "b2e10d82d67b10a7e37f1d809b719ab84c95ede64d57b7ee6b618bbc0dc656cf",
-      "bytes": 96769
+      "sha256": "d3e2a05449f169b5f1b21926348605662c12d229b239deca7bdec400273c99b5",
+      "bytes": 203974
     },
     {
       "path": "figures/hard_catalog_tail_coast_recovery/tail_coast_recovery.pdf",
-      "sha256": "6e2b624a472cd9927bafd32aa79af7e65e6b12c9884131d9abc09ebce94ab5b5",
-      "bytes": 14887
+      "sha256": "2af6993b03b737f105b32a798b90f867331689160bc192c680966f09bb2fdd22",
+      "bytes": 14924
     },
     {
       "path": "figures/hard_catalog_tail_coast_recovery/tail_coast_recovery.png",
-      "sha256": "c9902ffd54afd56faa51ecf272636d7b1bd6c1cb7e7e2739191e396d4c801e19",
-      "bytes": 68215
+      "sha256": "942abdc23e708926971a8f71e98a79564e4034baacb8fa41d4c9b4458c926d1e",
+      "bytes": 74679
     },
     {
       "path": "scripts/run_tail_coast_recovery.py",
-      "sha256": "db2016094bdebbacb152f4e4f401a02a1eee48406108c8cda3cbe5091d297023",
-      "bytes": 33474
+      "sha256": "70fb568d4eceb3d0191ef3c9a61c78663228e628609b73596296623ed192cec5",
+      "bytes": 34294
     },
     {
       "path": "src/qlt/tail_coast_recovery.py",
@@ -43,8 +43,8 @@
     },
     {
       "path": "tables/hard_catalog_tail_coast_recovery/tail_coast_recovery_table.tex",
-      "sha256": "7222dac04db3b6a3df0016af32562b3b9fe88b3a8a163c83bd5778580d346586",
-      "bytes": 1058
+      "sha256": "5a8ea03f14742f87f789038425b80ed6bb1c97fe8b73466958741a7b6289d1ec",
+      "bytes": 955
     },
     {
       "path": "tests/test_tail_coast_recovery.py",
@@ -58,13 +58,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "e1ca0c3fbbb6b64dd8aa0446598a4c42483de883ec316cd4d44d5365e9a4f994",
-      "bytes": 13452
+      "sha256": "015bae1237ab85234caca673eb4e2fbcace5c0d0ee3532dbe1d49983e63293f8",
+      "bytes": 14276
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "8210c54547ce4f4fed98483bbf04e768902b8ed1b78b060b4e91c6da69a11579",
-      "bytes": 19564
+      "sha256": "7cdc8ef3e82b6c049dbcc3ab7b2a64812ff7321a43dc30cea3bbe0235dba4b10",
+      "bytes": 20173
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -2218,13 +2218,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "0f3b821063f4c5f946a2c3e4b25a6c4ef349f7da78f6ee151cabf8fc56c298b7",
-      "bytes": 629601
+      "sha256": "6c949d97fa9fedc38576f82c81f469abb8c613b620f2eb05eb7857f39d97b2ac",
+      "bytes": 628368
     },
     {
       "path": "paper/main.tex",
-      "sha256": "fba13c806d8ca95001b283429f9782c3ed058f99ce8905e45d10e6d5d32ba136",
-      "bytes": 112326
+      "sha256": "6e17944bedf3ed2759b56da699df25267c7f648aac3ca1d81cb2a4ff53c4f4d1",
+      "bytes": 114955
     },
     {
       "path": "paper/references.bib",

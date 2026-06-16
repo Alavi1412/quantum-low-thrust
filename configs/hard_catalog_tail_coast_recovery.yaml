@@ -103,3 +103,44 @@ tail_coast_recovery:
               control: 0.0
               smooth: 0.0
               continuity: 0.0
+    - case_id: tail_coast_all_two_segment_t5_portfolio
+      purpose: "Hard catalog-DRO fixed-final-time recovery for all two-segment missed-thrust masks using a mixed-regularized five-segment exact-zero nominal tail coast, regularized/terminal-only branch residual portfolio variants, and deterministic constant-vector branch-start fallbacks."
+      transfer_time: 4.0
+      amax: 1.0
+      segments: 14
+      tail_coast_segments: 5
+      outage_lengths: [2]
+      selected_outages: all_configured
+      nominal_max_nfev: 140
+      tail_nominal_max_nfev: 220
+      branch_max_nfev: 220
+      branch:
+        xtol: 1.0e-4
+        ftol: 1.0e-4
+        gtol: 1.0e-4
+        fallback_initializations:
+          - label: constant_y_plus_0p5
+            vector: [0.0, 0.5, 0.0]
+          - label: constant_y_minus_0p5
+            vector: [0.0, -0.5, 0.0]
+          - label: constant_x_plus_0p5
+            vector: [0.5, 0.0, 0.0]
+          - label: constant_x_minus_0p5
+            vector: [-0.5, 0.0, 0.0]
+          - label: constant_y_plus_1
+            vector: [0.0, 1.0, 0.0]
+          - label: constant_y_minus_1
+            vector: [0.0, -1.0, 0.0]
+        weight_variants:
+          - label: regularized_001
+            weights:
+              terminal: 4.0
+              control: 0.01
+              smooth: 0.01
+              continuity: 0.0
+          - label: terminal_only
+            weights:
+              terminal: 4.0
+              control: 0.0
+              smooth: 0.0
+              continuity: 0.0

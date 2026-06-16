@@ -219,8 +219,20 @@ starts are declared and charged; only mask 7 evaluates fallbacks
 (`fallback_evals=[0,0,0,0,0,0,0,2,0,0,0,0,0,0]`) and its accepted fallback is
 `constant_y_minus_0p5`. The late-tail mask 13 has no recovery variables and is
 labeled `no_recovery_variables`, so `branch_optimizer_all_success=false` even
-though the row is threshold-feasible. Two-segment outage families remain
-unresolved.
+though the row is threshold-feasible. The
+`tail_coast_all_two_segment_t5_portfolio` row separately selects all 13
+two-segment masks via `all_configured`, keeps the same original target/final
+time, and reaches selected/all fixed-final-time worst error
+`0.0936063931709301`, so the configured two-segment scope also meets thresholds
+within this tail-coast continuous-backend diagnostic. Fallback starts are
+evaluated for masks 0, 6, and 7 and the accepted fallback labels are
+`constant_y_minus_0p5`, `constant_x_minus_0p5`, and
+`constant_x_plus_0p5`; mask 12 is `no_recovery_variables`, so the row is
+threshold-feasible while `branch_optimizer_all_success=false`. This package
+does not establish fuel optimality, a combined one/two simultaneous suite,
+broader outage-family robustness beyond the configured `[1]` and `[2]` rows,
+production-grade optimal control, high-fidelity validation, or quantum
+advantage.
 
 For the continuation-extension continuous-backend baseline:
 

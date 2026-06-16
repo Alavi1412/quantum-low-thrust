@@ -178,6 +178,33 @@ def _json_list(value) -> str:
     return json.dumps(value, sort_keys=False)
 
 
+def _json_array(value) -> list:
+    if isinstance(value, list):
+        return value
+    if value is None:
+        return []
+    if isinstance(value, float) and np.isnan(value):
+        return []
+    text = str(value).strip()
+    if not text or text.lower() == "nan":
+        return []
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        return []
+    return parsed if isinstance(parsed, list) else []
+
+
+def _count_zero_recovery_branches(value) -> int:
+    count = 0
+    for item in _json_array(value):
+        try:
+            count += int(float(item)) == 0
+        except (TypeError, ValueError):
+            continue
+    return int(count)
+
+
 def _outage_count(segments: int, lengths: list[int]) -> int:
     return int(sum(max(0, int(segments) - int(length) + 1) for length in lengths))
 
@@ -524,25 +551,25 @@ def write_table(df: pd.DataFrame, tables_dir: Path) -> None:
     if df.empty:
         path.write_text("% No tail-coast recovery rows.\n", encoding="utf-8")
         return
-    table = df.sort_values("suite_case_id")[
+    sorted_df = df.sort_values("suite_case_id").copy()
+    sorted_df["no_recovery_branch_count"] = sorted_df["branch_recovery_segments"].map(_count_zero_recovery_branches)
+    table = sorted_df[
         [
             "suite_case_id",
             "selected_outage_policy",
+            "outage_lengths",
             "selected_outage_count",
             "tail_coast_segments",
-            "branch_portfolio_enabled",
-            "branch_portfolio_variant_labels",
-            "branch_fallback_initialization_labels",
-            "branch_accepted_initialization_is_fallback",
-            "nominal_seed_error",
+            "branch_portfolio_variant_count",
+            "branch_fallback_initialization_evaluated_branch_count",
+            "branch_fallback_initialization_accepted_branch_count",
+            "no_recovery_branch_count",
             "nominal_tail_coast_error",
             "selected_worst_error",
             "all_mask_worst_error",
-            "nominal_tail_zero_max_abs",
             "control_max_norm",
             "control_bound_violation",
             "nfev",
-            "runtime_seconds",
             "meets_thresholds",
             "branch_optimizer_ran",
             "branch_optimizer_all_success",
@@ -551,21 +578,19 @@ def write_table(df: pd.DataFrame, tables_dir: Path) -> None:
     table.columns = [
         "Case",
         "Policy",
+        "Outage lengths",
         "Selected masks",
         "Tail coast segments",
-        "Branch portfolio",
-        "Branch variants",
-        "Fallback starts",
-        "Accepted fallback by branch",
-        "Seed nominal error",
+        "Portfolio variants",
+        "Fallback eval branches",
+        "Accepted fallback branches",
+        "No-recovery branches",
         "Tail-coast nominal error",
         "Selected fixed-time worst error",
         "All-mask fixed-time diagnostic worst",
-        "Tail max |u|",
         "Max ||u||",
         "Bound violation",
         "nfev",
-        "Runtime (s)",
         "Meets thresholds",
         "Branch optimizer ran",
         "Accepted branch optimizers converged",
@@ -627,7 +652,7 @@ def regenerate(
         "implementation_identities": _implementation_identities(),
         "threshold_rule": "meets_thresholds requires tail-coast nominal error <= nominal_success and selected fixed-final-time worst error <= robust_success",
         "semantics": {
-            "backend": "Fixed-final-time tail-coast locked-nominal continuous recovery evidence; not quantum evidence, not delayed arrival, not fuel optimality, and not two-segment robustness unless configured.",
+            "backend": "Fixed-final-time tail-coast locked-nominal continuous recovery evidence; not quantum evidence, not delayed arrival, not fuel optimality, and not robustness beyond the configured outage masks.",
             "nominal": "The nominal solve is seeded from an all-windows multiple-shooting trajectory, then refined with configured tail_nominal weights while the final tail_coast_segments controls are fixed exactly to zero.",
             "branch_recovery": (
                 "Each selected missed-thrust mask is evaluated independently at the original target and original transfer time; "
@@ -653,7 +678,7 @@ def regenerate(
         "limitations": [
             "This is continuous-backend evidence and does not establish quantum advantage.",
             "This is fixed-final-time evidence and intentionally does not use delayed targets or added recovery horizon segments.",
-            "The configured evidence case covers one-segment outages only.",
+            "The configured evidence scope is case-specific; outage_lengths and selected_outage_policy record which missed-thrust masks each row covers.",
         ],
         "expected_cases": [_case_payload(case) for case in cases],
         "branch_weight_variants_by_case": {str(case["suite_case_id"]): _branch_weight_variants(config, case["case_raw"]) for case in cases},
