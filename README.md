@@ -38,9 +38,11 @@ Reviewer-facing checklist for the current artifact snapshot:
 ```powershell
 git status --short
 py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
+py -3.11 -m pytest tests/test_claim_evidence_ledger.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
 py -3.11 scripts\run_threshold_sensitivity.py
+py -3.11 scripts\run_claim_evidence_ledger.py
 py -3.11 scripts\run_evidence_synthesis.py
 py -3.11 scripts\run_replay_stress_validation.py
 py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --regenerate-artifacts-only --allow-artifact-refresh-fingerprint-mismatch
@@ -56,6 +58,7 @@ For a broader local check, run `py -3.11 -m pytest tests -q` after installing
 the pinned dependencies. The long experiment commands below are expensive; use
 the recorded artifacts unless intentionally regenerating evidence. The primary
 review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
+`data/results/claim_evidence_ledger/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
@@ -133,6 +136,7 @@ For the 30-seed main-method cardinality-prior package:
 py -3.11 scripts\run_experiment.py --config configs\q1_phase_shift_cardinality_30seed.yaml
 py -3.11 scripts\run_main_method_statistics.py --config configs\q1_phase_shift_cardinality_30seed.yaml
 py -3.11 scripts\run_threshold_sensitivity.py
+py -3.11 scripts\run_claim_evidence_ledger.py
 py -3.11 scripts\run_evidence_synthesis.py
 ```
 
@@ -149,6 +153,24 @@ recorded raw CSV only; it does not rerun trajectory optimization. At the tight
 `(0.05, 0.09)` threshold check, all sampled methods are `0/30` while
 all-windows continuous remains `30/30`. It does not support a quantum-advantage
 or QAOA-superiority claim.
+
+The claim evidence ledger postprocessor writes
+`data/results/claim_evidence_ledger/claim_evidence_ledger.csv`,
+`data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json`,
+`data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv`,
+`data/results/claim_evidence_ledger/tail_coast_branch_audit.csv`, and matching
+LaTeX tables under `tables/claim_evidence_ledger/`:
+
+```powershell
+py -3.11 scripts\run_claim_evidence_ledger.py
+```
+
+It reads recorded artifacts only and does not rerun trajectory optimization.
+The ledger separates selected-branch evidence, all-mask diagnostics, and
+all-configured-mask evidence. The tail-coast audit confirms the combined row
+passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
+`0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
+JSON summary only; accepted branch controls are not persisted or replayed.
 
 The evidence synthesis postprocessor writes
 `data/results/evidence_synthesis/evidence_synthesis.csv`,

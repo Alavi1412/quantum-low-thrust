@@ -1,0 +1,123 @@
+{
+  "command": "scripts\\run_claim_evidence_ledger.py",
+  "row_count": 8,
+  "tail_coast_threshold_audit_row_count": 5,
+  "tail_coast_branch_audit_row_count": 1,
+  "optimization_rerun": false,
+  "uses_recorded_artifacts_only": true,
+  "high_fidelity_claim": false,
+  "branch_control_replay": false,
+  "fuel_optimality_claim": false,
+  "quantum_advantage_claim": false,
+  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun.",
+  "determinism_note": "Runtime and wall-clock timestamps are intentionally omitted so identical inputs and command text produce byte-stable outputs.",
+  "claim_semantics": {
+    "selected_branch_evidence": "Rows where selected outage branches were optimized/evaluated and unselected masks, if present, remain diagnostics.",
+    "all_mask_diagnostic": "All configured masks may be evaluated diagnostically without being selected for optimization.",
+    "all_configured_mask_evidence": "True only when the row selected/evaluated every configured mask within the stated mask family."
+  },
+  "tail_coast_threshold_pairs": [
+    {
+      "threshold_id": "configured_0p09_0p17",
+      "nominal_threshold": 0.09,
+      "selected_or_all_worst_threshold": 0.17
+    },
+    {
+      "threshold_id": "screen_0p05_0p12",
+      "nominal_threshold": 0.05,
+      "selected_or_all_worst_threshold": 0.12
+    },
+    {
+      "threshold_id": "near_margin_0p025_0p095",
+      "nominal_threshold": 0.025,
+      "selected_or_all_worst_threshold": 0.095
+    },
+    {
+      "threshold_id": "robust_tight_0p025_0p09",
+      "nominal_threshold": 0.025,
+      "selected_or_all_worst_threshold": 0.09
+    },
+    {
+      "threshold_id": "very_tight_0p02_0p09",
+      "nominal_threshold": 0.02,
+      "selected_or_all_worst_threshold": 0.09
+    }
+  ],
+  "row_order": [
+    "phase_shift_main_method_30seed_selected_branch",
+    "phase_shift_qaoa_qubo_30seed_selected_branch",
+    "phase_shift_continuation_all_single_p04_all_configured",
+    "phase_shift_continuation_two_segment_n8_p03_all_configured",
+    "phase_shift_direct_collocation_p04_selected_branch_diagnostic",
+    "phase_shift_independent_hs_p04_amax02_selected_branch_diagnostic",
+    "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
+    "catalog_dro_delayed_h6_all_single_delayed_arrival"
+  ],
+  "input_artifacts": [
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/summary.csv",
+      "sha256": "b71e6ab8fcbc6f18bfe41278fdb734fe9ff13b79a369abe659b4c1be356014e8",
+      "bytes": 7173
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/main_method_statistics_metadata.json",
+      "sha256": "1539ca86f38af536163db2aa46b45e21d7970badc3852bd1247726205832b547",
+      "bytes": 9691
+    },
+    {
+      "path": "data/results/phase_shift_cardinality_30seed/threshold_sensitivity.csv",
+      "sha256": "afdd44d82516bf9174478037da9d074fa19bd76c3ebdd94979890ac673ab3d67",
+      "bytes": 3427
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/summary.csv",
+      "sha256": "dbaa5458ba8a67fea182f5dc59c3864d49701fbc538d673fa3731945424c0929",
+      "bytes": 5742
+    },
+    {
+      "path": "data/results/qaoa_depth_ablation_30seed/paired_comparisons.csv",
+      "sha256": "7a8ef7b7c6ebdebf7eb600ef78d45e2917dbecb92e0e4405931ec5e2282fb9e1",
+      "bytes": 1820
+    },
+    {
+      "path": "data/results/continuation_extension_suite/continuation_margin_suite.csv",
+      "sha256": "194688c1dc8df761622fee1069914aeb1a1e91ae2078a8e15ced6a59f4673311",
+      "bytes": 9759
+    },
+    {
+      "path": "data/results/direct_collocation_baseline/direct_collocation_baseline.csv",
+      "sha256": "b1f9b4c10daba731fbf5f7074e7b9b213a804d51a9f74fc0c6bd356898c2443d",
+      "bytes": 6007
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline.csv",
+      "sha256": "cebebee6c4d8925954c81629df6d58885012005b7adff6d3403b37dd4e71dd65",
+      "bytes": 15920
+    },
+    {
+      "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery.csv",
+      "sha256": "2dada0321e38e64185abd00d311eee8d2fad55698abf23f0f639c53f94f4073d",
+      "bytes": 348303
+    },
+    {
+      "path": "data/results/hard_catalog_delayed_recovery/delayed_locked_recovery.csv",
+      "sha256": "a33866d7f4a6f6522734482d980dd4eb0adb84edc90693a6607162013cdec7ba",
+      "bytes": 79072
+    }
+  ],
+  "artifacts": {
+    "claim_evidence_ledger_csv": "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
+    "claim_evidence_ledger_metadata_json": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
+    "tail_coast_threshold_audit_csv": "data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv",
+    "tail_coast_branch_audit_csv": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
+    "claim_evidence_ledger_table_tex": "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
+    "tail_coast_threshold_audit_table_tex": "tables/claim_evidence_ledger/tail_coast_threshold_audit_table.tex",
+    "tail_coast_branch_audit_table_tex": "tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex"
+  },
+  "interpretation_limits": [
+    "This ledger clarifies evidence semantics; it does not add high-fidelity validation.",
+    "The branch audit summarizes recorded branch_results JSON only; accepted branch controls are not persisted and are not replayed.",
+    "The tail-coast positive row is fixed-final-time locked-nominal continuous-backend evidence only.",
+    "The QAOA/QUBO rows are simulated initializer evidence and do not support quantum advantage or superiority claims."
+  ]
+}
