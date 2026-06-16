@@ -39,8 +39,10 @@ Reviewer-facing checklist for the current artifact snapshot:
 git status --short
 py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
+py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
 py -3.11 scripts\run_threshold_sensitivity.py
 py -3.11 scripts\run_evidence_synthesis.py
+py -3.11 scripts\run_replay_stress_validation.py
 py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --regenerate-artifacts-only --allow-artifact-refresh-fingerprint-mismatch
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
@@ -55,6 +57,7 @@ the pinned dependencies. The long experiment commands below are expensive; use
 the recorded artifacts unless intentionally regenerating evidence. The primary
 review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/evidence_synthesis/*`,
+`data/results/replay_stress_validation/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
 `data/results/qaoa_depth_ablation_30seed/*`,
 `data/results/hard_catalog_tail_coast_recovery/*`, and
@@ -157,6 +160,22 @@ cross-indexes tight 30-seed threshold sensitivity, continuation-extension
 multiple-shooting rows, compact direct-collocation and independent-midpoint
 Hermite-Simpson diagnostics, and the scoped hard-catalog tail-coast row used in
 the main manuscript claim path.
+
+The replay/stress validation postprocessor writes
+`data/results/replay_stress_validation/replay_stress_validation.csv`,
+`data/results/replay_stress_validation/replay_stress_validation_metadata.json`,
+and `tables/replay_stress_validation/replay_stress_validation_table.tex`:
+
+```powershell
+py -3.11 scripts\run_replay_stress_validation.py
+```
+
+It repropagates persisted nominal-control sidecars for representative
+continuation-extension and independent-midpoint Hermite-Simpson phase-shift
+rows. The source-substep baselines reproduce recorded nominal errors to within
+`1e-12`; refined substeps and direct +/-1% acceleration scaling are stress
+diagnostics only. It does not run least-squares optimization, replay branch
+recovery controls, or claim high-fidelity validation.
 
 For the QAOA depth ablation:
 

@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-16T18:33:30Z",
+  "generated_utc": "2026-06-16T19:33:48Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "eb90f69e898872ce632f6173676776f2963dd12f",
+  "git_head_at_generation": "333be56f184b4f8d74944a37cb1dc1129fbb2ac3",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n?? data/results/evidence_synthesis/evidence_synthesis.csv\n?? data/results/evidence_synthesis/evidence_synthesis_metadata.json\n?? scripts/run_evidence_synthesis.py\n?? tables/evidence_synthesis/evidence_synthesis_table.tex\n?? tables/evidence_synthesis/practitioner_lessons_table.tex\n?? tests/test_evidence_synthesis.py",
+  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n?? data/results/replay_stress_validation/replay_stress_validation.csv\n?? data/results/replay_stress_validation/replay_stress_validation_metadata.json\n?? scripts/run_replay_stress_validation.py\n?? tables/replay_stress_validation/replay_stress_validation_table.tex\n?? tests/test_replay_stress_validation.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 539,
+  "file_count": 544,
   "files": [
     {
       "path": ".gitignore",
@@ -40,13 +40,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "b6f91e8e699381a8aab1de74994714e9e64ee9fbd41ff95c1cc2896b12bbd859",
-      "bytes": 17353
+      "sha256": "87ddea21bd8efb589e5f269bb1a7bce711b8dc4cac3877fd63b5fd6fd58d73ac",
+      "bytes": 18300
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "dc374b0bfe7c68f2158e636d9ab8cfe6c1b12501bace28f3762f836ef1e60f66",
-      "bytes": 24581
+      "sha256": "e7632348aea1fa9472ae4373541d8bb93e9dfb6efc49ce4c3ba7a2c7a2f70014",
+      "bytes": 25857
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -1644,6 +1644,16 @@
       "bytes": 75250
     },
     {
+      "path": "data/results/replay_stress_validation/replay_stress_validation.csv",
+      "sha256": "6311771d712426430efaa785ac58cc864430d093ea0f4bc6b830a3e2cab2dfc3",
+      "bytes": 10556
+    },
+    {
+      "path": "data/results/replay_stress_validation/replay_stress_validation_metadata.json",
+      "sha256": "bb59dc45dc1f43610edc6cdf53d1f1b284ad3e514f8feee200df5b53edbdd812",
+      "bytes": 4933
+    },
+    {
       "path": "data/results/robust_margin_suite/robust_margin_suite.csv",
       "sha256": "f830a36ecd440e1db039d89ce1f8fe17640230c2ffb63698c703a8bf91afa015",
       "bytes": 9179
@@ -2245,13 +2255,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "250e9d7aaff43b5ee94cfc4fb60d741892111a2fdb050f54486f0a67e5cc90f0",
-      "bytes": 405677
+      "sha256": "c964ade1e90a75fa9a762006c741a3c4d6a54b864f51fc38c424999d6de0c719",
+      "bytes": 410718
     },
     {
       "path": "paper/main.tex",
-      "sha256": "a185f78094d7d87a7d92575a2ef074d98c7dc72ad652df0d04d6962f68fbdc15",
-      "bytes": 48026
+      "sha256": "69feb5181a9cfbca4b5507bae846eda7ac871fd0302c40cf2fe7641370f58611",
+      "bytes": 50530
     },
     {
       "path": "paper/references.bib",
@@ -2260,13 +2270,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "9c2d3c12846a55d829e2574262dba69585b4ddc246b41c786934467e71bb6b66",
-      "bytes": 468075
+      "sha256": "d4c72310847ed0054eb3af6e250c3a35e471eb7facd9455e9ff809b74faba199",
+      "bytes": 468300
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "99d80439374932f38ed77af8cb137f9fe99de25882b9b0cf40ec0e0aed542fe5",
-      "bytes": 24871
+      "sha256": "c48bc1fe7138b21f5d5110d4a06eb6f1a8f67ab104427f8811343abd6a1a2477",
+      "bytes": 25209
     },
     {
       "path": "requirements-lock.txt",
@@ -2372,6 +2382,11 @@
       "path": "scripts/run_qaoa_depth_ablation.py",
       "sha256": "85f6d9b8edf98493ebe23980f66c7b5d95eb030bff051d8e885e1f94c59ee228",
       "bytes": 29677
+    },
+    {
+      "path": "scripts/run_replay_stress_validation.py",
+      "sha256": "ef546290163fe83bc5d860681c674e81ceffebebb710c72301bf67779151a78c",
+      "bytes": 19801
     },
     {
       "path": "scripts/run_robust_margin_suite.py",
@@ -2669,6 +2684,11 @@
       "bytes": 628
     },
     {
+      "path": "tables/replay_stress_validation/replay_stress_validation_table.tex",
+      "sha256": "7a2f7ed0fb101e9d628f36a23f948aa20747fcea2d246146c1bc10788ee2802c",
+      "bytes": 4795
+    },
+    {
       "path": "tables/results_table.tex",
       "sha256": "8d770c77f5510aa71853fe56ee27b540212a178256e014e137b531a952cef1c0",
       "bytes": 943
@@ -2717,6 +2737,11 @@
       "path": "tests/test_locked_nominal_recovery.py",
       "sha256": "893261ba03f4a346f8ff446faee324b2462115a1f09d03733afbf04c2c669eaf",
       "bytes": 13630
+    },
+    {
+      "path": "tests/test_replay_stress_validation.py",
+      "sha256": "fd5711dc438505c17266fd29eb814931baba8a73b3c286c8f82d120d7c71774f",
+      "bytes": 4451
     },
     {
       "path": "tests/test_smoke.py",

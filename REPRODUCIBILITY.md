@@ -32,8 +32,10 @@ py -3.11 -m pip install -r requirements-lock.txt
 git status --short
 py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
+py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
 py -3.11 scripts\run_threshold_sensitivity.py
 py -3.11 scripts\run_evidence_synthesis.py
+py -3.11 scripts\run_replay_stress_validation.py
 py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --regenerate-artifacts-only --allow-artifact-refresh-fingerprint-mismatch
 cd paper
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
@@ -49,6 +51,7 @@ reviewer-facing verification path. A broader local check can run
 paper artifacts need to be regenerated; use the recorded artifacts for normal
 verification. The primary review artifacts are `paper/main.pdf`,
 `paper/supplement.pdf`, `data/results/evidence_synthesis/*`,
+`data/results/replay_stress_validation/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
 `data/results/qaoa_depth_ablation_30seed/*`,
 `data/results/hard_catalog_tail_coast_recovery/*`, and
@@ -61,6 +64,7 @@ verification. The primary review artifacts are `paper/main.pdf`,
 | Paper PDFs | `latexmk -pdf paper/main.tex` and `latexmk -pdf paper/supplement.tex` or equivalent local LaTeX build | `paper/main.tex`, `paper/supplement.tex`, `paper/references.bib`, generated `tables/`, `figures/` | `paper/main.pdf`, `paper/supplement.pdf` | Build time depends on local TeX install; not an experiment. |
 | Smoke tests | `python -m pytest tests` | `tests/test_smoke.py`, `src/qlt/*`, `configs/smoke.yaml` | pytest pass/fail output | Short. |
 | Evidence synthesis replay | `py -3.11 scripts\run_evidence_synthesis.py` | Recorded CSV/JSON artifacts from threshold sensitivity, continuation extension, direct collocation, independent-midpoint Hermite-Simpson, and tail-coast packages | `data/results/evidence_synthesis/evidence_synthesis.csv`, `data/results/evidence_synthesis/evidence_synthesis_metadata.json`, `tables/evidence_synthesis/evidence_synthesis_table.tex`, `tables/evidence_synthesis/practitioner_lessons_table.tex` | Short deterministic postprocessor; no trajectory optimization is rerun. |
+| Recorded-control replay/stress validation | `py -3.11 scripts\run_replay_stress_validation.py` | Recorded nominal-control sidecars and source rows from continuation extension and independent-midpoint Hermite-Simpson packages; `data/source_states.json` | `data/results/replay_stress_validation/replay_stress_validation.csv`, `data/results/replay_stress_validation/replay_stress_validation_metadata.json`, `tables/replay_stress_validation/replay_stress_validation_table.tex` | Short deterministic postprocessor; repropagates nominal controls only. No least-squares optimization, branch recovery replay, high-fidelity force model, or operational validation claim. |
 | Phase-shift benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift.yaml` | `configs/q1_phase_shift.yaml`, `data/source_states.json` | `data/results/phase_shift/*`, `figures/phase_shift/*`, `tables/phase_shift/*` | Moderate; metadata records package versions but no total runtime field. |
 | Phase-shift cardinality benchmark | `python scripts/run_experiment.py --config configs/q1_phase_shift_cardinality.yaml` | `configs/q1_phase_shift_cardinality.yaml`, `data/source_states.json` | `data/results/phase_shift_cardinality/*`, `figures/phase_shift_cardinality/*`, `tables/phase_shift_cardinality/*` | Moderate to expensive; 10 seeds with branch recovery. |
 | Bounded phase suite | `python scripts/run_bounded_phase_suite.py --resume` | `configs/bounded_phase_suite.yaml`, `data/source_states.json` | `data/results/bounded_phase_suite/bounded_phase_suite.csv`, `figures/bounded_phase_suite/*`, `tables/bounded_phase_suite/*` | Expensive; configured runtime budget is 600 s, with recorded cases from about 13 s to 367 s. |
@@ -93,6 +97,13 @@ verification. The primary review artifacts are `paper/main.pdf`,
   `tables/evidence_synthesis/practitioner_lessons_table.tex`. The synthesis is
   a deterministic replay over recorded CSV/JSON artifacts and does not rerun
   trajectory optimization.
+- Recorded-control replay/stress validation:
+  `data/results/replay_stress_validation/replay_stress_validation.csv`,
+  `data/results/replay_stress_validation/replay_stress_validation_metadata.json`,
+  and `tables/replay_stress_validation/replay_stress_validation_table.tex`.
+  This repropagates persisted nominal-control sidecars only; it does not run
+  optimization, replay branch recovery controls, or claim high-fidelity
+  validation.
 - Non-teacher catalog phase-shift results: `data/results/phase_shift/*` and
   `data/results/phase_shift_cardinality/*`.
 - Bounded projected multiple-shooting feasibility claims:

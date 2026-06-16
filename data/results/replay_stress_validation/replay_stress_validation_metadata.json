@@ -1,0 +1,106 @@
+{
+  "command": "scripts\\run_replay_stress_validation.py",
+  "row_count": 15,
+  "case_count": 3,
+  "skipped_cases": [],
+  "optimization_rerun": false,
+  "uses_only_recorded_control_sidecars": true,
+  "high_fidelity_claim": false,
+  "source_mode": "Recorded nominal-control sidecars are repropagated with existing CR3BP utilities only; no least-squares optimization, schedule search, branch recovery optimization, or high-fidelity force model is launched.",
+  "determinism_note": "Runtime and wall-clock timestamps are intentionally omitted so identical inputs and command text produce byte-stable CSV, table, and metadata outputs.",
+  "thresholds": {
+    "configured_nominal": 0.09,
+    "tighter_nominal": 0.065,
+    "tight_nominal": 0.05
+  },
+  "baseline_reproduction_tolerance": 1e-12,
+  "baseline_reproduction": {
+    "all_baselines_reproduced": true,
+    "max_abs_delta": 7.632783294297951e-17
+  },
+  "variant_semantics": [
+    {
+      "replay_variant": "baseline_source_substeps",
+      "substep_factor": 1,
+      "acceleration_scale": 1.0,
+      "interpretation_limits": "Deterministic source-grid nominal-control replay; branch recovery controls are not replayed."
+    },
+    {
+      "replay_variant": "refined_2x_substeps",
+      "substep_factor": 2,
+      "acceleration_scale": 1.0,
+      "interpretation_limits": "Integration-grid refinement only; target definition and recorded controls are fixed."
+    },
+    {
+      "replay_variant": "refined_4x_substeps",
+      "substep_factor": 4,
+      "acceleration_scale": 1.0,
+      "interpretation_limits": "Integration-grid refinement only; target definition and recorded controls are fixed."
+    },
+    {
+      "replay_variant": "accel_scale_0p99_source_substeps",
+      "substep_factor": 1,
+      "acceleration_scale": 0.99,
+      "interpretation_limits": "Small direct acceleration-scale stress around recorded controls; not high-fidelity validation."
+    },
+    {
+      "replay_variant": "accel_scale_1p01_source_substeps",
+      "substep_factor": 1,
+      "acceleration_scale": 1.01,
+      "interpretation_limits": "Small direct acceleration-scale stress around recorded controls; may exceed the configured acceleration bound and is not high-fidelity validation."
+    }
+  ],
+  "input_artifacts": [
+    {
+      "path": "configs/continuation_extension_suite.yaml",
+      "sha256": "17b9d0390276ec393253ba971ca19a4c9f8a4d7ecdb100ef7a05008e4f3cc74f",
+      "bytes": 3716
+    },
+    {
+      "path": "configs/independent_hs_continuation_baseline.yaml",
+      "sha256": "8743d2febd75b922974040089a58389a1bda4467bd2172e939ee132b965640c6",
+      "bytes": 3506
+    },
+    {
+      "path": "data/results/continuation_extension_suite/continuation_margin_suite.csv",
+      "sha256": "194688c1dc8df761622fee1069914aeb1a1e91ae2078a8e15ced6a59f4673311",
+      "bytes": 9759
+    },
+    {
+      "path": "data/results/continuation_extension_suite/controls/all_single_p04_warm_from_p03_nominal_controls.json",
+      "sha256": "9498dbcd4d5a23332fabf59495e3a66bb38f0f381cfa4510b763fae30f646f90",
+      "bytes": 1356
+    },
+    {
+      "path": "data/results/continuation_extension_suite/controls/two_segment_n8_p03_cold_nominal_controls.json",
+      "sha256": "86bb319acbd4cdd40d8161988739205a4dc358d12a40eaa98ed1659a9a30cf84",
+      "bytes": 1310
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/controls/ihs_phase_p04_amax02_warm_from_p03_nominal_controls.json",
+      "sha256": "27da33d6e6986d8ff5ef5a53b48fa08db1ecad9fe163607f75ce8ab96ac96bc7",
+      "bytes": 3466
+    },
+    {
+      "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline.csv",
+      "sha256": "cebebee6c4d8925954c81629df6d58885012005b7adff6d3403b37dd4e71dd65",
+      "bytes": 15920
+    },
+    {
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf",
+      "bytes": 1203
+    }
+  ],
+  "artifacts": {
+    "replay_stress_validation_csv": "data/results/replay_stress_validation/replay_stress_validation.csv",
+    "replay_stress_validation_metadata_json": "data/results/replay_stress_validation/replay_stress_validation_metadata.json",
+    "replay_stress_validation_table_tex": "tables/replay_stress_validation/replay_stress_validation_table.tex"
+  },
+  "interpretation_limits": [
+    "Rows are nominal-control replays only; selected branch recovery controls are not replayed.",
+    "The acceleration-scale rows are small direct perturbations of recorded controls, not a high-fidelity validation model; scale-up rows may exceed the configured acceleration bound.",
+    "Pass flags use nominal-error thresholds only because this script does not rerun missed-thrust branch recovery.",
+    "The target definition is fixed to the source artifact's CR3BP target generation settings."
+  ]
+}
