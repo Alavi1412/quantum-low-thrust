@@ -86,6 +86,17 @@ count `18/32` overall with July at `8/8`, and retuned feasibility for all
 nominal and branch rows, but it remains a point-mass stress/retuning package,
 not SPICE/full high-fidelity/flight validation, production solver parity, fuel
 optimality, DOI evidence, or quantum evidence.
+The independent-HS SPICE-derived ephemeris replay package is archived under
+`data/results/independent_hs_spice_ephemeris_replay/` and backed by compact
+vector caches in `data/cache/spice/`. It replays the 36 already-retuned
+multi-epoch controls under SPICE-derived Moon/Sun J2000 geometric vectors with
+branch pass `32/32`, worst nominal/branch errors
+`0.021439441253166033`/`0.024730650824609506`, and max delta
+`3.2763991519857427e-10` from the Horizons-retuned replay. It is a no-retune
+point-mass ephemeris-source replay, not full high-fidelity/flight validation,
+production solver parity, fuel optimality, DOI evidence, or quantum evidence.
+Raw NAIF kernel binaries are not archive artifacts; only compact JSON vector
+caches are committed.
 
 ## Post-Deposit Updates
 

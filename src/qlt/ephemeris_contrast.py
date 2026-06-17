@@ -216,6 +216,12 @@ def load_horizons_cache(path: Path) -> dict[str, object]:
     return cache
 
 
+def load_spice_cache(path: Path) -> dict[str, object]:
+    cache = json.loads(path.read_text(encoding="utf-8"))
+    validate_spice_cache(cache)
+    return cache
+
+
 def samples_from_cache(cache: dict[str, object], body: str) -> list[HorizonsVectorSample]:
     bodies = cache.get("bodies", {})
     if not isinstance(bodies, dict) or body not in bodies:
@@ -242,6 +248,25 @@ def samples_from_cache(cache: dict[str, object], body: str) -> list[HorizonsVect
     return samples
 
 
+def samples_from_spice_cache(cache: dict[str, object], body: str) -> list[HorizonsVectorSample]:
+    bodies = cache.get("bodies", {})
+    if not isinstance(bodies, dict) or body not in bodies:
+        raise ValueError(f"SPICE cache missing body {body!r}")
+    body_data = bodies[body]
+    if not isinstance(body_data, dict):
+        raise ValueError(f"SPICE cache body {body!r} is not an object")
+    raw_samples = body_data.get("samples")
+    if not isinstance(raw_samples, list):
+        raise ValueError(f"SPICE cache body {body!r} missing samples")
+    samples = [sample_from_cache_row(row) for row in raw_samples]
+    for index, sample in enumerate(samples):
+        if sample.position_km.shape != (3,):
+            raise ValueError(f"SPICE cache {body!r} sample {index} position_km must have shape (3,)")
+        if sample.velocity_km_s.shape != (3,):
+            raise ValueError(f"SPICE cache {body!r} sample {index} velocity_km_s must have shape (3,)")
+    return samples
+
+
 def validate_horizons_cache(cache: dict[str, object]) -> None:
     if int(cache.get("schema_version", 0)) != 1:
         raise ValueError("unsupported Horizons cache schema_version")
@@ -265,6 +290,59 @@ def validate_horizons_cache(cache: dict[str, object]) -> None:
     sun_jd = np.asarray([sample.jd_tdb for sample in sun], dtype=float)
     if not np.allclose(moon_jd, sun_jd, rtol=0.0, atol=5.0e-10):
         raise ValueError("Moon/Sun Horizons caches have different JD grids")
+
+
+def validate_spice_cache(cache: dict[str, object]) -> None:
+    if int(cache.get("schema_version", 0)) != 1:
+        raise ValueError("unsupported SPICE cache schema_version")
+    if str(cache.get("cache_type", "")) != "spice_geocentric_moon_sun_vectors":
+        raise ValueError("unsupported SPICE cache_type")
+    metadata = cache.get("metadata")
+    if not isinstance(metadata, dict):
+        raise ValueError("SPICE cache missing metadata")
+    spice = cache.get("spice")
+    if not isinstance(spice, dict) or not spice.get("spiceypy_version") or not spice.get("cspice_toolkit_version"):
+        raise ValueError("SPICE cache missing SpiceyPy/CSPICE version metadata")
+    kernels = cache.get("kernels")
+    if not isinstance(kernels, dict):
+        raise ValueError("SPICE cache missing kernels")
+    for key in ("lsk", "spk", "gm"):
+        kernel = kernels.get(key)
+        if not isinstance(kernel, dict):
+            raise ValueError(f"SPICE cache missing kernel metadata for {key}")
+        if not kernel.get("url") or not kernel.get("sha256"):
+            raise ValueError(f"SPICE cache kernel {key} missing URL or SHA-256")
+    bodies = cache.get("bodies")
+    if not isinstance(bodies, dict):
+        raise ValueError("SPICE cache missing bodies")
+    expected = {
+        "moon_geocentric": "MOON",
+        "sun_geocentric": "SUN",
+    }
+    for body, target in expected.items():
+        body_data = bodies.get(body)
+        if not isinstance(body_data, dict):
+            raise ValueError(f"SPICE cache missing body {body}")
+        if str(body_data.get("target", "")).upper() != target:
+            raise ValueError(f"SPICE cache {body} has unexpected target")
+        if str(body_data.get("observer", "")).upper() != "EARTH":
+            raise ValueError(f"SPICE cache {body} must use EARTH observer")
+        if str(body_data.get("frame", "")).upper() != "J2000":
+            raise ValueError(f"SPICE cache {body} must use J2000 frame")
+        if str(body_data.get("aberration_correction", "")).upper() != "NONE":
+            raise ValueError(f"SPICE cache {body} must use geometric/no-aberration states")
+    moon = samples_from_spice_cache(cache, "moon_geocentric")
+    sun = samples_from_spice_cache(cache, "sun_geocentric")
+    if len(moon) != len(sun):
+        raise ValueError("Moon/Sun SPICE caches have different sample counts")
+    if len(moon) < 2:
+        raise ValueError("SPICE cache requires at least two samples")
+    moon_jd = np.asarray([sample.jd_tdb for sample in moon], dtype=float)
+    sun_jd = np.asarray([sample.jd_tdb for sample in sun], dtype=float)
+    if not np.allclose(moon_jd, sun_jd, rtol=0.0, atol=5.0e-10):
+        raise ValueError("Moon/Sun SPICE caches have different JD grids")
+    if np.any(np.diff(moon_jd) <= 0.0):
+        raise ValueError("SPICE cache JD grid must be strictly increasing")
 
 
 def _metadata_float(metadata: dict[str, object], key: str) -> float:
@@ -399,6 +477,75 @@ def validate_horizons_cache_compatibility(
             expected_tlist = "\n".join(f"{float(jd):.9f}" for jd in expected_jds)
             if str(request_params["TLIST"]) != expected_tlist:
                 raise ValueError(f"Horizons cache request TLIST mismatch for {body}")
+
+
+def validate_spice_cache_compatibility(
+    cache: dict[str, object],
+    *,
+    start_jd_tdb: float,
+    tf: float,
+    n_segments: int,
+    canonical_time_unit_seconds: float = DEFAULT_CANONICAL_TIME_UNIT_SECONDS,
+    reference_distance_km: float = DEFAULT_REFERENCE_DISTANCE_KM,
+) -> None:
+    """Validate that a SPICE-derived vector cache matches the active replay grid."""
+
+    metadata = cache.get("metadata")
+    if not isinstance(metadata, dict):
+        raise ValueError("SPICE cache missing metadata")
+
+    expected_nodes = canonical_node_times(float(tf), int(n_segments))
+    expected_jds = np.asarray(
+        canonical_node_jds(
+            start_jd_tdb=float(start_jd_tdb),
+            tf=float(tf),
+            n_segments=int(n_segments),
+            canonical_time_unit_seconds=float(canonical_time_unit_seconds),
+        ),
+        dtype=float,
+    )
+
+    _require_close("start_jd_tdb", _metadata_float(metadata, "start_jd_tdb"), float(start_jd_tdb), atol=5.0e-10)
+    _require_close(
+        "canonical_transfer_time",
+        _metadata_float(metadata, "canonical_transfer_time"),
+        float(tf),
+        atol=1.0e-12,
+    )
+    actual_segments = _metadata_int(metadata, "segments")
+    if actual_segments != int(n_segments):
+        raise ValueError(
+            f"SPICE cache metadata mismatch for segments: expected {int(n_segments)}, got {actual_segments}"
+        )
+    _require_close(
+        "canonical_time_unit_seconds",
+        _metadata_float(metadata, "canonical_time_unit_seconds"),
+        float(canonical_time_unit_seconds),
+        atol=1.0e-9,
+    )
+    _require_close(
+        "reference_distance_km",
+        _metadata_float(metadata, "reference_distance_km"),
+        float(reference_distance_km),
+        atol=1.0e-9,
+    )
+    _require_allclose(
+        "canonical_node_times",
+        _metadata_float_array(metadata, "canonical_node_times"),
+        expected_nodes,
+        atol=1.0e-12,
+    )
+    _require_allclose(
+        "node_jd_tdb",
+        _metadata_float_array(metadata, "node_jd_tdb"),
+        expected_jds,
+        atol=5.0e-10,
+    )
+
+    for body in ("moon_geocentric", "sun_geocentric"):
+        samples = samples_from_spice_cache(cache, body)
+        sample_jds = np.asarray([sample.jd_tdb for sample in samples], dtype=float)
+        _require_allclose(f"{body} sample JD grid", sample_jds, expected_jds, atol=1.0e-9)
 
 
 def rotating_basis_from_moon(sample: HorizonsVectorSample) -> np.ndarray:
@@ -617,6 +764,35 @@ def horizons_point_mass_profile_from_cache(cache: dict[str, object]) -> Horizons
     sun_jd = np.asarray([sample.jd_tdb for sample in sun_samples], dtype=float)
     if not np.allclose(moon_jd, sun_jd, rtol=0.0, atol=5.0e-10):
         raise ValueError("Moon/Sun Horizons caches have different JD grids")
+    return HorizonsPointMassProfile(
+        canonical_time=np.asarray(canonical_times, dtype=float),
+        jd_tdb=moon_jd,
+        moon_position_km=np.asarray([sample.position_km for sample in moon_samples], dtype=float),
+        moon_velocity_km_s=np.asarray([sample.velocity_km_s for sample in moon_samples], dtype=float),
+        sun_position_km=np.asarray([sample.position_km for sample in sun_samples], dtype=float),
+        sun_velocity_km_s=np.asarray([sample.velocity_km_s for sample in sun_samples], dtype=float),
+    )
+
+
+def spice_point_mass_profile_from_cache(cache: dict[str, object]) -> HorizonsPointMassProfile:
+    """Build an interpolatable Moon/Sun geocentric profile from a SPICE-derived cache."""
+
+    metadata = cache.get("metadata")
+    if not isinstance(metadata, dict):
+        raise ValueError("SPICE cache missing metadata")
+    canonical_times = _metadata_float_array(metadata, "canonical_node_times")
+    moon_samples = samples_from_spice_cache(cache, "moon_geocentric")
+    sun_samples = samples_from_spice_cache(cache, "sun_geocentric")
+    if len(moon_samples) != len(sun_samples):
+        raise ValueError("Moon/Sun SPICE caches have different sample counts")
+    if canonical_times.shape != (len(moon_samples),):
+        raise ValueError("SPICE cache canonical_node_times length does not match Moon/Sun sample count")
+    if np.any(np.diff(canonical_times) <= 0.0):
+        raise ValueError("SPICE cache canonical_node_times must be strictly increasing")
+    moon_jd = np.asarray([sample.jd_tdb for sample in moon_samples], dtype=float)
+    sun_jd = np.asarray([sample.jd_tdb for sample in sun_samples], dtype=float)
+    if not np.allclose(moon_jd, sun_jd, rtol=0.0, atol=5.0e-10):
+        raise ValueError("Moon/Sun SPICE caches have different JD grids")
     return HorizonsPointMassProfile(
         canonical_time=np.asarray(canonical_times, dtype=float),
         jd_tdb=moon_jd,

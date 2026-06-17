@@ -29,6 +29,9 @@ EXCLUDED_SUFFIXES = {
     ".spl",
     ".synctex.gz",
     ".toc",
+    ".bsp",
+    ".tls",
+    ".tpc",
 }
 
 

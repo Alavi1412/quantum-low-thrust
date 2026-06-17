@@ -129,6 +129,20 @@ INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA = (
     / "independent_hs_horizons_multi_epoch_point_mass_retuning"
     / "independent_hs_horizons_multi_epoch_point_mass_retuning_metadata.json"
 )
+INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_spice_ephemeris_replay"
+    / "independent_hs_spice_ephemeris_replay.csv"
+)
+INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_spice_ephemeris_replay"
+    / "independent_hs_spice_ephemeris_replay_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -264,6 +278,16 @@ def independent_hs_horizons_multi_epoch_point_mass_retuning_artifacts_available(
         for path in (
             INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_CSV,
             INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA,
+        )
+    )
+
+
+def independent_hs_spice_ephemeris_replay_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV,
+            INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA,
         )
     )
 
@@ -1301,6 +1325,97 @@ def _independent_hs_horizons_multi_epoch_point_mass_retuning_ledger_row() -> dic
     }
 
 
+def _independent_hs_spice_ephemeris_replay_ledger_row() -> dict[str, str]:
+    metadata = _read_json(INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA)
+    rows = _read_csv_rows(INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV)
+    if int(metadata["row_count"]) != len(rows):
+        raise RuntimeError("independent-HS SPICE replay metadata row_count does not match CSV")
+    for flag_name in (
+        "retuning",
+        "optimization_rerun",
+        "high_fidelity_validation",
+        "high_fidelity_flight_validation",
+        "production_solver_parity_claim",
+        "fuel_optimality_claim",
+        "doi_claim",
+        "quantum_advantage_claim",
+    ):
+        if bool(metadata[flag_name]):  # type: ignore[index]
+            raise RuntimeError(f"independent-HS SPICE replay metadata must not claim {flag_name}")
+    if not bool(metadata["spice_ephemeris_validation"]):  # type: ignore[index]
+        raise RuntimeError("independent-HS SPICE replay metadata must disclose spice_ephemeris_validation=true")
+    summary = metadata["overall_summary"]  # type: ignore[index]
+    epochs = list(metadata["epochs"])  # type: ignore[index]
+    epoch_labels = ", ".join(str(epoch["epoch_label"]) for epoch in epochs)  # type: ignore[index]
+    cache_sources = "; ".join(str(epoch["cache_path"]) for epoch in epochs)  # type: ignore[index]
+    kernel_hashes = metadata["kernel_sha256_by_epoch"]["2026jan01"]  # type: ignore[index]
+    epoch_count = int(summary["epoch_count"])  # type: ignore[index]
+    branch_count = int(summary["branch_row_count_total"])  # type: ignore[index]
+    branch_pass = int(summary["branch_spice_replay_pass_count_total"])  # type: ignore[index]
+    nominal_pass = int(summary["nominal_spice_replay_pass_count_total"])  # type: ignore[index]
+    nominal_count = int(summary["nominal_row_count"])  # type: ignore[index]
+    spice_nominal = str(summary["nominal_spice_replay_worst_over_epochs"])  # type: ignore[index]
+    spice_branch = str(summary["branch_spice_replay_worst_over_epochs"])  # type: ignore[index]
+    source_nominal = str(summary["source_horizons_retuned_nominal_worst_over_epochs"])  # type: ignore[index]
+    source_branch = str(summary["source_horizons_retuned_branch_worst_over_epochs"])  # type: ignore[index]
+    max_delta = str(summary["max_abs_delta_from_horizons_retuned"])  # type: ignore[index]
+    return {
+        "claim_id": "phase_shift_independent_hs_spice_ephemeris_replay",
+        "evidence_family": "independent-HS SPICE-derived ephemeris replay",
+        "target_family": "halo phase-shift",
+        "target_mode": "catalog_halo_phase_shift",
+        "source_case": "ihs_all_single_p04_amax02_polish_from_p04",
+        "backend_or_method": (
+            "recorded replay of cached-Horizons-retuned endpoint-plus-midpoint controls under "
+            "SPICE-derived Moon/Sun geometric J2000 vectors"
+        ),
+        "mask_scope": (
+            f"{epoch_count} fixed 2026 epochs ({epoch_labels}); {nominal_count} nominal and "
+            f"{branch_count} already-retuned branch controls replayed without retuning"
+        ),
+        "selected_branch_semantics": (
+            "replays the existing multi-epoch Horizons-retuned controls; no optimizer or retuning run occurs"
+        ),
+        "all_mask_semantics": (
+            "all eight configured one-segment masks are replayed at each epoch under the same normalized "
+            "target/scales/threshold semantics"
+        ),
+        "all_configured_mask_evidence": "True",
+        "nominal_error": (
+            f"SPICE replay worst nominal={spice_nominal}; Horizons-retuned source worst nominal="
+            f"{source_nominal}; max delta={max_delta}"
+        ),
+        "selected_worst_error": (
+            f"SPICE replay branch worst={spice_branch}; branch pass count={branch_pass}/{branch_count}; "
+            f"Horizons-retuned source branch worst={source_branch}; max delta={max_delta}"
+        ),
+        "all_mask_worst_error": f"SPICE replay all-mask branch worst={spice_branch}",
+        "thresholds": (
+            "source nominal<=0.09; source branch<=0.17; "
+            f"kernels lsk={str(kernel_hashes['lsk'])[:12]}, spk={str(kernel_hashes['spk'])[:12]}, "
+            f"gm={str(kernel_hashes['gm'])[:12]}"
+        ),
+        "passes_configured_thresholds": str(
+            bool(nominal_pass == nominal_count and branch_pass == branch_count and float(spice_nominal) <= 0.09)
+        ),
+        "primary_interpretation": (
+            "The existing multi-epoch point-mass retuned controls replay under SPICE-derived geometric "
+            f"Moon/Sun vectors with branch pass count {branch_pass}/{branch_count} and max error delta "
+            f"{max_delta} relative to the Horizons-retuned replay."
+        ),
+        "explicit_boundary": (
+            "SPICE-derived ephemeris replay under the paper Earth/Moon/Sun point-mass model only; no "
+            "retuning or optimization rerun, not full high-fidelity/flight validation, not production "
+            "solver parity, not fuel optimality, not DOI evidence, and not quantum, QUBO, or QAOA evidence."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV)}; "
+            f"{_relative_or_absolute(INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA)}; "
+            f"{cache_sources}"
+        ),
+    }
+
+
 def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
     metadata = _read_json(BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA)
     rows = _read_csv_rows(BICIRCULAR_SOLAR_TIDAL_STRESS_CSV)
@@ -1535,6 +1650,7 @@ def build_claim_evidence_ledger(
     include_independent_hs_horizons_solar_tidal_replay: bool | None = None,
     include_independent_hs_horizons_point_mass_retuning: bool | None = None,
     include_independent_hs_horizons_multi_epoch_point_mass_retuning: bool | None = None,
+    include_independent_hs_spice_ephemeris_replay: bool | None = None,
     include_branch_control_replay: bool | None = None,
     include_bicircular_solar_tidal_stress: bool | None = None,
     include_bicircular_tail_coast_recovery: bool | None = None,
@@ -1556,6 +1672,8 @@ def build_claim_evidence_ledger(
         include_independent_hs_horizons_multi_epoch_point_mass_retuning = (
             independent_hs_horizons_multi_epoch_point_mass_retuning_artifacts_available()
         )
+    if include_independent_hs_spice_ephemeris_replay is None:
+        include_independent_hs_spice_ephemeris_replay = independent_hs_spice_ephemeris_replay_artifacts_available()
     if include_branch_control_replay is None:
         include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
     if include_bicircular_solar_tidal_stress is None:
@@ -1592,6 +1710,9 @@ def build_claim_evidence_ledger(
         ihs_insert_at += 1
     if include_independent_hs_horizons_multi_epoch_point_mass_retuning:
         rows.insert(ihs_insert_at, _independent_hs_horizons_multi_epoch_point_mass_retuning_ledger_row())
+        ihs_insert_at += 1
+    if include_independent_hs_spice_ephemeris_replay:
+        rows.insert(ihs_insert_at, _independent_hs_spice_ephemeris_replay_ledger_row())
     tail_insert_at = next(
         index
         for index, row in enumerate(rows)
@@ -1849,6 +1970,13 @@ def _input_artifacts() -> list[Path]:
                 INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA,
             ]
         )
+    if independent_hs_spice_ephemeris_replay_artifacts_available():
+        paths.extend(
+            [
+                INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV,
+                INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA,
+            ]
+        )
     if bicircular_solar_tidal_stress_artifacts_available():
         paths.extend(
             [
@@ -1887,6 +2015,7 @@ def write_artifacts(
     ihs_multi_epoch_point_mass_retuning_available = (
         independent_hs_horizons_multi_epoch_point_mass_retuning_artifacts_available()
     )
+    ihs_spice_replay_available = independent_hs_spice_ephemeris_replay_artifacts_available()
     branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
     bicircular_stress_available = bicircular_solar_tidal_stress_artifacts_available()
     bicircular_retuned_available = bicircular_tail_coast_recovery_artifacts_available()
@@ -1899,6 +2028,7 @@ def write_artifacts(
         include_independent_hs_horizons_multi_epoch_point_mass_retuning=(
             ihs_multi_epoch_point_mass_retuning_available
         ),
+        include_independent_hs_spice_ephemeris_replay=ihs_spice_replay_available,
         include_branch_control_replay=branch_control_replay_available,
         include_bicircular_solar_tidal_stress=bicircular_stress_available,
         include_bicircular_tail_coast_recovery=bicircular_retuned_available,
@@ -1936,6 +2066,7 @@ def write_artifacts(
         "independent_hs_horizons_solar_tidal_replay_probe": ihs_horizons_replay_available,
         "independent_hs_horizons_point_mass_retuning": ihs_point_mass_retuning_available,
         "independent_hs_horizons_multi_epoch_point_mass_retuning": ihs_multi_epoch_point_mass_retuning_available,
+        "independent_hs_spice_ephemeris_replay": ihs_spice_replay_available,
         "branch_control_replay": branch_control_replay_available,
         "bicircular_solar_tidal_stress_probe": bicircular_stress_available,
         "bicircular_tail_coast_retuned_recovery": bicircular_retuned_available,
@@ -1969,6 +2100,11 @@ def write_artifacts(
                 " An independent-HS multi-epoch cached-Horizons point-mass retuning row is included because its aggregate CSV and metadata exist."
                 if ihs_multi_epoch_point_mass_retuning_available
                 else " No independent-HS multi-epoch cached-Horizons point-mass retuning row is included because that package is absent."
+            )
+            + (
+                " An independent-HS SPICE-derived ephemeris replay row is included because its CSV and metadata exist."
+                if ihs_spice_replay_available
+                else " No independent-HS SPICE-derived ephemeris replay row is included because that package is absent."
             )
             + (
                 " A branch-control replay ledger row is included because the focused replay package is present."
@@ -2015,6 +2151,7 @@ def write_artifacts(
         "independent_hs_horizons_multi_epoch_point_mass_retuning_artifacts_available": (
             ihs_multi_epoch_point_mass_retuning_available
         ),
+        "independent_hs_spice_ephemeris_replay_artifacts_available": ihs_spice_replay_available,
         "branch_control_replay_artifacts_available": branch_control_replay_available,
         "bicircular_solar_tidal_stress_artifacts_available": bicircular_stress_available,
         "bicircular_tail_coast_recovery_artifacts_available": bicircular_retuned_available,
@@ -2072,6 +2209,12 @@ def write_artifacts(
                 "extends that stress/retuning check across four fixed 2026 representative epochs; it "
                 "is not SPICE/full high-fidelity/flight validation, production solver parity, fuel "
                 "optimality, DOI evidence, or quantum evidence."
+            ),
+            (
+                "The independent-HS SPICE-derived ephemeris replay row, when present, replays the "
+                "already-retuned controls under compact SPICE-derived Moon/Sun geometric J2000 vectors "
+                "using the same point-mass stress propagation; it is not full high-fidelity/flight "
+                "validation or production solver parity."
             ),
             (
                 "The historical tail-coast branch audit summarizes recorded branch_results JSON only; "

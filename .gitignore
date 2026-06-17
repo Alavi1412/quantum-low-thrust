@@ -5,6 +5,11 @@ __pycache__/
 
 /logs/
 
+/data/cache/spice/kernels/
+*.bsp
+*.tls
+*.tpc
+
 paper/*.aux
 paper/*.bbl
 paper/*.blg

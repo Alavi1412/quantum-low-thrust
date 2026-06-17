@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-17T13:11:02Z",
+  "generated_utc": "2026-06-17T14:31:28Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "77a3e84eb039e66bf26814b1789b0342054fddf5",
+  "git_head_at_generation": "c17a964fd179da6d6c9350447a26a166796201ca",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/evidence_synthesis/evidence_synthesis.csv\n M data/results/evidence_synthesis/evidence_synthesis_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_evidence_synthesis.py\n M scripts/run_independent_hs_horizons_point_mass_retuning.py\n M scripts/verify_submission_snapshot.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tables/evidence_synthesis/evidence_synthesis_table.tex\n M tables/evidence_synthesis/practitioner_lessons_table.tex\n M tests/test_claim_evidence_ledger.py\n M tests/test_evidence_synthesis.py\n?? data/cache/horizons/independent_hs_phase_shift_2026apr01_vectors.json\n?? data/cache/horizons/independent_hs_phase_shift_2026jul01_vectors.json\n?? data/cache/horizons/independent_hs_phase_shift_2026oct01_vectors.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/independent_hs_horizons_point_mass_retuned_control_manifest.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/independent_hs_horizons_point_mass_retuning.csv\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/independent_hs_horizons_point_mass_retuning_metadata.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/independent_hs_horizons_point_mass_retuned_control_manifest.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/independent_hs_horizons_point_mass_retuning.csv\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/independent_hs_horizons_point_mass_retuning_metadata.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/independent_hs_horizons_point_mass_retuned_control_manifest.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/independent_hs_horizons_point_mass_retuning.csv\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/independent_hs_horizons_point_mass_retuning_metadata.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/independent_hs_horizons_point_mass_retuned_control_manifest.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/independent_hs_horizons_point_mass_retuning.csv\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/independent_hs_horizons_point_mass_retuning_metadata.json\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning.csv\n?? data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning_metadata.json\n?? scripts/run_independent_hs_horizons_multi_epoch_point_mass_retuning.py\n?? tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/independent_hs_horizons_point_mass_retuning_table.tex\n?? tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/independent_hs_horizons_point_mass_retuning_table.tex\n?? tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/independent_hs_horizons_point_mass_retuning_table.tex\n?? tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/independent_hs_horizons_point_mass_retuning_table.tex\n?? tables/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning_table.tex\n?? tests/test_independent_hs_horizons_multi_epoch_point_mass_retuning.py",
+  "working_tree_status_at_generation": "M .gitignore\n M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/evidence_synthesis/evidence_synthesis.csv\n M data/results/evidence_synthesis/evidence_synthesis_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M requirements-lock.txt\n M requirements.txt\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_evidence_synthesis.py\n M scripts/verify_submission_snapshot.py\n M scripts/write_artifact_manifest.py\n M src/qlt/ephemeris_contrast.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tables/evidence_synthesis/evidence_synthesis_table.tex\n M tables/evidence_synthesis/practitioner_lessons_table.tex\n M tests/test_claim_evidence_ledger.py\n M tests/test_evidence_synthesis.py\n?? data/cache/spice/independent_hs_phase_shift_2026apr01_spice_vectors.json\n?? data/cache/spice/independent_hs_phase_shift_2026jan01_spice_vectors.json\n?? data/cache/spice/independent_hs_phase_shift_2026jul01_spice_vectors.json\n?? data/cache/spice/independent_hs_phase_shift_2026oct01_spice_vectors.json\n?? data/results/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay.csv\n?? data/results/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_metadata.json\n?? scripts/run_independent_hs_spice_ephemeris_replay.py\n?? tables/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_table.tex\n?? tests/test_independent_hs_spice_ephemeris_replay.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -19,44 +19,47 @@
       ".aux",
       ".bbl",
       ".blg",
+      ".bsp",
       ".fdb_latexmk",
       ".fls",
       ".log",
       ".out",
       ".spl",
       ".synctex.gz",
-      ".toc"
+      ".tls",
+      ".toc",
+      ".tpc"
     ],
     "explicit": [
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 766,
+  "file_count": 775,
   "files": [
     {
       "path": ".gitignore",
-      "sha256": "754e04a6a1cda089a44cc25b363d63625d1fd6c07f06ac0061a4246994aa453c",
-      "bytes": 186
+      "sha256": "ad2f96360a9bd53d772cd730d97ba91125a0de392ff82b0e2308d61538667c48",
+      "bytes": 225
     },
     {
       "path": "ARCHIVAL_RELEASE.md",
-      "sha256": "d7bca087df539ca3c9f2504bad51d17564e72aa6e65c87086ffa45ab56fcaf99",
-      "bytes": 5049
+      "sha256": "dacadee01b88961f10d087dd437b5700fd81bafd1c7ac7d2f02f9f81f6fbdeff",
+      "bytes": 5794
     },
     {
       "path": "CITATION.cff",
-      "sha256": "d48f12ad9798d74b015fd965ab276c3b3fba17492d21e189b7edc7a2712f4575",
-      "bytes": 1021
+      "sha256": "2afa2cd65864bdc42e4f812ba34017febaa3158f7d75e495065d76cb1eb9df2c",
+      "bytes": 1068
     },
     {
       "path": "README.md",
-      "sha256": "d2f068318afe5b0e2fbd54fc7e0ceba7b77e3926d04d03a048e2ec94e3be8230",
-      "bytes": 37353
+      "sha256": "041d7c564fcbe04add205bd3d4b9a762ddf4f7ced92cebd260781d4fbfe55045",
+      "bytes": 39339
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "feb1d84148550b8b8861a9e567f50b420a1a109e70695792b0f60aa0ce85afb1",
-      "bytes": 55276
+      "sha256": "1f6b2b98a07406286e8a77487ef669a700f591cb937580ea29512b31216c555f",
+      "bytes": 58800
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -222,6 +225,26 @@
       "path": "data/cache/horizons/independent_hs_phase_shift_2026oct01_vectors.json",
       "sha256": "debc9260f74466617648c0c5baabb88445702468607e443428cf8bd70208f93b",
       "bytes": 30294
+    },
+    {
+      "path": "data/cache/spice/independent_hs_phase_shift_2026apr01_spice_vectors.json",
+      "sha256": "2792bd47aeb8f45e95efdf970bbd9feee1a9c594e286b1828b790a3054ec812a",
+      "bytes": 13366
+    },
+    {
+      "path": "data/cache/spice/independent_hs_phase_shift_2026jan01_spice_vectors.json",
+      "sha256": "fd785770a77c69682bddc7d33e17395694ab6857adeb9ffc334bf141f864a0af",
+      "bytes": 13382
+    },
+    {
+      "path": "data/cache/spice/independent_hs_phase_shift_2026jul01_spice_vectors.json",
+      "sha256": "1e5631b4574deda84d98d46e231a4058d6e4032b2e271b7e08a6cc3e191b68ed",
+      "bytes": 13371
+    },
+    {
+      "path": "data/cache/spice/independent_hs_phase_shift_2026oct01_spice_vectors.json",
+      "sha256": "47e79d632c98916bb2ca5c7b019d2f934a9d70b57f2e981ccbeccf75f8b5eccd",
+      "bytes": 13398
     },
     {
       "path": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv",
@@ -470,13 +493,13 @@
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
-      "sha256": "1a361a9cfb8e450cde7ecee234b863922003a8091ff7c06ea7a8a58a52027281",
-      "bytes": 26778
+      "sha256": "af1d3fc0d6a15f4e6e64544278e14947115368ef8e393daf213fbd41776b3ef6",
+      "bytes": 28923
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
-      "sha256": "89fbe9db040c5e876f911c4c407f6940d9d6afeb5fb93e88c84c0cd16ac6eb30",
-      "bytes": 15628
+      "sha256": "707b442bf8dfaa8112a5a237ee6e739af6da94d59cdd7956b3cc549758b395db",
+      "bytes": 16680
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
@@ -570,13 +593,13 @@
     },
     {
       "path": "data/results/evidence_synthesis/evidence_synthesis.csv",
-      "sha256": "da4bc0d90b55f44879dbc1bff8575ace3b7d3c42dd701048cd71b0e68245d9e1",
-      "bytes": 10805
+      "sha256": "e62450894c820e29cf12eec13509eb6600f3c240dc6d82308523ccd7fc8bcc38",
+      "bytes": 11835
     },
     {
       "path": "data/results/evidence_synthesis/evidence_synthesis_metadata.json",
-      "sha256": "7df5cb5f8eec2939a9870ff6eb4af39ea1414e2a30a273f6aca40b71f3b68f1f",
-      "bytes": 8989
+      "sha256": "66c7a6850f94e86912f701e8d37729fdd8a6495684019d79216a823f01e3db2a",
+      "bytes": 9799
     },
     {
       "path": "data/results/feasibility_metadata.json",
@@ -1327,6 +1350,16 @@
       "path": "data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_metadata.json",
       "sha256": "4f9914dfc8f30ada394d65f66666eeb816aa08ae2fb7798b266c349f8ba7686c",
       "bytes": 15924
+    },
+    {
+      "path": "data/results/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay.csv",
+      "sha256": "2f9b9074dc3e3c21c24eb036d5f947c5e946200cea840954286e3c9d5c7a1ef4",
+      "bytes": 41843
+    },
+    {
+      "path": "data/results/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_metadata.json",
+      "sha256": "23746e4f7ec5674b040910b1b6475bd780015ee94d4c7fd4d204565e5a0c3105",
+      "bytes": 22517
     },
     {
       "path": "data/results/multiple_shooting_feasibility.csv",
@@ -3155,13 +3188,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "11ed418a60d0fb81f14f8d36933e0a3fc193bad17395ff30a11d0c4f676c9742",
-      "bytes": 429498
+      "sha256": "e324caae5b62be79a9f1262bb8b208fb4b6b05ea0ec3ddfe8e1bf8d6b6608ab8",
+      "bytes": 432626
     },
     {
       "path": "paper/main.tex",
-      "sha256": "4d9248fccae21b37f47c988b0af874d6d39cd14178cfb93c1ab7070e6d63c1c1",
-      "bytes": 67926
+      "sha256": "138f28d428bc8dabdcc83e3e4ccd9bdd16aee0997625fc07e441e6f0dc569fd2",
+      "bytes": 70747
     },
     {
       "path": "paper/references.bib",
@@ -3170,23 +3203,23 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "1562744b745fae63a8ec206482fbbefbb108ed9bbf40ffb7539e14614b73dd75",
-      "bytes": 529169
+      "sha256": "9813b050db170e7820d1f3de9fa2493f9af6ba2b1ee566ed8f81a37b31559bdc",
+      "bytes": 533725
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "333887b0ddfb0a3ee1d223c4a3534b2b753f13723bb4b0913e92a9b6c5d5f67e",
-      "bytes": 53659
+      "sha256": "0d17fb2b756dbd9a93e8edc0a563ca4901c7c7c8e78f202fc11be4682769338f",
+      "bytes": 57209
     },
     {
       "path": "requirements-lock.txt",
-      "sha256": "f35401149866c1045c645557098cad422388ff9139d2123f4552ab4fbb8665dd",
-      "bytes": 535
+      "sha256": "9368d90b49d542984719db75d62ca68b84a813fcce42bd72b8dd12530e01de21",
+      "bytes": 547
     },
     {
       "path": "requirements.txt",
-      "sha256": "496d504ca369069e1ebe6f46b166ac602821f76c71e8d2a90bad4d28a8fbeacf",
-      "bytes": 82
+      "sha256": "c96843bb3465cf20fcd7479984ac4029e46f0dc133d3fce3bdf83ffd28b456d2",
+      "bytes": 96
     },
     {
       "path": "scripts/generate_tables.py",
@@ -3235,8 +3268,8 @@
     },
     {
       "path": "scripts/run_claim_evidence_ledger.py",
-      "sha256": "a61392442a33f348ae4ad85a0c4f499e1c2a497e290e39283f677ed14d618029",
-      "bytes": 103877
+      "sha256": "4fa5940cf9a8ac079a9b566d578737b0115a1a41a6618165a8de0a24a47ab266",
+      "bytes": 111605
     },
     {
       "path": "scripts/run_continuation_margin_suite.py",
@@ -3255,8 +3288,8 @@
     },
     {
       "path": "scripts/run_evidence_synthesis.py",
-      "sha256": "edef7d0ccab5a718879935c276aae51133b083235f58762fabfd3ec15a4400e1",
-      "bytes": 47478
+      "sha256": "4f14ffa51220b396e9edf753b478674c4bab6df718b7069c1db6dde1d044af25",
+      "bytes": 52196
     },
     {
       "path": "scripts/run_experiment.py",
@@ -3309,6 +3342,11 @@
       "bytes": 38059
     },
     {
+      "path": "scripts/run_independent_hs_spice_ephemeris_replay.py",
+      "sha256": "3acd4d2da31f483f85ef41cd4a8b0a4c914bccc5d2f73d4a651b28528f23f3a0",
+      "bytes": 34636
+    },
+    {
       "path": "scripts/run_locked_nominal_recovery.py",
       "sha256": "cea051a321b2d110f9dc2adc0a33b2e2c9a897faff24bfb4e37fb196178e5e7f",
       "bytes": 29792
@@ -3355,13 +3393,13 @@
     },
     {
       "path": "scripts/verify_submission_snapshot.py",
-      "sha256": "78cc759f1c4bad6239105fad801eea8256cfd3e072d69c89e073fddf419b2f45",
-      "bytes": 8787
+      "sha256": "3b7380c5e27f8fa321a74f6f4f5d5bbdd975eb44b3aabb60b58d12eed2315ed0",
+      "bytes": 9557
     },
     {
       "path": "scripts/write_artifact_manifest.py",
-      "sha256": "c180cee0c65e8706cbf0164429520fe1edb82a548c48bc4b3bef90a43c7d43ca",
-      "bytes": 6672
+      "sha256": "29db8ba40cb6e1cacb318ecc7ca4eb679101de1a3873382777a0fd6e0b626218",
+      "bytes": 6708
     },
     {
       "path": "src/qlt/__init__.py",
@@ -3395,8 +3433,8 @@
     },
     {
       "path": "src/qlt/ephemeris_contrast.py",
-      "sha256": "7cfa312a7090c54de4d13d25e10c8dc80509e443763a695d52ba79e00a97d8e0",
-      "bytes": 47669
+      "sha256": "d3cc155214f8225c924619ae41424d0e0fd0a7be891f4130ae53be3ad4d8200e",
+      "bytes": 55837
     },
     {
       "path": "src/qlt/experiment.py",
@@ -3490,8 +3528,8 @@
     },
     {
       "path": "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
-      "sha256": "691f8d5274e7c1daf5788e554744acec56daa1d9b6640028d903eaaf873cbbc0",
-      "bytes": 10238
+      "sha256": "c6831c1f657afeb2a73e5a63c146560fef62c3ccd01898091dbd6c114c273144",
+      "bytes": 11018
     },
     {
       "path": "tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex",
@@ -3520,13 +3558,13 @@
     },
     {
       "path": "tables/evidence_synthesis/evidence_synthesis_table.tex",
-      "sha256": "06eccdf16d538ffc3500f3871d87524b79d0c1a137fa4bc1cc028f5b61522bb6",
-      "bytes": 6602
+      "sha256": "020a49230b1864702147f76dee818dc76bd15b6d569789200f375a3ec7adeb2f",
+      "bytes": 7292
     },
     {
       "path": "tables/evidence_synthesis/practitioner_lessons_table.tex",
-      "sha256": "78405e22be32d3e31e9e1dac1bef223a0891f938e89bfd9576ba3e42bb07e3e7",
-      "bytes": 5029
+      "sha256": "b407c093d3cdd1b4ea3928562672ac27134ba6225ead8cddd80f94ecc5b5d049",
+      "bytes": 5583
     },
     {
       "path": "tables/feasibility_table.tex",
@@ -3627,6 +3665,11 @@
       "path": "tables/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_table.tex",
       "sha256": "ef6f2312f4d62212bdbcf51a872bfeba8d21917658280a56fd3013086b391fee",
       "bytes": 456
+    },
+    {
+      "path": "tables/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_table.tex",
+      "sha256": "49249b2bf2765842eb330276737716b47dbfe75d46d3cef2d18f76353fda1888",
+      "bytes": 608
     },
     {
       "path": "tables/multiple_shooting_feasibility_table.tex",
@@ -3785,8 +3828,8 @@
     },
     {
       "path": "tests/test_claim_evidence_ledger.py",
-      "sha256": "f750bb402366ef597f7317594c7e3f4c4007b49734ed6f1cf7ba88ba09503a57",
-      "bytes": 30018
+      "sha256": "128248945dd118d47b31372be053b3d547c229419e57b5362f4c55173f781cd8",
+      "bytes": 32790
     },
     {
       "path": "tests/test_delayed_recovery.py",
@@ -3795,8 +3838,8 @@
     },
     {
       "path": "tests/test_evidence_synthesis.py",
-      "sha256": "d988e62f3303e6d5b922258cb67a3d7f9a9f4f77000f336ffcdabec466e01a44",
-      "bytes": 11791
+      "sha256": "18d5b13c351887bcc2379442f1e9a32c83535103f85cf91a223876bf090c1614",
+      "bytes": 13140
     },
     {
       "path": "tests/test_hermite_simpson_continuation.py",
@@ -3837,6 +3880,11 @@
       "path": "tests/test_independent_hs_horizons_solar_tidal_replay.py",
       "sha256": "4a0a7bb0eb7af743104dac90ec476d59b27880dab319b392a682fc877d87e5a9",
       "bytes": 18782
+    },
+    {
+      "path": "tests/test_independent_hs_spice_ephemeris_replay.py",
+      "sha256": "62d76b627db8d392db8b2a45546d2f1280673ec55eb6396fdc45dc41b9ecc5e2",
+      "bytes": 12240
     },
     {
       "path": "tests/test_locked_nominal_recovery.py",

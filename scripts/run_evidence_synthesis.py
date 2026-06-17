@@ -149,6 +149,20 @@ INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA = (
     / "independent_hs_horizons_multi_epoch_point_mass_retuning"
     / "independent_hs_horizons_multi_epoch_point_mass_retuning_metadata.json"
 )
+INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_spice_ephemeris_replay"
+    / "independent_hs_spice_ephemeris_replay.csv"
+)
+INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_spice_ephemeris_replay"
+    / "independent_hs_spice_ephemeris_replay_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -305,6 +319,13 @@ def independent_hs_horizons_multi_epoch_point_mass_retuning_available() -> bool:
     return (
         INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_CSV.is_file()
         and INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA.is_file()
+    )
+
+
+def independent_hs_spice_ephemeris_replay_available() -> bool:
+    return (
+        INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV.is_file()
+        and INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA.is_file()
     )
 
 
@@ -590,6 +611,63 @@ def _independent_hs_horizons_multi_epoch_point_mass_retuning_row() -> dict[str, 
     }
 
 
+def _independent_hs_spice_ephemeris_replay_row() -> dict[str, str]:
+    metadata = json.loads(INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA.read_text(encoding="utf-8"))
+    summary = metadata["overall_summary"]
+    for flag_name in (
+        "retuning",
+        "optimization_rerun",
+        "high_fidelity_validation",
+        "high_fidelity_flight_validation",
+        "production_solver_parity_claim",
+        "fuel_optimality_claim",
+        "doi_claim",
+        "quantum_advantage_claim",
+    ):
+        if bool(metadata[flag_name]):
+            raise RuntimeError(f"SPICE ephemeris replay metadata must not claim {flag_name}")
+    if not bool(metadata["spice_ephemeris_validation"]):
+        raise RuntimeError("SPICE ephemeris replay metadata must set spice_ephemeris_validation=true")
+    nominal_error = str(summary["nominal_spice_replay_worst_over_epochs"])
+    branch_worst = str(summary["branch_spice_replay_worst_over_epochs"])
+    branch_pass = int(summary["branch_spice_replay_pass_count_total"])
+    branch_count = int(summary["branch_row_count_total"])
+    nominal_pass = int(summary["nominal_spice_replay_pass_count_total"])
+    nominal_count = int(summary["nominal_row_count"])
+    max_delta = str(summary["max_abs_delta_from_horizons_retuned"])
+    return {
+        "row_id": "ihs_spice_ephemeris_replay_polish_p04_amax02",
+        "artifact_family": "independent-HS SPICE-derived ephemeris replay",
+        "representative_case_or_statistic": "ihs_all_single_p04_amax02_polish_from_p04 over four 2026 epochs",
+        "target_family": "catalog halo phase-shift",
+        "backend_initializer_role": "already-retuned endpoint-plus-midpoint controls replayed under SPICE-derived vectors",
+        "mask_scope": "4 fixed 2026 epochs; 4 nominal and 32 branch controls replayed with no retuning",
+        "phase_time": "0.4",
+        "transfer_time": "0.5",
+        "amax": "0.2",
+        "segments": "8",
+        "nominal_error": nominal_error,
+        "selected_worst_error": branch_worst,
+        "all_mask_worst_error": branch_worst,
+        "configured_pass": str(bool(float(nominal_error) <= 0.09 and branch_pass == branch_count)),
+        "stringent_0p065_0p10_all_mask_pass": _threshold_pass(nominal_error, branch_worst, STRINGENT_THRESHOLDS),
+        "near_tight_0p05_0p10_all_mask_pass": _threshold_pass(nominal_error, branch_worst, NEAR_TIGHT_THRESHOLDS),
+        "tight_0p05_0p09_all_mask_pass": _threshold_pass(nominal_error, branch_worst, TIGHT_THRESHOLDS),
+        "pass_status_note": (
+            f"SPICE-derived replay: nominal {nominal_pass}/{nominal_count}; branch {branch_pass}/"
+            f"{branch_count}; max Horizons-retuned delta={max_delta}"
+        ),
+        "practitioner_interpretation": (
+            "The multi-epoch point-mass retuned controls replay under SPICE-derived Moon/Sun vectors "
+            "with sub-1e-9 normalized-error deltas relative to the cached-Horizons-retuned replay. "
+            "This strengthens ephemeris-source provenance but remains point-mass stress replay, not "
+            "full high-fidelity/flight validation or production solver parity."
+        ),
+        "source_artifact": _relative_or_absolute(INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV),
+        "source_row_id": "overall_summary in independent-HS SPICE ephemeris replay metadata",
+    }
+
+
 def _threshold_count_row(threshold_rows: list[dict[str, str]]) -> dict[str, str]:
     tight_rows = [
         row
@@ -778,6 +856,11 @@ def build_synthesis() -> pd.DataFrame:
             if independent_hs_horizons_multi_epoch_point_mass_retuning_available()
             else []
         ),
+        *(
+            [_independent_hs_spice_ephemeris_replay_row()]
+            if independent_hs_spice_ephemeris_replay_available()
+            else []
+        ),
         _case_metric_row(
             row_id="tail_coast_hard_catalog_all_one_two",
             artifact_family="hard-catalog tail-coast recovery",
@@ -930,6 +1013,13 @@ def write_artifacts(
                 INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA,
             ]
         )
+    if independent_hs_spice_ephemeris_replay_available():
+        input_artifacts.extend(
+            [
+                INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV,
+                INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA,
+            ]
+        )
     metadata = {
         "command": command,
         "row_count": int(len(synthesis)),
@@ -1009,6 +1099,12 @@ def write_artifacts(
                 "extends that stress/retuning check across four fixed 2026 representative epochs; it "
                 "is not SPICE/full high-fidelity/flight validation, production solver parity, fuel "
                 "optimality, DOI evidence, or quantum evidence."
+            ),
+            (
+                "The independent-HS SPICE-derived ephemeris replay row, when present, replays the "
+                "already-retuned controls under compact SPICE-derived Moon/Sun vectors using the same "
+                "point-mass stress propagation; it is not full high-fidelity/flight validation or "
+                "production solver parity."
             ),
         ],
     }

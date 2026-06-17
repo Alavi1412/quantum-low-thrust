@@ -176,22 +176,24 @@ the independent-HS branch-control replay CSV/metadata, the independent-HS
 simple bicircular phase-sweep stress CSV/metadata, the independent-HS
 cached-Horizons-derived solar-tidal replay CSV/metadata, the independent-HS
 cached-Horizons Earth/Moon/Sun point-mass retuning CSV/metadata, the independent-HS
-multi-epoch cached-Horizons point-mass retuning CSV/metadata, the focused
-tail-coast replay CSV/metadata, focused source recovery CSV, bicircular
-solar-tidal stress CSV/metadata, and Horizons ephemeris force-model contrast
-CSV/metadata, plus the bicircular retuned recovery CSV, summary, and metadata,
-so the ledger has 18
+multi-epoch cached-Horizons point-mass retuning CSV/metadata, the independent-HS
+SPICE-derived ephemeris replay CSV/metadata, the focused tail-coast replay
+CSV/metadata, focused source recovery CSV, bicircular solar-tidal stress
+CSV/metadata, and Horizons ephemeris force-model contrast CSV/metadata, plus
+the bicircular retuned recovery CSV, summary, and metadata, so the ledger has 19
 claim rows. The independent-HS bicircular row is a positive simple stress-probe
 replay for the converged all-configured row; the independent-HS cached-Horizons
 row is a stronger representative-epoch stress replay using cached JPL Horizons
 geometry; the new point-mass row reports that persisted controls fail direct
 Earth/Moon/Sun point-mass replay but independent retuning restores representative
 epoch feasibility, and the multi-epoch point-mass row repeats that stress/retuning
-check over four fixed 2026 cached-Horizons epochs; the hard-catalog solar-tidal row is a negative stress-probe
+check over four fixed 2026 cached-Horizons epochs; the new SPICE replay row
+replays those already-retuned controls under compact SPICE-derived Moon/Sun
+vectors with branch pass count `32/32`; the hard-catalog solar-tidal row is a negative stress-probe
 row, the retuned recovery row is a completed negative simple-bicircular retuning
-row, and the hard-catalog Horizons row is a force-model contrast row. None is
-SPICE/full high-fidelity/flight validation, production solver parity, or quantum
-evidence.
+row, and the hard-catalog Horizons row is a force-model contrast row. The SPICE
+row is a point-mass ephemeris-source replay, not full high-fidelity/flight
+validation, production solver parity, or quantum evidence.
 The tail-coast audit confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
@@ -210,8 +212,9 @@ row, the independent-HS branch-control replay row, the positive independent-HS
 simple bicircular phase-sweep stress row, the independent-HS
 cached-Horizons-derived solar-tidal replay row, the independent-HS
 cached-Horizons point-mass retuning row, the independent-HS multi-epoch
-cached-Horizons point-mass retuning row, and the scoped hard-catalog tail-coast
-row used in the main manuscript claim path.
+cached-Horizons point-mass retuning row, the independent-HS SPICE-derived
+ephemeris replay row, and the scoped hard-catalog tail-coast row used in the
+main manuscript claim path.
 
 The replay/stress validation postprocessor writes
 `data/results/replay_stress_validation/replay_stress_validation.csv`,
@@ -350,6 +353,33 @@ SciPy success is `36/36`, and total `nfev` is `197`. This is a stronger
 representative-epoch set for the point-mass stress concern, not SPICE/full
 high-fidelity/flight validation, production solver parity, fuel optimality, DOI
 evidence, or quantum evidence.
+
+The independent-HS SPICE-derived ephemeris replay postprocessor writes
+`data/results/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay.csv`,
+`data/results/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_metadata.json`,
+compact vector caches under `data/cache/spice/`, and
+`tables/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_table.tex`:
+
+```powershell
+py -3.11 scripts\run_independent_hs_spice_ephemeris_replay.py
+```
+
+The default path is offline from four committed compact SPICE-derived vector
+caches. Use `--refresh-spice-cache` only when intentionally downloading NAIF
+kernels and regenerating those caches; raw `*.bsp`, `*.tls`, and `*.tpc`
+kernels are ignored and removed by the default refresh path. The cache metadata
+records `naif0012.tls`, `de442s.bsp`, `gm_de440.tpc`, kernel SHA-256 values,
+SpiceyPy `8.1.2`, CSPICE `CSPICE_N0067`, J2000 frame, Earth observer, Moon/Sun
+targets, `NONE` aberration correction, and the canonical node JD_TDB grid. The
+replay reads the 36 controls already retuned by the multi-epoch
+cached-Horizons point-mass package and does not rerun optimization or retuning.
+Across 4 nominal and 32 branch rows, all SPICE-derived point-mass replays pass:
+worst nominal/branch errors are `0.021439441253166033`/`0.024730650824609506`,
+branch pass is `32/32`, and the maximum absolute delta from the Horizons-retuned
+replay is `3.2763991519857427e-10`. This is SPICE-derived ephemeris replay under
+the same Earth/Moon/Sun point-mass stress model, not full high-fidelity/flight
+validation, production solver parity, fuel optimality, DOI evidence, or quantum
+evidence.
 
 The Horizons ephemeris force-model contrast postprocessor writes
 `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,

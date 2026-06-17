@@ -1,0 +1,415 @@
+{
+  "bodies": {
+    "moon_geocentric": {
+      "aberration_correction": "NONE",
+      "frame": "J2000",
+      "observer": "EARTH",
+      "samples": [
+        {
+          "calendar_tdb": "2026-JAN-01 00:00:00.000 TDB",
+          "jd_tdb": 2461041.5,
+          "light_time_s": 1.2042531468009128,
+          "position_km": [
+            144325.7300231461,
+            289584.15658799215,
+            160158.9225650358
+          ],
+          "range_km": 361026.01093368046,
+          "range_rate_km_s": -0.017006465843619624,
+          "velocity_km_s": [
+            -1.0043141345418356,
+            0.38391461631609003,
+            0.17253490037555821
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-01 06:30:49.391 TDB",
+          "jd_tdb": 2461041.7714049905,
+          "light_time_s": 1.2031126581404386,
+          "position_km": [
+            120449.82442107103,
+            297902.52030620165,
+            163825.9714802691
+          ],
+          "range_km": 360684.10103483585,
+          "range_rate_km_s": -0.012120035630035476,
+          "velocity_km_s": [
+            -1.0312724569157,
+            0.3252558130368412,
+            0.1400910707549167
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-01 13:01:38.782 TDB",
+          "jd_tdb": 2461042.0428099814,
+          "light_time_s": 1.202362128073503,
+          "position_km": [
+            95998.06332568132,
+            304825.30954596563,
+            166723.3147199551
+          ],
+          "range_km": 360459.09778126626,
+          "range_rate_km_s": -0.0070416039437967625,
+          "velocity_km_s": [
+            -1.0534016489427909,
+            0.26494099073727834,
+            0.10691719100660343
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-01 19:32:28.173 TDB",
+          "jd_tdb": 2461042.314214972,
+          "light_time_s": 1.202015092852064,
+          "position_km": [
+            71085.46272469532,
+            310317.62352062145,
+            168836.0099061526
+          ],
+          "range_km": 360355.0592392185,
+          "range_rate_km_s": -0.0018096489299896682,
+          "velocity_km_s": [
+            -1.0705563122909396,
+            0.20330802912710405,
+            0.07320008480514127
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-02 02:03:17.564 TDB",
+          "jd_tdb": 2461042.5856199623,
+          "light_time_s": 1.2020819485804015,
+          "position_km": [
+            45830.01288681442,
+            314352.64772822015,
+            170153.56883096744
+          ],
+          "range_km": 360375.10208234814,
+          "range_rate_km_s": 0.003534115397152955,
+          "velocity_km_s": [
+            -1.082628527881432,
+            0.14070808167798626,
+            0.03913246483733624
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-02 08:34:06.955 TDB",
+          "jd_tdb": 2461042.857024953,
+          "light_time_s": 1.2025697225536187,
+          "position_km": [
+            20351.776259889324,
+            316911.9185330636,
+            170670.06964381097
+          ],
+          "range_km": 360521.33304072736,
+          "range_rate_km_s": 0.008945378400010976,
+          "velocity_km_s": [
+            -1.0895497376631202,
+            0.07750154350438852,
+            0.004910699285271832
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-02 15:04:56.347 TDB",
+          "jd_tdb": 2461043.1284299437,
+          "light_time_s": 1.2034818977191464,
+          "position_km": [
+            -5228.050681451333,
+            317985.48982960853,
+            170384.21512434707
+          ],
+          "range_km": 360794.79627572745,
+          "range_rate_km_s": 0.014377948764361607,
+          "velocity_km_s": [
+            -1.0912919045721388,
+            0.014053745968904218,
+            -0.029267544427654647
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-02 21:35:45.738 TDB",
+          "jd_tdb": 2461043.399834934,
+          "light_time_s": 1.20481829544579,
+          "position_km": [
+            -30788.09350803925,
+            317571.99671204184,
+            169299.33491980037
+          ],
+          "range_km": 361195.4382350636,
+          "range_rate_km_s": 0.01978452579758447,
+          "velocity_km_s": [
+            -1.0878678969553388,
+            -0.04926949928626177,
+            -0.06320571081895826
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-03 04:06:35.129 TDB",
+          "jd_tdb": 2461043.6712399246,
+          "light_time_s": 1.2065750200331329,
+          "position_km": [
+            -56207.75602155969,
+            315678.61415960605,
+            167423.33127463987
+          ],
+          "range_km": 361722.09101713216,
+          "range_rate_km_s": 0.025117502223487798,
+          "velocity_km_s": [
+            -1.079331075248772,
+            -0.11210637784940752,
+            -0.09671075230338377
+          ]
+        }
+      ],
+      "target": "MOON"
+    },
+    "sun_geocentric": {
+      "aberration_correction": "NONE",
+      "frame": "J2000",
+      "observer": "EARTH",
+      "samples": [
+        {
+          "calendar_tdb": "2026-JAN-01 00:00:00.000 TDB",
+          "jd_tdb": 2461041.5,
+          "light_time_s": 490.6847189833478,
+          "position_km": [
+            26072138.431123447,
+            -132831703.65397546,
+            -57579898.962130114
+          ],
+          "range_km": 147103578.0070571,
+          "range_rate_km_s": -0.03114929620540983,
+          "velocity_km_s": [
+            29.788931166231176,
+            4.951144769624871,
+            2.1461363678310184
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-01 06:30:49.391 TDB",
+          "jd_tdb": 2461041.7714049905,
+          "light_time_s": 490.68240087012646,
+          "position_km": [
+            26770365.312014833,
+            -132714088.60682036,
+            -57528918.19927549
+          ],
+          "range_km": 147102883.05419654,
+          "range_rate_km_s": -0.028118528746366143,
+          "velocity_km_s": [
+            29.76277773796457,
+            5.080227166313673,
+            2.202006139933177
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-01 13:01:38.782 TDB",
+          "jd_tdb": 2461042.0428099814,
+          "light_time_s": 490.68032089188614,
+          "position_km": [
+            27467971.58910571,
+            -132593448.24181132,
+            -57476628.01433044
+          ],
+          "range_km": 147102259.4924073,
+          "range_rate_km_s": -0.025060888766464222,
+          "velocity_km_s": [
+            29.73600016158265,
+            5.209174443254978,
+            2.25781719515242
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-01 19:32:28.173 TDB",
+          "jd_tdb": 2461042.314214972,
+          "light_time_s": 490.67848102049186,
+          "position_km": [
+            28164942.652974702,
+            -132469785.71670045,
+            -57423029.773780555
+          ],
+          "range_km": 147101707.9128396,
+          "range_rate_km_s": -0.021979739695241064,
+          "velocity_km_s": [
+            29.708600828486976,
+            5.337987581610095,
+            2.3135704492113907
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-02 02:03:17.564 TDB",
+          "jd_tdb": 2461042.5856199623,
+          "light_time_s": 490.6768829563958,
+          "position_km": [
+            28861263.948789176,
+            -132343104.16358644,
+            -57368124.82146079
+          ],
+          "range_km": 147101228.8252762,
+          "range_rate_km_s": -0.018878651512769153,
+          "velocity_km_s": [
+            29.68058169254853,
+            5.46666772745459,
+            2.369266890962592
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-02 08:34:06.955 TDB",
+          "jd_tdb": 2461042.857024953,
+          "light_time_s": 490.6755281140046,
+          "position_km": [
+            29556920.96097521,
+            -132213406.68645145,
+            -57311914.47751811
+          ],
+          "range_km": 147100822.6537455,
+          "range_rate_km_s": -0.01576136136642037,
+          "velocity_km_s": [
+            29.651944247402035,
+            5.595216141994793,
+            2.4249075549065817
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-02 15:04:56.347 TDB",
+          "jd_tdb": 2461043.1284299437,
+          "light_time_s": 490.67441761028425,
+          "position_km": [
+            30251899.204640754,
+            -132080696.35862646,
+            -57254400.03748258
+          ],
+          "range_km": 147100489.7331056,
+          "range_rate_km_s": -0.012631729803727799,
+          "velocity_km_s": [
+            29.622689512233357,
+            5.723634149800819,
+            2.480493492798361
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-02 21:35:45.738 TDB",
+          "jd_tdb": 2461043.399834934,
+          "light_time_s": 490.6735522569334,
+          "position_km": [
+            30946184.209591255,
+            -131944976.22286153,
+            -57195582.772605866
+          ],
+          "range_km": 147100230.30669755,
+          "range_rate_km_s": -0.009493693914945724,
+          "velocity_km_s": [
+            29.592818027288047,
+            5.851923083874812,
+            2.536025744007529
+          ]
+        },
+        {
+          "calendar_tdb": "2026-JAN-03 04:06:35.129 TDB",
+          "jd_tdb": 2461043.6712399246,
+          "light_time_s": 490.67293255627993,
+          "position_km": [
+            31639761.516307086,
+            -131806249.29038067,
+            -57135463.929893516
+          ],
+          "range_km": 147100044.52511537,
+          "range_rate_km_s": -0.006351218692484736,
+          "velocity_km_s": [
+            29.562329858568464,
+            5.980084232680677,
+            2.591505307027188
+          ]
+        }
+      ],
+      "target": "SUN"
+    }
+  },
+  "cache_type": "spice_geocentric_moon_sun_vectors",
+  "interpretation_limits": [
+    "SPICE-derived vectors are compact cached geometric states from spkezr target states.",
+    "States are Moon and Sun relative to Earth in J2000 with aberration correction NONE.",
+    "The replay still uses the paper's Earth/Moon/Sun point-mass stress model and normalized CR3BP target/scales.",
+    "This cache is not a full high-fidelity force model, flight-validation product, or production solver parity check."
+  ],
+  "kernels": {
+    "gm": {
+      "bytes": 12406,
+      "filename": "gm_de440.tpc",
+      "sha256": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc"
+    },
+    "lsk": {
+      "bytes": 5257,
+      "filename": "naif0012.tls",
+      "sha256": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls"
+    },
+    "spk": {
+      "bytes": 32701440,
+      "filename": "de442s.bsp",
+      "sha256": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c",
+      "url": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de442s.bsp"
+    }
+  },
+  "metadata": {
+    "aberration_correction": "NONE",
+    "canonical_node_times": [
+      0.0,
+      0.0625,
+      0.125,
+      0.1875,
+      0.25,
+      0.3125,
+      0.375,
+      0.4375,
+      0.5
+    ],
+    "canonical_time_unit_seconds": 375190.259,
+    "canonical_transfer_time": 0.5,
+    "epoch_id": "2026jan01",
+    "epoch_label": "2026-Jan-01",
+    "frame": "J2000",
+    "kernel_sha256": {
+      "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+      "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+    },
+    "kernel_urls": {
+      "gm": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc",
+      "lsk": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls",
+      "spk": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de442s.bsp"
+    },
+    "node_jd_tdb": [
+      2461041.5,
+      2461041.7714049905,
+      2461042.0428099814,
+      2461042.314214972,
+      2461042.5856199623,
+      2461042.857024953,
+      2461043.1284299437,
+      2461043.399834934,
+      2461043.6712399246
+    ],
+    "observer": "EARTH",
+    "reference_distance_km": 384400.0,
+    "representative_epoch_note": "Fixed representative 2026-Jan-01 TDB epoch for independent-HS SPICE-derived Moon/Sun vector replay under the paper point-mass stress model; it is not a mission epoch.",
+    "segments": 8,
+    "source_limitations": [
+      "SPICE-derived vectors are compact cached geometric states from spkezr target states.",
+      "States are Moon and Sun relative to Earth in J2000 with aberration correction NONE.",
+      "The replay still uses the paper's Earth/Moon/Sun point-mass stress model and normalized CR3BP target/scales.",
+      "This cache is not a full high-fidelity force model, flight-validation product, or production solver parity check."
+    ],
+    "spkezr_call": "spkezr(target, et, 'J2000', 'NONE', 'EARTH')",
+    "start_calendar_tdb": "A.D. 2026-Jan-01 00:00:00.0000",
+    "start_jd_tdb": 2461041.5,
+    "targets": [
+      "MOON",
+      "SUN"
+    ]
+  },
+  "schema_version": 1,
+  "spice": {
+    "cspice_toolkit_version": "CSPICE_N0067",
+    "spiceypy_version": "8.1.2"
+  }
+}

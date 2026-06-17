@@ -1,0 +1,401 @@
+{
+  "artifacts": {
+    "independent_hs_spice_ephemeris_replay_csv": "data/results/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay.csv",
+    "independent_hs_spice_ephemeris_replay_metadata_json": "data/results/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_metadata.json",
+    "independent_hs_spice_ephemeris_replay_table_tex": "tables/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_table.tex"
+  },
+  "branch_row_count": 32,
+  "cache_sha256_by_epoch": {
+    "2026apr01": "2792bd47aeb8f45e95efdf970bbd9feee1a9c594e286b1828b790a3054ec812a",
+    "2026jan01": "fd785770a77c69682bddc7d33e17395694ab6857adeb9ffc334bf141f864a0af",
+    "2026jul01": "1e5631b4574deda84d98d46e231a4058d6e4032b2e271b7e08a6cc3e191b68ed",
+    "2026oct01": "47e79d632c98916bb2ca5c7b019d2f934a9d70b57f2e981ccbeccf75f8b5eccd"
+  },
+  "command": "scripts\\run_independent_hs_spice_ephemeris_replay.py",
+  "doi_claim": false,
+  "epochs": [
+    {
+      "branch_row_count": 8,
+      "branch_spice_replay_pass_count": 8,
+      "branch_spice_replay_worst_error": 0.024730650824609506,
+      "cache_path": "data/cache/spice/independent_hs_phase_shift_2026jan01_spice_vectors.json",
+      "cache_sha256": "fd785770a77c69682bddc7d33e17395694ab6857adeb9ffc334bf141f864a0af",
+      "epoch_id": "2026jan01",
+      "epoch_label": "2026-Jan-01",
+      "kernel_sha256": {
+        "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+        "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+        "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+      },
+      "max_abs_delta_from_horizons_retuned": 3.2763991519857427e-10,
+      "nominal_row_count": 1,
+      "nominal_spice_replay_error": 0.021439441253166033,
+      "nominal_spice_replay_pass": true,
+      "row_count": 9,
+      "source_horizons_retuned_branch_worst_error": 0.02473065115224942,
+      "source_horizons_retuned_nominal_error": 0.02143944130524006,
+      "start_calendar_tdb": "A.D. 2026-Jan-01 00:00:00.0000",
+      "start_jd_tdb": 2461041.5
+    },
+    {
+      "branch_row_count": 8,
+      "branch_spice_replay_pass_count": 8,
+      "branch_spice_replay_worst_error": 0.019113822161793408,
+      "cache_path": "data/cache/spice/independent_hs_phase_shift_2026apr01_spice_vectors.json",
+      "cache_sha256": "2792bd47aeb8f45e95efdf970bbd9feee1a9c594e286b1828b790a3054ec812a",
+      "epoch_id": "2026apr01",
+      "epoch_label": "2026-Apr-01",
+      "kernel_sha256": {
+        "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+        "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+        "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+      },
+      "max_abs_delta_from_horizons_retuned": 1.7099113618079809e-10,
+      "nominal_row_count": 1,
+      "nominal_spice_replay_error": 0.010070737089724117,
+      "nominal_spice_replay_pass": true,
+      "row_count": 9,
+      "source_horizons_retuned_branch_worst_error": 0.019113822305659185,
+      "source_horizons_retuned_nominal_error": 0.010070737162601779,
+      "start_calendar_tdb": "A.D. 2026-Apr-01 00:00:00.0000",
+      "start_jd_tdb": 2461131.5
+    },
+    {
+      "branch_row_count": 8,
+      "branch_spice_replay_pass_count": 8,
+      "branch_spice_replay_worst_error": 0.01943923251015841,
+      "cache_path": "data/cache/spice/independent_hs_phase_shift_2026jul01_spice_vectors.json",
+      "cache_sha256": "1e5631b4574deda84d98d46e231a4058d6e4032b2e271b7e08a6cc3e191b68ed",
+      "epoch_id": "2026jul01",
+      "epoch_label": "2026-Jul-01",
+      "kernel_sha256": {
+        "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+        "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+        "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+      },
+      "max_abs_delta_from_horizons_retuned": 1.0466943284326291e-10,
+      "nominal_row_count": 1,
+      "nominal_spice_replay_error": 0.012872158059178554,
+      "nominal_spice_replay_pass": true,
+      "row_count": 9,
+      "source_horizons_retuned_branch_worst_error": 0.019439232590887784,
+      "source_horizons_retuned_nominal_error": 0.012872158163847987,
+      "start_calendar_tdb": "A.D. 2026-Jul-01 00:00:00.0000",
+      "start_jd_tdb": 2461222.5
+    },
+    {
+      "branch_row_count": 8,
+      "branch_spice_replay_pass_count": 8,
+      "branch_spice_replay_worst_error": 0.01801310621864116,
+      "cache_path": "data/cache/spice/independent_hs_phase_shift_2026oct01_spice_vectors.json",
+      "cache_sha256": "47e79d632c98916bb2ca5c7b019d2f934a9d70b57f2e981ccbeccf75f8b5eccd",
+      "epoch_id": "2026oct01",
+      "epoch_label": "2026-Oct-01",
+      "kernel_sha256": {
+        "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+        "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+        "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+      },
+      "max_abs_delta_from_horizons_retuned": 1.0052732084264715e-10,
+      "nominal_row_count": 1,
+      "nominal_spice_replay_error": 0.014430201767565043,
+      "nominal_spice_replay_pass": true,
+      "row_count": 9,
+      "source_horizons_retuned_branch_worst_error": 0.018013106197757842,
+      "source_horizons_retuned_nominal_error": 0.014430201689791956,
+      "start_calendar_tdb": "A.D. 2026-Oct-01 00:00:00.0000",
+      "start_jd_tdb": 2461314.5
+    }
+  ],
+  "fuel_optimality_claim": false,
+  "high_fidelity_flight_validation": false,
+  "high_fidelity_validation": false,
+  "input_artifacts": [
+    {
+      "bytes": 57447,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning.csv",
+      "sha256": "7582d3138306bf58133e356e80b7c578edd63a74b5f2a3ee6f8442e306995c8a"
+    },
+    {
+      "bytes": 14224,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning_metadata.json",
+      "sha256": "640dcc493f85cb649f462a4c84442cb36de610144778b7a0d056e7c8d346e1b7"
+    },
+    {
+      "bytes": 13382,
+      "path": "data/cache/spice/independent_hs_phase_shift_2026jan01_spice_vectors.json",
+      "sha256": "fd785770a77c69682bddc7d33e17395694ab6857adeb9ffc334bf141f864a0af"
+    },
+    {
+      "bytes": 2772,
+      "path": "configs/independent_hs_all_configured_headroom.yaml",
+      "sha256": "15ae12c93e4fad9927066d52bfe7c6c23b146f67cd062b201d2b5dfcf0a5cd49"
+    },
+    {
+      "bytes": 1203,
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf"
+    },
+    {
+      "bytes": 3851,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json",
+      "sha256": "753ec35bb892b76c7ed4ef584317db87a7033b95178ea7623763d996c16bef65"
+    },
+    {
+      "bytes": 3821,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json",
+      "sha256": "d535c68a92aac182fe8365595d9b7d09cdadecdefcb9db161a52f983c049e26c"
+    },
+    {
+      "bytes": 3776,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json",
+      "sha256": "ab753a7ac5f2374cfa86cdebc0c35cab44c78081e37abf930f604ef86e736ab9"
+    },
+    {
+      "bytes": 3790,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json",
+      "sha256": "543a294cf27457349bcadde18ef7dfe25ca1608eaf345f9b735c4bb6b1e89ce6"
+    },
+    {
+      "bytes": 3800,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json",
+      "sha256": "8593f57985c2748337146fbbb691506cddda9a7a04c946cea049335c09b8cafc"
+    },
+    {
+      "bytes": 3775,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json",
+      "sha256": "7f349bfca0a2b8da746d0bccdf6b95d18c9cdc03f0f19fc23f856d5e9e12bc88"
+    },
+    {
+      "bytes": 3813,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json",
+      "sha256": "323936bd7ef5b4b8283642601a212d44c99e7bf9a7e48f077a28f69a8b70656f"
+    },
+    {
+      "bytes": 3805,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json",
+      "sha256": "df9633d7a0d1c5ebb3a43bbc6fa4f7dd94c40e038dcf8276269a4f6a1908b6db"
+    },
+    {
+      "bytes": 3844,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json",
+      "sha256": "219092ea265bbd1b8bec9bc729c8d0fb5e6ea978a66bbee2d908bd2fcc8ba0f0"
+    },
+    {
+      "bytes": 13366,
+      "path": "data/cache/spice/independent_hs_phase_shift_2026apr01_spice_vectors.json",
+      "sha256": "2792bd47aeb8f45e95efdf970bbd9feee1a9c594e286b1828b790a3054ec812a"
+    },
+    {
+      "bytes": 3836,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json",
+      "sha256": "b9295e397dcc2aebec25e5afb0f9ba7f314564626d6b2efd090ac3eb2ab251cd"
+    },
+    {
+      "bytes": 3813,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json",
+      "sha256": "48ccd7bfe13f27a69f20ee1afa6e10ac1e721a18212bcc44afd4e059c3d882bd"
+    },
+    {
+      "bytes": 3848,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json",
+      "sha256": "10da0e192433f1ffe6455cb9daf58dcf0698838ea7744f25e8ff4f9828df58f5"
+    },
+    {
+      "bytes": 3813,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json",
+      "sha256": "9d0d31246f71b1dfb852d21dc9d2ddbde2f5c66e6979e57c89c8e906cf599ed5"
+    },
+    {
+      "bytes": 3778,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json",
+      "sha256": "f1d8854369898a64f0390322e1eebe7c7c55d089b7525dc19513f24314d50c00"
+    },
+    {
+      "bytes": 3820,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json",
+      "sha256": "348335a7a4a0ded5c19c28449747062ecd5f8d3d66174dad1fbc434b070ae72c"
+    },
+    {
+      "bytes": 3814,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json",
+      "sha256": "537592f55f0891f9099b507cde27f77243604ea728a67f1690a44fa65bd9a2e6"
+    },
+    {
+      "bytes": 3814,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json",
+      "sha256": "fc5ec70790b541b149fd8e965506a770560b07f7ad1198a1edad40c1edd40e5e"
+    },
+    {
+      "bytes": 3785,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json",
+      "sha256": "5f68e6ebc434c094dacc67367022b0de27cdb26cb3a25e999d09bbfe665ea097"
+    },
+    {
+      "bytes": 13371,
+      "path": "data/cache/spice/independent_hs_phase_shift_2026jul01_spice_vectors.json",
+      "sha256": "1e5631b4574deda84d98d46e231a4058d6e4032b2e271b7e08a6cc3e191b68ed"
+    },
+    {
+      "bytes": 3845,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json",
+      "sha256": "53c8c287f5192fc9763a32d76567b0e67172a69446f1a7d068cc4cff669c6078"
+    },
+    {
+      "bytes": 3799,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json",
+      "sha256": "d70123c8ee28650322292298e828c46cb91cc636dd2b5355ff732bc23c664e6a"
+    },
+    {
+      "bytes": 3819,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json",
+      "sha256": "7ef8ce96abee1f8bf455a89bf02dfa6d375366752859256196e141bfc5676b5a"
+    },
+    {
+      "bytes": 3769,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json",
+      "sha256": "52e6582a93d5a8bdb7604387c8fc04aefd6da9e55ea44b7af678ed32f03bf147"
+    },
+    {
+      "bytes": 3776,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json",
+      "sha256": "40d92c4bd78be9d4296e3bbe7e28a50c25fc9c143eb11b18bedde1aa35b23668"
+    },
+    {
+      "bytes": 3841,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json",
+      "sha256": "f3f2180b0aeed0d57ff71d9c75c3c7c2488ba514ecfddd04ab4a657d68bdcac7"
+    },
+    {
+      "bytes": 3773,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json",
+      "sha256": "edd81cff4b387701bee0858edb7a63625e502f049277988a7d44a9a0e6ce4828"
+    },
+    {
+      "bytes": 3811,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json",
+      "sha256": "eefaad9916f9497e7904163fb7e4a87c2260258c18572b3f3e1519720c4a8db9"
+    },
+    {
+      "bytes": 3808,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json",
+      "sha256": "9b950453ad4e2da4b062afbf8ad1ba233d24abeae6ea6f3562611c83dbbb6b9d"
+    },
+    {
+      "bytes": 13398,
+      "path": "data/cache/spice/independent_hs_phase_shift_2026oct01_spice_vectors.json",
+      "sha256": "47e79d632c98916bb2ca5c7b019d2f934a9d70b57f2e981ccbeccf75f8b5eccd"
+    },
+    {
+      "bytes": 3857,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json",
+      "sha256": "069b36b02fdbbe0d9fc6183cb213afdc32dd665dde20669ca07f455444dccf69"
+    },
+    {
+      "bytes": 3838,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json",
+      "sha256": "c98aced0a7a2b2c1312cb312492fc9cafac259763597b7523429d9d363e0c575"
+    },
+    {
+      "bytes": 3833,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json",
+      "sha256": "aea2e5f1a3b3eb6acdd700b20a67704a04d3cb0786cf97282249ed828e4db68f"
+    },
+    {
+      "bytes": 3833,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json",
+      "sha256": "23164a26b9001bc74939175597fd5bc90747b8a1c3a6171362b23af2e351c38a"
+    },
+    {
+      "bytes": 3806,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json",
+      "sha256": "485dccfaca33eb512c1224d5965c7539f64b97008fa487232154b89826cb1946"
+    },
+    {
+      "bytes": 3809,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json",
+      "sha256": "d32ea85a56bc2943767003bb4ba10613165e0b7deac62040203f152610dfde86"
+    },
+    {
+      "bytes": 3837,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json",
+      "sha256": "24b7b40de559f79e1e8f743d2e1eb28d13aeacdec89ba58844b6eed2aa1a1b59"
+    },
+    {
+      "bytes": 3829,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json",
+      "sha256": "21c3b3d7f05995399c832418551f0efd05448be497b7a02048af375c7fcd3d28"
+    },
+    {
+      "bytes": 3832,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json",
+      "sha256": "aa7d25e182c01d41ea975917020b178c962f9f9210f6e109399c7300d6593f5c"
+    }
+  ],
+  "interpretation_limits": [
+    "This package replays controls already retuned under cached-Horizons point-mass dynamics; it does not retune.",
+    "SPICE is used only to derive compact Moon/Sun geocentric vector caches on the canonical node grid.",
+    "Propagation remains an Earth/Moon/Sun point-mass stress model with normalized CR3BP target/scales/thresholds.",
+    "The package is not full high-fidelity propagation, flight validation, production solver parity, fuel optimality, DOI evidence, or quantum evidence."
+  ],
+  "kernel_sha256_by_epoch": {
+    "2026apr01": {
+      "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+      "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+    },
+    "2026jan01": {
+      "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+      "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+    },
+    "2026jul01": {
+      "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+      "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+    },
+    "2026oct01": {
+      "gm": "924ddf4fb9ead9fe8a1aa55780bcabde40b09d00065d58226e24b68d8092f140",
+      "lsk": "678e32bdb5a744117a467cd9601cd6b373f0e9bc9bbde1371d5eee39600a039b",
+      "spk": "54d97562a5b094d298b1b8eafa5a2e17e3e010ce85e1a366d07f003ad159323c"
+    }
+  },
+  "limitations": [
+    "This package replays controls already retuned under cached-Horizons point-mass dynamics; it does not retune.",
+    "SPICE is used only to derive compact Moon/Sun geocentric vector caches on the canonical node grid.",
+    "Propagation remains an Earth/Moon/Sun point-mass stress model with normalized CR3BP target/scales/thresholds.",
+    "The package is not full high-fidelity propagation, flight validation, production solver parity, fuel optimality, DOI evidence, or quantum evidence."
+  ],
+  "no_retune_semantics": true,
+  "nominal_row_count": 4,
+  "optimization_rerun": false,
+  "overall_summary": {
+    "branch_row_count": 32,
+    "branch_row_count_total": 32,
+    "branch_spice_replay_pass_count_total": 32,
+    "branch_spice_replay_worst_over_epochs": 0.024730650824609506,
+    "epoch_count": 4,
+    "max_abs_delta_from_horizons_retuned": 3.2763991519857427e-10,
+    "nominal_row_count": 4,
+    "nominal_spice_replay_pass_count_total": 4,
+    "nominal_spice_replay_worst_over_epochs": 0.021439441253166033,
+    "row_count": 36,
+    "source_horizons_retuned_branch_worst_over_epochs": 0.02473065115224942,
+    "source_horizons_retuned_nominal_worst_over_epochs": 0.02143944130524006
+  },
+  "production_solver_parity_claim": false,
+  "quantum_advantage_claim": false,
+  "retuning": false,
+  "row_count": 36,
+  "runtime_network_dependency": false,
+  "source_horizons_retuned_controls_replayed": true,
+  "spice_derived_ephemeris_replay": true,
+  "spice_ephemeris_validation": true,
+  "spice_kernel_urls": {
+    "gm": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/pck/gm_de440.tpc",
+    "lsk": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls",
+    "spk": "https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de442s.bsp"
+  },
+  "spice_point_mass_replay": true,
+  "uses_committed_spice_vector_caches": true
+}
