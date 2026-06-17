@@ -391,6 +391,15 @@ The SPICE-derived ephemeris replay package uses the four same canonical epoch gr
 \resizebox{\textwidth}{!}{\input{../tables/independent_hs_spice_ephemeris_replay/independent_hs_spice_ephemeris_replay_table.tex}}
 \end{table}
 
+The CasADi/IPOPT bridge package addresses the production-solver parity concern in a deliberately narrow normalized-CR3BP setting. It reads the accepted \texttt{ihs\_all\_single\_p04\_amax02\_polish\_from\_p04} nominal sidecar and eight branch sidecars, verifies the source manifest and sidecar SHA-256 hashes, and exports nominal plus post-recovery active branch endpoint-plus-midpoint controls to a CasADi direct-shooting NLP solved with IPOPT. Branch outage-masked segments remain fixed inactive/zero, and each branch pre-recovery prefix is fixed to the refined nominal controls with the outage mask applied, so the target, scales, configured thresholds, and branch-recovery semantics match the independent-HS source artifacts. Source CR3BP replay gives nominal/branch-worst errors $0.011333095366088189/0.07792080291839382$; IPOPT refinement gives $0.009138565365046585/0.015534969964216154$, with IPOPT success $9/9$, bridge pass $9/9$, total IPOPT iterations $66$, maximum prefix delta $0.0$, and maximum control-bound violation $0.0$. This is a scoped mature NLP backend bridge check only; it is not production mission design, high-fidelity or flight validation, global or fuel optimality, DOI evidence, or quantum evidence.
+
+\begin{table}[htbp]
+\centering
+\caption{Independent-HS CasADi/IPOPT bridge check for the accepted normalized-CR3BP polish case. The bridge fixes branch pre-recovery prefixes to refined nominal masked controls and refines only post-recovery active endpoint-plus-midpoint controls under the same target/scales/branch semantics; it is scoped to mature NLP backend parity, not production mission design or high-fidelity validation.}
+\label{tab:supp_independent_hs_casadi_ipopt_bridge}
+\resizebox{\textwidth}{!}{\input{../tables/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge_table.tex}}
+\end{table}
+
 \clearpage
 
 \section{Phase-Shift Schedule Diagnostics and Small-Seed Evidence}

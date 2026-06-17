@@ -1,0 +1,177 @@
+{
+  "active_control_mask": [
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "amax": 0.2,
+  "branch_order": 0,
+  "bridge_semantics": "CasADi/IPOPT local direct-shooting refinement of endpoint-plus-midpoint controls with Euclidean norm constraints and the original normalized CR3BP target/scales. Branch rows fix the pre-recovery prefix to the refined nominal masked controls and expose only post-recovery active controls as IPOPT variables.",
+  "casadi_refinement": true,
+  "casadi_version": "3.7.2",
+  "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+  "configured_threshold": 0.17,
+  "control_norm_diagnostics": {
+    "endpoint_norm_max": 0.10318734957567052,
+    "max_control_bound_violation": 0.0,
+    "max_control_norm": 0.19548134013862684,
+    "midpoint_norm_max": 0.19548134013862684
+  },
+  "doi_claim": false,
+  "final_state": [
+    1.017809041206017,
+    -0.05516659141957157,
+    -0.14022139065303157,
+    -0.0594359445655864,
+    -0.0805172495916488,
+    0.20082609261714038
+  ],
+  "fuel_optimality_claim": false,
+  "high_fidelity_flight_validation": false,
+  "high_fidelity_validation": false,
+  "ipopt_iterations": 10,
+  "ipopt_objective": 0.00037345482427199686,
+  "ipopt_refined_passes_configured_threshold": true,
+  "ipopt_refined_terminal_error": 0.014654541935107393,
+  "ipopt_status": "Solve_Succeeded",
+  "ipopt_success": true,
+  "limitations": [
+    "Scoped normalized-CR3BP CasADi/IPOPT direct-shooting bridge for one accepted independent-HS case.",
+    "Branch variables are restricted to post-recovery active endpoint-plus-midpoint controls.",
+    "Pre-recovery branch prefixes are fixed to the refined nominal controls with the outage mask applied.",
+    "Outage-masked branch segments are fixed inactive/zero.",
+    "This is a local refinement/parity check, not global optimality, fuel optimality, production flight validation, DOI evidence, or quantum advantage evidence.",
+    "The force model remains the original normalized CR3BP target and scales; this is not high-fidelity or flight validation."
+  ],
+  "mask_index": 0,
+  "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+  "optimization_rerun": true,
+  "outage_mask": [
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "prefix_invariant_diagnostics": {
+    "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+    "max_prefix_endpoint_delta_from_refined_nominal_masked": 0.0,
+    "max_prefix_midpoint_delta_from_refined_nominal_masked": 0.0
+  },
+  "production_solver_parity_claim": true,
+  "production_solver_parity_claim_scope": "Scoped mature NLP backend bridge check for this normalized-CR3BP benchmark instance only.",
+  "quantum_advantage_claim": false,
+  "record_type": "branch",
+  "recovery_start": 1,
+  "refined_endpoint_controls": [
+    [
+      0.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.03528614324083426,
+      -0.0010856576535384062,
+      -0.09696049997343388
+    ],
+    [
+      0.03276872608099579,
+      -0.007849776532410372,
+      -0.09085335465745266
+    ],
+    [
+      0.028869844524650613,
+      -0.01640622914047772,
+      -0.08320649460114378
+    ],
+    [
+      0.024067184806999663,
+      -0.02511561067615198,
+      -0.07522922724998475
+    ],
+    [
+      0.018708261229809276,
+      -0.033301078503283676,
+      -0.06753740340271885
+    ],
+    [
+      0.013264789898516939,
+      -0.040451168208599245,
+      -0.060693301169881385
+    ],
+    [
+      0.00883116052083518,
+      -0.04556043374817273,
+      -0.05590903583230185
+    ]
+  ],
+  "refined_midpoint_controls": [
+    [
+      0.0,
+      0.0,
+      -0.0
+    ],
+    [
+      0.06885655985070882,
+      -0.0015945548027946827,
+      -0.18294585511265393
+    ],
+    [
+      0.06390714486844147,
+      -0.015008435961170224,
+      -0.1707394756387658
+    ],
+    [
+      0.05627966095260147,
+      -0.03198192096285421,
+      -0.15565480571247986
+    ],
+    [
+      0.04693704809337399,
+      -0.04931666965729599,
+      -0.1401522525771257
+    ],
+    [
+      0.03650729709108652,
+      -0.06567382036369386,
+      -0.12535554166356622
+    ],
+    [
+      0.0258575145328653,
+      -0.07999982778962883,
+      -0.1126901316989301
+    ],
+    [
+      0.017118414562860385,
+      -0.09025643151282017,
+      -0.10392958720175788
+    ]
+  ],
+  "runtime_seconds": 0.9704541999963112,
+  "schema_version": 1,
+  "sidecar_type": "independent_hs_casadi_ipopt_bridge_refined_controls",
+  "source_controls_path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_controls.json",
+  "source_controls_sha256": "e0971fc28fc5f30700acd0c379b90012891a22a1ff5268aab3b6d5b13c3a20eb",
+  "source_recorded_cr3bp_terminal_error": 0.07792080291839382,
+  "source_replay_terminal_error": 0.07792080291839382,
+  "substeps_per_segment": 4,
+  "transfer_time": 0.5,
+  "variable_control_mask": [
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ]
+}

@@ -1,0 +1,311 @@
+{
+  "artifacts": {
+    "casadi_ipopt_bridge_control_manifest_json": "data/results/independent_hs_casadi_ipopt_bridge/controls/independent_hs_casadi_ipopt_bridge_control_manifest.json",
+    "casadi_ipopt_bridge_control_manifest_sha256": "bddb94770b8e158de18376806d4ac38c24b778e5a1b066bbfb7cdba12dd6acf6",
+    "casadi_ipopt_bridge_control_sidecars": [
+      {
+        "ipopt_refined_terminal_error": 0.009138565365046585,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_casadi_ipopt_refined_controls.json",
+        "record_type": "nominal",
+        "sha256": "67e8a8c1db39c0b373c32e6150735fdf81211554e33888b2a5fc4d9f3b22b0d8"
+      },
+      {
+        "branch_order": 0,
+        "ipopt_refined_terminal_error": 0.014654541935107393,
+        "mask_index": 0,
+        "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_casadi_ipopt_refined_controls.json",
+        "record_type": "branch",
+        "recovery_start": 1,
+        "sha256": "a48cc8daaba7ade2c27e00157b3e0aa221492c6f5d5aa52ff3d938acbc3e7f0b",
+        "variable_control_mask": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "branch_order": 1,
+        "ipopt_refined_terminal_error": 0.012977535203488768,
+        "mask_index": 1,
+        "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_casadi_ipopt_refined_controls.json",
+        "record_type": "branch",
+        "recovery_start": 2,
+        "sha256": "80f1a51cd8311c0f1614a814b86f38f0eaa9110bbf3728b29ad0edc510c4bf3e",
+        "variable_control_mask": [
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "branch_order": 2,
+        "ipopt_refined_terminal_error": 0.01130039992642026,
+        "mask_index": 2,
+        "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_casadi_ipopt_refined_controls.json",
+        "record_type": "branch",
+        "recovery_start": 3,
+        "sha256": "8086b287bcdf054faaef6521242c7511cb63a484fa4cb7bf4d079f115ae1d36c",
+        "variable_control_mask": [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "branch_order": 3,
+        "ipopt_refined_terminal_error": 0.009902664248599079,
+        "mask_index": 3,
+        "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_casadi_ipopt_refined_controls.json",
+        "record_type": "branch",
+        "recovery_start": 4,
+        "sha256": "b8c160158b1becc49b007560c7eaeb41aae234d1025902886f567f815b9ecb32",
+        "variable_control_mask": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "branch_order": 4,
+        "ipopt_refined_terminal_error": 0.009068877373130264,
+        "mask_index": 4,
+        "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_casadi_ipopt_refined_controls.json",
+        "record_type": "branch",
+        "recovery_start": 5,
+        "sha256": "25656fc2413aed3e5761e68705e0aa18d41e32694ea548652e4c85ec3eca08b7",
+        "variable_control_mask": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1
+        ]
+      },
+      {
+        "branch_order": 5,
+        "ipopt_refined_terminal_error": 0.015534969964216154,
+        "mask_index": 7,
+        "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_casadi_ipopt_refined_controls.json",
+        "record_type": "branch",
+        "recovery_start": 8,
+        "sha256": "2acfce9c66dc100c1f3ebcc6ff64f52dd58642e1cb0514bccf2bd10a188945a0",
+        "variable_control_mask": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "branch_order": 6,
+        "ipopt_refined_terminal_error": 0.009099143183590555,
+        "mask_index": 6,
+        "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_casadi_ipopt_refined_controls.json",
+        "record_type": "branch",
+        "recovery_start": 7,
+        "sha256": "29e69e2191924c3aa8848f4f507d6eb67cc3c95b6d5084707b150d59e573381e",
+        "variable_control_mask": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "branch_order": 7,
+        "ipopt_refined_terminal_error": 0.008846730482166698,
+        "mask_index": 5,
+        "max_prefix_control_delta_from_refined_nominal_masked": 0.0,
+        "path": "data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_casadi_ipopt_refined_controls.json",
+        "record_type": "branch",
+        "recovery_start": 6,
+        "sha256": "ce68f985ab3a66b2bceb15be7bdf84f16a3dc4494ac7b1e993fce6f6c61ac9f6",
+        "variable_control_mask": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ]
+      }
+    ],
+    "independent_hs_casadi_ipopt_bridge_csv": "data/results/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge.csv",
+    "independent_hs_casadi_ipopt_bridge_metadata_json": "data/results/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge_metadata.json",
+    "independent_hs_casadi_ipopt_bridge_table_tex": "tables/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge_table.tex"
+  },
+  "branch_outage_segments_fixed_inactive": true,
+  "branch_prefix_fixed_to_refined_nominal_masked_controls": true,
+  "branch_recovery_start_source": "Source branch sidecar or manifest explicit recovery_start when present; otherwise one plus the last zero in the outage mask.",
+  "branch_row_count": 8,
+  "branch_variable_controls_recovery_only": true,
+  "casadi_refinement": true,
+  "casadi_version": "3.7.2",
+  "command": "scripts\\run_independent_hs_casadi_ipopt_bridge.py",
+  "doi_claim": false,
+  "fuel_optimality_claim": false,
+  "high_fidelity_flight_validation": false,
+  "high_fidelity_validation": false,
+  "input_artifacts": [
+    {
+      "bytes": 2772,
+      "path": "configs/independent_hs_all_configured_headroom.yaml",
+      "sha256": "15ae12c93e4fad9927066d52bfe7c6c23b146f67cd062b201d2b5dfcf0a5cd49"
+    },
+    {
+      "bytes": 1203,
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf"
+    },
+    {
+      "bytes": 10975,
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
+      "sha256": "9a50949eb40d5858658e0d667eb54a2c34b8d278bc0a667bd14b59ff07cea1ed"
+    },
+    {
+      "bytes": 12313,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_control_manifest.json",
+      "sha256": "067099019dc31f3cd52f7b475bcf574719f299a390ca68fe074420205d8ac6ed"
+    },
+    {
+      "bytes": 3468,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_controls.json",
+      "sha256": "46871d310bb008e1be5438eb0ee00d1da0b5c320eefe2fc46f8add782ae06198"
+    },
+    {
+      "bytes": 7798,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_controls.json",
+      "sha256": "e0971fc28fc5f30700acd0c379b90012891a22a1ff5268aab3b6d5b13c3a20eb"
+    },
+    {
+      "bytes": 7782,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_controls.json",
+      "sha256": "2d4e0b756892ea2b5d9fd647207a6c1652c16585dda4a130504a452c40f9b50c"
+    },
+    {
+      "bytes": 7788,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_controls.json",
+      "sha256": "542883ea5dee97baacc45e736222aaf36a4e2249493d1c4d02eabe46b93efe55"
+    },
+    {
+      "bytes": 7786,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_controls.json",
+      "sha256": "80dcf364ebc43719655686cce641289b2c718f1c5edb57f09377ad2bf263bf53"
+    },
+    {
+      "bytes": 7783,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_controls.json",
+      "sha256": "ae64d25b776b428a3d90268ee11a201987aa21dd328e7a5326a9153ea5134461"
+    },
+    {
+      "bytes": 7776,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_controls.json",
+      "sha256": "fafe30ed005fa19a0bfe392e6b81b0999b47af84eb19d8a73b42396115e1bd49"
+    },
+    {
+      "bytes": 7780,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_controls.json",
+      "sha256": "29db0576658055a952ff736e657f3c908e5b6791f53ea02b40266dd28e0c1915"
+    },
+    {
+      "bytes": 7775,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_controls.json",
+      "sha256": "ee18922dc4b0715b9d371153718e9ff08d9deba18830d7b401445088e5992ee2"
+    }
+  ],
+  "interpretation_limits": [
+    "CasADi/IPOPT is used as a mature NLP backend for a scoped direct-shooting bridge check only.",
+    "The benchmark remains normalized Earth-Moon CR3BP with the original target, scales, thresholds, and branch masks.",
+    "This local refinement does not establish production mission design, global optimality, fuel optimality, or high-fidelity validation.",
+    "No DOI, quantum advantage, QUBO, or QAOA claim is supported by this artifact."
+  ],
+  "ipopt_backend": "casadi.nlpsol(ipopt)",
+  "limitations": [
+    "CasADi/IPOPT is used as a mature NLP backend for a scoped direct-shooting bridge check only.",
+    "The benchmark remains normalized Earth-Moon CR3BP with the original target, scales, thresholds, and branch masks.",
+    "This local refinement does not establish production mission design, global optimality, fuel optimality, or high-fidelity validation.",
+    "No DOI, quantum advantage, QUBO, or QAOA claim is supported by this artifact."
+  ],
+  "nominal_row_count": 1,
+  "optimization_rerun": true,
+  "polish_case_summary": {
+    "all_ipopt_success": true,
+    "all_rows_pass_configured_threshold": true,
+    "branch_row_count": 8,
+    "bridge_pass_count": 9,
+    "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+    "ipopt_refined_branch_worst_terminal_error": 0.015534969964216154,
+    "ipopt_refined_nominal_terminal_error": 0.009138565365046585,
+    "ipopt_refined_pass_count": 9,
+    "ipopt_success_count": 9,
+    "ipopt_total_iterations": 66,
+    "max_abs_terminal_error_delta_from_source_replay": 0.06326626098328643,
+    "max_branch_prefix_control_delta_from_refined_nominal_masked": 0.0,
+    "max_control_bound_violation": 0.0,
+    "max_control_norm": 0.19999994541103322,
+    "min_terminal_error_improvement_from_source_replay": -0.005819179231203104,
+    "nominal_row_count": 1,
+    "row_count": 9,
+    "source_branch_replay_worst_terminal_error": 0.07792080291839382,
+    "source_nominal_replay_terminal_error": 0.011333095366088189,
+    "total_runtime_seconds": 3.5510803000070155,
+    "worst_ipopt_refined_terminal_error": 0.015534969964216154,
+    "worst_source_replay_terminal_error": 0.07792080291839382,
+    "zero_variable_branch_count": 1
+  },
+  "production_solver_parity_claim": true,
+  "production_solver_parity_claim_scope": "Scoped mature NLP backend bridge/parity check for one accepted normalized-CR3BP independent-HS benchmark instance; not a production flight-design claim.",
+  "quantum_advantage_claim": false,
+  "refinement_settings": {
+    "acceptable_tol": 1e-07,
+    "control_regularization_weight": 1e-05,
+    "max_iter": 80,
+    "seed_deviation_regularization_weight": 0.0001,
+    "smooth_regularization_weight": 5e-05,
+    "terminal_residual_weight": 1.0,
+    "tol": 1e-08
+  },
+  "row_count": 9,
+  "runtime_network_dependency": false,
+  "uses_normalized_cr3bp": true
+}

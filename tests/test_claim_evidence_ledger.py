@@ -30,6 +30,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
     has_ihs_point_mass = module.independent_hs_horizons_point_mass_retuning_artifacts_available()
     has_ihs_multi_point_mass = module.independent_hs_horizons_multi_epoch_point_mass_retuning_artifacts_available()
     has_ihs_spice = module.independent_hs_spice_ephemeris_replay_artifacts_available()
+    has_ihs_casadi = module.independent_hs_casadi_ipopt_bridge_artifacts_available()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
     has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
@@ -107,6 +108,19 @@ def test_claim_evidence_ledger_rows_and_semantics():
             if claim_id in expected_claims:
                 ihs_spice_insert_at = expected_claims.index(claim_id) + 1
         expected_claims.insert(ihs_spice_insert_at, "phase_shift_independent_hs_spice_ephemeris_replay")
+    if has_ihs_casadi:
+        ihs_casadi_insert_at = expected_claims.index("phase_shift_independent_hs_p04_amax02_all_configured") + 1
+        for claim_id in (
+            "phase_shift_independent_hs_branch_control_replay",
+            "phase_shift_independent_hs_bicircular_phase_stress_probe",
+            "phase_shift_independent_hs_horizons_solar_tidal_replay_probe",
+            "phase_shift_independent_hs_horizons_point_mass_retuning",
+            "phase_shift_independent_hs_horizons_multi_epoch_point_mass_retuning",
+            "phase_shift_independent_hs_spice_ephemeris_replay",
+        ):
+            if claim_id in expected_claims:
+                ihs_casadi_insert_at = expected_claims.index(claim_id) + 1
+        expected_claims.insert(ihs_casadi_insert_at, "phase_shift_independent_hs_casadi_ipopt_bridge")
     tail_insert_at = (
         expected_claims.index("catalog_dro_tail_coast_all_one_two_segment_t5_all_configured")
         + 1
@@ -280,6 +294,26 @@ def test_claim_evidence_ledger_rows_and_semantics():
     else:
         assert "phase_shift_independent_hs_spice_ephemeris_replay" not in ledger["claim_id"].tolist()
 
+    if has_ihs_casadi:
+        ihs_casadi = row("phase_shift_independent_hs_casadi_ipopt_bridge")
+        assert ihs_casadi["all_configured_mask_evidence"] == "True"
+        assert ihs_casadi["target_mode"] == "catalog_halo_phase_shift"
+        assert "1 nominal plus 8 configured one-segment branch rows" in ihs_casadi["mask_scope"]
+        assert "source CR3BP replay nominal=0.011333095366088189" in ihs_casadi["nominal_error"]
+        assert "CasADi/IPOPT refined nominal=0.009138565365046585" in ihs_casadi["nominal_error"]
+        assert "source CR3BP branch worst=0.07792080291839382" in ihs_casadi["selected_worst_error"]
+        assert "CasADi/IPOPT refined branch worst=0.015534969964216154" in ihs_casadi["selected_worst_error"]
+        assert "IPOPT success count=9/9" in ihs_casadi["selected_worst_error"]
+        assert "max branch prefix delta=0.0" in ihs_casadi["thresholds"]
+        assert ihs_casadi["passes_configured_thresholds"] == "True"
+        assert "mature CasADi/IPOPT NLP backend" in ihs_casadi["primary_interpretation"]
+        assert "Scoped production-solver bridge/parity check only" in ihs_casadi["explicit_boundary"]
+        assert "not production mission design" in ihs_casadi["explicit_boundary"]
+        assert "not high-fidelity" in ihs_casadi["explicit_boundary"]
+        assert "not quantum" in ihs_casadi["explicit_boundary"]
+    else:
+        assert "phase_shift_independent_hs_casadi_ipopt_bridge" not in ledger["claim_id"].tolist()
+
     tail = row("catalog_dro_tail_coast_all_one_two_segment_t5_all_configured")
     assert tail["all_configured_mask_evidence"] == "True"
     assert tail["target_mode"] == "catalog_dro_phase"
@@ -445,6 +479,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     has_ihs_point_mass = module.independent_hs_horizons_point_mass_retuning_artifacts_available()
     has_ihs_multi_point_mass = module.independent_hs_horizons_multi_epoch_point_mass_retuning_artifacts_available()
     has_ihs_spice = module.independent_hs_spice_ephemeris_replay_artifacts_available()
+    has_ihs_casadi = module.independent_hs_casadi_ipopt_bridge_artifacts_available()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
     has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
@@ -457,6 +492,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         + int(has_ihs_point_mass)
         + int(has_ihs_multi_point_mass)
         + int(has_ihs_spice)
+        + int(has_ihs_casadi)
         + int(has_replay)
         + int(has_bicircular)
         + int(has_retuned)
@@ -470,6 +506,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         + (2 if has_ihs_point_mass else 0)
         + (2 if has_ihs_multi_point_mass else 0)
         + (2 if has_ihs_spice else 0)
+        + (2 if has_ihs_casadi else 0)
         + (3 if has_replay else 0)
         + (2 if has_bicircular else 0)
         + (3 if has_retuned else 0)
@@ -494,6 +531,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["independent_hs_horizons_point_mass_retuning"] is has_ihs_point_mass
     assert metadata["independent_hs_horizons_multi_epoch_point_mass_retuning"] is has_ihs_multi_point_mass
     assert metadata["independent_hs_spice_ephemeris_replay"] is has_ihs_spice
+    assert metadata["independent_hs_casadi_ipopt_bridge"] is has_ihs_casadi
     assert metadata["branch_control_replay"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_probe"] is has_bicircular
     assert metadata["bicircular_tail_coast_retuned_recovery"] is has_retuned
@@ -512,6 +550,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         has_ihs_multi_point_mass
     )
     assert metadata["independent_hs_spice_ephemeris_replay_artifacts_available"] is has_ihs_spice
+    assert metadata["independent_hs_casadi_ipopt_bridge_artifacts_available"] is has_ihs_casadi
     assert metadata["branch_control_replay_artifacts_available"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_artifacts_available"] is has_bicircular
     assert metadata["bicircular_tail_coast_recovery_artifacts_available"] is has_retuned
@@ -554,6 +593,10 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         assert "phase\\_shift\\_independent\\_hs\\_spice\\_ephemeris\\_replay" in table
     else:
         assert "phase\\_shift\\_independent\\_hs\\_spice\\_ephemeris\\_replay" not in table
+    if has_ihs_casadi:
+        assert "phase\\_shift\\_independent\\_hs\\_casadi\\_ipopt\\_bridge" in table
+    else:
+        assert "phase\\_shift\\_independent\\_hs\\_casadi\\_ipopt\\_bridge" not in table
     assert "catalog\\_dro\\_tail\\_coast\\_all\\_one\\_two\\_segment\\_t5\\_all\\_configured" in table
     if has_replay:
         assert "catalog\\_dro\\_tail\\_coast\\_branch\\_control\\_replay\\_accepted\\_controls" in table

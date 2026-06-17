@@ -163,6 +163,20 @@ INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA = (
     / "independent_hs_spice_ephemeris_replay"
     / "independent_hs_spice_ephemeris_replay_metadata.json"
 )
+INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_casadi_ipopt_bridge"
+    / "independent_hs_casadi_ipopt_bridge.csv"
+)
+INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_casadi_ipopt_bridge"
+    / "independent_hs_casadi_ipopt_bridge_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -326,6 +340,13 @@ def independent_hs_spice_ephemeris_replay_available() -> bool:
     return (
         INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV.is_file()
         and INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA.is_file()
+    )
+
+
+def independent_hs_casadi_ipopt_bridge_available() -> bool:
+    return (
+        INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_CSV.is_file()
+        and INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_METADATA.is_file()
     )
 
 
@@ -668,6 +689,70 @@ def _independent_hs_spice_ephemeris_replay_row() -> dict[str, str]:
     }
 
 
+def _independent_hs_casadi_ipopt_bridge_row() -> dict[str, str]:
+    metadata = json.loads(INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_METADATA.read_text(encoding="utf-8"))
+    summary = metadata["polish_case_summary"]
+    if not bool(metadata["casadi_refinement"]) or not bool(metadata["optimization_rerun"]):
+        raise RuntimeError("CasADi/IPOPT bridge metadata must disclose refinement optimizer rerun")
+    if not bool(metadata["production_solver_parity_claim"]):
+        raise RuntimeError("CasADi/IPOPT bridge metadata must disclose scoped production-solver parity claim")
+    for flag_name in (
+        "high_fidelity_validation",
+        "high_fidelity_flight_validation",
+        "fuel_optimality_claim",
+        "doi_claim",
+        "quantum_advantage_claim",
+    ):
+        if bool(metadata[flag_name]):
+            raise RuntimeError(f"CasADi/IPOPT bridge metadata must not claim {flag_name}")
+    row_count = int(summary["row_count"])
+    branch_count = int(summary["branch_row_count"])
+    ipopt_success = int(summary["ipopt_success_count"])
+    bridge_pass = int(summary["bridge_pass_count"])
+    source_nominal = str(summary["source_nominal_replay_terminal_error"])
+    source_branch = str(summary["source_branch_replay_worst_terminal_error"])
+    refined_nominal = str(summary["ipopt_refined_nominal_terminal_error"])
+    refined_branch = str(summary["ipopt_refined_branch_worst_terminal_error"])
+    max_violation = str(summary["max_control_bound_violation"])
+    max_prefix_delta = str(summary["max_branch_prefix_control_delta_from_refined_nominal_masked"])
+    zero_variable_branch_count = int(summary["zero_variable_branch_count"])
+    return {
+        "row_id": "ihs_casadi_ipopt_bridge_polish_p04_amax02",
+        "artifact_family": "independent-HS CasADi/IPOPT bridge check",
+        "representative_case_or_statistic": "ihs_all_single_p04_amax02_polish_from_p04",
+        "target_family": "catalog halo phase-shift",
+        "backend_initializer_role": "mature NLP backend direct-shooting refinement from accepted sidecars",
+        "mask_scope": (
+            "1 nominal and 8 configured one-segment branch rows; branch outage segments fixed inactive; "
+            f"branch prefixes fixed to refined nominal masked controls; zero-variable branches={zero_variable_branch_count}"
+        ),
+        "phase_time": "0.4",
+        "transfer_time": "0.5",
+        "amax": "0.2",
+        "segments": "8",
+        "nominal_error": refined_nominal,
+        "selected_worst_error": refined_branch,
+        "all_mask_worst_error": refined_branch,
+        "configured_pass": str(bool(float(refined_nominal) <= 0.09 and bridge_pass == row_count)),
+        "stringent_0p065_0p10_all_mask_pass": _threshold_pass(refined_nominal, refined_branch, STRINGENT_THRESHOLDS),
+        "near_tight_0p05_0p10_all_mask_pass": _threshold_pass(refined_nominal, refined_branch, NEAR_TIGHT_THRESHOLDS),
+        "tight_0p05_0p09_all_mask_pass": _threshold_pass(refined_nominal, refined_branch, TIGHT_THRESHOLDS),
+        "pass_status_note": (
+            f"source replay nominal {source_nominal}, branch worst {source_branch}; "
+            f"IPOPT success {ipopt_success}/{row_count}; bridge pass {bridge_pass}/{row_count}; "
+            f"max bound violation {max_violation}; max prefix delta {max_prefix_delta}"
+        ),
+        "practitioner_interpretation": (
+            "The accepted independent-HS polish case exports to CasADi/IPOPT and locally refines under "
+            "the same normalized CR3BP target/scales/branch masks while preserving source branch-recovery "
+            "semantics. This narrowly addresses production-solver parity, but it is not production mission "
+            "design, high-fidelity/flight validation, global or fuel optimality, DOI evidence, or quantum evidence."
+        ),
+        "source_artifact": _relative_or_absolute(INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_CSV),
+        "source_row_id": "polish_case_summary in independent-HS CasADi/IPOPT bridge metadata",
+    }
+
+
 def _threshold_count_row(threshold_rows: list[dict[str, str]]) -> dict[str, str]:
     tight_rows = [
         row
@@ -861,6 +946,11 @@ def build_synthesis() -> pd.DataFrame:
             if independent_hs_spice_ephemeris_replay_available()
             else []
         ),
+        *(
+            [_independent_hs_casadi_ipopt_bridge_row()]
+            if independent_hs_casadi_ipopt_bridge_available()
+            else []
+        ),
         _case_metric_row(
             row_id="tail_coast_hard_catalog_all_one_two",
             artifact_family="hard-catalog tail-coast recovery",
@@ -1020,6 +1110,13 @@ def write_artifacts(
                 INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_METADATA,
             ]
         )
+    if independent_hs_casadi_ipopt_bridge_available():
+        input_artifacts.extend(
+            [
+                INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_CSV,
+                INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_METADATA,
+            ]
+        )
     metadata = {
         "command": command,
         "row_count": int(len(synthesis)),
@@ -1105,6 +1202,12 @@ def write_artifacts(
                 "already-retuned controls under compact SPICE-derived Moon/Sun vectors using the same "
                 "point-mass stress propagation; it is not full high-fidelity/flight validation or "
                 "production solver parity."
+            ),
+            (
+                "The independent-HS CasADi/IPOPT bridge row, when present, is a scoped mature NLP "
+                "backend direct-shooting refinement of the accepted normalized-CR3BP polish case; it "
+                "is not production mission design, high-fidelity/flight validation, global optimality, "
+                "fuel optimality, DOI evidence, or quantum evidence."
             ),
         ],
     }

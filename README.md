@@ -57,7 +57,9 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/bicircular_tail_coast_recovery/*`,
 `data/results/independent_hs_bicircular_phase_stress/*`,
 `data/results/independent_hs_horizons_solar_tidal_replay/*`,
+`data/results/independent_hs_horizons_point_mass_retuning/*`,
 `data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/*`,
+`data/results/independent_hs_casadi_ipopt_bridge/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
 `data/results/independent_hs_branch_control_replay/*`,
@@ -177,10 +179,11 @@ simple bicircular phase-sweep stress CSV/metadata, the independent-HS
 cached-Horizons-derived solar-tidal replay CSV/metadata, the independent-HS
 cached-Horizons Earth/Moon/Sun point-mass retuning CSV/metadata, the independent-HS
 multi-epoch cached-Horizons point-mass retuning CSV/metadata, the independent-HS
-SPICE-derived ephemeris replay CSV/metadata, the focused tail-coast replay
+SPICE-derived ephemeris replay CSV/metadata, the independent-HS CasADi/IPOPT
+bridge CSV/metadata, the focused tail-coast replay
 CSV/metadata, focused source recovery CSV, bicircular solar-tidal stress
 CSV/metadata, and Horizons ephemeris force-model contrast CSV/metadata, plus
-the bicircular retuned recovery CSV, summary, and metadata, so the ledger has 19
+the bicircular retuned recovery CSV, summary, and metadata, so the ledger has 20
 claim rows. The independent-HS bicircular row is a positive simple stress-probe
 replay for the converged all-configured row; the independent-HS cached-Horizons
 row is a stronger representative-epoch stress replay using cached JPL Horizons
@@ -189,11 +192,18 @@ Earth/Moon/Sun point-mass replay but independent retuning restores representativ
 epoch feasibility, and the multi-epoch point-mass row repeats that stress/retuning
 check over four fixed 2026 cached-Horizons epochs; the new SPICE replay row
 replays those already-retuned controls under compact SPICE-derived Moon/Sun
-vectors with branch pass count `32/32`; the hard-catalog solar-tidal row is a negative stress-probe
+vectors with branch pass count `32/32`; the new CasADi/IPOPT row locally
+refines the accepted polish nominal plus eight branch rows under the same
+normalized CR3BP target and branch recovery semantics with IPOPT success `9/9`;
+the
+hard-catalog solar-tidal row is a negative stress-probe
 row, the retuned recovery row is a completed negative simple-bicircular retuning
 row, and the hard-catalog Horizons row is a force-model contrast row. The SPICE
 row is a point-mass ephemeris-source replay, not full high-fidelity/flight
-validation, production solver parity, or quantum evidence.
+validation, production solver parity, or quantum evidence. The CasADi/IPOPT row
+is a scoped mature NLP backend bridge check, not production mission design,
+high-fidelity validation, global/fuel optimality, DOI evidence, or quantum
+evidence.
 The tail-coast audit confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
@@ -213,8 +223,8 @@ simple bicircular phase-sweep stress row, the independent-HS
 cached-Horizons-derived solar-tidal replay row, the independent-HS
 cached-Horizons point-mass retuning row, the independent-HS multi-epoch
 cached-Horizons point-mass retuning row, the independent-HS SPICE-derived
-ephemeris replay row, and the scoped hard-catalog tail-coast row used in the
-main manuscript claim path.
+ephemeris replay row, the independent-HS CasADi/IPOPT bridge row, and the
+scoped hard-catalog tail-coast row used in the main manuscript claim path.
 
 The replay/stress validation postprocessor writes
 `data/results/replay_stress_validation/replay_stress_validation.csv`,
@@ -380,6 +390,33 @@ replay is `3.2763991519857427e-10`. This is SPICE-derived ephemeris replay under
 the same Earth/Moon/Sun point-mass stress model, not full high-fidelity/flight
 validation, production solver parity, fuel optimality, DOI evidence, or quantum
 evidence.
+
+The independent-HS CasADi/IPOPT bridge check writes
+`data/results/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge.csv`,
+`data/results/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge_metadata.json`,
+refined endpoint-plus-midpoint control sidecars under
+`data/results/independent_hs_casadi_ipopt_bridge/controls/`, and
+`tables/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge_table.tex`:
+
+```powershell
+py -3.11 scripts\run_independent_hs_casadi_ipopt_bridge.py
+```
+
+The bridge reads the accepted
+`ihs_all_single_p04_amax02_polish_from_p04` nominal and eight branch sidecars,
+exports the nominal controls and post-recovery active branch endpoint-plus-midpoint
+controls to a CasADi/IPOPT direct-shooting NLP, keeps outage-masked branch
+segments fixed inactive, and fixes every branch pre-recovery prefix to the
+refined nominal controls with the outage mask applied. It uses the same
+normalized CR3BP target, scales, configured thresholds, and branch-recovery
+semantics as the source independent-HS artifacts. The current run reports
+source replay nominal/branch-worst errors
+`0.011333095366088189`/`0.07792080291839382` and CasADi/IPOPT refined
+nominal/branch-worst errors `0.009138565365046585`/`0.015534969964216154`,
+with IPOPT success `9/9`, bridge pass `9/9`, total IPOPT iterations `66`,
+max prefix delta `0.0`, and max control-bound violation `0.0`. This is a scoped mature NLP backend bridge
+check only; it is not production mission design, high-fidelity or flight
+validation, global/fuel optimality, DOI evidence, or quantum evidence.
 
 The Horizons ephemeris force-model contrast postprocessor writes
 `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,

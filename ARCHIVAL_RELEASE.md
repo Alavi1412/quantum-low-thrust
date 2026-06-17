@@ -34,6 +34,7 @@ and assigned a real identifier.
 - `data/results/independent_hs_horizons_solar_tidal_replay/`
 - `data/results/independent_hs_horizons_point_mass_retuning/`
 - `data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/`
+- `data/results/independent_hs_casadi_ipopt_bridge/`
 - `data/results/evidence_synthesis/`
 - `data/results/replay_stress_validation/`
 - `data/results/independent_hs_all_configured_headroom/`
@@ -97,6 +98,14 @@ point-mass ephemeris-source replay, not full high-fidelity/flight validation,
 production solver parity, fuel optimality, DOI evidence, or quantum evidence.
 Raw NAIF kernel binaries are not archive artifacts; only compact JSON vector
 caches are committed.
+The independent-HS CasADi/IPOPT bridge package is archived under
+`data/results/independent_hs_casadi_ipopt_bridge/`. It refines the accepted
+polish nominal row and eight branch rows under the same normalized CR3BP target,
+scales, thresholds, and branch recovery semantics with pre-recovery prefixes
+fixed to refined nominal masked controls, post-recovery active branch controls
+as IPOPT variables, IPOPT success `9/9`, and max prefix delta `0.0`; it is a scoped
+mature NLP backend bridge check, not production mission design, high-fidelity
+or flight validation, global/fuel optimality, DOI evidence, or quantum evidence.
 
 ## Post-Deposit Updates
 
