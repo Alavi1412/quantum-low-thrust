@@ -57,6 +57,7 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/bicircular_tail_coast_recovery/*`,
 `data/results/independent_hs_bicircular_phase_stress/*`,
 `data/results/independent_hs_horizons_solar_tidal_replay/*`,
+`data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
 `data/results/independent_hs_branch_control_replay/*`,
@@ -174,17 +175,19 @@ current snapshot includes the new independent-HS all-configured headroom row,
 the independent-HS branch-control replay CSV/metadata, the independent-HS
 simple bicircular phase-sweep stress CSV/metadata, the independent-HS
 cached-Horizons-derived solar-tidal replay CSV/metadata, the independent-HS
-cached-Horizons Earth/Moon/Sun point-mass retuning CSV/metadata, the focused
+cached-Horizons Earth/Moon/Sun point-mass retuning CSV/metadata, the independent-HS
+multi-epoch cached-Horizons point-mass retuning CSV/metadata, the focused
 tail-coast replay CSV/metadata, focused source recovery CSV, bicircular
 solar-tidal stress CSV/metadata, and Horizons ephemeris force-model contrast
 CSV/metadata, plus the bicircular retuned recovery CSV, summary, and metadata,
-so the ledger has 17
+so the ledger has 18
 claim rows. The independent-HS bicircular row is a positive simple stress-probe
 replay for the converged all-configured row; the independent-HS cached-Horizons
 row is a stronger representative-epoch stress replay using cached JPL Horizons
 geometry; the new point-mass row reports that persisted controls fail direct
 Earth/Moon/Sun point-mass replay but independent retuning restores representative
-epoch feasibility; the hard-catalog solar-tidal row is a negative stress-probe
+epoch feasibility, and the multi-epoch point-mass row repeats that stress/retuning
+check over four fixed 2026 cached-Horizons epochs; the hard-catalog solar-tidal row is a negative stress-probe
 row, the retuned recovery row is a completed negative simple-bicircular retuning
 row, and the hard-catalog Horizons row is a force-model contrast row. None is
 SPICE/full high-fidelity/flight validation, production solver parity, or quantum
@@ -206,6 +209,7 @@ Hermite-Simpson diagnostics, the new all-configured independent-HS headroom
 row, the independent-HS branch-control replay row, the positive independent-HS
 simple bicircular phase-sweep stress row, the independent-HS
 cached-Horizons-derived solar-tidal replay row, the independent-HS
+cached-Horizons point-mass retuning row, the independent-HS multi-epoch
 cached-Horizons point-mass retuning row, and the scoped hard-catalog tail-coast
 row used in the main manuscript claim path.
 
@@ -322,6 +326,30 @@ After retuning, nominal error is `0.02143944130524006`, branch worst is
 `9/9`, and total `nfev` is `71`. This is a cached-Horizons point-mass retuning
 stress package only; it is not SPICE, full high-fidelity or flight validation,
 production solver parity, fuel optimality, DOI evidence, or quantum evidence.
+
+The independent-HS multi-epoch cached-Horizons point-mass retuning wrapper writes
+`data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning.csv`,
+`data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning_metadata.json`,
+per-epoch retuned controls under
+`data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/`,
+and
+`tables/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning_table.tex`:
+
+```powershell
+py -3.11 scripts\run_independent_hs_horizons_multi_epoch_point_mass_retuning.py
+```
+
+The default path is offline when the committed 2026-Jan-01, 2026-Apr-01,
+2026-Jul-01, and 2026-Oct-01 caches exist. It aggregates 36 rows (4 nominal and
+32 branch rows). Nominal direct replay fails in all 4 epochs; direct branch pass
+count is `18/32` overall, including `8/8` in July. Worst direct nominal/branch
+errors are `0.3812580376880591`/`0.3797450961017463`.
+After independent retuning, all rows pass: worst retuned nominal/branch errors
+are `0.02143944130524006`/`0.02473065115224942`, branch pass count is `32/32`,
+SciPy success is `36/36`, and total `nfev` is `197`. This is a stronger
+representative-epoch set for the point-mass stress concern, not SPICE/full
+high-fidelity/flight validation, production solver parity, fuel optimality, DOI
+evidence, or quantum evidence.
 
 The Horizons ephemeris force-model contrast postprocessor writes
 `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,

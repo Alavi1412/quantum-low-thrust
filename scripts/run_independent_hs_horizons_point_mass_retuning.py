@@ -161,6 +161,15 @@ def _resolve_cache_path(path: Path) -> Path:
     return ROOT / path
 
 
+def _cache_epoch_label(cache: dict[str, object], *, start_jd_tdb: float) -> str:
+    metadata = cache.get("metadata", {})
+    if isinstance(metadata, dict):
+        label = str(metadata.get("start_calendar_tdb", "")).strip()
+        if label:
+            return label
+    return f"JD {float(start_jd_tdb):.9f} TDB"
+
+
 def _read_json_verified(path_text: object, expected_sha256: object | None = None) -> tuple[dict, Path, str]:
     path = _resolve_existing_path(path_text)
     if not path.is_file():
@@ -361,6 +370,8 @@ def _write_retuned_sidecar(
     amax: float,
     cache_path: Path,
     cache_sha256: str,
+    start_jd_tdb: float,
+    representative_epoch_label: str,
 ) -> tuple[Path, str]:
     if record_type == "nominal":
         filename = f"{case_id}_nominal_point_mass_retuned_controls.json"
@@ -371,7 +382,7 @@ def _write_retuned_sidecar(
     midpoint = np.asarray(retune_result["midpoint_controls"], dtype=float)
     diagnostics = _control_norm_diagnostics(endpoint, midpoint, amax=float(amax))
     limitations = [
-        "Cached JPL Horizons Moon/Sun vectors provide representative 2026-Jan-01 geometry only.",
+        f"Cached JPL Horizons Moon/Sun vectors provide representative {representative_epoch_label} geometry only.",
         "Dynamics are Earth central gravity plus indirect Moon/Sun point-mass terms in a geocentric inertial frame.",
         "Controls were retuned independently for this stress model and should not be read as production solver parity.",
         "This is not SPICE propagation, full high-fidelity or flight validation, fuel optimality, DOI evidence, or quantum advantage evidence.",
@@ -390,6 +401,8 @@ def _write_retuned_sidecar(
         "source_controls_sha256": source_controls_sha256,
         "cache_path": _relative_or_absolute(cache_path),
         "cache_sha256": cache_sha256,
+        "start_jd_tdb": float(start_jd_tdb),
+        "representative_epoch_label": representative_epoch_label,
         "recorded_cr3bp_terminal_error": float(recorded_cr3bp_terminal_error),
         "point_mass_replay_terminal_error": float(point_mass_replay_terminal_error),
         "point_mass_retuned_terminal_error": float(retune_result["terminal_error"]),
@@ -433,6 +446,7 @@ def _row_for_result(
     cfg,
     cache_path: Path,
     cache_sha256: str,
+    start_jd_tdb: float,
 ) -> dict[str, object]:
     endpoint = np.asarray(retune_result["endpoint_controls"], dtype=float)
     midpoint = np.asarray(retune_result["midpoint_controls"], dtype=float)
@@ -475,7 +489,7 @@ def _row_for_result(
         "retuned_midpoint_bound_violation": diagnostics["midpoint_bound_violation"],
         "substeps_per_segment": int(cfg.substeps),
         "transfer_time": float(cfg.tf),
-        "start_jd_tdb": DEFAULT_CACHE_START_JD_TDB,
+        "start_jd_tdb": float(start_jd_tdb),
         "cache_path": _relative_or_absolute(cache_path),
         "cache_sha256": cache_sha256,
         "retuning_semantics": (
@@ -550,6 +564,7 @@ def run(args: argparse.Namespace) -> pd.DataFrame:
         raise RuntimeError(f"Horizons cache SHA mismatch: expected {expected_cache_sha}, got {cache_sha256}")
     cache = load_horizons_cache(cache_path)
     profile = horizons_point_mass_profile_from_cache(cache)
+    representative_epoch_label = _cache_epoch_label(cache, start_jd_tdb=float(args.start_jd_tdb))
 
     results_dir = _resolve_output_path(args.results_dir)
     tables_dir = _resolve_output_path(args.tables_dir)
@@ -644,6 +659,8 @@ def run(args: argparse.Namespace) -> pd.DataFrame:
             amax=float(cfg.amax),
             cache_path=cache_path,
             cache_sha256=cache_sha256,
+            start_jd_tdb=float(args.start_jd_tdb),
+            representative_epoch_label=representative_epoch_label,
         )
         retuned_sidecars.append(
             {
@@ -672,6 +689,7 @@ def run(args: argparse.Namespace) -> pd.DataFrame:
                 cfg=cfg,
                 cache_path=cache_path,
                 cache_sha256=cache_sha256,
+                start_jd_tdb=float(args.start_jd_tdb),
             )
         )
 
@@ -729,6 +747,8 @@ def run(args: argparse.Namespace) -> pd.DataFrame:
                 amax=float(cfg.amax),
                 cache_path=cache_path,
                 cache_sha256=cache_sha256,
+                start_jd_tdb=float(args.start_jd_tdb),
+                representative_epoch_label=representative_epoch_label,
             )
             retuned_sidecars.append(
                 {
@@ -759,6 +779,7 @@ def run(args: argparse.Namespace) -> pd.DataFrame:
                     cfg=cfg,
                     cache_path=cache_path,
                     cache_sha256=cache_sha256,
+                    start_jd_tdb=float(args.start_jd_tdb),
                 )
             )
 
@@ -816,7 +837,7 @@ def run(args: argparse.Namespace) -> pd.DataFrame:
         canonical_time_unit_seconds=float(args.canonical_time_unit_seconds),
     )
     limitations = [
-        "Cached JPL Horizons Moon/Sun vectors provide a representative 2026-Jan-01 epoch only.",
+        f"Cached JPL Horizons Moon/Sun vectors provide a representative {representative_epoch_label} epoch only.",
         "The force model is Earth central gravity plus indirect Moon/Sun point masses in a geocentric inertial frame.",
         "Persisted controls fail direct point-mass replay; feasibility is restored only after independent retuning.",
         "The retuning optimizer runs for this package, so this is not a recorded-controls-only replay.",

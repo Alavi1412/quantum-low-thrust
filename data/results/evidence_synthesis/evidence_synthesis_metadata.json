@@ -1,6 +1,6 @@
 {
   "command": "scripts\\run_evidence_synthesis.py",
-  "row_count": 12,
+  "row_count": 13,
   "optimization_rerun": false,
   "source_mode": "Recorded CSV/JSON artifacts only; no trajectory optimization is launched.",
   "determinism_note": "Runtime is intentionally omitted so rerunning this deterministic postprocessor leaves metadata unchanged when inputs and command are unchanged.",
@@ -34,6 +34,7 @@
     "ihs_bicircular_phase_stress_polish_p04_amax02",
     "ihs_horizons_solar_tidal_replay_polish_p04_amax02",
     "ihs_horizons_point_mass_retuning_polish_p04_amax02",
+    "ihs_horizons_multi_epoch_point_mass_retuning_polish_p04_amax02",
     "tail_coast_hard_catalog_all_one_two",
     "ihs_hard_catalog_selected_failure"
   ],
@@ -137,6 +138,16 @@
       "path": "data/results/independent_hs_horizons_point_mass_retuning/independent_hs_horizons_point_mass_retuning_metadata.json",
       "sha256": "df67f9085c4807eefd098b2516f7d68276c9ca555c2a5672084d083a4df566e0",
       "bytes": 17730
+    },
+    {
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning.csv",
+      "sha256": "7582d3138306bf58133e356e80b7c578edd63a74b5f2a3ee6f8442e306995c8a",
+      "bytes": 57447
+    },
+    {
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning_metadata.json",
+      "sha256": "640dcc493f85cb649f462a4c84442cb36de610144778b7a0d056e7c8d346e1b7",
+      "bytes": 14224
     }
   ],
   "artifacts": {
@@ -153,6 +164,7 @@
     "The independent-HS branch-control replay row, when present, is normalized-CR3BP persisted-control replay only; it does not rerun optimization or add high-fidelity validation.",
     "The independent-HS bicircular phase-stress row, when present, is a positive simple circular solar-tidal stress replay for the converged all-configured row; it is not SPICE/high-fidelity validation or production solver parity.",
     "The independent-HS cached-Horizons solar-tidal replay row, when present, uses cached JPL Horizons geometry in a simplified stress replay; it is not SPICE/high-fidelity/flight validation or production solver parity.",
-    "The independent-HS cached-Horizons point-mass retuning row, when present, reports a failed persisted-control replay and an independent retuning pass; it is not SPICE/full high-fidelity/flight validation or production solver parity."
+    "The independent-HS cached-Horizons point-mass retuning row, when present, reports a failed persisted-control replay and an independent retuning pass; it is not SPICE/full high-fidelity/flight validation or production solver parity.",
+    "The independent-HS multi-epoch cached-Horizons point-mass retuning row, when present, extends that stress/retuning check across four fixed 2026 representative epochs; it is not SPICE/full high-fidelity/flight validation, production solver parity, fuel optimality, DOI evidence, or quantum evidence."
   ]
 }

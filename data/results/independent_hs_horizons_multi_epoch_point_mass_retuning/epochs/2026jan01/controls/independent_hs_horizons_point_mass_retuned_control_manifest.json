@@ -1,0 +1,101 @@
+{
+  "cache_path": "data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json",
+  "cache_sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2",
+  "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+  "limitations": [
+    "Retuned controls are stress-model artifacts for cached-Horizons Earth/Moon/Sun point-mass dynamics.",
+    "This package does not claim SPICE, full high-fidelity or flight validation, production solver parity, fuel optimality, DOI status, or quantum advantage."
+  ],
+  "manifest_type": "independent_hs_horizons_point_mass_retuned_control_manifest",
+  "retuned_control_sidecars": [
+    {
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.02143944130524006,
+      "record_type": "nominal",
+      "sha256": "753ec35bb892b76c7ed4ef584317db87a7033b95178ea7623763d996c16bef65"
+    },
+    {
+      "branch_order": 0,
+      "mask_index": 0,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.017367326509765427,
+      "record_type": "branch",
+      "sha256": "d535c68a92aac182fe8365595d9b7d09cdadecdefcb9db161a52f983c049e26c"
+    },
+    {
+      "branch_order": 1,
+      "mask_index": 1,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.0222911235516329,
+      "record_type": "branch",
+      "sha256": "ab753a7ac5f2374cfa86cdebc0c35cab44c78081e37abf930f604ef86e736ab9"
+    },
+    {
+      "branch_order": 2,
+      "mask_index": 2,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.02316978360022084,
+      "record_type": "branch",
+      "sha256": "543a294cf27457349bcadde18ef7dfe25ca1608eaf345f9b735c4bb6b1e89ce6"
+    },
+    {
+      "branch_order": 3,
+      "mask_index": 3,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.020645340276872908,
+      "record_type": "branch",
+      "sha256": "8593f57985c2748337146fbbb691506cddda9a7a04c946cea049335c09b8cafc"
+    },
+    {
+      "branch_order": 4,
+      "mask_index": 4,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.024209385445486238,
+      "record_type": "branch",
+      "sha256": "7f349bfca0a2b8da746d0bccdf6b95d18c9cdc03f0f19fc23f856d5e9e12bc88"
+    },
+    {
+      "branch_order": 5,
+      "mask_index": 7,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.02473065115224942,
+      "record_type": "branch",
+      "sha256": "323936bd7ef5b4b8283642601a212d44c99e7bf9a7e48f077a28f69a8b70656f"
+    },
+    {
+      "branch_order": 6,
+      "mask_index": 6,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.020989918062632694,
+      "record_type": "branch",
+      "sha256": "df9633d7a0d1c5ebb3a43bbc6fa4f7dd94c40e038dcf8276269a4f6a1908b6db"
+    },
+    {
+      "branch_order": 7,
+      "mask_index": 5,
+      "path": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json",
+      "point_mass_retuned_terminal_error": 0.01743704533214496,
+      "record_type": "branch",
+      "sha256": "219092ea265bbd1b8bec9bc729c8d0fb5e6ea978a66bbee2d908bd2fcc8ba0f0"
+    }
+  ],
+  "retuned_sidecar_count": 9,
+  "schema_version": 1,
+  "source_manifest_path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_control_manifest.json",
+  "source_manifest_sha256": "067099019dc31f3cd52f7b475bcf574719f299a390ca68fe074420205d8ac6ed",
+  "summary": {
+    "branch_row_count": 8,
+    "cache_sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2",
+    "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+    "persisted_branch_point_mass_replay_worst_error": 0.3797450961017463,
+    "persisted_branch_replay_pass_count": 0,
+    "persisted_nominal_point_mass_replay_error": 0.3812580376880591,
+    "persisted_nominal_replay_passes_configured_threshold": false,
+    "retuned_all_rows_pass": true,
+    "retuned_branch_pass_count": 8,
+    "retuned_branch_point_mass_worst_error": 0.02473065115224942,
+    "retuned_nominal_pass_count": 1,
+    "retuned_nominal_point_mass_error": 0.02143944130524006,
+    "retuned_nominal_row_count": 1
+  }
+}

@@ -22,6 +22,9 @@ and assigned a real identifier.
 - `data/source_states.json`
 - `data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json`
 - `data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json`
+- `data/cache/horizons/independent_hs_phase_shift_2026apr01_vectors.json`
+- `data/cache/horizons/independent_hs_phase_shift_2026jul01_vectors.json`
+- `data/cache/horizons/independent_hs_phase_shift_2026oct01_vectors.json`
 - `data/results/artifact_manifest.json`
 - `data/results/claim_evidence_ledger/`
 - `data/results/horizons_ephemeris_force_model_contrast/`
@@ -30,6 +33,7 @@ and assigned a real identifier.
 - `data/results/independent_hs_bicircular_phase_stress/`
 - `data/results/independent_hs_horizons_solar_tidal_replay/`
 - `data/results/independent_hs_horizons_point_mass_retuning/`
+- `data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/`
 - `data/results/evidence_synthesis/`
 - `data/results/replay_stress_validation/`
 - `data/results/independent_hs_all_configured_headroom/`
@@ -72,6 +76,15 @@ archived under `data/results/independent_hs_horizons_point_mass_retuning/` and
 uses the same cache. It reports failed direct persisted-control replay followed
 by independent retuning feasibility at the representative epoch; it is not
 SPICE/full high-fidelity/flight validation, production solver parity, fuel
+optimality, DOI evidence, or quantum evidence.
+The independent-HS multi-epoch cached-Horizons point-mass retuning package is
+archived under
+`data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/` and uses
+the committed 2026-Jan-01, 2026-Apr-01, 2026-Jul-01, and 2026-Oct-01 caches. It
+shows nominal direct replay fails in all four epochs, direct branch replay pass
+count `18/32` overall with July at `8/8`, and retuned feasibility for all
+nominal and branch rows, but it remains a point-mass stress/retuning package,
+not SPICE/full high-fidelity/flight validation, production solver parity, fuel
 optimality, DOI evidence, or quantum evidence.
 
 ## Post-Deposit Updates

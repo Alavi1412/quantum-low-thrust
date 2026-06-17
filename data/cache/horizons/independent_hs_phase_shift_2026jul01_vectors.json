@@ -1,0 +1,414 @@
+{
+  "schema_version": 1,
+  "cache_type": "jpl_horizons_geocentric_moon_sun_vectors",
+  "metadata": {
+    "representative_epoch_note": "Fixed representative 2026-Jul-01 TDB epoch for independent-HS cached-Horizons Earth/Moon/Sun point-mass retuning/stress only; it is not a mission epoch.",
+    "epoch_id": "2026jul01",
+    "epoch_label": "2026-Jul-01",
+    "start_jd_tdb": 2461222.5,
+    "start_calendar_tdb": "A.D. 2026-Jul-01 00:00:00.0000",
+    "canonical_transfer_time": 0.5,
+    "segments": 8,
+    "canonical_node_times": [
+      0.0,
+      0.0625,
+      0.125,
+      0.1875,
+      0.25,
+      0.3125,
+      0.375,
+      0.4375,
+      0.5
+    ],
+    "node_jd_tdb": [
+      2461222.5,
+      2461222.7714049905,
+      2461223.0428099814,
+      2461223.314214972,
+      2461223.5856199623,
+      2461223.857024953,
+      2461224.1284299437,
+      2461224.399834934,
+      2461224.6712399246
+    ],
+    "canonical_time_unit_seconds": 375190.259,
+    "reference_distance_km": 384400.0,
+    "query_docs": {
+      "horizons_api": "https://ssd-api.jpl.nasa.gov/doc/horizons.html",
+      "horizons_manual": "https://ssd.jpl.nasa.gov/horizons/manual.html",
+      "de440_de441": "https://ssd.jpl.nasa.gov/doc/de440_de441.html"
+    },
+    "query_urls": {
+      "moon_geocentric": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=301&CENTER=500%40399&EPHEM_TYPE=VECTORS&TLIST=2461222.500000000%0A2461222.771404990%0A2461223.042809981%0A2461223.314214972%0A2461223.585619962%0A2461223.857024953%0A2461224.128429944%0A2461224.399834934%0A2461224.671239925&VEC_TABLE=3&OBJ_DATA=NO&CSV_FORMAT=YES",
+      "sun_geocentric": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=10&CENTER=500%40399&EPHEM_TYPE=VECTORS&TLIST=2461222.500000000%0A2461222.771404990%0A2461223.042809981%0A2461223.314214972%0A2461223.585619962%0A2461223.857024953%0A2461224.128429944%0A2461224.399834934%0A2461224.671239925&VEC_TABLE=3&OBJ_DATA=NO&CSV_FORMAT=YES"
+    },
+    "body_queries": {
+      "moon_geocentric": {
+        "COMMAND": "301",
+        "CENTER": "500@399",
+        "description": "Moon geometric vectors relative to Earth center"
+      },
+      "sun_geocentric": {
+        "COMMAND": "10",
+        "CENTER": "500@399",
+        "description": "Sun geometric vectors relative to Earth center"
+      }
+    },
+    "ephemeris_note": "Horizons result headers for this cache report the active Horizons vector source; the retuning package remains a cached point-mass stress model."
+  },
+  "bodies": {
+    "moon_geocentric": {
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=301&CENTER=500%40399&EPHEM_TYPE=VECTORS&TLIST=2461222.500000000%0A2461222.771404990%0A2461223.042809981%0A2461223.314214972%0A2461223.585619962%0A2461223.857024953%0A2461224.128429944%0A2461224.399834934%0A2461224.671239925&VEC_TABLE=3&OBJ_DATA=NO&CSV_FORMAT=YES",
+      "request_params": {
+        "format": "json",
+        "COMMAND": "301",
+        "CENTER": "500@399",
+        "EPHEM_TYPE": "VECTORS",
+        "TLIST": "2461222.500000000\n2461222.771404990\n2461223.042809981\n2461223.314214972\n2461223.585619962\n2461223.857024953\n2461224.128429944\n2461224.399834934\n2461224.671239925",
+        "VEC_TABLE": "3",
+        "OBJ_DATA": "NO",
+        "CSV_FORMAT": "YES"
+      },
+      "response_signature": {
+        "version": "1.2",
+        "source": "NASA/JPL Horizons API"
+      },
+      "result_sha256": "39e5fa52696aebc0424c921d6c76c3964d79239292f428425f46b91ad3d29213",
+      "raw_result": "\n\n*******************************************************************************\nEphemeris / API_USER Wed Jun 17 04:59:13 2026 Pasadena, USA      / Horizons\n*******************************************************************************\nTarget body name: Moon (301)                      {source: DE441}\nCenter body name: Earth (399)                     {source: DE441}\nCenter-site name: BODY CENTER\n*******************************************************************************\nStart time      : A.D. 2026-Jul-01 00:00:00.0000 TDB\nStop  time      : A.D. 2026-Jul-03 04:06:35.1295 TDB\nStep-size       : DISCRETE TIME-LIST\n*******************************************************************************\nCenter geodetic : 0.0, 0.0, 0.0                   {E-lon(deg),Lat(deg),Alt(km)}\nCenter cylindric: 0.0, 0.0, 0.0                   {E-lon(deg),Dxy(km),Dz(km)}\nCenter radii    : 6378.137, 6378.137, 6356.752 km {Equator_a, b, pole_c}\nOutput units    : KM-S\nCalendar mode   : Mixed Julian/Gregorian\nOutput type     : GEOMETRIC cartesian states\nOutput format   : 3 (position, velocity, LT, range, range-rate)\nEOP file        : eop.260616.p260912\nEOP coverage    : DATA-BASED 1962-JAN-20 TO 2026-JUN-16. PREDICTS-> 2026-SEP-11\nReference frame : Ecliptic of J2000.0\n*******************************************************************************\n            JDTDB,            Calendar Date (TDB),                      X,                      Y,                      Z,                     VX,                     VY,                     VZ,                     LT,                     RG,                     RR,\n**************************************************************************************************************************************************************************************************************************************************************************\n$$SOE\n2461222.500000000, A.D. 2026-Jul-01 00:00:00.0000,  1.367818586051335E+05, -3.791876433547988E+05, -2.342802442782180E+04,  9.116967383200152E-01,  3.465782435542306E-01,  6.697634432571857E-02,  1.346878030583563E+00,  4.037838754148455E+05, -2.051527313259572E-02,\n2461222.771404990, A.D. 2026-Jul-01 06:30:49.3911,  1.579182633600006E+05, -3.704337666816046E+05, -2.181860070974767E+04,  8.905053501043775E-01,  3.998649766930408E-01,  7.025467220089671E-02,  1.345199956130957E+00,  4.032808013499916E+05, -2.238958484932177E-02,\n2461223.042809981, A.D. 2026-Jul-01 13:01:38.7824,  1.785211106700599E+05, -3.604433511031657E+05, -2.013493858846302E+04,  8.661971591798312E-01,  4.520146061312418E-01,  7.330621787762712E-02,  1.343375763521192E+00,  4.027339221636450E+05, -2.425223236258202E-02,\n2461223.314214972, A.D. 2026-Jul-01 19:32:28.1736,  1.985178786062477E+05, -3.492450363859126E+05, -1.838248968042135E+04,  8.388217649291609E-01,  5.028587655366406E-01,  7.611964829491985E-02,  1.341406181606663E+00,  4.021434563602560E+05, -2.610779573194562E-02,\n2461223.585619962, A.D. 2026-Jul-02 02:03:17.5647,  2.178373063078872E+05, -3.368714013629191E+05, -1.656696626039098E+04,  8.084371399029779E-01,  5.522299110288161E-01,  7.868407000762931E-02,  1.339291609137243E+00,  4.015095234820292E+05, -2.796011253424054E-02,\n2461223.857024953, A.D. 2026-Jul-02 08:34:06.9559,  2.364095916079672E+05, -3.233589408381081E+05, -1.469433058190126E+04,  7.751097215462104E-01,  5.999616345415987E-01,  8.098905914578505E-02,  1.337032178107755E+00,  4.008321631000176E+05, -2.981214352399714E-02,\n2461224.128429944, A.D. 2026-Jul-02 15:04:56.3472,  2.541665902041530E+05, -3.087480355056985E+05, -1.277078355006911E+04,  7.389145006315082E-01,  6.458889776650386E-01,  8.302469127332468E-02,  1.334627827415018E+00,  4.001113568959479E+05, -3.166584520570764E-02,\n2461224.399834934, A.D. 2026-Jul-02 21:35:45.7383,  2.710420173330337E+05, -2.930829142283728E+05, -1.080275265329471E+04,  6.999351083108285E-01,  6.898487487072860E-01,  8.478157144552820E-02,  1.332078386118345E+00,  3.993470536230918E+05, -3.352205084168169E-02,\n2461224.671239925, A.D. 2026-Jul-03 04:06:35.1295,  2.869716517480524E+05, -2.764116085500476E+05, -8.796879152625566E+03,  6.582639052278405E-01,  7.316798435873006E-01,  8.625086466306647E-02,  1.329383665586017E+00,  3.985391967310820E+05, -3.538036130238165E-02,\n$$EOE\n**************************************************************************************************************************************************************************************************************************************************************************\n \nTIME\n\n  Barycentric Dynamical Time (\"TDB\" or T_eph) output was requested. This\ncontinuous coordinate time is equivalent to the relativistic proper time\nof a clock at rest in a reference frame co-moving with the solar system\nbarycenter but outside the system's gravity well. It is the independent\nvariable in the solar system relativistic equations of motion.\n\n  TDB runs at a uniform rate of one SI second per second and is independent\nof irregularities in Earth's rotation.\n \nCALENDAR SYSTEM\n\n  Mixed calendar mode was active such that calendar dates after AD 1582-Oct-15\n(if any) are in the modern Gregorian system. Dates prior to 1582-Oct-5 (if any)\nare in the Julian calendar system, which is automatically extended for dates\nprior to its adoption on 45-Jan-1 BC.  The Julian calendar is useful for\nmatching historical dates. The Gregorian calendar more accurately corresponds\nto the Earth's orbital motion and seasons. A \"Gregorian-only\" calendar mode is\navailable if such physical events are the primary interest.\n\nREFERENCE FRAME AND COORDINATES\n\n  Ecliptic at the standard reference epoch\n\n    Reference epoch: J2000.0\n    X-Y plane: adopted Earth orbital plane at the reference epoch\n               Note: IAU76 obliquity of 84381.448 arcseconds wrt ICRF X-Y plane\n    X-axis   : ICRF\n    Z-axis   : perpendicular to the X-Y plane in the directional (+ or -) sense\n               of Earth's north pole at the reference epoch.\n\n  Symbol meaning:\n\n    JDTDB    Julian Day Number, Barycentric Dynamical Time\n      X      X-component of position vector (km)\n      Y      Y-component of position vector (km)\n      Z      Z-component of position vector (km)\n      VX     X-component of velocity vector (km/sec)                           \n      VY     Y-component of velocity vector (km/sec)                           \n      VZ     Z-component of velocity vector (km/sec)                           \n      LT     One-way down-leg Newtonian light-time (sec)\n      RG     Range; distance from coordinate center (km)\n      RR     Range-rate; radial velocity wrt coord. center (km/sec)\n\nABERRATIONS AND CORRECTIONS\n\n Geometric state vectors have NO corrections or aberrations applied.\n\nComputations by ...\n\n    Solar System Dynamics Group, Horizons On-Line Ephemeris System\n    4800 Oak Grove Drive, Jet Propulsion Laboratory\n    Pasadena, CA  91109   USA\n\n    General site: https://ssd.jpl.nasa.gov/\n    Mailing list: https://ssd.jpl.nasa.gov/email_list.html\n    System news : https://ssd.jpl.nasa.gov/horizons/news.html\n    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html\n    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x\n                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html\n                  command-line   telnet ssd.jpl.nasa.gov 6775\n                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/horizons_batch.txt\n                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS\n    Inquiries   : contact-ssd@jpl.nasa.gov\n*******************************************************************************\n",
+      "samples": [
+        {
+          "jd_tdb": 2461222.5,
+          "calendar_tdb": "A.D. 2026-Jul-01 00:00:00.0000",
+          "position_km": [
+            136781.8586051335,
+            -379187.6433547988,
+            -23428.0244278218
+          ],
+          "velocity_km_s": [
+            0.9116967383200152,
+            0.3465782435542306,
+            0.06697634432571857
+          ],
+          "light_time_s": 1.346878030583563,
+          "range_km": 403783.8754148455,
+          "range_rate_km_s": -0.02051527313259572
+        },
+        {
+          "jd_tdb": 2461222.77140499,
+          "calendar_tdb": "A.D. 2026-Jul-01 06:30:49.3911",
+          "position_km": [
+            157918.2633600006,
+            -370433.7666816046,
+            -21818.60070974767
+          ],
+          "velocity_km_s": [
+            0.8905053501043775,
+            0.3998649766930408,
+            0.0702546722008967
+          ],
+          "light_time_s": 1.345199956130957,
+          "range_km": 403280.8013499916,
+          "range_rate_km_s": -0.02238958484932177
+        },
+        {
+          "jd_tdb": 2461223.042809981,
+          "calendar_tdb": "A.D. 2026-Jul-01 13:01:38.7824",
+          "position_km": [
+            178521.1106700599,
+            -360443.3511031657,
+            -20134.93858846302
+          ],
+          "velocity_km_s": [
+            0.8661971591798312,
+            0.4520146061312418,
+            0.07330621787762712
+          ],
+          "light_time_s": 1.343375763521192,
+          "range_km": 402733.922163645,
+          "range_rate_km_s": -0.02425223236258202
+        },
+        {
+          "jd_tdb": 2461223.314214972,
+          "calendar_tdb": "A.D. 2026-Jul-01 19:32:28.1736",
+          "position_km": [
+            198517.8786062477,
+            -349245.0363859126,
+            -18382.48968042135
+          ],
+          "velocity_km_s": [
+            0.8388217649291609,
+            0.5028587655366406,
+            0.07611964829491985
+          ],
+          "light_time_s": 1.341406181606663,
+          "range_km": 402143.456360256,
+          "range_rate_km_s": -0.02610779573194562
+        },
+        {
+          "jd_tdb": 2461223.585619962,
+          "calendar_tdb": "A.D. 2026-Jul-02 02:03:17.5647",
+          "position_km": [
+            217837.3063078872,
+            -336871.4013629191,
+            -16566.96626039098
+          ],
+          "velocity_km_s": [
+            0.8084371399029779,
+            0.5522299110288161,
+            0.07868407000762931
+          ],
+          "light_time_s": 1.339291609137243,
+          "range_km": 401509.5234820292,
+          "range_rate_km_s": -0.02796011253424054
+        },
+        {
+          "jd_tdb": 2461223.857024953,
+          "calendar_tdb": "A.D. 2026-Jul-02 08:34:06.9559",
+          "position_km": [
+            236409.5916079672,
+            -323358.9408381081,
+            -14694.33058190126
+          ],
+          "velocity_km_s": [
+            0.7751097215462104,
+            0.5999616345415987,
+            0.08098905914578505
+          ],
+          "light_time_s": 1.337032178107755,
+          "range_km": 400832.1631000176,
+          "range_rate_km_s": -0.02981214352399714
+        },
+        {
+          "jd_tdb": 2461224.128429944,
+          "calendar_tdb": "A.D. 2026-Jul-02 15:04:56.3472",
+          "position_km": [
+            254166.590204153,
+            -308748.0355056985,
+            -12770.78355006911
+          ],
+          "velocity_km_s": [
+            0.7389145006315082,
+            0.6458889776650386,
+            0.08302469127332468
+          ],
+          "light_time_s": 1.334627827415018,
+          "range_km": 400111.3568959479,
+          "range_rate_km_s": -0.03166584520570764
+        },
+        {
+          "jd_tdb": 2461224.399834934,
+          "calendar_tdb": "A.D. 2026-Jul-02 21:35:45.7383",
+          "position_km": [
+            271042.0173330337,
+            -293082.9142283728,
+            -10802.75265329471
+          ],
+          "velocity_km_s": [
+            0.6999351083108285,
+            0.689848748707286,
+            0.0847815714455282
+          ],
+          "light_time_s": 1.332078386118345,
+          "range_km": 399347.0536230918,
+          "range_rate_km_s": -0.03352205084168169
+        },
+        {
+          "jd_tdb": 2461224.671239925,
+          "calendar_tdb": "A.D. 2026-Jul-03 04:06:35.1295",
+          "position_km": [
+            286971.6517480524,
+            -276411.6085500476,
+            -8796.879152625566
+          ],
+          "velocity_km_s": [
+            0.6582639052278405,
+            0.7316798435873006,
+            0.08625086466306647
+          ],
+          "light_time_s": 1.329383665586017,
+          "range_km": 398539.196731082,
+          "range_rate_km_s": -0.03538036130238165
+        }
+      ]
+    },
+    "sun_geocentric": {
+      "query_url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=10&CENTER=500%40399&EPHEM_TYPE=VECTORS&TLIST=2461222.500000000%0A2461222.771404990%0A2461223.042809981%0A2461223.314214972%0A2461223.585619962%0A2461223.857024953%0A2461224.128429944%0A2461224.399834934%0A2461224.671239925&VEC_TABLE=3&OBJ_DATA=NO&CSV_FORMAT=YES",
+      "request_params": {
+        "format": "json",
+        "COMMAND": "10",
+        "CENTER": "500@399",
+        "EPHEM_TYPE": "VECTORS",
+        "TLIST": "2461222.500000000\n2461222.771404990\n2461223.042809981\n2461223.314214972\n2461223.585619962\n2461223.857024953\n2461224.128429944\n2461224.399834934\n2461224.671239925",
+        "VEC_TABLE": "3",
+        "OBJ_DATA": "NO",
+        "CSV_FORMAT": "YES"
+      },
+      "response_signature": {
+        "source": "NASA/JPL Horizons API",
+        "version": "1.2"
+      },
+      "result_sha256": "2ba6a2d1bdf52fb9ffe578e87f153d45b3107d0b8e6542d958994d8cc72c4fc6",
+      "raw_result": "\n\n*******************************************************************************\nEphemeris / API_USER Wed Jun 17 04:59:14 2026 Pasadena, USA      / Horizons\n*******************************************************************************\nTarget body name: Sun (10)                        {source: DE441}\nCenter body name: Earth (399)                     {source: DE441}\nCenter-site name: BODY CENTER\n*******************************************************************************\nStart time      : A.D. 2026-Jul-01 00:00:00.0000 TDB\nStop  time      : A.D. 2026-Jul-03 04:06:35.1295 TDB\nStep-size       : DISCRETE TIME-LIST\n*******************************************************************************\nCenter geodetic : 0.0, 0.0, 0.0                   {E-lon(deg),Lat(deg),Alt(km)}\nCenter cylindric: 0.0, 0.0, 0.0                   {E-lon(deg),Dxy(km),Dz(km)}\nCenter radii    : 6378.137, 6378.137, 6356.752 km {Equator_a, b, pole_c}\nOutput units    : KM-S\nCalendar mode   : Mixed Julian/Gregorian\nOutput type     : GEOMETRIC cartesian states\nOutput format   : 3 (position, velocity, LT, range, range-rate)\nEOP file        : eop.260616.p260912\nEOP coverage    : DATA-BASED 1962-JAN-20 TO 2026-JUN-16. PREDICTS-> 2026-SEP-11\nReference frame : Ecliptic of J2000.0\n*******************************************************************************\n            JDTDB,            Calendar Date (TDB),                      X,                      Y,                      Z,                     VX,                     VY,                     VZ,                     LT,                     RG,                     RR,\n**************************************************************************************************************************************************************************************************************************************************************************\n$$SOE\n2461222.500000000, A.D. 2026-Jul-01 00:00:00.0000, -2.335820641700208E+07,  1.502733994236219E+08, -9.162449215054512E+03, -2.894100859641282E+01, -4.459862042213109E+00,  1.250731618216205E-03,  5.072774114733342E+02,  1.520779420734682E+08,  3.821337354058490E-02,\n2461222.771404990, A.D. 2026-Jul-01 06:30:49.3911, -2.403661374793734E+07,  1.501672675261734E+08, -9.132555580452085E+03, -2.892030037331229E+01, -4.592120073964934E+00,  1.298449186482475E-03,  5.072803358365016E+02,  1.520788187754903E+08,  3.655968710725502E-02,\n2461223.042809981, A.D. 2026-Jul-01 13:01:38.7824, -2.471452889692876E+07,  1.500580352373464E+08, -9.101575144842267E+03, -2.889903015094376E+01, -4.724294485545638E+00,  1.343401530488952E-03,  5.072831306186426E+02,  1.520796566300979E+08,  3.489983647810303E-02,\n2461223.314214972, A.D. 2026-Jul-01 19:32:28.1736, -2.539193868141471E+07,  1.499457045250176E+08, -9.069574377626181E+03, -2.887719776980981E+01, -4.856384707001462E+00,  1.385450785797770E-03,  5.072857952814648E+02,  1.520804554759151E+08,  3.323238443083230E-02,\n2461223.585619962, A.D. 2026-Jul-02 02:03:17.5647, -2.606882991403166E+07,  1.498302773705481E+08, -9.036622919201851E+03, -2.885480297921718E+01, -4.988390160319769E+00,  1.424464431602157E-03,  5.072883291737825E+02,  1.520812151177214E+08,  3.155588176238674E-02,\n2461223.857024953, A.D. 2026-Jul-02 08:34:06.9559, -2.674518940742264E+07,  1.497117557677796E+08, -9.002793450839818E+03, -2.883184543591178E+01, -5.120310257022312E+00,  1.460315654888689E-03,  5.072907315306562E+02,  1.520819353261935E+08,  2.986886863156950E-02,\n2461224.128429944, A.D. 2026-Jul-02 15:04:56.3472, -2.742100395928371E+07,  1.495901417255219E+08, -8.968161557368934E+03, -2.880832470342431E+01, -5.252144391886167E+00,  1.492883713139381E-03,  5.072930014725660E+02,  1.520826158376581E+08,  2.816987593060936E-02,\n2461224.399834934, A.D. 2026-Jul-02 21:35:45.7383, -2.809626035249043E+07,  1.494654372676643E+08, -8.932805580429733E+03, -2.878424025094655E+01, -5.383891939584529E+00,  1.522054299584630E-03,  5.072951380047505E+02,  1.520832563538933E+08,  2.645742659399107E-02,\n2461224.671239925, A.D. 2026-Jul-03 04:06:35.1295, -2.877094536601581E+07,  1.493376444312378E+08, -8.896806462444365E+03, -2.875959145176176E+01, -5.515552253399707E+00,  1.547719913390644E-03,  5.072971400166748E+02,  1.520838565419691E+08,  2.473003685734988E-02,\n$$EOE\n**************************************************************************************************************************************************************************************************************************************************************************\n \nTIME\n\n  Barycentric Dynamical Time (\"TDB\" or T_eph) output was requested. This\ncontinuous coordinate time is equivalent to the relativistic proper time\nof a clock at rest in a reference frame co-moving with the solar system\nbarycenter but outside the system's gravity well. It is the independent\nvariable in the solar system relativistic equations of motion.\n\n  TDB runs at a uniform rate of one SI second per second and is independent\nof irregularities in Earth's rotation.\n \nCALENDAR SYSTEM\n\n  Mixed calendar mode was active such that calendar dates after AD 1582-Oct-15\n(if any) are in the modern Gregorian system. Dates prior to 1582-Oct-5 (if any)\nare in the Julian calendar system, which is automatically extended for dates\nprior to its adoption on 45-Jan-1 BC.  The Julian calendar is useful for\nmatching historical dates. The Gregorian calendar more accurately corresponds\nto the Earth's orbital motion and seasons. A \"Gregorian-only\" calendar mode is\navailable if such physical events are the primary interest.\n\nREFERENCE FRAME AND COORDINATES\n\n  Ecliptic at the standard reference epoch\n\n    Reference epoch: J2000.0\n    X-Y plane: adopted Earth orbital plane at the reference epoch\n               Note: IAU76 obliquity of 84381.448 arcseconds wrt ICRF X-Y plane\n    X-axis   : ICRF\n    Z-axis   : perpendicular to the X-Y plane in the directional (+ or -) sense\n               of Earth's north pole at the reference epoch.\n\n  Symbol meaning:\n\n    JDTDB    Julian Day Number, Barycentric Dynamical Time\n      X      X-component of position vector (km)\n      Y      Y-component of position vector (km)\n      Z      Z-component of position vector (km)\n      VX     X-component of velocity vector (km/sec)                           \n      VY     Y-component of velocity vector (km/sec)                           \n      VZ     Z-component of velocity vector (km/sec)                           \n      LT     One-way down-leg Newtonian light-time (sec)\n      RG     Range; distance from coordinate center (km)\n      RR     Range-rate; radial velocity wrt coord. center (km/sec)\n\nABERRATIONS AND CORRECTIONS\n\n Geometric state vectors have NO corrections or aberrations applied.\n\nComputations by ...\n\n    Solar System Dynamics Group, Horizons On-Line Ephemeris System\n    4800 Oak Grove Drive, Jet Propulsion Laboratory\n    Pasadena, CA  91109   USA\n\n    General site: https://ssd.jpl.nasa.gov/\n    Mailing list: https://ssd.jpl.nasa.gov/email_list.html\n    System news : https://ssd.jpl.nasa.gov/horizons/news.html\n    User Guide  : https://ssd.jpl.nasa.gov/horizons/manual.html\n    Connect     : browser        https://ssd.jpl.nasa.gov/horizons/app.html#/x\n                  API            https://ssd-api.jpl.nasa.gov/doc/horizons.html\n                  command-line   telnet ssd.jpl.nasa.gov 6775\n                  e-mail/batch   https://ssd.jpl.nasa.gov/ftp/ssd/horizons_batch.txt\n                  scripts        https://ssd.jpl.nasa.gov/ftp/ssd/SCRIPTS\n    Inquiries   : contact-ssd@jpl.nasa.gov\n*******************************************************************************\n",
+      "samples": [
+        {
+          "jd_tdb": 2461222.5,
+          "calendar_tdb": "A.D. 2026-Jul-01 00:00:00.0000",
+          "position_km": [
+            -23358206.41700208,
+            150273399.4236219,
+            -9162.449215054512
+          ],
+          "velocity_km_s": [
+            -28.94100859641282,
+            -4.459862042213109,
+            0.001250731618216205
+          ],
+          "light_time_s": 507.2774114733342,
+          "range_km": 152077942.0734682,
+          "range_rate_km_s": 0.0382133735405849
+        },
+        {
+          "jd_tdb": 2461222.77140499,
+          "calendar_tdb": "A.D. 2026-Jul-01 06:30:49.3911",
+          "position_km": [
+            -24036613.74793734,
+            150167267.5261734,
+            -9132.555580452085
+          ],
+          "velocity_km_s": [
+            -28.92030037331229,
+            -4.592120073964934,
+            0.001298449186482475
+          ],
+          "light_time_s": 507.2803358365016,
+          "range_km": 152078818.7754903,
+          "range_rate_km_s": 0.03655968710725502
+        },
+        {
+          "jd_tdb": 2461223.042809981,
+          "calendar_tdb": "A.D. 2026-Jul-01 13:01:38.7824",
+          "position_km": [
+            -24714528.89692876,
+            150058035.2373464,
+            -9101.575144842267
+          ],
+          "velocity_km_s": [
+            -28.89903015094376,
+            -4.724294485545638,
+            0.001343401530488952
+          ],
+          "light_time_s": 507.2831306186426,
+          "range_km": 152079656.6300979,
+          "range_rate_km_s": 0.03489983647810303
+        },
+        {
+          "jd_tdb": 2461223.314214972,
+          "calendar_tdb": "A.D. 2026-Jul-01 19:32:28.1736",
+          "position_km": [
+            -25391938.68141471,
+            149945704.5250176,
+            -9069.57437762618
+          ],
+          "velocity_km_s": [
+            -28.87719776980981,
+            -4.856384707001462,
+            0.00138545078579777
+          ],
+          "light_time_s": 507.2857952814648,
+          "range_km": 152080455.4759151,
+          "range_rate_km_s": 0.0332323844308323
+        },
+        {
+          "jd_tdb": 2461223.585619962,
+          "calendar_tdb": "A.D. 2026-Jul-02 02:03:17.5647",
+          "position_km": [
+            -26068829.91403166,
+            149830277.3705481,
+            -9036.62291920185
+          ],
+          "velocity_km_s": [
+            -28.85480297921718,
+            -4.988390160319769,
+            0.001424464431602157
+          ],
+          "light_time_s": 507.2883291737825,
+          "range_km": 152081215.1177214,
+          "range_rate_km_s": 0.03155588176238674
+        },
+        {
+          "jd_tdb": 2461223.857024953,
+          "calendar_tdb": "A.D. 2026-Jul-02 08:34:06.9559",
+          "position_km": [
+            -26745189.40742264,
+            149711755.7677796,
+            -9002.793450839818
+          ],
+          "velocity_km_s": [
+            -28.83184543591178,
+            -5.120310257022312,
+            0.001460315654888689
+          ],
+          "light_time_s": 507.2907315306562,
+          "range_km": 152081935.3261935,
+          "range_rate_km_s": 0.0298688686315695
+        },
+        {
+          "jd_tdb": 2461224.128429944,
+          "calendar_tdb": "A.D. 2026-Jul-02 15:04:56.3472",
+          "position_km": [
+            -27421003.95928371,
+            149590141.7255219,
+            -8968.161557368934
+          ],
+          "velocity_km_s": [
+            -28.80832470342431,
+            -5.252144391886167,
+            0.001492883713139381
+          ],
+          "light_time_s": 507.293001472566,
+          "range_km": 152082615.8376581,
+          "range_rate_km_s": 0.02816987593060936
+        },
+        {
+          "jd_tdb": 2461224.399834934,
+          "calendar_tdb": "A.D. 2026-Jul-02 21:35:45.7383",
+          "position_km": [
+            -28096260.35249043,
+            149465437.2676643,
+            -8932.805580429733
+          ],
+          "velocity_km_s": [
+            -28.78424025094655,
+            -5.383891939584529,
+            0.00152205429958463
+          ],
+          "light_time_s": 507.2951380047505,
+          "range_km": 152083256.3538933,
+          "range_rate_km_s": 0.02645742659399107
+        },
+        {
+          "jd_tdb": 2461224.671239925,
+          "calendar_tdb": "A.D. 2026-Jul-03 04:06:35.1295",
+          "position_km": [
+            -28770945.36601581,
+            149337644.4312378,
+            -8896.806462444365
+          ],
+          "velocity_km_s": [
+            -28.75959145176176,
+            -5.515552253399707,
+            0.001547719913390644
+          ],
+          "light_time_s": 507.2971400166748,
+          "range_km": 152083856.5419691,
+          "range_rate_km_s": 0.02473003685734988
+        }
+      ]
+    }
+  },
+  "interpretation_limits": [
+    "Cached JPL Horizons vectors are used for an offline force-model contrast only.",
+    "The cache does not define a mission epoch or flight-validation data product.",
+    "The contrast is not SPICE validation, high-fidelity trajectory replay, or accepted-control retuning."
+  ]
+}

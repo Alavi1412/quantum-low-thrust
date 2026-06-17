@@ -28,6 +28,7 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
     has_ihs_bicircular = module.independent_hs_bicircular_phase_stress_available()
     has_ihs_horizons = module.independent_hs_horizons_solar_tidal_replay_available()
     has_ihs_point_mass = module.independent_hs_horizons_point_mass_retuning_available()
+    has_ihs_multi_point_mass = module.independent_hs_horizons_multi_epoch_point_mass_retuning_available()
 
     expected_rows = {
         "phase_shift_tight_threshold_counts",
@@ -47,6 +48,8 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
         expected_rows.add("ihs_horizons_solar_tidal_replay_polish_p04_amax02")
     if has_ihs_point_mass:
         expected_rows.add("ihs_horizons_point_mass_retuning_polish_p04_amax02")
+    if has_ihs_multi_point_mass:
+        expected_rows.add("ihs_horizons_multi_epoch_point_mass_retuning_polish_p04_amax02")
     assert len(synthesis) == len(expected_rows)
     assert set(synthesis["row_id"]) == expected_rows
 
@@ -132,6 +135,22 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
         assert "Persisted controls fail direct ephemeris point-mass replay" in ihs_point_mass["practitioner_interpretation"]
         assert "not SPICE/full high-fidelity/flight validation" in ihs_point_mass["practitioner_interpretation"]
 
+    if has_ihs_multi_point_mass:
+        ihs_multi_point_mass = row("ihs_horizons_multi_epoch_point_mass_retuning_polish_p04_amax02")
+        assert ihs_multi_point_mass["configured_pass"] == "True"
+        assert ihs_multi_point_mass["nominal_error"] == "0.02143944130524006"
+        assert ihs_multi_point_mass["selected_worst_error"] == "0.02473065115224942"
+        assert ihs_multi_point_mass["all_mask_worst_error"] == ihs_multi_point_mass["selected_worst_error"]
+        assert ihs_multi_point_mass["tight_0p05_0p09_all_mask_pass"] == "True"
+        assert "4 representative 2026 epochs" in ihs_multi_point_mass["mask_scope"]
+        assert "nominal direct replay fails in 4/4 epochs" in ihs_multi_point_mass["pass_status_note"]
+        assert "direct branch pass 18/32 (July 8/8)" in ihs_multi_point_mass["pass_status_note"]
+        assert "retuned branch 32/32" in ihs_multi_point_mass["pass_status_note"]
+        assert "no longer a single representative-epoch check" in ihs_multi_point_mass["practitioner_interpretation"]
+        assert "not SPICE/full high-fidelity/flight validation" in ihs_multi_point_mass[
+            "practitioner_interpretation"
+        ]
+
     tail = row("tail_coast_hard_catalog_all_one_two")
     assert tail["nominal_error"] == "0.02299233817855882"
     assert tail["selected_worst_error"] == "0.0936063931709301"
@@ -174,12 +193,14 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
     has_ihs_bicircular = module.independent_hs_bicircular_phase_stress_available()
     has_ihs_horizons = module.independent_hs_horizons_solar_tidal_replay_available()
     has_ihs_point_mass = module.independent_hs_horizons_point_mass_retuning_available()
+    has_ihs_multi_point_mass = module.independent_hs_horizons_multi_epoch_point_mass_retuning_available()
     expected_rows = (
         8
         + int(has_ihs_replay)
         + int(has_ihs_bicircular)
         + int(has_ihs_horizons)
         + int(has_ihs_point_mass)
+        + int(has_ihs_multi_point_mass)
     )
     expected_inputs = (
         12
@@ -187,6 +208,7 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
         + (2 if has_ihs_bicircular else 0)
         + (2 if has_ihs_horizons else 0)
         + (2 if has_ihs_point_mass else 0)
+        + (2 if has_ihs_multi_point_mass else 0)
     )
     assert metadata["optimization_rerun"] is False
     assert metadata["row_count"] == expected_rows
@@ -206,6 +228,8 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
         assert "ihs_horizons_solar_tidal_replay_polish_p04_amax02" in set(csv_df["row_id"])
     if has_ihs_point_mass:
         assert "ihs_horizons_point_mass_retuning_polish_p04_amax02" in set(csv_df["row_id"])
+    if has_ihs_multi_point_mass:
+        assert "ihs_horizons_multi_epoch_point_mass_retuning_polish_p04_amax02" in set(csv_df["row_id"])
     table = table_path.read_text(encoding="utf-8")
     assert "0.05/0.10: True; 0.05/0.09: False" in table
     assert "sampled methods 0/30; all-windows 30/30" in table

@@ -135,6 +135,20 @@ INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA = (
     / "independent_hs_horizons_point_mass_retuning"
     / "independent_hs_horizons_point_mass_retuning_metadata.json"
 )
+INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_horizons_multi_epoch_point_mass_retuning"
+    / "independent_hs_horizons_multi_epoch_point_mass_retuning.csv"
+)
+INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_horizons_multi_epoch_point_mass_retuning"
+    / "independent_hs_horizons_multi_epoch_point_mass_retuning_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -284,6 +298,13 @@ def independent_hs_horizons_point_mass_retuning_available() -> bool:
     return (
         INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV.is_file()
         and INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA.is_file()
+    )
+
+
+def independent_hs_horizons_multi_epoch_point_mass_retuning_available() -> bool:
+    return (
+        INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_CSV.is_file()
+        and INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA.is_file()
     )
 
 
@@ -503,6 +524,72 @@ def _independent_hs_horizons_point_mass_retuning_row() -> dict[str, str]:
     }
 
 
+def _independent_hs_horizons_multi_epoch_point_mass_retuning_row() -> dict[str, str]:
+    metadata = json.loads(INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA.read_text(encoding="utf-8"))
+    summary = metadata["overall_summary"]
+    epochs = list(metadata["epochs"])
+    for flag_name in (
+        "spice_ephemeris_validation",
+        "high_fidelity_validation",
+        "high_fidelity_flight_validation",
+        "production_solver_parity_claim",
+        "fuel_optimality_claim",
+        "doi_claim",
+        "quantum_advantage_claim",
+    ):
+        if bool(metadata[flag_name]):
+            raise RuntimeError(f"multi-epoch point-mass retuning metadata must not claim {flag_name}")
+    epoch_count = int(summary["epoch_count"])
+    branch_count = int(summary["branch_row_count_total"])
+    branch_pass = int(summary["retuned_branch_pass_count_total"])
+    direct_failure_epochs = int(summary["direct_replay_failure_epoch_count"])
+    direct_branch_pass = sum(int(epoch["persisted_branch_replay_pass_count"]) for epoch in epochs)
+    july_epoch = next((epoch for epoch in epochs if str(epoch["epoch_id"]) == "2026jul01"), None)
+    if july_epoch is None:
+        raise RuntimeError("multi-epoch point-mass retuning metadata missing 2026-Jul-01 epoch")
+    july_direct_branch_pass = int(july_epoch["persisted_branch_replay_pass_count"])
+    july_branch_count = int(july_epoch["branch_row_count"])
+    retuned_nominal = str(summary["retuned_nominal_worst_over_epochs"])
+    retuned_branch = str(summary["retuned_branch_worst_over_epochs"])
+    replay_nominal = str(summary["persisted_nominal_replay_worst_over_epochs"])
+    replay_branch = str(summary["persisted_branch_replay_worst_over_epochs"])
+    return {
+        "row_id": "ihs_horizons_multi_epoch_point_mass_retuning_polish_p04_amax02",
+        "artifact_family": "independent-HS multi-epoch cached-Horizons Earth/Moon/Sun point-mass retuning",
+        "representative_case_or_statistic": "ihs_all_single_p04_amax02_polish_from_p04 over four 2026 epochs",
+        "target_family": "catalog halo phase-shift",
+        "backend_initializer_role": "independent endpoint-plus-midpoint retuning under cached-Horizons point-mass dynamics",
+        "mask_scope": "4 representative 2026 epochs; 32 configured one-segment branch rows retuned",
+        "phase_time": "0.4",
+        "transfer_time": "0.5",
+        "amax": "0.2",
+        "segments": "8",
+        "nominal_error": retuned_nominal,
+        "selected_worst_error": retuned_branch,
+        "all_mask_worst_error": retuned_branch,
+        "configured_pass": str(bool(float(retuned_nominal) <= 0.09 and branch_pass == branch_count)),
+        "stringent_0p065_0p10_all_mask_pass": _threshold_pass(retuned_nominal, retuned_branch, STRINGENT_THRESHOLDS),
+        "near_tight_0p05_0p10_all_mask_pass": _threshold_pass(retuned_nominal, retuned_branch, NEAR_TIGHT_THRESHOLDS),
+        "tight_0p05_0p09_all_mask_pass": _threshold_pass(retuned_nominal, retuned_branch, TIGHT_THRESHOLDS),
+        "pass_status_note": (
+            f"nominal direct replay fails in {direct_failure_epochs}/{epoch_count} epochs: nominal worst "
+            f"{replay_nominal}, branch worst {replay_branch}, direct branch pass {direct_branch_pass}/"
+            f"{branch_count} (July {july_direct_branch_pass}/{july_branch_count}); retuned branch "
+            f"{branch_pass}/{branch_count}"
+        ),
+        "practitioner_interpretation": (
+            "The cached-Horizons point-mass retuning result is no longer a single representative-epoch "
+            "check: nominal direct replay fails in all four fixed 2026 epochs; direct branch replay "
+            f"passes {direct_branch_pass}/{branch_count} overall (July {july_direct_branch_pass}/"
+            f"{july_branch_count}); retuning restores feasibility. "
+            "This is still not SPICE/full high-fidelity/flight validation, production solver parity, "
+            "fuel optimality, DOI evidence, or quantum evidence."
+        ),
+        "source_artifact": _relative_or_absolute(INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_CSV),
+        "source_row_id": "overall_summary in independent-HS multi-epoch point-mass retuning metadata",
+    }
+
+
 def _threshold_count_row(threshold_rows: list[dict[str, str]]) -> dict[str, str]:
     tight_rows = [
         row
@@ -686,6 +773,11 @@ def build_synthesis() -> pd.DataFrame:
             if independent_hs_horizons_point_mass_retuning_available()
             else []
         ),
+        *(
+            [_independent_hs_horizons_multi_epoch_point_mass_retuning_row()]
+            if independent_hs_horizons_multi_epoch_point_mass_retuning_available()
+            else []
+        ),
         _case_metric_row(
             row_id="tail_coast_hard_catalog_all_one_two",
             artifact_family="hard-catalog tail-coast recovery",
@@ -831,6 +923,13 @@ def write_artifacts(
                 INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA,
             ]
         )
+    if independent_hs_horizons_multi_epoch_point_mass_retuning_available():
+        input_artifacts.extend(
+            [
+                INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_CSV,
+                INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_METADATA,
+            ]
+        )
     metadata = {
         "command": command,
         "row_count": int(len(synthesis)),
@@ -904,6 +1003,12 @@ def write_artifacts(
                 "The independent-HS cached-Horizons point-mass retuning row, when present, reports a "
                 "failed persisted-control replay and an independent retuning pass; it is not SPICE/"
                 "full high-fidelity/flight validation or production solver parity."
+            ),
+            (
+                "The independent-HS multi-epoch cached-Horizons point-mass retuning row, when present, "
+                "extends that stress/retuning check across four fixed 2026 representative epochs; it "
+                "is not SPICE/full high-fidelity/flight validation, production solver parity, fuel "
+                "optimality, DOI evidence, or quantum evidence."
             ),
         ],
     }

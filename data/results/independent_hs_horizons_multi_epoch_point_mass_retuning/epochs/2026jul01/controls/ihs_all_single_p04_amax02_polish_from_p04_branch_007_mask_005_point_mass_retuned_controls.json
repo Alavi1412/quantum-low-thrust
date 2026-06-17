@@ -1,0 +1,143 @@
+{
+  "active_control_mask": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    1,
+    1
+  ],
+  "amax": 0.2,
+  "branch_order": 7,
+  "cache_path": "data/cache/horizons/independent_hs_phase_shift_2026jul01_vectors.json",
+  "cache_sha256": "5a5e2d844f3b42232ebe6000425916d36c360ebba0adb6598fb2919dc8313935",
+  "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+  "configured_threshold": 0.17,
+  "control_norm_diagnostics": {
+    "endpoint_bound_violation": 2.7755575615628914e-17,
+    "endpoint_norm_max": 0.20000000000000004,
+    "midpoint_bound_violation": 0.0,
+    "midpoint_norm_max": 0.2
+  },
+  "cost": 6.633702248069436e-05,
+  "limitations": [
+    "Cached JPL Horizons Moon/Sun vectors provide representative A.D. 2026-Jul-01 00:00:00.0000 geometry only.",
+    "Dynamics are Earth central gravity plus indirect Moon/Sun point-mass terms in a geocentric inertial frame.",
+    "Controls were retuned independently for this stress model and should not be read as production solver parity.",
+    "This is not SPICE propagation, full high-fidelity or flight validation, fuel optimality, DOI evidence, or quantum advantage evidence."
+  ],
+  "mask_index": 5,
+  "nfev": 5,
+  "optimality": 3.773489020771758e-05,
+  "outage_mask": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    1,
+    1
+  ],
+  "point_mass_replay_terminal_error": 0.09474936714868684,
+  "point_mass_retuned_terminal_error": 0.011504523089978496,
+  "record_type": "branch",
+  "recorded_cr3bp_terminal_error": 0.013358152425487681,
+  "representative_epoch_label": "A.D. 2026-Jul-01 00:00:00.0000",
+  "retuned_endpoint_controls": [
+    [
+      0.06682011223400026,
+      0.0732484033470133,
+      -0.17369439832115735
+    ],
+    [
+      0.07802058976811593,
+      0.05222859577804401,
+      -0.17659264241550116
+    ],
+    [
+      0.08457791087588189,
+      0.07080992028427399,
+      -0.16683084900942674
+    ],
+    [
+      0.09139475774173637,
+      0.058741038542492914,
+      -0.16509299646366432
+    ],
+    [
+      0.08213334583795874,
+      0.029518890984312852,
+      -0.1432363413315511
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.06445832045999364,
+      -0.016696148148464207,
+      -0.09902170734313763
+    ],
+    [
+      0.06037963741280266,
+      -0.10693143412583166,
+      -0.09650536861961433
+    ]
+  ],
+  "retuned_midpoint_controls": [
+    [
+      0.06418800795170695,
+      0.0925818604080654,
+      -0.14929318860137963
+    ],
+    [
+      0.0709163153963555,
+      0.06350453235149202,
+      -0.17589215611113232
+    ],
+    [
+      0.08374709158645534,
+      0.06042755000522179,
+      -0.1712744459958236
+    ],
+    [
+      0.09407267481400397,
+      0.03897867404754319,
+      -0.17213655864700575
+    ],
+    [
+      0.08908314067579857,
+      -0.00011931419734001643,
+      -0.1484269947563882
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.05716617223545316,
+      -0.06598170409319731,
+      -0.10387454528428959
+    ],
+    [
+      0.05112522289153189,
+      -0.14095357500330197,
+      -0.10106777042077471
+    ]
+  ],
+  "retuned_passes_configured_threshold": true,
+  "retuning_semantics": "Independent least-squares retuning of endpoint-plus-midpoint controls under cached-Horizons Earth/Moon/Sun point-mass dynamics; branch outage-masked segments remain inactive.",
+  "runtime_seconds": 4.833987699996214,
+  "schema_version": 1,
+  "scipy_message": "`gtol` termination condition is satisfied.",
+  "scipy_success": true,
+  "sidecar_type": "independent_hs_horizons_point_mass_retuned_controls",
+  "source_controls_path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_controls.json",
+  "source_controls_sha256": "ee18922dc4b0715b9d371153718e9ff08d9deba18830d7b401445088e5992ee2",
+  "start_jd_tdb": 2461222.5
+}

@@ -1,0 +1,260 @@
+{
+  "artifacts": {
+    "independent_hs_horizons_multi_epoch_point_mass_retuning_csv": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning.csv",
+    "independent_hs_horizons_multi_epoch_point_mass_retuning_metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning_metadata.json",
+    "independent_hs_horizons_multi_epoch_point_mass_retuning_table_tex": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning_table.tex",
+    "per_epoch_artifacts": [
+      {
+        "csv": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/independent_hs_horizons_point_mass_retuning.csv",
+        "epoch_id": "2026jan01",
+        "epoch_label": "2026-Jan-01",
+        "metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/independent_hs_horizons_point_mass_retuning_metadata.json",
+        "results_dir": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01",
+        "table_tex": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/independent_hs_horizons_point_mass_retuning_table.tex",
+        "tables_dir": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01"
+      },
+      {
+        "csv": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/independent_hs_horizons_point_mass_retuning.csv",
+        "epoch_id": "2026apr01",
+        "epoch_label": "2026-Apr-01",
+        "metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/independent_hs_horizons_point_mass_retuning_metadata.json",
+        "results_dir": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01",
+        "table_tex": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/independent_hs_horizons_point_mass_retuning_table.tex",
+        "tables_dir": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01"
+      },
+      {
+        "csv": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/independent_hs_horizons_point_mass_retuning.csv",
+        "epoch_id": "2026jul01",
+        "epoch_label": "2026-Jul-01",
+        "metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/independent_hs_horizons_point_mass_retuning_metadata.json",
+        "results_dir": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01",
+        "table_tex": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/independent_hs_horizons_point_mass_retuning_table.tex",
+        "tables_dir": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01"
+      },
+      {
+        "csv": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/independent_hs_horizons_point_mass_retuning.csv",
+        "epoch_id": "2026oct01",
+        "epoch_label": "2026-Oct-01",
+        "metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/independent_hs_horizons_point_mass_retuning_metadata.json",
+        "results_dir": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01",
+        "table_tex": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/independent_hs_horizons_point_mass_retuning_table.tex",
+        "tables_dir": "tables/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01"
+      }
+    ]
+  },
+  "branch_row_count": 32,
+  "cache_sha256_by_epoch": {
+    "2026apr01": "83f859c622aa6c48945c990d3883e7016f99cf2d3727d229bbccf724f96e4b7d",
+    "2026jan01": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2",
+    "2026jul01": "5a5e2d844f3b42232ebe6000425916d36c360ebba0adb6598fb2919dc8313935",
+    "2026oct01": "debc9260f74466617648c0c5baabb88445702468607e443428cf8bd70208f93b"
+  },
+  "cached_horizons_earth_moon_sun_multi_epoch_point_mass_retuning": true,
+  "command": "scripts\\run_independent_hs_horizons_multi_epoch_point_mass_retuning.py",
+  "default_epoch_count": 4,
+  "doi_claim": false,
+  "epoch_count": 4,
+  "epochs": [
+    {
+      "branch_row_count": 8,
+      "cache_fetched_this_run": false,
+      "cache_path": "data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json",
+      "cache_sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2",
+      "direct_replay_failure_recorded": true,
+      "epoch_id": "2026jan01",
+      "epoch_label": "2026-Jan-01",
+      "nominal_row_count": 1,
+      "persisted_branch_point_mass_replay_worst_error": 0.3797450961017463,
+      "persisted_branch_replay_pass_count": 0,
+      "persisted_nominal_point_mass_replay_error": 0.3812580376880591,
+      "persisted_nominal_replay_passes_configured_threshold": false,
+      "retuned_all_rows_pass": true,
+      "retuned_branch_pass_count": 8,
+      "retuned_branch_point_mass_worst_error": 0.02473065115224942,
+      "retuned_nominal_pass_count": 1,
+      "retuned_nominal_point_mass_error": 0.02143944130524006,
+      "row_count": 9,
+      "scipy_success_count": 9,
+      "single_epoch_metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01/independent_hs_horizons_point_mass_retuning_metadata.json",
+      "single_epoch_results_dir": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jan01",
+      "start_calendar_tdb": "A.D. 2026-Jan-01 00:00:00.0000",
+      "start_jd_tdb": 2461041.5,
+      "total_nfev": 71,
+      "total_runtime_seconds": 51.62804739997955
+    },
+    {
+      "branch_row_count": 8,
+      "cache_fetched_this_run": false,
+      "cache_path": "data/cache/horizons/independent_hs_phase_shift_2026apr01_vectors.json",
+      "cache_sha256": "83f859c622aa6c48945c990d3883e7016f99cf2d3727d229bbccf724f96e4b7d",
+      "direct_replay_failure_recorded": true,
+      "epoch_id": "2026apr01",
+      "epoch_label": "2026-Apr-01",
+      "nominal_row_count": 1,
+      "persisted_branch_point_mass_replay_worst_error": 0.17905937263187813,
+      "persisted_branch_replay_pass_count": 7,
+      "persisted_nominal_point_mass_replay_error": 0.10736450155005398,
+      "persisted_nominal_replay_passes_configured_threshold": false,
+      "retuned_all_rows_pass": true,
+      "retuned_branch_pass_count": 8,
+      "retuned_branch_point_mass_worst_error": 0.019113822305659185,
+      "retuned_nominal_pass_count": 1,
+      "retuned_nominal_point_mass_error": 0.010070737162601779,
+      "row_count": 9,
+      "scipy_success_count": 9,
+      "single_epoch_metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01/independent_hs_horizons_point_mass_retuning_metadata.json",
+      "single_epoch_results_dir": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026apr01",
+      "start_calendar_tdb": "A.D. 2026-Apr-01 00:00:00.0000",
+      "start_jd_tdb": 2461131.5,
+      "total_nfev": 58,
+      "total_runtime_seconds": 60.27487139997538
+    },
+    {
+      "branch_row_count": 8,
+      "cache_fetched_this_run": false,
+      "cache_path": "data/cache/horizons/independent_hs_phase_shift_2026jul01_vectors.json",
+      "cache_sha256": "5a5e2d844f3b42232ebe6000425916d36c360ebba0adb6598fb2919dc8313935",
+      "direct_replay_failure_recorded": true,
+      "epoch_id": "2026jul01",
+      "epoch_label": "2026-Jul-01",
+      "nominal_row_count": 1,
+      "persisted_branch_point_mass_replay_worst_error": 0.1410908196347213,
+      "persisted_branch_replay_pass_count": 8,
+      "persisted_nominal_point_mass_replay_error": 0.09903054953969588,
+      "persisted_nominal_replay_passes_configured_threshold": false,
+      "retuned_all_rows_pass": true,
+      "retuned_branch_pass_count": 8,
+      "retuned_branch_point_mass_worst_error": 0.019439232590887784,
+      "retuned_nominal_pass_count": 1,
+      "retuned_nominal_point_mass_error": 0.012872158163847987,
+      "row_count": 9,
+      "scipy_success_count": 9,
+      "single_epoch_metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01/independent_hs_horizons_point_mass_retuning_metadata.json",
+      "single_epoch_results_dir": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026jul01",
+      "start_calendar_tdb": "A.D. 2026-Jul-01 00:00:00.0000",
+      "start_jd_tdb": 2461222.5,
+      "total_nfev": 39,
+      "total_runtime_seconds": 48.248179800022626
+    },
+    {
+      "branch_row_count": 8,
+      "cache_fetched_this_run": false,
+      "cache_path": "data/cache/horizons/independent_hs_phase_shift_2026oct01_vectors.json",
+      "cache_sha256": "debc9260f74466617648c0c5baabb88445702468607e443428cf8bd70208f93b",
+      "direct_replay_failure_recorded": true,
+      "epoch_id": "2026oct01",
+      "epoch_label": "2026-Oct-01",
+      "nominal_row_count": 1,
+      "persisted_branch_point_mass_replay_worst_error": 0.1878777728317127,
+      "persisted_branch_replay_pass_count": 3,
+      "persisted_nominal_point_mass_replay_error": 0.18959067299420396,
+      "persisted_nominal_replay_passes_configured_threshold": false,
+      "retuned_all_rows_pass": true,
+      "retuned_branch_pass_count": 8,
+      "retuned_branch_point_mass_worst_error": 0.018013106197757842,
+      "retuned_nominal_pass_count": 1,
+      "retuned_nominal_point_mass_error": 0.014430201689791956,
+      "row_count": 9,
+      "scipy_success_count": 9,
+      "single_epoch_metadata_json": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01/independent_hs_horizons_point_mass_retuning_metadata.json",
+      "single_epoch_results_dir": "data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/epochs/2026oct01",
+      "start_calendar_tdb": "A.D. 2026-Oct-01 00:00:00.0000",
+      "start_jd_tdb": 2461314.5,
+      "total_nfev": 29,
+      "total_runtime_seconds": 30.05557059997227
+    }
+  ],
+  "fuel_optimality_claim": false,
+  "high_fidelity_flight_validation": false,
+  "high_fidelity_validation": false,
+  "input_artifacts": [
+    {
+      "bytes": 2772,
+      "path": "configs/independent_hs_all_configured_headroom.yaml",
+      "sha256": "15ae12c93e4fad9927066d52bfe7c6c23b146f67cd062b201d2b5dfcf0a5cd49"
+    },
+    {
+      "bytes": 1203,
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf"
+    },
+    {
+      "bytes": 30227,
+      "path": "data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json",
+      "sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2"
+    },
+    {
+      "bytes": 30303,
+      "path": "data/cache/horizons/independent_hs_phase_shift_2026apr01_vectors.json",
+      "sha256": "83f859c622aa6c48945c990d3883e7016f99cf2d3727d229bbccf724f96e4b7d"
+    },
+    {
+      "bytes": 30295,
+      "path": "data/cache/horizons/independent_hs_phase_shift_2026jul01_vectors.json",
+      "sha256": "5a5e2d844f3b42232ebe6000425916d36c360ebba0adb6598fb2919dc8313935"
+    },
+    {
+      "bytes": 30294,
+      "path": "data/cache/horizons/independent_hs_phase_shift_2026oct01_vectors.json",
+      "sha256": "debc9260f74466617648c0c5baabb88445702468607e443428cf8bd70208f93b"
+    }
+  ],
+  "interpretation_limits": [
+    "Representative epochs are fixed 2026 cached-Horizons point-mass stress cases, not mission epochs.",
+    "Each epoch uses Earth central gravity plus indirect Moon/Sun point-mass terms from cached Horizons vectors.",
+    "Persisted controls are directly replayed first; independent retuning then runs nominal and each branch separately.",
+    "Retuned controls are stress-model artifacts and should not be read as production solver parity.",
+    "This is not SPICE propagation, full high-fidelity or flight validation, fuel optimality, DOI evidence, or quantum advantage evidence."
+  ],
+  "limitations": [
+    "Representative epochs are fixed 2026 cached-Horizons point-mass stress cases, not mission epochs.",
+    "Each epoch uses Earth central gravity plus indirect Moon/Sun point-mass terms from cached Horizons vectors.",
+    "Persisted controls are directly replayed first; independent retuning then runs nominal and each branch separately.",
+    "Retuned controls are stress-model artifacts and should not be read as production solver parity.",
+    "This is not SPICE propagation, full high-fidelity or flight validation, fuel optimality, DOI evidence, or quantum advantage evidence."
+  ],
+  "multi_epoch_cached_horizons_point_mass_stress_retuning": true,
+  "nominal_row_count": 4,
+  "optimization_rerun": true,
+  "overall_summary": {
+    "all_epochs_record_direct_replay_failure": true,
+    "branch_row_count": 32,
+    "branch_row_count_total": 32,
+    "branch_rows_per_epoch": [
+      8,
+      8,
+      8,
+      8
+    ],
+    "direct_replay_failure_epoch_count": 4,
+    "epoch_count": 4,
+    "nominal_row_count": 4,
+    "persisted_branch_replay_worst_over_epochs": 0.3797450961017463,
+    "persisted_nominal_replay_worst_over_epochs": 0.3812580376880591,
+    "retuned_all_epochs_all_rows_pass": true,
+    "retuned_branch_pass_count_total": 32,
+    "retuned_branch_worst_over_epochs": 0.02473065115224942,
+    "retuned_nominal_worst_over_epochs": 0.02143944130524006,
+    "row_count": 36,
+    "scipy_success_count_total": 36,
+    "total_nfev": 197,
+    "total_runtime_seconds": 190.20666919994983
+  },
+  "production_solver_parity_claim": false,
+  "quantum_advantage_claim": false,
+  "retuning": true,
+  "retuning_settings": {
+    "branch_outage_segments_fixed_inactive": true,
+    "control_regularization_weight": 0.0001,
+    "ftol": 1e-05,
+    "gtol": 0.0001,
+    "max_nfev": 40,
+    "smooth_regularization_weight": 0.0005,
+    "terminal_residual_weight": 1.0,
+    "xtol": 1e-05
+  },
+  "row_count": 36,
+  "runtime_network_dependency": false,
+  "spice_ephemeris_validation": false,
+  "uses_cached_horizons_vectors": true
+}
