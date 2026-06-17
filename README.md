@@ -56,6 +56,7 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/bicircular_solar_tidal_stress/*`,
 `data/results/bicircular_tail_coast_recovery/*`,
 `data/results/independent_hs_bicircular_phase_stress/*`,
+`data/results/independent_hs_horizons_solar_tidal_replay/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
 `data/results/independent_hs_branch_control_replay/*`,
@@ -171,15 +172,18 @@ The ledger separates selected-branch evidence, all-mask diagnostics,
 all-configured-mask evidence, and deterministic branch-control replay rows. The
 current snapshot includes the new independent-HS all-configured headroom row,
 the independent-HS branch-control replay CSV/metadata, the independent-HS
-simple bicircular phase-sweep stress CSV/metadata, the focused tail-coast replay
-CSV/metadata, focused source recovery CSV, bicircular solar-tidal stress
+simple bicircular phase-sweep stress CSV/metadata, the independent-HS
+cached-Horizons-derived solar-tidal replay CSV/metadata, the focused tail-coast
+replay CSV/metadata, focused source recovery CSV, bicircular solar-tidal stress
 CSV/metadata, and Horizons ephemeris force-model contrast CSV/metadata, plus the
-bicircular retuned recovery CSV, summary, and metadata, so the ledger has 15
-claim rows. The independent-HS bicircular row is a positive stress-probe replay
-for the converged all-configured row; the hard-catalog solar-tidal row is a
-negative stress-probe row, the retuned recovery row is a completed negative
-simple-bicircular retuning row, and the Horizons row is a force-model contrast
-row. None is high-fidelity validation or quantum evidence.
+bicircular retuned recovery CSV, summary, and metadata, so the ledger has 16
+claim rows. The independent-HS bicircular row is a positive simple stress-probe
+replay for the converged all-configured row; the independent-HS cached-Horizons
+row is a stronger representative-epoch stress replay using cached JPL Horizons
+geometry; the hard-catalog solar-tidal row is a negative stress-probe row, the
+retuned recovery row is a completed negative simple-bicircular retuning row, and
+the hard-catalog Horizons row is a force-model contrast row. None is
+SPICE/high-fidelity/flight validation or quantum evidence.
 The tail-coast audit confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
@@ -195,8 +199,9 @@ cross-indexes tight 30-seed threshold sensitivity, continuation-extension
 multiple-shooting rows, compact direct-collocation and independent-midpoint
 Hermite-Simpson diagnostics, the new all-configured independent-HS headroom
 row, the independent-HS branch-control replay row, the positive independent-HS
-simple bicircular phase-sweep stress row, and the scoped hard-catalog tail-coast
-row used in the main manuscript claim path.
+simple bicircular phase-sweep stress row, the independent-HS
+cached-Horizons-derived solar-tidal replay row, and the scoped hard-catalog
+tail-coast row used in the main manuscript claim path.
 
 The replay/stress validation postprocessor writes
 `data/results/replay_stress_validation/replay_stress_validation.csv`,
@@ -257,6 +262,34 @@ simple-bicircular nominal error is `0.022138676654057693`, and the maximum
 branch-phase error is `0.08557051343145317`. This is a deterministic
 beyond-CR3BP stress probe only; it is not SPICE validation, high-fidelity
 validation, production solver parity, fuel optimality, or quantum evidence.
+
+The independent-HS cached-Horizons-derived solar-tidal replay postprocessor
+writes
+`data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay.csv`,
+`data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_metadata.json`,
+and
+`tables/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_table.tex`:
+
+```powershell
+py -3.11 scripts\run_independent_hs_horizons_solar_tidal_replay.py
+```
+
+The default path is offline and reads
+`data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json`. Use
+`--refresh-cache` only when intentionally regenerating the representative
+2026-Jan-01 JPL Horizons Moon/Sun vector cache. The script validates cache
+compatibility with the p=0.4 independent-HS transfer grid (`tf=0.5`, 8
+segments, canonical time unit `375190.259 s`, `384400 km/LU`), validates
+manifest and sidecar SHA-256 hashes, and repropagates persisted endpoint-plus-
+midpoint controls against the original CR3BP target. For
+`ihs_all_single_p04_amax02_polish_from_p04`, the cached-Horizons-derived
+solar-tidal replay gives nominal error `0.018363195236986728`, branch worst
+`0.07422350563850917`, branch pass count `8/8`, CR3BP replay delta `0.0`, Sun
+distance range `382.6857920288508--382.693044178952` LU, and cache SHA-256
+`13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2`. This is
+stronger than the simple bicircular phase sweep because it uses cached JPL
+Horizons geometry, but it remains a simplified stress probe, not SPICE,
+high-fidelity, flight-ready, or production-solver-parity validation.
 
 The Horizons ephemeris force-model contrast postprocessor writes
 `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,

@@ -12,6 +12,10 @@ from urllib.request import urlopen
 
 import numpy as np
 
+from .cr3bp import cr3bp_derivative
+from .direct_collocation import quadratic_midpoint_control
+from .refinement import project_controls_to_ball
+
 
 HORIZONS_API_URL = "https://ssd.jpl.nasa.gov/api/horizons.api"
 DEFAULT_CACHE_START_JD_TDB = 2461041.5
@@ -453,3 +457,308 @@ def solar_tidal_acceleration_from_sun_vector(
     sun_norm = np.maximum(np.linalg.norm(s, axis=1, keepdims=True), 1.0e-15)
     accel = float(sun_mu_ratio) * (rel / rel_norm**3 - s / sun_norm**3)
     return accel[0] if scalar else accel
+
+
+def horizons_sun_vector_profile_from_cache(
+    cache: dict[str, object],
+    *,
+    mu: float,
+    reference_distance_km: float = DEFAULT_REFERENCE_DISTANCE_KM,
+) -> dict[str, np.ndarray]:
+    """Build canonical-time Sun vectors for cached-Horizons-derived replay.
+
+    The returned Sun vectors are JPL-Horizons-derived Earth/Moon/Sun geometry
+    transformed into the Earth-Moon rotating barycentric frame and divided by a
+    fixed CR3BP reference distance. This is a replay/stress-probe input, not a
+    SPICE or high-fidelity propagation product.
+    """
+
+    metadata = cache.get("metadata")
+    if not isinstance(metadata, dict):
+        raise ValueError("Horizons cache missing metadata")
+    canonical_times = _metadata_float_array(metadata, "canonical_node_times")
+    moon_samples = samples_from_cache(cache, "moon_geocentric")
+    sun_samples = samples_from_cache(cache, "sun_geocentric")
+    geometry = horizons_rotating_geometry(
+        moon_samples=moon_samples,
+        sun_samples=sun_samples,
+        mu=float(mu),
+        reference_distance_km=float(reference_distance_km),
+    )
+    sun_vectors = np.asarray(geometry["sun_barycenter_rotating_lu"], dtype=float)
+    if canonical_times.shape != (sun_vectors.shape[0],):
+        raise ValueError(
+            "Horizons cache canonical_node_times length does not match Sun-vector sample count"
+        )
+    if np.any(np.diff(canonical_times) <= 0.0):
+        raise ValueError("Horizons cache canonical_node_times must be strictly increasing")
+    return {
+        "canonical_time": canonical_times,
+        "sun_barycenter_rotating_lu": sun_vectors,
+        "sun_distance_lu": np.asarray(geometry["sun_distance_lu"], dtype=float),
+        "jd_tdb": np.asarray(geometry["jd_tdb"], dtype=float),
+    }
+
+
+def interpolate_horizons_sun_vector(
+    t: float,
+    canonical_times: np.ndarray,
+    sun_vectors_rotating_lu: np.ndarray,
+    *,
+    tolerance: float = 1.0e-12,
+) -> np.ndarray:
+    """Linearly interpolate cached Horizons Sun vectors over canonical time."""
+
+    times = np.asarray(canonical_times, dtype=float)
+    vectors = np.asarray(sun_vectors_rotating_lu, dtype=float)
+    if times.ndim != 1:
+        raise ValueError(f"canonical_times must be one-dimensional, got {times.shape}")
+    if vectors.ndim != 2 or vectors.shape[1] != 3:
+        raise ValueError(f"sun_vectors_rotating_lu must have shape (n, 3), got {vectors.shape}")
+    if vectors.shape[0] != times.shape[0]:
+        raise ValueError(
+            f"Sun-vector sample count {vectors.shape[0]} does not match time count {times.shape[0]}"
+        )
+    if times.shape[0] < 2:
+        raise ValueError("at least two Sun-vector samples are required for interpolation")
+    if np.any(np.diff(times) <= 0.0):
+        raise ValueError("canonical_times must be strictly increasing")
+
+    value = float(t)
+    lower = float(times[0])
+    upper = float(times[-1])
+    if value < lower - float(tolerance) or value > upper + float(tolerance):
+        raise ValueError(f"canonical time {value:.17g} is outside cached Horizons range {lower:.17g}--{upper:.17g}")
+    value = min(max(value, lower), upper)
+    return np.asarray([np.interp(value, times, vectors[:, axis]) for axis in range(3)], dtype=float)
+
+
+def horizons_solar_tidal_derivative(
+    t: float,
+    states: np.ndarray,
+    mu: float,
+    *,
+    canonical_times: np.ndarray,
+    sun_vectors_rotating_lu: np.ndarray,
+    sun_mu_ratio: float,
+    control_accel: np.ndarray | None = None,
+) -> np.ndarray:
+    """CR3BP derivative plus cached-Horizons-derived solar-tidal acceleration."""
+
+    s = np.asarray(states, dtype=float)
+    scalar = s.ndim == 1
+    working = s[None, :] if scalar else s
+    if working.ndim != 2 or working.shape[1] != 6:
+        raise ValueError(f"states must have shape (..., 6), got {working.shape}")
+
+    sun_vector = interpolate_horizons_sun_vector(t, canonical_times, sun_vectors_rotating_lu)
+    solar_accel = solar_tidal_acceleration_from_sun_vector(
+        working[:, :3],
+        sun_vector,
+        sun_mu_ratio=float(sun_mu_ratio),
+    )
+    if control_accel is None:
+        accel = solar_accel
+    else:
+        control = np.asarray(control_accel, dtype=float)
+        if control.ndim == 1:
+            control = control[None, :]
+        accel = solar_accel + control
+    out = cr3bp_derivative(working, mu, accel)
+    return out[0] if scalar else out
+
+
+def rk4_horizons_solar_tidal_step(
+    states: np.ndarray,
+    mu: float,
+    t: float,
+    dt: float,
+    *,
+    canonical_times: np.ndarray,
+    sun_vectors_rotating_lu: np.ndarray,
+    sun_mu_ratio: float,
+    control_accel: np.ndarray | None = None,
+) -> np.ndarray:
+    """One RK4 step for the cached-Horizons-derived solar-tidal stress probe."""
+
+    s = np.asarray(states, dtype=float)
+    k1 = horizons_solar_tidal_derivative(
+        t,
+        s,
+        mu,
+        canonical_times=canonical_times,
+        sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+        sun_mu_ratio=sun_mu_ratio,
+        control_accel=control_accel,
+    )
+    k2 = horizons_solar_tidal_derivative(
+        t + 0.5 * dt,
+        s + 0.5 * dt * k1,
+        mu,
+        canonical_times=canonical_times,
+        sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+        sun_mu_ratio=sun_mu_ratio,
+        control_accel=control_accel,
+    )
+    k3 = horizons_solar_tidal_derivative(
+        t + 0.5 * dt,
+        s + 0.5 * dt * k2,
+        mu,
+        canonical_times=canonical_times,
+        sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+        sun_mu_ratio=sun_mu_ratio,
+        control_accel=control_accel,
+    )
+    k4 = horizons_solar_tidal_derivative(
+        t + dt,
+        s + dt * k3,
+        mu,
+        canonical_times=canonical_times,
+        sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+        sun_mu_ratio=sun_mu_ratio,
+        control_accel=control_accel,
+    )
+    return s + (dt / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4)
+
+
+def _rk4_horizons_solar_tidal_step_quadratic_control(
+    state: np.ndarray,
+    mu: float,
+    t: float,
+    dt: float,
+    endpoint_control: np.ndarray,
+    midpoint_control: np.ndarray,
+    tau0: float,
+    tau1: float,
+    *,
+    canonical_times: np.ndarray,
+    sun_vectors_rotating_lu: np.ndarray,
+    sun_mu_ratio: float,
+) -> np.ndarray:
+    tau_mid = 0.5 * (float(tau0) + float(tau1))
+    u1 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau0)
+    u2 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau_mid)
+    u4 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau1)
+    k1 = horizons_solar_tidal_derivative(
+        t,
+        state,
+        mu,
+        canonical_times=canonical_times,
+        sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+        sun_mu_ratio=sun_mu_ratio,
+        control_accel=u1,
+    )
+    k2 = horizons_solar_tidal_derivative(
+        t + 0.5 * dt,
+        state + 0.5 * dt * k1,
+        mu,
+        canonical_times=canonical_times,
+        sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+        sun_mu_ratio=sun_mu_ratio,
+        control_accel=u2,
+    )
+    k3 = horizons_solar_tidal_derivative(
+        t + 0.5 * dt,
+        state + 0.5 * dt * k2,
+        mu,
+        canonical_times=canonical_times,
+        sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+        sun_mu_ratio=sun_mu_ratio,
+        control_accel=u2,
+    )
+    k4 = horizons_solar_tidal_derivative(
+        t + dt,
+        state + dt * k3,
+        mu,
+        canonical_times=canonical_times,
+        sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+        sun_mu_ratio=sun_mu_ratio,
+        control_accel=u4,
+    )
+    return state + (dt / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4)
+
+
+def propagate_piecewise_controls_horizons_solar_tidal(
+    state0: np.ndarray,
+    controls: np.ndarray,
+    mu: float,
+    tf: float,
+    substeps_per_segment: int,
+    *,
+    canonical_times: np.ndarray,
+    sun_vectors_rotating_lu: np.ndarray,
+    sun_mu_ratio: float,
+    midpoint_controls: np.ndarray | None = None,
+    return_nodes: bool = False,
+) -> tuple[np.ndarray, np.ndarray | None]:
+    """Replay endpoint/midpoint controls with cached-Horizons-derived Sun vectors.
+
+    This mirrors the independent-HS reporting propagation semantics: endpoint
+    controls are segment controls and optional midpoint controls use the same
+    quadratic interpolation satisfying ``u(0)=u(1)=endpoint`` and
+    ``u(0.5)=midpoint``. The force perturbation is only a simplified solar
+    tidal acceleration from linearly interpolated cached JPL Horizons geometry;
+    it is not SPICE validation, high-fidelity propagation, flight validation,
+    or production solver parity.
+    """
+
+    controls = project_controls_to_ball(np.asarray(controls, dtype=float), np.inf)
+    if controls.ndim != 2 or controls.shape[1] != 3:
+        raise ValueError(f"controls must have shape (segments, 3), got {controls.shape}")
+    if midpoint_controls is not None:
+        midpoint_controls = project_controls_to_ball(np.asarray(midpoint_controls, dtype=float), np.inf)
+        if midpoint_controls.shape != controls.shape:
+            raise ValueError(
+                f"midpoint_controls shape {midpoint_controls.shape} does not match controls shape {controls.shape}"
+            )
+    if int(substeps_per_segment) <= 0:
+        raise ValueError("substeps_per_segment must be positive")
+
+    state = np.asarray(state0, dtype=float).copy()
+    n_segments = int(controls.shape[0])
+    if n_segments == 0:
+        nodes = np.asarray([state.copy()]) if return_nodes else None
+        return state, nodes
+
+    h = float(tf) / float(n_segments)
+    dt = h / float(substeps_per_segment)
+    steps = int(substeps_per_segment)
+    t = 0.0
+    nodes = [state.copy()] if return_nodes else None
+
+    for segment_index, control in enumerate(controls):
+        if midpoint_controls is None:
+            for _ in range(steps):
+                state = rk4_horizons_solar_tidal_step(
+                    state,
+                    mu,
+                    t,
+                    dt,
+                    canonical_times=canonical_times,
+                    sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+                    sun_mu_ratio=sun_mu_ratio,
+                    control_accel=control,
+                )
+                t += dt
+        else:
+            midpoint_control = midpoint_controls[segment_index]
+            for step_index in range(steps):
+                tau0 = step_index / float(steps)
+                tau1 = (step_index + 1) / float(steps)
+                state = _rk4_horizons_solar_tidal_step_quadratic_control(
+                    state,
+                    mu,
+                    t,
+                    dt,
+                    control,
+                    midpoint_control,
+                    tau0,
+                    tau1,
+                    canonical_times=canonical_times,
+                    sun_vectors_rotating_lu=sun_vectors_rotating_lu,
+                    sun_mu_ratio=sun_mu_ratio,
+                )
+                t += dt
+        if return_nodes:
+            nodes.append(state.copy())
+    return state, np.asarray(nodes) if return_nodes else None

@@ -5,7 +5,7 @@ type: software
 authors:
   - name: "Anonymous Author"
 version: "0.1.0"
-abstract: "Reproducible normalized Earth-Moon CR3BP low-thrust missed-thrust initialization benchmark resource with negative QAOA evidence, all-configured independent-midpoint Hermite-Simpson headroom artifacts, accepted-control replay, cached Horizons force-model contrast, solar-tidal stress artifacts, and completed negative bicircular retuning artifacts."
+abstract: "Reproducible normalized Earth-Moon CR3BP low-thrust missed-thrust initialization benchmark resource with negative QAOA evidence, all-configured independent-midpoint Hermite-Simpson headroom artifacts, accepted-control replay, cached Horizons force-model contrast, cached-Horizons-derived independent-HS solar-tidal replay, solar-tidal stress artifacts, and completed negative bicircular retuning artifacts."
 keywords:
   - astrodynamics
   - low-thrust trajectory optimization

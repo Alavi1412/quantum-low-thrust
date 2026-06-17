@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-17T09:12:32Z",
+  "generated_utc": "2026-06-17T10:25:50Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "3a6dbcaef0813b63fb1bcec66a1b6579564fbe58",
+  "git_head_at_generation": "b47b96d989fc2230f5d38f9ddd5311035a3d6845",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M README.md\n M REPRODUCIBILITY.md\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/evidence_synthesis/evidence_synthesis.csv\n M data/results/evidence_synthesis/evidence_synthesis_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_evidence_synthesis.py\n M scripts/verify_submission_snapshot.py\n M src/qlt/bicircular.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tables/evidence_synthesis/evidence_synthesis_table.tex\n M tables/evidence_synthesis/practitioner_lessons_table.tex\n M tests/test_claim_evidence_ledger.py\n M tests/test_evidence_synthesis.py\n?? data/results/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress.csv\n?? data/results/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress_metadata.json\n?? scripts/run_independent_hs_bicircular_phase_stress.py\n?? tables/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress_table.tex\n?? tests/test_independent_hs_bicircular_phase_stress.py",
+  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/evidence_synthesis/evidence_synthesis.csv\n M data/results/evidence_synthesis/evidence_synthesis_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_evidence_synthesis.py\n M scripts/verify_submission_snapshot.py\n M src/qlt/ephemeris_contrast.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tables/evidence_synthesis/evidence_synthesis_table.tex\n M tables/evidence_synthesis/practitioner_lessons_table.tex\n M tests/test_claim_evidence_ledger.py\n M tests/test_evidence_synthesis.py\n?? data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json\n?? data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay.csv\n?? data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_metadata.json\n?? scripts/run_independent_hs_horizons_solar_tidal_replay.py\n?? tables/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_table.tex\n?? tests/test_independent_hs_horizons_solar_tidal_replay.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 685,
+  "file_count": 691,
   "files": [
     {
       "path": ".gitignore",
@@ -40,23 +40,23 @@
     },
     {
       "path": "ARCHIVAL_RELEASE.md",
-      "sha256": "96666ae34ab0d4a733988ade0a2bd2ba936b50d1ddbfce340dc5c7fcbd11e182",
-      "bytes": 3110
+      "sha256": "51b66cfb164de7296c1f183afd07161d0a04af4e4bc303a40cf019e96354bd35",
+      "bytes": 3644
     },
     {
       "path": "CITATION.cff",
-      "sha256": "46b22270658d2b77096f1e63ded9c554daf98aa76def1f50a37c14836c0de30b",
-      "bytes": 872
+      "sha256": "ae3fed74ea04f20fdefce2c66a8119f83a7e46999360640eff5e971701a1492e",
+      "bytes": 930
     },
     {
       "path": "README.md",
-      "sha256": "1bd6f7d42036b3d5e5e144b849d0c2fc00d77378c1ea64f62f3cb012acc58855",
-      "bytes": 31553
+      "sha256": "8215eec839ae8f7da48b3b8967b6e3b7b41700062b13fed7b3cab1fd62aae2f3",
+      "bytes": 33553
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "c87b0ba5cda45bf8f7b15697900b7f6bbc69cbaba46ce5151681f3ac3e8e7c32",
-      "bytes": 44804
+      "sha256": "bda2038993888da097a372bf18d1caf4ffc9df47649ebe823522bfd21822480b",
+      "bytes": 48223
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -202,6 +202,11 @@
       "path": "data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json",
       "sha256": "9b7f45113d6eb5334cfcb8a099ffebcc110bbf73e93f633d567cfc312a081ed3",
       "bytes": 40936
+    },
+    {
+      "path": "data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json",
+      "sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2",
+      "bytes": 30227
     },
     {
       "path": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv",
@@ -450,13 +455,13 @@
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
-      "sha256": "a644ea792afd4759054f2d5bea90d951781131f61d56c4a93f632270320d116e",
-      "bytes": 20436
+      "sha256": "410665fea24356fb8cf15d24fa2271670a44a913901cc074caac60eb4378730a",
+      "bytes": 22465
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
-      "sha256": "fc481719244c18eeadebb9dd0c2ca5d5e52baaae7b983842cc43dcabe18141da",
-      "bytes": 12188
+      "sha256": "68e8ff323da45397cfba89690afb6a50976d31403e5e1fe1e56eabb4dd1cbf15",
+      "bytes": 13282
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
@@ -550,13 +555,13 @@
     },
     {
       "path": "data/results/evidence_synthesis/evidence_synthesis.csv",
-      "sha256": "b0b927cd1ae373d4fee4b82bac50ffe84d45abff4880999b34331e766d7390e9",
-      "bytes": 7651
+      "sha256": "25ad793645585c8a4aac6829a4fee43fe8db13a4cd6d30baed181590819de205",
+      "bytes": 8596
     },
     {
       "path": "data/results/evidence_synthesis/evidence_synthesis_metadata.json",
-      "sha256": "7d4c7d497358996ce874e21fa1341e9dc3dc1b36815f61fca5ee10d31151a0ec",
-      "bytes": 6487
+      "sha256": "1c824d1351468d7fda499d93bbc603fc47acc26065c06567aba4d8b13fdd7be0",
+      "bytes": 7264
     },
     {
       "path": "data/results/feasibility_metadata.json",
@@ -987,6 +992,16 @@
       "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline_metadata.json",
       "sha256": "8e5646119bab7e029e7bc9e5e8e55397310597c583a86a1d922b9d5252e8b517",
       "bytes": 36854
+    },
+    {
+      "path": "data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay.csv",
+      "sha256": "563a3c95293991d4aede7684a172c169e7f45ceab931ed0bc37286adcded2406",
+      "bytes": 18565
+    },
+    {
+      "path": "data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_metadata.json",
+      "sha256": "4f9914dfc8f30ada394d65f66666eeb816aa08ae2fb7798b266c349f8ba7686c",
+      "bytes": 15924
     },
     {
       "path": "data/results/multiple_shooting_feasibility.csv",
@@ -2815,13 +2830,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "9c6621a5073d45cc5ca5f29a4f4ad79bd6b1596dabede1fce917cc582d9b1e94",
-      "bytes": 422414
+      "sha256": "1d1e0b1b8345ce2665acbe33ec0e739f56c60333412058fe2ac7d31829f01fcb",
+      "bytes": 424871
     },
     {
       "path": "paper/main.tex",
-      "sha256": "a710dd0d205034b2f401f76ac4381b72e2b23d2689b3d38686c8b0d016097b4c",
-      "bytes": 62007
+      "sha256": "7ab900cab9455b1475bff9899d746572391b63c01dfe6c4cab4d60cb4201c777",
+      "bytes": 63981
     },
     {
       "path": "paper/references.bib",
@@ -2830,13 +2845,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "4dc295b6818378729eeab38568b2405c37c9b5618f0cb2b32318c6f48fc11dd5",
-      "bytes": 518690
+      "sha256": "a5407480551ce4a07d5ec65de90116eb10fda3617aa5ebb8b436d961ad51dc3d",
+      "bytes": 521598
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "d6c879dbe8c89576943b3b156dfc021c58ceff62dcaee9f8034e583682e32b5e",
-      "bytes": 43102
+      "sha256": "3bb0961d40f83266b2e8fff28ed8f613d3f1287ff58401fca6cf681543997807",
+      "bytes": 46118
     },
     {
       "path": "requirements-lock.txt",
@@ -2895,8 +2910,8 @@
     },
     {
       "path": "scripts/run_claim_evidence_ledger.py",
-      "sha256": "0c15cbe622689bd0d4ccbb6610614bdc669ab0538fe891b04b148ed707c1979c",
-      "bytes": 80289
+      "sha256": "5a1cafd909b8b40d7da96e6ab5de29ccf64fa300d6a539ee7692b48980edfa2c",
+      "bytes": 87478
     },
     {
       "path": "scripts/run_continuation_margin_suite.py",
@@ -2915,8 +2930,8 @@
     },
     {
       "path": "scripts/run_evidence_synthesis.py",
-      "sha256": "faa5fbdcac651a54a734753ddf0d99004a7119b131c8dcc9343db5945991b456",
-      "bytes": 33158
+      "sha256": "05b1e4676ed7a231866b1971b3696283e1f47c2dfe97e6370d4b3e837c2f6546",
+      "bytes": 37247
     },
     {
       "path": "scripts/run_experiment.py",
@@ -2952,6 +2967,11 @@
       "path": "scripts/run_independent_hs_continuation.py",
       "sha256": "384b33ee1c5c2ec375aa43d54e5f11882b6eb5bd13374fc4c6c41980846983db",
       "bytes": 6122
+    },
+    {
+      "path": "scripts/run_independent_hs_horizons_solar_tidal_replay.py",
+      "sha256": "f8d63a8f229168765b94690eed80568ef438e113619bb1a969f0ab2d5505b715",
+      "bytes": 38059
     },
     {
       "path": "scripts/run_locked_nominal_recovery.py",
@@ -3000,8 +3020,8 @@
     },
     {
       "path": "scripts/verify_submission_snapshot.py",
-      "sha256": "5847b2f445303d24a7557ebca6fcbd45d6faa5c83aaac99074eaf598bfa01ffd",
-      "bytes": 6761
+      "sha256": "7a5f8d091371ad754f48f0c9444d5d287348d5913d68c449aa0dede1b8def0c5",
+      "bytes": 7323
     },
     {
       "path": "scripts/write_artifact_manifest.py",
@@ -3040,8 +3060,8 @@
     },
     {
       "path": "src/qlt/ephemeris_contrast.py",
-      "sha256": "1bbf456e5f0bc9867be72bd0ece9ffb725539e0a28fca20288d03a8aadd1c2cd",
-      "bytes": 18905
+      "sha256": "131b0d0f9028e47817d0808ade021c12f263673c8ffe84b2bea5f79cd596443a",
+      "bytes": 30161
     },
     {
       "path": "src/qlt/experiment.py",
@@ -3135,8 +3155,8 @@
     },
     {
       "path": "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
-      "sha256": "110714f161e25567c30c0842c2a0b00843e5f80486b44e275abaed3f25ed7e77",
-      "bytes": 7916
+      "sha256": "d098d355536b012a5e48fcf7cc1e0f0bf20cb1d0ae1b35fd87932d970832cfdd",
+      "bytes": 8673
     },
     {
       "path": "tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex",
@@ -3165,13 +3185,13 @@
     },
     {
       "path": "tables/evidence_synthesis/evidence_synthesis_table.tex",
-      "sha256": "50467743f35b4c9fb5f07b2dee6bfb9311db10a4a110d21cc28598d715eac429",
-      "bytes": 4651
+      "sha256": "45a51c2bfc6ed7bed3076efe8ae91478aaa664ad4ecab4b2a1a274263ed5e2b7",
+      "bytes": 5228
     },
     {
       "path": "tables/evidence_synthesis/practitioner_lessons_table.tex",
-      "sha256": "2c2b13970d78eadd33e2c6266ce5eb9716da169c294cb0a7718491ecadf6a2ae",
-      "bytes": 3394
+      "sha256": "5bd1fc5bdbd413585537db83b7179820b7f62d1d0f0c8b16c6ee30e440267d2c",
+      "bytes": 3858
     },
     {
       "path": "tables/feasibility_table.tex",
@@ -3237,6 +3257,11 @@
       "path": "tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex",
       "sha256": "905cd876b04b6f4e02afca06c8ee868eadc5ce906bdd29cc6dc3e7e80fe83962",
       "bytes": 1309
+    },
+    {
+      "path": "tables/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_table.tex",
+      "sha256": "ef6f2312f4d62212bdbcf51a872bfeba8d21917658280a56fd3013086b391fee",
+      "bytes": 456
     },
     {
       "path": "tables/multiple_shooting_feasibility_table.tex",
@@ -3395,8 +3420,8 @@
     },
     {
       "path": "tests/test_claim_evidence_ledger.py",
-      "sha256": "5ff4d1b48d8ff842eb3600d95076e1795a5ce2b49b920be7128b3b5d12d079c7",
-      "bytes": 21438
+      "sha256": "2c9e92a6db4d9da63f7f4a409b03094da9d8688c8463a52e77b11d5a9e57a546",
+      "bytes": 23885
     },
     {
       "path": "tests/test_delayed_recovery.py",
@@ -3405,8 +3430,8 @@
     },
     {
       "path": "tests/test_evidence_synthesis.py",
-      "sha256": "4a95cb398df1fab55cb0ba4dc829faf7826c3d60c3666e424d6407d3ced00c73",
-      "bytes": 7472
+      "sha256": "9d22df7d564d28e04ea4b382e89478c0292874124c74bd3552a468f04bdf8303",
+      "bytes": 8673
     },
     {
       "path": "tests/test_hermite_simpson_continuation.py",
@@ -3432,6 +3457,11 @@
       "path": "tests/test_independent_hs_direct_collocation.py",
       "sha256": "10ea0d39243e1ffd313331fcc0f16bb2fc9fc77e4ab700437f02a0b25fd453aa",
       "bytes": 24753
+    },
+    {
+      "path": "tests/test_independent_hs_horizons_solar_tidal_replay.py",
+      "sha256": "4a0a7bb0eb7af743104dac90ec476d59b27880dab319b392a682fc877d87e5a9",
+      "bytes": 18782
     },
     {
       "path": "tests/test_locked_nominal_recovery.py",

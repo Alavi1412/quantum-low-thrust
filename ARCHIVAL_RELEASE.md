@@ -21,12 +21,14 @@ and assigned a real identifier.
 - `README.md`, `REPRODUCIBILITY.md`, and `ARCHIVAL_RELEASE.md`
 - `data/source_states.json`
 - `data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json`
+- `data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json`
 - `data/results/artifact_manifest.json`
 - `data/results/claim_evidence_ledger/`
 - `data/results/horizons_ephemeris_force_model_contrast/`
 - `data/results/bicircular_solar_tidal_stress/`
 - `data/results/bicircular_tail_coast_recovery/`
 - `data/results/independent_hs_bicircular_phase_stress/`
+- `data/results/independent_hs_horizons_solar_tidal_replay/`
 - `data/results/evidence_synthesis/`
 - `data/results/replay_stress_validation/`
 - `data/results/independent_hs_all_configured_headroom/`
@@ -58,6 +60,12 @@ The independent-HS bicircular phase-sweep stress package is a short deterministi
 postprocessor artifact archived under
 `data/results/independent_hs_bicircular_phase_stress/`; it is not a
 SPICE/high-fidelity validation package.
+The independent-HS cached-Horizons-derived solar-tidal replay package is another
+short deterministic postprocessor artifact archived under
+`data/results/independent_hs_horizons_solar_tidal_replay/` and backed by
+`data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json`; it is a
+representative 2026-Jan-01 stress probe, not SPICE/high-fidelity/flight
+validation or production solver parity.
 
 ## Post-Deposit Updates
 

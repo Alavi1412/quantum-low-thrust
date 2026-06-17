@@ -1,6 +1,6 @@
 {
   "command": "scripts\\run_claim_evidence_ledger.py",
-  "row_count": 15,
+  "row_count": 16,
   "tail_coast_threshold_audit_row_count": 5,
   "tail_coast_branch_audit_row_count": 1,
   "optimization_rerun": false,
@@ -8,13 +8,14 @@
   "high_fidelity_claim": false,
   "independent_hs_branch_control_replay": true,
   "independent_hs_bicircular_phase_stress_probe": true,
+  "independent_hs_horizons_solar_tidal_replay_probe": true,
   "branch_control_replay": true,
   "bicircular_solar_tidal_stress_probe": true,
   "bicircular_tail_coast_retuned_recovery": true,
   "horizons_ephemeris_force_model_contrast": true,
   "fuel_optimality_claim": false,
   "quantum_advantage_claim": false,
-  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun. An independent-HS branch-control replay row is included because its replay package is present. A positive independent-HS simple bicircular phase-sweep stress row is included because its CSV and metadata exist. A branch-control replay ledger row is included because the focused replay package is present. A bicircular solar-tidal stress row is included because its real stress-probe CSV and metadata exist. A completed negative bicircular retuned recovery row is included because its real retuning CSV, summary CSV, and metadata exist. A Horizons ephemeris force-model contrast row is included because its real CSV and metadata exist.",
+  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun. An independent-HS branch-control replay row is included because its replay package is present. A positive independent-HS simple bicircular phase-sweep stress row is included because its CSV and metadata exist. A positive independent-HS cached-Horizons-derived solar-tidal replay row is included because its CSV and metadata exist. A branch-control replay ledger row is included because the focused replay package is present. A bicircular solar-tidal stress row is included because its real stress-probe CSV and metadata exist. A completed negative bicircular retuned recovery row is included because its real retuning CSV, summary CSV, and metadata exist. A Horizons ephemeris force-model contrast row is included because its real CSV and metadata exist.",
   "determinism_note": "Runtime and wall-clock timestamps are intentionally omitted so identical inputs and command text produce byte-stable outputs.",
   "claim_semantics": {
     "selected_branch_evidence": "Rows where selected outage branches were optimized/evaluated and unselected masks, if present, remain diagnostics.",
@@ -23,6 +24,7 @@
   },
   "independent_hs_branch_control_replay_artifacts_available": true,
   "independent_hs_bicircular_phase_stress_artifacts_available": true,
+  "independent_hs_horizons_solar_tidal_replay_artifacts_available": true,
   "branch_control_replay_artifacts_available": true,
   "bicircular_solar_tidal_stress_artifacts_available": true,
   "bicircular_tail_coast_recovery_artifacts_available": true,
@@ -64,6 +66,7 @@
     "phase_shift_independent_hs_p04_amax02_all_configured",
     "phase_shift_independent_hs_branch_control_replay",
     "phase_shift_independent_hs_bicircular_phase_stress_probe",
+    "phase_shift_independent_hs_horizons_solar_tidal_replay_probe",
     "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
     "catalog_dro_tail_coast_branch_control_replay_accepted_controls",
     "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe",
@@ -163,6 +166,16 @@
       "bytes": 12168
     },
     {
+      "path": "data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay.csv",
+      "sha256": "563a3c95293991d4aede7684a172c169e7f45ceab931ed0bc37286adcded2406",
+      "bytes": 18565
+    },
+    {
+      "path": "data/results/independent_hs_horizons_solar_tidal_replay/independent_hs_horizons_solar_tidal_replay_metadata.json",
+      "sha256": "4f9914dfc8f30ada394d65f66666eeb816aa08ae2fb7798b266c349f8ba7686c",
+      "bytes": 15924
+    },
+    {
       "path": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv",
       "sha256": "1342c74d412e3e2e0b85a8159bb7683c4f45fe1836831f66bfd62e6af3192c41",
       "bytes": 87121
@@ -211,6 +224,7 @@
     "This ledger clarifies evidence semantics; it does not add high-fidelity validation.",
     "The independent-HS branch-control replay row, when present, repropagates persisted endpoint-plus-midpoint controls under normalized CR3BP only; it is not an optimizer rerun, high-fidelity validation, production solver parity, or fuel-optimality evidence.",
     "The independent-HS bicircular phase-stress row, when present, is a positive simple circular solar-tidal stress replay for the converged all-configured row; it is not SPICE/high-fidelity validation or production solver parity.",
+    "The independent-HS cached-Horizons solar-tidal replay row, when present, uses cached JPL Horizons geometry in a simplified solar-tidal stress replay for the converged all-configured row; it is not SPICE/high-fidelity/flight validation or production solver parity.",
     "The historical tail-coast branch audit summarizes recorded branch_results JSON only; the focused replay row is included only when its real replay CSV and metadata exist.",
     "The bicircular solar-tidal row, when present, is a negative beyond-CR3BP stress replay and not high-fidelity validation or production solver parity.",
     "The bicircular retuned recovery row, when present, is a simple bicircular retuning stress experiment that reports a completed negative threshold result; it is not SPICE/high-fidelity validation, production solver parity, fuel optimality, or quantum evidence.",

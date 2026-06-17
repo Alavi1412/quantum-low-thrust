@@ -87,6 +87,20 @@ INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA = (
     / "independent_hs_bicircular_phase_stress"
     / "independent_hs_bicircular_phase_stress_metadata.json"
 )
+INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_horizons_solar_tidal_replay"
+    / "independent_hs_horizons_solar_tidal_replay.csv"
+)
+INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_horizons_solar_tidal_replay"
+    / "independent_hs_horizons_solar_tidal_replay_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -192,6 +206,16 @@ def independent_hs_bicircular_phase_stress_artifacts_available() -> bool:
         for path in (
             INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV,
             INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA,
+        )
+    )
+
+
+def independent_hs_horizons_solar_tidal_replay_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV,
+            INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA,
         )
     )
 
@@ -968,6 +992,90 @@ def _independent_hs_bicircular_phase_stress_ledger_row() -> dict[str, str]:
     }
 
 
+def _independent_hs_horizons_solar_tidal_replay_ledger_row() -> dict[str, str]:
+    metadata = _read_json(INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA)
+    rows = _read_csv_rows(INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV)
+    if int(metadata["row_count"]) != len(rows):
+        raise RuntimeError("independent-HS cached-Horizons replay metadata row_count does not match CSV")
+    for flag_name in (
+        "high_fidelity_validation",
+        "spice_ephemeris_validation",
+        "accepted_control_high_fidelity_replay",
+        "production_solver_parity_claim",
+        "flight_ready_claim",
+        "fuel_optimality_claim",
+        "quantum_advantage_claim",
+    ):
+        if bool(metadata[flag_name]):  # type: ignore[index]
+            raise RuntimeError(f"independent-HS cached-Horizons replay metadata must not claim {flag_name}")
+    polish = metadata["polish_case_summary"]  # type: ignore[index]
+    summary = metadata["horizons_solar_tidal_summary"]  # type: ignore[index]
+    cache = metadata["cache"]  # type: ignore[index]
+    sun_range = metadata["sun_distance_lu_range"]  # type: ignore[index]
+    nominal_error = str(metadata["polish_nominal_horizons_solar_tidal_terminal_error"])
+    branch_worst = str(metadata["polish_branch_horizons_solar_tidal_worst_error"])
+    branch_pass = int(metadata["polish_branch_horizons_solar_tidal_pass_count"])
+    branch_count = int(metadata["polish_branch_horizons_solar_tidal_row_count"])
+    cache_sha = str(metadata["cache_sha256"])
+    return {
+        "claim_id": "phase_shift_independent_hs_horizons_solar_tidal_replay_probe",
+        "evidence_family": "independent-HS cached-Horizons-derived solar-tidal replay",
+        "target_family": "halo phase-shift",
+        "target_mode": "catalog_halo_phase_shift",
+        "source_case": "ihs_all_single_p04_amax02_polish_from_p04",
+        "backend_or_method": (
+            "persisted independent-HS endpoint-plus-midpoint controls under a simplified solar tide "
+            "from cached JPL Horizons geometry"
+        ),
+        "mask_scope": (
+            f"representative 2026-Jan-01 epoch; polish row has 1 nominal replay and "
+            f"{branch_count} configured one-segment branch replays"
+        ),
+        "selected_branch_semantics": (
+            "replays persisted nominal and all eight branch endpoint-plus-midpoint schedules; controls are not retuned"
+        ),
+        "all_mask_semantics": (
+            "all eight configured one-segment masks are replayed once against the original CR3BP target "
+            "with linearly interpolated cached-Horizons Sun geometry"
+        ),
+        "all_configured_mask_evidence": "True",
+        "nominal_error": (
+            f"polish cached-Horizons solar-tidal nominal={nominal_error}; "
+            f"CR3BP replay delta={metadata['cr3bp_max_replay_delta']}"  # type: ignore[index]
+        ),
+        "selected_worst_error": (
+            f"polish cached-Horizons solar-tidal branch worst={branch_worst}; "
+            f"pass count={branch_pass}/{branch_count}; "
+            f"global branch pass count={summary['branch_horizons_solar_tidal_pass_count']}/"
+            f"{summary['branch_horizons_solar_tidal_row_count']}"  # type: ignore[index]
+        ),
+        "all_mask_worst_error": (
+            f"polish all-mask cached-Horizons stress worst={branch_worst}; all eight masks pass once"
+        ),
+        "thresholds": (
+            "source nominal<=0.09; source branch<=0.17; "
+            f"Sun distance LU range={sun_range[0]}--{sun_range[1]}; "
+            f"cache sha256={cache_sha}; cache path={cache['path']}"
+        ),
+        "passes_configured_thresholds": str(bool(branch_pass == branch_count and float(nominal_error) <= 0.09)),
+        "primary_interpretation": (
+            "This is stronger than the simple bicircular phase sweep because the Sun geometry is derived "
+            "from a cached JPL Horizons Moon/Sun vector cache; the persisted polish-row controls remain "
+            "within the configured thresholds for this representative stress replay."
+        ),
+        "explicit_boundary": (
+            "Cached-Horizons-derived solar-tidal stress probe only; not SPICE validation, high-fidelity "
+            "or flight validation, accepted-control high-fidelity replay, production solver parity, "
+            "fuel optimality, quantum, QUBO, or QAOA evidence."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV)}; "
+            f"{_relative_or_absolute(INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA)}; "
+            f"{cache['path']}"
+        ),
+    }
+
+
 def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
     metadata = _read_json(BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA)
     rows = _read_csv_rows(BICIRCULAR_SOLAR_TIDAL_STRESS_CSV)
@@ -1199,6 +1307,7 @@ def _horizons_ephemeris_force_model_contrast_ledger_row() -> dict[str, str]:
 def build_claim_evidence_ledger(
     include_independent_hs_branch_control_replay: bool | None = None,
     include_independent_hs_bicircular_phase_stress: bool | None = None,
+    include_independent_hs_horizons_solar_tidal_replay: bool | None = None,
     include_branch_control_replay: bool | None = None,
     include_bicircular_solar_tidal_stress: bool | None = None,
     include_bicircular_tail_coast_recovery: bool | None = None,
@@ -1208,6 +1317,10 @@ def build_claim_evidence_ledger(
         include_independent_hs_branch_control_replay = independent_hs_branch_control_replay_artifacts_available()
     if include_independent_hs_bicircular_phase_stress is None:
         include_independent_hs_bicircular_phase_stress = independent_hs_bicircular_phase_stress_artifacts_available()
+    if include_independent_hs_horizons_solar_tidal_replay is None:
+        include_independent_hs_horizons_solar_tidal_replay = (
+            independent_hs_horizons_solar_tidal_replay_artifacts_available()
+        )
     if include_branch_control_replay is None:
         include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
     if include_bicircular_solar_tidal_stress is None:
@@ -1235,6 +1348,9 @@ def build_claim_evidence_ledger(
         ihs_insert_at += 1
     if include_independent_hs_bicircular_phase_stress:
         rows.insert(ihs_insert_at, _independent_hs_bicircular_phase_stress_ledger_row())
+        ihs_insert_at += 1
+    if include_independent_hs_horizons_solar_tidal_replay:
+        rows.insert(ihs_insert_at, _independent_hs_horizons_solar_tidal_replay_ledger_row())
     tail_insert_at = next(
         index
         for index, row in enumerate(rows)
@@ -1471,6 +1587,13 @@ def _input_artifacts() -> list[Path]:
                 INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA,
             ]
         )
+    if independent_hs_horizons_solar_tidal_replay_artifacts_available():
+        paths.extend(
+            [
+                INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV,
+                INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA,
+            ]
+        )
     if bicircular_solar_tidal_stress_artifacts_available():
         paths.extend(
             [
@@ -1504,6 +1627,7 @@ def write_artifacts(
 ) -> dict[str, object]:
     ihs_branch_replay_available = independent_hs_branch_control_replay_artifacts_available()
     ihs_bicircular_phase_stress_available = independent_hs_bicircular_phase_stress_artifacts_available()
+    ihs_horizons_replay_available = independent_hs_horizons_solar_tidal_replay_artifacts_available()
     branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
     bicircular_stress_available = bicircular_solar_tidal_stress_artifacts_available()
     bicircular_retuned_available = bicircular_tail_coast_recovery_artifacts_available()
@@ -1511,6 +1635,7 @@ def write_artifacts(
     ledger = build_claim_evidence_ledger(
         include_independent_hs_branch_control_replay=ihs_branch_replay_available,
         include_independent_hs_bicircular_phase_stress=ihs_bicircular_phase_stress_available,
+        include_independent_hs_horizons_solar_tidal_replay=ihs_horizons_replay_available,
         include_branch_control_replay=branch_control_replay_available,
         include_bicircular_solar_tidal_stress=bicircular_stress_available,
         include_bicircular_tail_coast_recovery=bicircular_retuned_available,
@@ -1545,6 +1670,7 @@ def write_artifacts(
         "high_fidelity_claim": False,
         "independent_hs_branch_control_replay": ihs_branch_replay_available,
         "independent_hs_bicircular_phase_stress_probe": ihs_bicircular_phase_stress_available,
+        "independent_hs_horizons_solar_tidal_replay_probe": ihs_horizons_replay_available,
         "branch_control_replay": branch_control_replay_available,
         "bicircular_solar_tidal_stress_probe": bicircular_stress_available,
         "bicircular_tail_coast_retuned_recovery": bicircular_retuned_available,
@@ -1563,6 +1689,11 @@ def write_artifacts(
                 " A positive independent-HS simple bicircular phase-sweep stress row is included because its CSV and metadata exist."
                 if ihs_bicircular_phase_stress_available
                 else " No independent-HS bicircular phase-sweep stress row is included because that package is absent."
+            )
+            + (
+                " A positive independent-HS cached-Horizons-derived solar-tidal replay row is included because its CSV and metadata exist."
+                if ihs_horizons_replay_available
+                else " No independent-HS cached-Horizons-derived solar-tidal replay row is included because that package is absent."
             )
             + (
                 " A branch-control replay ledger row is included because the focused replay package is present."
@@ -1604,6 +1735,7 @@ def write_artifacts(
         },
         "independent_hs_branch_control_replay_artifacts_available": ihs_branch_replay_available,
         "independent_hs_bicircular_phase_stress_artifacts_available": ihs_bicircular_phase_stress_available,
+        "independent_hs_horizons_solar_tidal_replay_artifacts_available": ihs_horizons_replay_available,
         "branch_control_replay_artifacts_available": branch_control_replay_available,
         "bicircular_solar_tidal_stress_artifacts_available": bicircular_stress_available,
         "bicircular_tail_coast_recovery_artifacts_available": bicircular_retuned_available,
@@ -1643,6 +1775,12 @@ def write_artifacts(
                 "The independent-HS bicircular phase-stress row, when present, is a positive simple "
                 "circular solar-tidal stress replay for the converged all-configured row; it is not "
                 "SPICE/high-fidelity validation or production solver parity."
+            ),
+            (
+                "The independent-HS cached-Horizons solar-tidal replay row, when present, uses cached "
+                "JPL Horizons geometry in a simplified solar-tidal stress replay for the converged "
+                "all-configured row; it is not SPICE/high-fidelity/flight validation or production "
+                "solver parity."
             ),
             (
                 "The historical tail-coast branch audit summarizes recorded branch_results JSON only; "
