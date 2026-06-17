@@ -1,0 +1,284 @@
+{
+  "artifacts": {
+    "independent_hs_bicircular_phase_stress_csv": "data/results/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress.csv",
+    "independent_hs_bicircular_phase_stress_metadata_json": "data/results/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress_metadata.json",
+    "independent_hs_bicircular_phase_stress_table_tex": "tables/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress_table.tex"
+  },
+  "baseline_reproduction": {
+    "max_cr3bp_delta_from_recorded": 0.0,
+    "passes_baseline_tolerance": true
+  },
+  "baseline_tolerance": 1e-10,
+  "bicircular_solar_tidal_stress_probe": true,
+  "branch_control_replay": true,
+  "branch_phase_row_count": 128,
+  "branch_source_record_count": 16,
+  "case_count": 2,
+  "command": "scripts\\run_independent_hs_bicircular_phase_stress.py",
+  "fuel_optimality_claim": false,
+  "high_fidelity_validation": false,
+  "independent_hs_bicircular_phase_stress_probe": true,
+  "input_artifacts": [
+    {
+      "bytes": 2772,
+      "path": "configs/independent_hs_all_configured_headroom.yaml",
+      "sha256": "15ae12c93e4fad9927066d52bfe7c6c23b146f67cd062b201d2b5dfcf0a5cd49"
+    },
+    {
+      "bytes": 1203,
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf"
+    },
+    {
+      "bytes": 10975,
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
+      "sha256": "9a50949eb40d5858658e0d667eb54a2c34b8d278bc0a667bd14b59ff07cea1ed"
+    },
+    {
+      "bytes": 12263,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_control_manifest.json",
+      "sha256": "b27b8f4677e942f8d14438b42f25847255998aa13a27b34f796b79ac47af0d2e"
+    },
+    {
+      "bytes": 3443,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json",
+      "sha256": "eda26f31547a19ac9df2c37186520e9746002a1a6e363649e0b378bd9566de24"
+    },
+    {
+      "bytes": 7803,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_000_mask_000_controls.json",
+      "sha256": "53c2815456a03f73c5dea994c4f1a3383d98dcf331386f78d64b062653c94838"
+    },
+    {
+      "bytes": 7786,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_001_mask_001_controls.json",
+      "sha256": "c5acd7aed28e506caa9d5679ca7a638518cd91bc8675a99738895d3109807bdf"
+    },
+    {
+      "bytes": 7786,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_002_mask_002_controls.json",
+      "sha256": "745ef20a73e7f434ce6c49e652caaa2567e389df41c939c10c2b9cace4fea5b8"
+    },
+    {
+      "bytes": 7784,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_003_mask_003_controls.json",
+      "sha256": "e55e462718e34f570d41fe1892fcc95c0c6fc159b8179831eaf6cbcb490827f8"
+    },
+    {
+      "bytes": 7774,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_004_mask_004_controls.json",
+      "sha256": "39f77e7d84bed8be796769f498e003ddd984455043426593c6fb5b9048ea17dd"
+    },
+    {
+      "bytes": 7770,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_005_mask_007_controls.json",
+      "sha256": "8b41867e117e315f3d313aca1d5729543526b384c98b03bb113f551dbca635d4"
+    },
+    {
+      "bytes": 7772,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_006_mask_006_controls.json",
+      "sha256": "74dfd2a9211fe7b4cfda532f942321f4c80a0e43eb71db8638c3ee514d0dae28"
+    },
+    {
+      "bytes": 7767,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_007_mask_005_controls.json",
+      "sha256": "0c0299e6b11d14ddb562403581d213ec410f1fb0c7fc4191fa0b07e35d4244c0"
+    },
+    {
+      "bytes": 12313,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_control_manifest.json",
+      "sha256": "067099019dc31f3cd52f7b475bcf574719f299a390ca68fe074420205d8ac6ed"
+    },
+    {
+      "bytes": 3468,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_controls.json",
+      "sha256": "46871d310bb008e1be5438eb0ee00d1da0b5c320eefe2fc46f8add782ae06198"
+    },
+    {
+      "bytes": 7798,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_controls.json",
+      "sha256": "e0971fc28fc5f30700acd0c379b90012891a22a1ff5268aab3b6d5b13c3a20eb"
+    },
+    {
+      "bytes": 7782,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_controls.json",
+      "sha256": "2d4e0b756892ea2b5d9fd647207a6c1652c16585dda4a130504a452c40f9b50c"
+    },
+    {
+      "bytes": 7788,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_controls.json",
+      "sha256": "542883ea5dee97baacc45e736222aaf36a4e2249493d1c4d02eabe46b93efe55"
+    },
+    {
+      "bytes": 7786,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_controls.json",
+      "sha256": "80dcf364ebc43719655686cce641289b2c718f1c5edb57f09377ad2bf263bf53"
+    },
+    {
+      "bytes": 7783,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_controls.json",
+      "sha256": "ae64d25b776b428a3d90268ee11a201987aa21dd328e7a5326a9153ea5134461"
+    },
+    {
+      "bytes": 7776,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_controls.json",
+      "sha256": "fafe30ed005fa19a0bfe392e6b81b0999b47af84eb19d8a73b42396115e1bd49"
+    },
+    {
+      "bytes": 7780,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_controls.json",
+      "sha256": "29db0576658055a952ff736e657f3c908e5b6791f53ea02b40266dd28e0c1915"
+    },
+    {
+      "bytes": 7775,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_controls.json",
+      "sha256": "ee18922dc4b0715b9d371153718e9ff08d9deba18830d7b401445088e5992ee2"
+    }
+  ],
+  "interpretation_limits": [
+    "This is a deterministic beyond-CR3BP stress replay of persisted independent-HS controls.",
+    "The bicircular model is a simple circular solar third-body tidal perturbation in canonical units.",
+    "It is not SPICE ephemeris validation, high-fidelity flight validation, production solver parity, fuel optimality, or quantum evidence.",
+    "Controls are not retuned under the solar-tidal perturbation; terminal errors are measured against the original CR3BP target at the original fixed final time."
+  ],
+  "nominal_phase_row_count": 16,
+  "nominal_source_record_count": 2,
+  "optimization_rerun": false,
+  "phase_count": 8,
+  "phase_degrees": [
+    0.0,
+    45.0,
+    90.0,
+    135.0,
+    180.0,
+    225.0,
+    270.0,
+    315.0
+  ],
+  "phase_stress_summary": {
+    "all_bicircular_rows_pass": true,
+    "all_branch_bicircular_rows_pass": true,
+    "all_nominal_bicircular_rows_pass": true,
+    "branch_bicircular_pass_count": 128,
+    "branch_bicircular_row_count": 128,
+    "max_bicircular_terminal_error": 0.08557051343145317,
+    "max_branch_bicircular_terminal_error": 0.08557051343145317,
+    "max_nominal_bicircular_terminal_error": 0.022138676654057693,
+    "nominal_bicircular_pass_count": 16,
+    "nominal_bicircular_row_count": 16
+  },
+  "polish_case_summary": {
+    "branch_bicircular_pass_count": 64,
+    "branch_maxima_by_mask": [
+      {
+        "mask_index": 0,
+        "max_bicircular_terminal_error": 0.08557051343145317,
+        "pass_count": 8,
+        "phase_count": 8
+      },
+      {
+        "mask_index": 1,
+        "max_bicircular_terminal_error": 0.06352874850392037,
+        "pass_count": 8,
+        "phase_count": 8
+      },
+      {
+        "mask_index": 2,
+        "max_bicircular_terminal_error": 0.045786180091858225,
+        "pass_count": 8,
+        "phase_count": 8
+      },
+      {
+        "mask_index": 3,
+        "max_bicircular_terminal_error": 0.03298931165873681,
+        "pass_count": 8,
+        "phase_count": 8
+      },
+      {
+        "mask_index": 4,
+        "max_bicircular_terminal_error": 0.026001198981337396,
+        "pass_count": 8,
+        "phase_count": 8
+      },
+      {
+        "mask_index": 5,
+        "max_bicircular_terminal_error": 0.022340480664340828,
+        "pass_count": 8,
+        "phase_count": 8
+      },
+      {
+        "mask_index": 6,
+        "max_bicircular_terminal_error": 0.018973763615934117,
+        "pass_count": 8,
+        "phase_count": 8
+      },
+      {
+        "mask_index": 7,
+        "max_bicircular_terminal_error": 0.01901081193168289,
+        "pass_count": 8,
+        "phase_count": 8
+      }
+    ],
+    "branch_phase_count": 64,
+    "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+    "max_branch_bicircular_terminal_error": 0.08557051343145317,
+    "max_nominal_bicircular_terminal_error": 0.022138676654057693,
+    "nominal_bicircular_pass_count": 8,
+    "nominal_phase_count": 8,
+    "row_count": 72
+  },
+  "production_solver_parity_claim": false,
+  "quantum_advantage_claim": false,
+  "row_count": 144,
+  "solar_tidal_parameters": {
+    "distance_semantics": "constant circular Sun distance in Earth-Moon distance units",
+    "model_scope": "simple bicircular solar third-body tidal stress model; not SPICE ephemeris validation",
+    "mu_semantics": "GM_sun/(GM_earth+GM_moon) nondimensional mass ratio",
+    "rate_semantics": "Sun inertial mean-motion ratio to Earth-Moon mean motion; rotating-frame phase rate is n_sun - 1",
+    "rotating_frame_phase_rate": -0.9252,
+    "sun_distance_lu": 389.17,
+    "sun_inertial_angular_rate_ratio": 0.0748,
+    "sun_mu_ratio": 328900.56
+  },
+  "source_record_count": 18,
+  "spice_ephemeris_validation": false,
+  "summary": [
+    {
+      "all_bicircular_rows_pass": true,
+      "all_branch_bicircular_pass": true,
+      "all_nominal_bicircular_pass": true,
+      "branch_bicircular_pass_count": 64,
+      "branch_bicircular_terminal_error_max": 0.08557051343145317,
+      "branch_phase_row_count": 64,
+      "branch_threshold": 0.17,
+      "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+      "max_cr3bp_delta_from_recorded": 0.0,
+      "nominal_bicircular_pass_count": 8,
+      "nominal_bicircular_terminal_error_max": 0.022138676654057693,
+      "nominal_phase_row_count": 8,
+      "nominal_threshold": 0.09,
+      "optimizer_success": true,
+      "overall_bicircular_terminal_error_max": 0.08557051343145317,
+      "phase_count": 8
+    },
+    {
+      "all_bicircular_rows_pass": true,
+      "all_branch_bicircular_pass": true,
+      "all_nominal_bicircular_pass": true,
+      "branch_bicircular_pass_count": 64,
+      "branch_bicircular_terminal_error_max": 0.08506397832471857,
+      "branch_phase_row_count": 64,
+      "branch_threshold": 0.17,
+      "case_id": "ihs_all_single_p04_amax02_warm_from_p03",
+      "max_cr3bp_delta_from_recorded": 0.0,
+      "nominal_bicircular_pass_count": 8,
+      "nominal_bicircular_terminal_error_max": 0.021614115900901724,
+      "nominal_phase_row_count": 8,
+      "nominal_threshold": 0.09,
+      "optimizer_success": false,
+      "overall_bicircular_terminal_error_max": 0.08506397832471857,
+      "phase_count": 8
+    }
+  ],
+  "uses_recorded_artifacts_only": true
+}

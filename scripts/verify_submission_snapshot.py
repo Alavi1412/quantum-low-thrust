@@ -40,6 +40,8 @@ PRIMARY_ARTIFACT_PATHS = [
     ),
     "data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay.csv",
     "data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay_metadata.json",
+    "data/results/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress.csv",
+    "data/results/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress_metadata.json",
     "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay.csv",
     "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_metadata.json",
     "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv",
@@ -53,6 +55,7 @@ PRIMARY_ARTIFACT_PATHS = [
     "data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_metadata.json",
     "tables/replay_stress_validation/replay_stress_validation_table.tex",
     "tables/independent_hs_branch_control_replay/independent_hs_branch_control_replay_table.tex",
+    "tables/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress_table.tex",
     "tables/evidence_synthesis/evidence_synthesis_table.tex",
     "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
 ]
@@ -60,6 +63,7 @@ PRIMARY_ARTIFACT_PATHS = [
 FOCUSED_TEST_TARGETS = [
     "tests/test_replay_stress_validation.py",
     "tests/test_independent_hs_branch_control_replay.py",
+    "tests/test_independent_hs_bicircular_phase_stress.py",
     "tests/test_independent_hs_direct_collocation.py",
     "tests/test_claim_evidence_ledger.py",
     "tests/test_evidence_synthesis.py",

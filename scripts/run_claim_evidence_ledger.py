@@ -73,6 +73,20 @@ INDEPENDENT_HS_BRANCH_REPLAY_METADATA = (
     / "independent_hs_branch_control_replay"
     / "independent_hs_branch_control_replay_metadata.json"
 )
+INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_bicircular_phase_stress"
+    / "independent_hs_bicircular_phase_stress.csv"
+)
+INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_bicircular_phase_stress"
+    / "independent_hs_bicircular_phase_stress_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -168,6 +182,16 @@ def independent_hs_branch_control_replay_artifacts_available() -> bool:
         for path in (
             INDEPENDENT_HS_BRANCH_REPLAY_CSV,
             INDEPENDENT_HS_BRANCH_REPLAY_METADATA,
+        )
+    )
+
+
+def independent_hs_bicircular_phase_stress_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV,
+            INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA,
         )
     )
 
@@ -869,6 +893,81 @@ def _independent_hs_branch_control_replay_ledger_row() -> dict[str, str]:
     }
 
 
+def _independent_hs_bicircular_phase_stress_ledger_row() -> dict[str, str]:
+    metadata = _read_json(INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA)
+    rows = _read_csv_rows(INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV)
+    if int(metadata["row_count"]) != len(rows):
+        raise RuntimeError("independent-HS bicircular phase-stress metadata row_count does not match CSV")
+    for flag_name in (
+        "high_fidelity_validation",
+        "spice_ephemeris_validation",
+        "production_solver_parity_claim",
+        "fuel_optimality_claim",
+        "quantum_advantage_claim",
+    ):
+        if bool(metadata[flag_name]):  # type: ignore[index]
+            raise RuntimeError(f"independent-HS bicircular phase-stress metadata must not claim {flag_name}")
+    polish = metadata["polish_case_summary"]  # type: ignore[index]
+    summary = metadata["phase_stress_summary"]  # type: ignore[index]
+    parameters = metadata["solar_tidal_parameters"]  # type: ignore[index]
+    phase_degrees = ", ".join(str(value) for value in metadata["phase_degrees"])  # type: ignore[index]
+    branch_count = int(polish["branch_phase_count"])  # type: ignore[index]
+    nominal_count = int(polish["nominal_phase_count"])  # type: ignore[index]
+    branch_pass = int(polish["branch_bicircular_pass_count"])  # type: ignore[index]
+    nominal_pass = int(polish["nominal_bicircular_pass_count"])  # type: ignore[index]
+    nominal_max = str(polish["max_nominal_bicircular_terminal_error"])  # type: ignore[index]
+    branch_max = str(polish["max_branch_bicircular_terminal_error"])  # type: ignore[index]
+    return {
+        "claim_id": "phase_shift_independent_hs_bicircular_phase_stress_probe",
+        "evidence_family": "independent-HS simple bicircular phase-sweep stress replay",
+        "target_family": "halo phase-shift",
+        "target_mode": "catalog_halo_phase_shift",
+        "source_case": "ihs_all_single_p04_amax02_polish_from_p04",
+        "backend_or_method": "persisted independent-HS endpoint-plus-midpoint controls under simple circular solar tide",
+        "mask_scope": (
+            f"converged polish row; {nominal_count} nominal phase rows and {branch_count} "
+            f"branch-phase rows over Sun phases {phase_degrees}"
+        ),
+        "selected_branch_semantics": (
+            "replays persisted nominal and all eight branch endpoint-plus-midpoint schedules; controls are not retuned"
+        ),
+        "all_mask_semantics": (
+            "all eight configured one-segment masks are covered for each stress phase, but this is a "
+            "phase-sweep replay rather than a new optimization"
+        ),
+        "all_configured_mask_evidence": "True",
+        "nominal_error": (
+            f"polish simple-bicircular max nominal={nominal_max}; pass count={nominal_pass}/{nominal_count}; "
+            f"CR3BP replay delta={metadata['baseline_reproduction']['max_cr3bp_delta_from_recorded']}"  # type: ignore[index]
+        ),
+        "selected_worst_error": (
+            f"polish simple-bicircular max branch={branch_max}; pass count={branch_pass}/{branch_count}; "
+            f"global branch pass count={summary['branch_bicircular_pass_count']}/{summary['branch_bicircular_row_count']}"  # type: ignore[index]
+        ),
+        "all_mask_worst_error": (
+            f"polish all-mask stress worst={branch_max}; all eight masks pass in all eight phases"
+        ),
+        "thresholds": (
+            "source nominal<=0.09; source branch<=0.17; "
+            f"Sun distance={parameters['sun_distance_lu']} LU, mu ratio={parameters['sun_mu_ratio']}, "
+            f"rotating phase rate={parameters['rotating_frame_phase_rate']}"
+        ),
+        "passes_configured_thresholds": str(bool(branch_pass == branch_count and nominal_pass == nominal_count)),
+        "primary_interpretation": (
+            "Positive simple bicircular phase-sweep stress replay for the converged independent-HS "
+            "all-configured row; persisted controls remain within configured thresholds across the tested phases."
+        ),
+        "explicit_boundary": (
+            "Deterministic beyond-CR3BP stress probe only; not SPICE ephemeris validation, high-fidelity "
+            "flight validation, production solver parity, fuel optimality, quantum, QUBO, or QAOA evidence."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV)}; "
+            f"{_relative_or_absolute(INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA)}"
+        ),
+    }
+
+
 def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
     metadata = _read_json(BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA)
     rows = _read_csv_rows(BICIRCULAR_SOLAR_TIDAL_STRESS_CSV)
@@ -1099,6 +1198,7 @@ def _horizons_ephemeris_force_model_contrast_ledger_row() -> dict[str, str]:
 
 def build_claim_evidence_ledger(
     include_independent_hs_branch_control_replay: bool | None = None,
+    include_independent_hs_bicircular_phase_stress: bool | None = None,
     include_branch_control_replay: bool | None = None,
     include_bicircular_solar_tidal_stress: bool | None = None,
     include_bicircular_tail_coast_recovery: bool | None = None,
@@ -1106,6 +1206,8 @@ def build_claim_evidence_ledger(
 ) -> pd.DataFrame:
     if include_independent_hs_branch_control_replay is None:
         include_independent_hs_branch_control_replay = independent_hs_branch_control_replay_artifacts_available()
+    if include_independent_hs_bicircular_phase_stress is None:
+        include_independent_hs_bicircular_phase_stress = independent_hs_bicircular_phase_stress_artifacts_available()
     if include_branch_control_replay is None:
         include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
     if include_bicircular_solar_tidal_stress is None:
@@ -1130,6 +1232,9 @@ def build_claim_evidence_ledger(
     ) + 1
     if include_independent_hs_branch_control_replay:
         rows.insert(ihs_insert_at, _independent_hs_branch_control_replay_ledger_row())
+        ihs_insert_at += 1
+    if include_independent_hs_bicircular_phase_stress:
+        rows.insert(ihs_insert_at, _independent_hs_bicircular_phase_stress_ledger_row())
     tail_insert_at = next(
         index
         for index, row in enumerate(rows)
@@ -1359,6 +1464,13 @@ def _input_artifacts() -> list[Path]:
                 INDEPENDENT_HS_BRANCH_REPLAY_METADATA,
             ]
         )
+    if independent_hs_bicircular_phase_stress_artifacts_available():
+        paths.extend(
+            [
+                INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV,
+                INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA,
+            ]
+        )
     if bicircular_solar_tidal_stress_artifacts_available():
         paths.extend(
             [
@@ -1391,12 +1503,14 @@ def write_artifacts(
     command: str,
 ) -> dict[str, object]:
     ihs_branch_replay_available = independent_hs_branch_control_replay_artifacts_available()
+    ihs_bicircular_phase_stress_available = independent_hs_bicircular_phase_stress_artifacts_available()
     branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
     bicircular_stress_available = bicircular_solar_tidal_stress_artifacts_available()
     bicircular_retuned_available = bicircular_tail_coast_recovery_artifacts_available()
     horizons_contrast_available = horizons_ephemeris_force_model_contrast_artifacts_available()
     ledger = build_claim_evidence_ledger(
         include_independent_hs_branch_control_replay=ihs_branch_replay_available,
+        include_independent_hs_bicircular_phase_stress=ihs_bicircular_phase_stress_available,
         include_branch_control_replay=branch_control_replay_available,
         include_bicircular_solar_tidal_stress=bicircular_stress_available,
         include_bicircular_tail_coast_recovery=bicircular_retuned_available,
@@ -1430,6 +1544,7 @@ def write_artifacts(
         "uses_recorded_artifacts_only": True,
         "high_fidelity_claim": False,
         "independent_hs_branch_control_replay": ihs_branch_replay_available,
+        "independent_hs_bicircular_phase_stress_probe": ihs_bicircular_phase_stress_available,
         "branch_control_replay": branch_control_replay_available,
         "bicircular_solar_tidal_stress_probe": bicircular_stress_available,
         "bicircular_tail_coast_retuned_recovery": bicircular_retuned_available,
@@ -1443,6 +1558,11 @@ def write_artifacts(
                 " An independent-HS branch-control replay row is included because its replay package is present."
                 if ihs_branch_replay_available
                 else " No independent-HS branch-control replay row is included because that replay package is absent."
+            )
+            + (
+                " A positive independent-HS simple bicircular phase-sweep stress row is included because its CSV and metadata exist."
+                if ihs_bicircular_phase_stress_available
+                else " No independent-HS bicircular phase-sweep stress row is included because that package is absent."
             )
             + (
                 " A branch-control replay ledger row is included because the focused replay package is present."
@@ -1483,6 +1603,7 @@ def write_artifacts(
             ),
         },
         "independent_hs_branch_control_replay_artifacts_available": ihs_branch_replay_available,
+        "independent_hs_bicircular_phase_stress_artifacts_available": ihs_bicircular_phase_stress_available,
         "branch_control_replay_artifacts_available": branch_control_replay_available,
         "bicircular_solar_tidal_stress_artifacts_available": bicircular_stress_available,
         "bicircular_tail_coast_recovery_artifacts_available": bicircular_retuned_available,
@@ -1517,6 +1638,11 @@ def write_artifacts(
                 "The independent-HS branch-control replay row, when present, repropagates persisted "
                 "endpoint-plus-midpoint controls under normalized CR3BP only; it is not an optimizer rerun, "
                 "high-fidelity validation, production solver parity, or fuel-optimality evidence."
+            ),
+            (
+                "The independent-HS bicircular phase-stress row, when present, is a positive simple "
+                "circular solar-tidal stress replay for the converged all-configured row; it is not "
+                "SPICE/high-fidelity validation or production solver parity."
             ),
             (
                 "The historical tail-coast branch audit summarizes recorded branch_results JSON only; "

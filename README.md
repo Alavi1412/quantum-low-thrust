@@ -55,6 +55,7 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/cache/horizons/*`,
 `data/results/bicircular_solar_tidal_stress/*`,
 `data/results/bicircular_tail_coast_recovery/*`,
+`data/results/independent_hs_bicircular_phase_stress/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
 `data/results/independent_hs_branch_control_replay/*`,
@@ -169,14 +170,16 @@ It reads recorded artifacts only and does not rerun trajectory optimization.
 The ledger separates selected-branch evidence, all-mask diagnostics,
 all-configured-mask evidence, and deterministic branch-control replay rows. The
 current snapshot includes the new independent-HS all-configured headroom row,
-the independent-HS branch-control replay CSV/metadata, the focused tail-coast
-replay CSV/metadata, focused source recovery CSV, bicircular solar-tidal stress
-CSV/metadata, and Horizons ephemeris force-model contrast CSV/metadata, plus
-the bicircular retuned recovery CSV, summary, and metadata, so the ledger has
-14 claim rows. The
-solar-tidal row is a negative stress-probe row, the retuned recovery row is a
-completed negative simple-bicircular retuning row, and the Horizons row is a
-force-model contrast row. None is high-fidelity validation or quantum evidence.
+the independent-HS branch-control replay CSV/metadata, the independent-HS
+simple bicircular phase-sweep stress CSV/metadata, the focused tail-coast replay
+CSV/metadata, focused source recovery CSV, bicircular solar-tidal stress
+CSV/metadata, and Horizons ephemeris force-model contrast CSV/metadata, plus the
+bicircular retuned recovery CSV, summary, and metadata, so the ledger has 15
+claim rows. The independent-HS bicircular row is a positive stress-probe replay
+for the converged all-configured row; the hard-catalog solar-tidal row is a
+negative stress-probe row, the retuned recovery row is a completed negative
+simple-bicircular retuning row, and the Horizons row is a force-model contrast
+row. None is high-fidelity validation or quantum evidence.
 The tail-coast audit confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
@@ -191,8 +194,9 @@ CSV/JSON artifacts only and does not rerun trajectory optimization. The table
 cross-indexes tight 30-seed threshold sensitivity, continuation-extension
 multiple-shooting rows, compact direct-collocation and independent-midpoint
 Hermite-Simpson diagnostics, the new all-configured independent-HS headroom
-row, the independent-HS branch-control replay row, and the scoped hard-catalog
-tail-coast row used in the main manuscript claim path.
+row, the independent-HS branch-control replay row, the positive independent-HS
+simple bicircular phase-sweep stress row, and the scoped hard-catalog tail-coast
+row used in the main manuscript claim path.
 
 The replay/stress validation postprocessor writes
 `data/results/replay_stress_validation/replay_stress_validation.csv`,
@@ -231,6 +235,28 @@ nominal/branch/all-mask replay deltas at tolerance `1e-10`, and
 does not rerun optimization, certify optimizer convergence for the original
 row, add high-fidelity validation, establish production solver parity, or claim
 fuel optimality or quantum advantage.
+
+The independent-HS bicircular phase-sweep stress postprocessor writes
+`data/results/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress.csv`,
+`data/results/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress_metadata.json`,
+and
+`tables/independent_hs_bicircular_phase_stress/independent_hs_bicircular_phase_stress_table.tex`:
+
+```powershell
+py -3.11 scripts\run_independent_hs_bicircular_phase_stress.py
+```
+
+It validates the replay-ready p=0.4 independent-HS sidecar manifests and SHA-256
+hashes, repropagates persisted endpoint-plus-midpoint nominal and branch
+controls under normalized CR3BP, and then sweeps Sun phases
+`0, 45, 90, 135, 180, 225, 270, 315` degrees under the simple circular
+solar-tidal bicircular model. For the converged polish row
+`ihs_all_single_p04_amax02_polish_from_p04`, all 8 nominal phases and all 64
+branch-phase checks pass the configured `0.09/0.17` thresholds. The maximum
+simple-bicircular nominal error is `0.022138676654057693`, and the maximum
+branch-phase error is `0.08557051343145317`. This is a deterministic
+beyond-CR3BP stress probe only; it is not SPICE validation, high-fidelity
+validation, production solver parity, fuel optimality, or quantum evidence.
 
 The Horizons ephemeris force-model contrast postprocessor writes
 `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,

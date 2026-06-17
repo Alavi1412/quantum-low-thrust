@@ -25,6 +25,7 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
 
     synthesis = module.build_synthesis()
     has_ihs_replay = module.independent_hs_branch_replay_available()
+    has_ihs_bicircular = module.independent_hs_bicircular_phase_stress_available()
 
     expected_rows = {
         "phase_shift_tight_threshold_counts",
@@ -38,6 +39,8 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
     }
     if has_ihs_replay:
         expected_rows.add("ihs_branch_control_replay_p04_amax02")
+    if has_ihs_bicircular:
+        expected_rows.add("ihs_bicircular_phase_stress_polish_p04_amax02")
     assert len(synthesis) == len(expected_rows)
     assert set(synthesis["row_id"]) == expected_rows
 
@@ -90,6 +93,16 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
         assert "max replay delta=0.0" in ihs_replay["pass_status_note"]
         assert "without adding high-fidelity" in ihs_replay["practitioner_interpretation"]
 
+    if has_ihs_bicircular:
+        ihs_stress = row("ihs_bicircular_phase_stress_polish_p04_amax02")
+        assert ihs_stress["configured_pass"] == "True"
+        assert ihs_stress["nominal_error"] == "0.022138676654057693"
+        assert ihs_stress["selected_worst_error"] == "0.08557051343145317"
+        assert ihs_stress["all_mask_worst_error"] == "0.08557051343145317"
+        assert ihs_stress["tight_0p05_0p09_all_mask_pass"] == "True"
+        assert "branch 64/64" in ihs_stress["pass_status_note"]
+        assert "not flight validation" in ihs_stress["practitioner_interpretation"]
+
     tail = row("tail_coast_hard_catalog_all_one_two")
     assert tail["nominal_error"] == "0.02299233817855882"
     assert tail["selected_worst_error"] == "0.0936063931709301"
@@ -129,8 +142,9 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
 
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     has_ihs_replay = module.independent_hs_branch_replay_available()
-    expected_rows = 8 + int(has_ihs_replay)
-    expected_inputs = 12 + (2 if has_ihs_replay else 0)
+    has_ihs_bicircular = module.independent_hs_bicircular_phase_stress_available()
+    expected_rows = 8 + int(has_ihs_replay) + int(has_ihs_bicircular)
+    expected_inputs = 12 + (2 if has_ihs_replay else 0) + (2 if has_ihs_bicircular else 0)
     assert metadata["optimization_rerun"] is False
     assert metadata["row_count"] == expected_rows
     assert "Recorded CSV/JSON artifacts only" in metadata["source_mode"]
@@ -143,6 +157,8 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
     assert "ihs_all_configured_headroom_p04_amax02" in set(csv_df["row_id"])
     if has_ihs_replay:
         assert "ihs_branch_control_replay_p04_amax02" in set(csv_df["row_id"])
+    if has_ihs_bicircular:
+        assert "ihs_bicircular_phase_stress_polish_p04_amax02" in set(csv_df["row_id"])
     table = table_path.read_text(encoding="utf-8")
     assert "0.05/0.10: True; 0.05/0.09: False" in table
     assert "sampled methods 0/30; all-windows 30/30" in table

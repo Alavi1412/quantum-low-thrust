@@ -93,6 +93,20 @@ INDEPENDENT_HS_BRANCH_REPLAY_METADATA = (
     / "independent_hs_branch_control_replay"
     / "independent_hs_branch_control_replay_metadata.json"
 )
+INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_bicircular_phase_stress"
+    / "independent_hs_bicircular_phase_stress.csv"
+)
+INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_bicircular_phase_stress"
+    / "independent_hs_bicircular_phase_stress_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -224,6 +238,13 @@ def independent_hs_branch_replay_available() -> bool:
     return INDEPENDENT_HS_BRANCH_REPLAY_CSV.is_file() and INDEPENDENT_HS_BRANCH_REPLAY_METADATA.is_file()
 
 
+def independent_hs_bicircular_phase_stress_available() -> bool:
+    return (
+        INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV.is_file()
+        and INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA.is_file()
+    )
+
+
 def _case_metric_row(
     *,
     row_id: str,
@@ -306,6 +327,50 @@ def _independent_hs_branch_replay_row() -> dict[str, str]:
         ),
         "source_artifact": _relative_or_absolute(INDEPENDENT_HS_BRANCH_REPLAY_CSV),
         "source_row_id": "independent-HS branch-control replay metadata summary",
+    }
+
+
+def _independent_hs_bicircular_phase_stress_row() -> dict[str, str]:
+    metadata = json.loads(INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA.read_text(encoding="utf-8"))
+    polish = metadata["polish_case_summary"]
+    if int(polish["nominal_phase_count"]) != 8:
+        raise RuntimeError("expected independent-HS bicircular phase stress to contain 8 polish nominal phases")
+    if int(polish["branch_phase_count"]) != 64:
+        raise RuntimeError("expected independent-HS bicircular phase stress to contain 64 polish branch-phase rows")
+    nominal_max = str(polish["max_nominal_bicircular_terminal_error"])
+    branch_max = str(polish["max_branch_bicircular_terminal_error"])
+    nominal_pass = int(polish["nominal_bicircular_pass_count"])
+    branch_pass = int(polish["branch_bicircular_pass_count"])
+    phases = ", ".join(str(value) for value in metadata["phase_degrees"])
+    return {
+        "row_id": "ihs_bicircular_phase_stress_polish_p04_amax02",
+        "artifact_family": "independent-HS simple bicircular phase-sweep stress",
+        "representative_case_or_statistic": "ihs_all_single_p04_amax02_polish_from_p04",
+        "target_family": "catalog halo phase-shift",
+        "backend_initializer_role": "persisted endpoint-plus-midpoint controls replayed with simple circular solar tide",
+        "mask_scope": f"8/8 configured one-segment masks over Sun phases {phases}",
+        "phase_time": "0.4",
+        "transfer_time": "0.5",
+        "amax": "0.2",
+        "segments": "8",
+        "nominal_error": nominal_max,
+        "selected_worst_error": branch_max,
+        "all_mask_worst_error": branch_max,
+        "configured_pass": str(bool(nominal_pass == 8 and branch_pass == 64)),
+        "stringent_0p065_0p10_all_mask_pass": _threshold_pass(nominal_max, branch_max, STRINGENT_THRESHOLDS),
+        "near_tight_0p05_0p10_all_mask_pass": _threshold_pass(nominal_max, branch_max, NEAR_TIGHT_THRESHOLDS),
+        "tight_0p05_0p09_all_mask_pass": _threshold_pass(nominal_max, branch_max, TIGHT_THRESHOLDS),
+        "pass_status_note": (
+            f"simple bicircular stress replay: nominal {nominal_pass}/8; branch {branch_pass}/64; "
+            "no SPICE/high-fidelity or production parity claim"
+        ),
+        "practitioner_interpretation": (
+            "The converged independent-HS all-configured row has a positive deterministic "
+            "beyond-CR3BP stress replay under the simple circular solar-tidal model; the result "
+            "is useful benchmark-resource evidence, not flight validation."
+        ),
+        "source_artifact": _relative_or_absolute(INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV),
+        "source_row_id": "polish_case_summary in independent-HS bicircular phase-stress metadata",
     }
 
 
@@ -477,6 +542,11 @@ def build_synthesis() -> pd.DataFrame:
             pass_status_note="selected masks equal all configured one-segment masks for this row",
         ),
         *([_independent_hs_branch_replay_row()] if independent_hs_branch_replay_available() else []),
+        *(
+            [_independent_hs_bicircular_phase_stress_row()]
+            if independent_hs_bicircular_phase_stress_available()
+            else []
+        ),
         _case_metric_row(
             row_id="tail_coast_hard_catalog_all_one_two",
             artifact_family="hard-catalog tail-coast recovery",
@@ -604,6 +674,10 @@ def write_artifacts(
     ]
     if independent_hs_branch_replay_available():
         input_artifacts.extend([INDEPENDENT_HS_BRANCH_REPLAY_CSV, INDEPENDENT_HS_BRANCH_REPLAY_METADATA])
+    if independent_hs_bicircular_phase_stress_available():
+        input_artifacts.extend(
+            [INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV, INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_METADATA]
+        )
     metadata = {
         "command": command,
         "row_count": int(len(synthesis)),
@@ -662,6 +736,11 @@ def write_artifacts(
             (
                 "The independent-HS branch-control replay row, when present, is normalized-CR3BP "
                 "persisted-control replay only; it does not rerun optimization or add high-fidelity validation."
+            ),
+            (
+                "The independent-HS bicircular phase-stress row, when present, is a positive simple "
+                "circular solar-tidal stress replay for the converged all-configured row; it is not "
+                "SPICE/high-fidelity validation or production solver parity."
             ),
         ],
     }

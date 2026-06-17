@@ -26,6 +26,7 @@ and assigned a real identifier.
 - `data/results/horizons_ephemeris_force_model_contrast/`
 - `data/results/bicircular_solar_tidal_stress/`
 - `data/results/bicircular_tail_coast_recovery/`
+- `data/results/independent_hs_bicircular_phase_stress/`
 - `data/results/evidence_synthesis/`
 - `data/results/replay_stress_validation/`
 - `data/results/independent_hs_all_configured_headroom/`
@@ -53,6 +54,10 @@ intentionally refreshing the evidence package. The completed bicircular retuned
 recovery package is archived under `data/results/bicircular_tail_coast_recovery/`;
 refresh it only when intentionally rerunning the expensive negative retuning batch with
 `py -3.11 scripts\run_bicircular_tail_coast_recovery.py --resume`.
+The independent-HS bicircular phase-sweep stress package is a short deterministic
+postprocessor artifact archived under
+`data/results/independent_hs_bicircular_phase_stress/`; it is not a
+SPICE/high-fidelity validation package.
 
 ## Post-Deposit Updates
 
