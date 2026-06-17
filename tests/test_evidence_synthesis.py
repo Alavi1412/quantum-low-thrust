@@ -24,9 +24,9 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
     )
 
     synthesis = module.build_synthesis()
+    has_ihs_replay = module.independent_hs_branch_replay_available()
 
-    assert len(synthesis) == 8
-    assert set(synthesis["row_id"]) == {
+    expected_rows = {
         "phase_shift_tight_threshold_counts",
         "continuation_all_single_p04",
         "continuation_two_segment_n8_p03",
@@ -36,6 +36,10 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
         "tail_coast_hard_catalog_all_one_two",
         "ihs_hard_catalog_selected_failure",
     }
+    if has_ihs_replay:
+        expected_rows.add("ihs_branch_control_replay_p04_amax02")
+    assert len(synthesis) == len(expected_rows)
+    assert set(synthesis["row_id"]) == expected_rows
 
     def row(row_id: str) -> pd.Series:
         return synthesis.loc[synthesis["row_id"] == row_id].iloc[0]
@@ -79,6 +83,13 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
     assert ihs_all["tight_0p05_0p09_all_mask_pass"] == "True"
     assert "8/8 configured one-segment masks" in ihs_all["mask_scope"]
 
+    if has_ihs_replay:
+        ihs_replay = row("ihs_branch_control_replay_p04_amax02")
+        assert ihs_replay["configured_pass"] == "True"
+        assert "16 branch replay rows" in ihs_replay["mask_scope"]
+        assert "max replay delta=0.0" in ihs_replay["pass_status_note"]
+        assert "without adding high-fidelity" in ihs_replay["practitioner_interpretation"]
+
     tail = row("tail_coast_hard_catalog_all_one_two")
     assert tail["nominal_error"] == "0.02299233817855882"
     assert tail["selected_worst_error"] == "0.0936063931709301"
@@ -117,16 +128,21 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
     assert lessons_path.exists()
 
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    has_ihs_replay = module.independent_hs_branch_replay_available()
+    expected_rows = 8 + int(has_ihs_replay)
+    expected_inputs = 12 + (2 if has_ihs_replay else 0)
     assert metadata["optimization_rerun"] is False
-    assert metadata["row_count"] == 8
+    assert metadata["row_count"] == expected_rows
     assert "Recorded CSV/JSON artifacts only" in metadata["source_mode"]
     assert "Runtime is intentionally omitted" in metadata["determinism_note"]
-    assert len(metadata["input_artifacts"]) == 12
+    assert len(metadata["input_artifacts"]) == expected_inputs
 
     csv_df = pd.read_csv(csv_path)
-    assert len(csv_df) == 8
+    assert len(csv_df) == expected_rows
     assert "tail_coast_hard_catalog_all_one_two" in set(csv_df["row_id"])
     assert "ihs_all_configured_headroom_p04_amax02" in set(csv_df["row_id"])
+    if has_ihs_replay:
+        assert "ihs_branch_control_replay_p04_amax02" in set(csv_df["row_id"])
     table = table_path.read_text(encoding="utf-8")
     assert "0.05/0.10: True; 0.05/0.09: False" in table
     assert "sampled methods 0/30; all-windows 30/30" in table

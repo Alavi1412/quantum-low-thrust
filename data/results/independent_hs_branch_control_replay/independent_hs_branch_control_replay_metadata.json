@@ -1,0 +1,181 @@
+{
+  "artifacts": {
+    "independent_hs_branch_control_replay_csv": "data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay.csv",
+    "independent_hs_branch_control_replay_metadata_json": "data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay_metadata.json",
+    "independent_hs_branch_control_replay_table_tex": "tables/independent_hs_branch_control_replay/independent_hs_branch_control_replay_table.tex"
+  },
+  "branch_control_replay": true,
+  "branch_row_count": 16,
+  "case_count": 2,
+  "command": "scripts\\run_independent_hs_branch_control_replay.py --config configs\\independent_hs_all_configured_headroom.yaml --source-states data\\source_states.json",
+  "fuel_optimality_claim": false,
+  "high_fidelity_validation": false,
+  "input_artifacts": [
+    {
+      "bytes": 2772,
+      "path": "configs/independent_hs_all_configured_headroom.yaml",
+      "sha256": "15ae12c93e4fad9927066d52bfe7c6c23b146f67cd062b201d2b5dfcf0a5cd49"
+    },
+    {
+      "bytes": 1203,
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf"
+    },
+    {
+      "bytes": 10975,
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
+      "sha256": "9a50949eb40d5858658e0d667eb54a2c34b8d278bc0a667bd14b59ff07cea1ed"
+    },
+    {
+      "bytes": 12263,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_control_manifest.json",
+      "sha256": "b27b8f4677e942f8d14438b42f25847255998aa13a27b34f796b79ac47af0d2e"
+    },
+    {
+      "bytes": 3443,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json",
+      "sha256": "eda26f31547a19ac9df2c37186520e9746002a1a6e363649e0b378bd9566de24"
+    },
+    {
+      "bytes": 7803,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_000_mask_000_controls.json",
+      "sha256": "53c2815456a03f73c5dea994c4f1a3383d98dcf331386f78d64b062653c94838"
+    },
+    {
+      "bytes": 7786,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_001_mask_001_controls.json",
+      "sha256": "c5acd7aed28e506caa9d5679ca7a638518cd91bc8675a99738895d3109807bdf"
+    },
+    {
+      "bytes": 7786,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_002_mask_002_controls.json",
+      "sha256": "745ef20a73e7f434ce6c49e652caaa2567e389df41c939c10c2b9cace4fea5b8"
+    },
+    {
+      "bytes": 7784,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_003_mask_003_controls.json",
+      "sha256": "e55e462718e34f570d41fe1892fcc95c0c6fc159b8179831eaf6cbcb490827f8"
+    },
+    {
+      "bytes": 7774,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_004_mask_004_controls.json",
+      "sha256": "39f77e7d84bed8be796769f498e003ddd984455043426593c6fb5b9048ea17dd"
+    },
+    {
+      "bytes": 7770,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_005_mask_007_controls.json",
+      "sha256": "8b41867e117e315f3d313aca1d5729543526b384c98b03bb113f551dbca635d4"
+    },
+    {
+      "bytes": 7772,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_006_mask_006_controls.json",
+      "sha256": "74dfd2a9211fe7b4cfda532f942321f4c80a0e43eb71db8638c3ee514d0dae28"
+    },
+    {
+      "bytes": 7767,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_007_mask_005_controls.json",
+      "sha256": "0c0299e6b11d14ddb562403581d213ec410f1fb0c7fc4191fa0b07e35d4244c0"
+    },
+    {
+      "bytes": 12313,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_control_manifest.json",
+      "sha256": "067099019dc31f3cd52f7b475bcf574719f299a390ca68fe074420205d8ac6ed"
+    },
+    {
+      "bytes": 3468,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_controls.json",
+      "sha256": "46871d310bb008e1be5438eb0ee00d1da0b5c320eefe2fc46f8add782ae06198"
+    },
+    {
+      "bytes": 7798,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_controls.json",
+      "sha256": "e0971fc28fc5f30700acd0c379b90012891a22a1ff5268aab3b6d5b13c3a20eb"
+    },
+    {
+      "bytes": 7782,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_controls.json",
+      "sha256": "2d4e0b756892ea2b5d9fd647207a6c1652c16585dda4a130504a452c40f9b50c"
+    },
+    {
+      "bytes": 7788,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_controls.json",
+      "sha256": "542883ea5dee97baacc45e736222aaf36a4e2249493d1c4d02eabe46b93efe55"
+    },
+    {
+      "bytes": 7786,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_controls.json",
+      "sha256": "80dcf364ebc43719655686cce641289b2c718f1c5edb57f09377ad2bf263bf53"
+    },
+    {
+      "bytes": 7783,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_controls.json",
+      "sha256": "ae64d25b776b428a3d90268ee11a201987aa21dd328e7a5326a9153ea5134461"
+    },
+    {
+      "bytes": 7776,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_controls.json",
+      "sha256": "fafe30ed005fa19a0bfe392e6b81b0999b47af84eb19d8a73b42396115e1bd49"
+    },
+    {
+      "bytes": 7780,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_controls.json",
+      "sha256": "29db0576658055a952ff736e657f3c908e5b6791f53ea02b40266dd28e0c1915"
+    },
+    {
+      "bytes": 7775,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_controls.json",
+      "sha256": "ee18922dc4b0715b9d371153718e9ff08d9deba18830d7b401445088e5992ee2"
+    }
+  ],
+  "limitations": [
+    "Branch-control replay repropagates persisted controls in the normalized CR3BP model only.",
+    "Replay is deterministic postprocessing and does not rerun least-squares optimization.",
+    "The sidecars do not establish high-fidelity validation, SPICE/ephemeris propagation, production solver parity, fuel optimality, or quantum advantage.",
+    "All-configured evidence is limited to the outage family, target, transfer time, segment grid, thrust bound, and thresholds recorded in the manifest."
+  ],
+  "max_branch_terminal_error_delta": 0.0,
+  "max_terminal_error_delta": 0.0,
+  "nominal_row_count": 2,
+  "optimization_rerun": false,
+  "passes_tolerance": true,
+  "production_solver_parity_claim": false,
+  "quantum_advantage_claim": false,
+  "replay_semantics": "Normalized CR3BP replay of persisted independent-HS nominal and branch full-control schedules. The script validates manifest/sidecar SHA-256 hashes and compares replayed terminal errors to recorded nominal, selected-worst, and all-mask-worst errors without rerunning optimization.",
+  "row_count": 18,
+  "summary": [
+    {
+      "all_mask_worst_replay_delta": 0.0,
+      "branch_row_count": 8,
+      "case_id": "ihs_all_single_p04_amax02_warm_from_p03",
+      "expected_branch_count": 8,
+      "max_branch_terminal_error_delta": 0.0,
+      "max_terminal_error_delta": 0.0,
+      "nominal_terminal_error_delta": 0.0,
+      "passes_tolerance": true,
+      "recorded_all_mask_worst_error": 0.07741645121655767,
+      "recorded_selected_worst_error": 0.07741645121655767,
+      "selected_worst_replay_delta": 0.0,
+      "selected_worst_replay_terminal_error": 0.07741645121655767,
+      "target_state_max_abs_delta": 0.0,
+      "tolerance": 1e-10
+    },
+    {
+      "all_mask_worst_replay_delta": 0.0,
+      "branch_row_count": 8,
+      "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+      "expected_branch_count": 8,
+      "max_branch_terminal_error_delta": 0.0,
+      "max_terminal_error_delta": 0.0,
+      "nominal_terminal_error_delta": 0.0,
+      "passes_tolerance": true,
+      "recorded_all_mask_worst_error": 0.07792080291839382,
+      "recorded_selected_worst_error": 0.07792080291839382,
+      "selected_worst_replay_delta": 0.0,
+      "selected_worst_replay_terminal_error": 0.07792080291839382,
+      "target_state_max_abs_delta": 0.0,
+      "tolerance": 1e-10
+    }
+  ],
+  "tolerance": 1e-10,
+  "uses_recorded_artifacts_only": true
+}

@@ -59,6 +59,20 @@ INDEPENDENT_HS_ALL_CONFIGURED_CSV = (
     / "independent_hs_all_configured_headroom"
     / "independent_hs_all_configured_headroom.csv"
 )
+INDEPENDENT_HS_BRANCH_REPLAY_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_branch_control_replay"
+    / "independent_hs_branch_control_replay.csv"
+)
+INDEPENDENT_HS_BRANCH_REPLAY_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_branch_control_replay"
+    / "independent_hs_branch_control_replay_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -144,6 +158,16 @@ def tail_coast_branch_control_replay_artifacts_available() -> bool:
             TAIL_COAST_BRANCH_REPLAY_SOURCE_CSV,
             TAIL_COAST_BRANCH_REPLAY_CSV,
             TAIL_COAST_BRANCH_REPLAY_METADATA,
+        )
+    )
+
+
+def independent_hs_branch_control_replay_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            INDEPENDENT_HS_BRANCH_REPLAY_CSV,
+            INDEPENDENT_HS_BRANCH_REPLAY_METADATA,
         )
     )
 
@@ -764,6 +788,87 @@ def _tail_coast_branch_control_replay_ledger_row() -> dict[str, str]:
     }
 
 
+def _independent_hs_branch_control_replay_ledger_row() -> dict[str, str]:
+    source_rows = _read_csv_rows(INDEPENDENT_HS_ALL_CONFIGURED_CSV)
+    replay_rows = _read_csv_rows(INDEPENDENT_HS_BRANCH_REPLAY_CSV)
+    metadata = _read_json(INDEPENDENT_HS_BRANCH_REPLAY_METADATA)
+    source = _first_matching(
+        source_rows,
+        INDEPENDENT_HS_ALL_CONFIGURED_CSV,
+        case_id="ihs_all_single_p04_amax02_warm_from_p03",
+    )
+    polish = _first_matching(
+        source_rows,
+        INDEPENDENT_HS_ALL_CONFIGURED_CSV,
+        case_id="ihs_all_single_p04_amax02_polish_from_p04",
+    )
+    branch_rows = [row for row in replay_rows if row.get("record_type") == "branch"]
+    nominal_rows = [row for row in replay_rows if row.get("record_type") == "nominal"]
+    branch_row_count = int(metadata["branch_row_count"])
+    if branch_row_count != len(branch_rows):
+        raise RuntimeError("independent-HS branch replay metadata branch_row_count does not match replay CSV")
+    if int(metadata["nominal_row_count"]) != len(nominal_rows):
+        raise RuntimeError("independent-HS branch replay metadata nominal_row_count does not match replay CSV")
+    case_count = int(metadata["case_count"])
+    if case_count != 2:
+        raise RuntimeError("expected independent-HS branch replay to cover original and polish rows")
+    max_branch_delta = str(metadata["max_branch_terminal_error_delta"])
+    max_delta = str(metadata["max_terminal_error_delta"])
+    tolerance = str(metadata["tolerance"])
+    passes = bool(metadata["passes_tolerance"])
+    return {
+        "claim_id": "phase_shift_independent_hs_branch_control_replay",
+        "evidence_family": "independent-midpoint Hermite-Simpson branch-control replay",
+        "target_family": "halo phase-shift",
+        "target_mode": str(source["target_mode"]),
+        "source_case": "ihs_all_single_p04_amax02_warm_from_p03; ihs_all_single_p04_amax02_polish_from_p04",
+        "backend_or_method": "normalized CR3BP replay of persisted independent-HS endpoint and midpoint controls",
+        "mask_scope": (
+            f"{branch_row_count} branch replay rows across {case_count} all-configured one-segment "
+            "independent-HS rows; 8 branches per row"
+        ),
+        "selected_branch_semantics": (
+            "replays persisted nominal and selected branch endpoint-plus-midpoint full-control schedules"
+        ),
+        "all_mask_semantics": (
+            "both source rows selected all eight configured one-segment masks; replay does not rerun branch selection"
+        ),
+        "all_configured_mask_evidence": "True",
+        "nominal_error": (
+            f"original recorded={source['nominal_error']}; polish recorded={polish['nominal_error']}; "
+            f"max replay delta={max_delta}"
+        ),
+        "selected_worst_error": (
+            f"original selected/all={source['selected_worst_error']}; "
+            f"polish selected/all={polish['selected_worst_error']}; max branch replay delta={max_branch_delta}"
+        ),
+        "all_mask_worst_error": (
+            f"original all={source['all_mask_worst_error']}; polish all={polish['all_mask_worst_error']}; "
+            "all configured masks are replay rows, not new optimized branches"
+        ),
+        "thresholds": (
+            f"replay tolerance<={tolerance}; source nominal<={source['nominal_threshold']}; "
+            f"source selected/all<={source['selected_worst_threshold']}"
+        ),
+        "passes_configured_thresholds": str(passes),
+        "primary_interpretation": (
+            f"Persisted independent-HS branch controls replay deterministically under normalized CR3BP "
+            f"with max terminal-error delta {max_delta}; the polish row converges "
+            f"(optimizer_success={_bool_text(polish['optimizer_success'])}, nfev={polish['nfev']}) "
+            "but has slightly higher selected/all error than the capped source row."
+        ),
+        "explicit_boundary": (
+            "Branch-control replay only; no optimization rerun, high-fidelity validation, production solver parity, "
+            "fuel optimality, broader outage-family robustness, quantum, QUBO, or QAOA claim."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(INDEPENDENT_HS_BRANCH_REPLAY_CSV)}; "
+            f"{_relative_or_absolute(INDEPENDENT_HS_BRANCH_REPLAY_METADATA)}; "
+            f"{_relative_or_absolute(INDEPENDENT_HS_ALL_CONFIGURED_CSV)}"
+        ),
+    }
+
+
 def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
     metadata = _read_json(BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA)
     rows = _read_csv_rows(BICIRCULAR_SOLAR_TIDAL_STRESS_CSV)
@@ -993,11 +1098,14 @@ def _horizons_ephemeris_force_model_contrast_ledger_row() -> dict[str, str]:
 
 
 def build_claim_evidence_ledger(
+    include_independent_hs_branch_control_replay: bool | None = None,
     include_branch_control_replay: bool | None = None,
     include_bicircular_solar_tidal_stress: bool | None = None,
     include_bicircular_tail_coast_recovery: bool | None = None,
     include_horizons_ephemeris_force_model_contrast: bool | None = None,
 ) -> pd.DataFrame:
+    if include_independent_hs_branch_control_replay is None:
+        include_independent_hs_branch_control_replay = independent_hs_branch_control_replay_artifacts_available()
     if include_branch_control_replay is None:
         include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
     if include_bicircular_solar_tidal_stress is None:
@@ -1015,6 +1123,13 @@ def build_claim_evidence_ledger(
         *recorded_rows[:5],
         *recorded_rows[5:],
     ]
+    ihs_insert_at = next(
+        index
+        for index, row in enumerate(rows)
+        if row["claim_id"] == "phase_shift_independent_hs_p04_amax02_all_configured"
+    ) + 1
+    if include_independent_hs_branch_control_replay:
+        rows.insert(ihs_insert_at, _independent_hs_branch_control_replay_ledger_row())
     tail_insert_at = next(
         index
         for index, row in enumerate(rows)
@@ -1237,6 +1352,13 @@ def _input_artifacts() -> list[Path]:
                 TAIL_COAST_BRANCH_REPLAY_METADATA,
             ]
         )
+    if independent_hs_branch_control_replay_artifacts_available():
+        paths.extend(
+            [
+                INDEPENDENT_HS_BRANCH_REPLAY_CSV,
+                INDEPENDENT_HS_BRANCH_REPLAY_METADATA,
+            ]
+        )
     if bicircular_solar_tidal_stress_artifacts_available():
         paths.extend(
             [
@@ -1268,11 +1390,13 @@ def write_artifacts(
     tables_dir: Path,
     command: str,
 ) -> dict[str, object]:
+    ihs_branch_replay_available = independent_hs_branch_control_replay_artifacts_available()
     branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
     bicircular_stress_available = bicircular_solar_tidal_stress_artifacts_available()
     bicircular_retuned_available = bicircular_tail_coast_recovery_artifacts_available()
     horizons_contrast_available = horizons_ephemeris_force_model_contrast_artifacts_available()
     ledger = build_claim_evidence_ledger(
+        include_independent_hs_branch_control_replay=ihs_branch_replay_available,
         include_branch_control_replay=branch_control_replay_available,
         include_bicircular_solar_tidal_stress=bicircular_stress_available,
         include_bicircular_tail_coast_recovery=bicircular_retuned_available,
@@ -1305,6 +1429,7 @@ def write_artifacts(
         "optimization_rerun": False,
         "uses_recorded_artifacts_only": True,
         "high_fidelity_claim": False,
+        "independent_hs_branch_control_replay": ihs_branch_replay_available,
         "branch_control_replay": branch_control_replay_available,
         "bicircular_solar_tidal_stress_probe": bicircular_stress_available,
         "bicircular_tail_coast_retuned_recovery": bicircular_retuned_available,
@@ -1314,6 +1439,11 @@ def write_artifacts(
         "source_mode": (
             "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit "
             "are deterministic postprocessing outputs with no trajectory optimization rerun."
+            + (
+                " An independent-HS branch-control replay row is included because its replay package is present."
+                if ihs_branch_replay_available
+                else " No independent-HS branch-control replay row is included because that replay package is absent."
+            )
             + (
                 " A branch-control replay ledger row is included because the focused replay package is present."
                 if branch_control_replay_available
@@ -1352,6 +1482,7 @@ def write_artifacts(
                 "True only when the row selected/evaluated every configured mask within the stated mask family."
             ),
         },
+        "independent_hs_branch_control_replay_artifacts_available": ihs_branch_replay_available,
         "branch_control_replay_artifacts_available": branch_control_replay_available,
         "bicircular_solar_tidal_stress_artifacts_available": bicircular_stress_available,
         "bicircular_tail_coast_recovery_artifacts_available": bicircular_retuned_available,
@@ -1382,6 +1513,11 @@ def write_artifacts(
         },
         "interpretation_limits": [
             "This ledger clarifies evidence semantics; it does not add high-fidelity validation.",
+            (
+                "The independent-HS branch-control replay row, when present, repropagates persisted "
+                "endpoint-plus-midpoint controls under normalized CR3BP only; it is not an optimizer rerun, "
+                "high-fidelity validation, production solver parity, or fuel-optimality evidence."
+            ),
             (
                 "The historical tail-coast branch audit summarizes recorded branch_results JSON only; "
                 "the focused replay row is included only when its real replay CSV and metadata exist."

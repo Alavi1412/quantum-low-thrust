@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "case_id": "ihs_all_single_p04_amax02_warm_from_p03",
-  "settings_fingerprint": "883821f542e64d5475a386ce5ea24835b722ca93943920a3c33538c63964d5e0",
+  "settings_fingerprint": "dfdd58842c1ef1d086803e190cc125b8ce3bd091b1e9c85d19c3f54f123fd6ee",
   "control_hash": "955f9d980613186041858d6b0fce88527f8fc9cdc853ff8cfc970b2ba7c4a50d",
   "endpoint_control_hash": "955f9d980613186041858d6b0fce88527f8fc9cdc853ff8cfc970b2ba7c4a50d",
   "midpoint_control_present": true,

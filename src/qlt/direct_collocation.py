@@ -417,6 +417,7 @@ def initial_guess(
     nominal_control_guess: np.ndarray | None = None,
     nominal_midpoint_control_guess: np.ndarray | None = None,
     selected_branch_control_guesses: list[np.ndarray] | None = None,
+    selected_branch_midpoint_control_guesses: list[np.ndarray] | None = None,
     method: str | None = "trapezoidal",
     node_initialization: str = "blend",
     node_initialization_blend: float = 0.35,
@@ -433,6 +434,8 @@ def initial_guess(
     - ``selected_branch_control_guesses`` is an optional list of full-length
       ``(n_segments, 3)`` schedules whose post-outage tail seeds each selected
       branch's recovery controls.
+    - ``selected_branch_midpoint_control_guesses`` does the same for independent
+      midpoint branch controls when ``method`` uses midpoint controls.
 
     When omitted the historical feedback-rollout guess is used unchanged.
     """
@@ -488,6 +491,16 @@ def initial_guess(
             raise ValueError(
                 f"selected_branch_control_guess shape {guess_arr.shape} does not match {(cfg.n_segments, 3)}"
             )
+    branch_midpoint_guesses = list(selected_branch_midpoint_control_guesses or [])
+    for guess in branch_midpoint_guesses:
+        if guess is None:
+            continue
+        guess_arr = np.asarray(guess, dtype=float)
+        if guess_arr.shape != (cfg.n_segments, 3):
+            raise ValueError(
+                "selected_branch_midpoint_control_guess shape "
+                f"{guess_arr.shape} does not match {(cfg.n_segments, 3)}"
+            )
 
     chunks = [nominal_nodes.reshape(-1), nominal_controls.reshape(-1)]
     if nominal_midpoint_controls is not None:
@@ -514,7 +527,16 @@ def initial_guess(
             branch_controls = branch_full[start:].copy()
         else:
             branch_controls = nominal_controls[start:].copy()
-        branch_midpoint_controls = branch_controls.copy() if layout.has_midpoint_controls else None
+        branch_midpoint_controls = None
+        if layout.has_midpoint_controls:
+            if branch_index < len(branch_midpoint_guesses) and branch_midpoint_guesses[branch_index] is not None:
+                midpoint_full = project_controls_to_ball(
+                    np.asarray(branch_midpoint_guesses[branch_index], dtype=float),
+                    cfg.amax,
+                )
+                branch_midpoint_controls = midpoint_full[start:].copy()
+            else:
+                branch_midpoint_controls = branch_controls.copy()
         chunks.append(branch_nodes.reshape(-1))
         chunks.append(branch_controls.reshape(-1))
         if branch_midpoint_controls is not None:
@@ -832,6 +854,7 @@ def run_direct_collocation_baseline(
     nominal_control_guess: np.ndarray | None = None,
     nominal_midpoint_control_guess: np.ndarray | None = None,
     selected_branch_control_guesses: list[np.ndarray] | None = None,
+    selected_branch_midpoint_control_guesses: list[np.ndarray] | None = None,
     warm_start_info: dict | None = None,
 ) -> dict:
     start = time.perf_counter()
@@ -859,6 +882,7 @@ def run_direct_collocation_baseline(
         nominal_control_guess=nominal_control_guess,
         nominal_midpoint_control_guess=nominal_midpoint_control_guess,
         selected_branch_control_guesses=selected_branch_control_guesses,
+        selected_branch_midpoint_control_guesses=selected_branch_midpoint_control_guesses,
         method=method,
         node_initialization=str(collocation_config.get("node_initialization", "blend")),
         node_initialization_blend=float(collocation_config.get("node_initialization_blend", 0.35)),

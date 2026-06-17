@@ -1,0 +1,254 @@
+{
+  "all_outage_errors": [
+    0.07792080291839382,
+    0.055793507608435974,
+    0.03790843493896796,
+    0.025073228898754976,
+    0.01752556681446922,
+    0.013358152425487681,
+    0.010536176875094644,
+    0.00971579073301305
+  ],
+  "amax": 0.2,
+  "artifact_stem": "independent_hs_all_configured_headroom",
+  "branch_control_hash": "d0965a208e55a906db01f3e81fc06393bb5a9250a301dfa19a566e0972b406b4",
+  "branch_controls": [
+    [
+      0.0417840408626812,
+      0.09753715743229203,
+      -0.16952323231039332
+    ],
+    [
+      0.03685019265798163,
+      0.06172501086324663,
+      -0.16224122552338907
+    ],
+    [
+      0.028754082256681846,
+      0.015105958899045695,
+      -0.15422639307853173
+    ],
+    [
+      0.01824967482959367,
+      -0.027032246302039212,
+      -0.12935633270676203
+    ],
+    [
+      0.005154921213899633,
+      -0.05797596714241554,
+      -0.08759180823417348
+    ],
+    [
+      -0.007085550710314716,
+      -0.07445171303391984,
+      -0.041884603624035247
+    ],
+    [
+      -0.013130926167004628,
+      -0.0709867980247017,
+      -0.011561336550298496
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0
+    ]
+  ],
+  "branch_endpoint_control_hash": "2ee9e41a258365f52580b49421db6a9f08e4f02bca2f1622970635401d0f7003",
+  "branch_endpoint_control_norm_diagnostics": {
+    "amax": 0.2,
+    "control_bound_violation": 0.0,
+    "control_max_abs_component": 0.16952323231039332,
+    "control_norm_max": 0.19999382351400133,
+    "control_norm_mean": 0.1165573564148848,
+    "shape": [
+      8,
+      3
+    ]
+  },
+  "branch_endpoint_controls": [
+    [
+      0.0417840408626812,
+      0.09753715743229203,
+      -0.16952323231039332
+    ],
+    [
+      0.03685019265798163,
+      0.06172501086324663,
+      -0.16224122552338907
+    ],
+    [
+      0.028754082256681846,
+      0.015105958899045695,
+      -0.15422639307853173
+    ],
+    [
+      0.01824967482959367,
+      -0.027032246302039212,
+      -0.12935633270676203
+    ],
+    [
+      0.005154921213899633,
+      -0.05797596714241554,
+      -0.08759180823417348
+    ],
+    [
+      -0.007085550710314716,
+      -0.07445171303391984,
+      -0.041884603624035247
+    ],
+    [
+      -0.013130926167004628,
+      -0.0709867980247017,
+      -0.011561336550298496
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0
+    ]
+  ],
+  "branch_midpoint_control_hash": "25db8ee124deac38c73d181bbec1013587696015bf6491fe01e86bd7608834c2",
+  "branch_midpoint_control_norm_diagnostics": {
+    "amax": 0.2,
+    "control_bound_violation": 0.0,
+    "control_max_abs_component": 0.17756368233460404,
+    "control_norm_max": 0.19999999999999998,
+    "control_norm_mean": 0.14601304362319084,
+    "shape": [
+      8,
+      3
+    ]
+  },
+  "branch_midpoint_control_present": true,
+  "branch_midpoint_controls": [
+    [
+      0.04519354721804823,
+      0.09245077599626043,
+      -0.1714945984791921
+    ],
+    [
+      0.05746200532543621,
+      0.07421326059392115,
+      -0.17660643236958243
+    ],
+    [
+      0.06297315037634817,
+      0.018258855587828124,
+      -0.17756368233460404
+    ],
+    [
+      0.04215050555178851,
+      -0.0526108432657286,
+      -0.15741502403579763
+    ],
+    [
+      0.012044037342372558,
+      -0.10745284871502563,
+      -0.09544711089223261
+    ],
+    [
+      -0.014273541903711991,
+      -0.13412633069610924,
+      -0.02660703710692717
+    ],
+    [
+      -0.02674069447596818,
+      -0.12224519579462381,
+      0.013588334828954898
+    ],
+    [
+      -0.0,
+      -0.0,
+      0.0
+    ]
+  ],
+  "branch_order": 5,
+  "case_group": "phase_all_configured_single",
+  "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+  "case_order": 2,
+  "collocation_method": "hermite_simpson_midpoint",
+  "config_hash": "efdf1518e5034a8b494dd4532e097dca96375c2b5f2beec902b12bd91a43a402",
+  "fuel_quadrature": "simpson_endpoint_midpoint_endpoint",
+  "implementation_identities": {
+    "cr3bp_module": "//nas/Projects/Papers/quantum-low-thrust/src/qlt/cr3bp.py|sha256=65fd1a4092a206e2af1c2ededbba0473f3d201281aa95ab9a0b20eec2d29a175",
+    "direct_collocation_module": "//nas/Projects/Papers/quantum-low-thrust/src/qlt/direct_collocation.py|sha256=9ef65d7f231e131e2dd76b91dc6d34ba6e93dd85c011d6339c1ea88ca4305e67",
+    "objective_module": "//nas/Projects/Papers/quantum-low-thrust/src/qlt/objective.py|sha256=295744aac6c00bd0cc3e869c0da3dee91c03c0c51486c6509e18fc9d11786cbd",
+    "runner": "//nas/Projects/Papers/quantum-low-thrust/scripts/run_hermite_simpson_continuation.py|sha256=f13c99810fc13db943d5b4d41ecc819cfe2685a18345cdf945e275286d95ea44"
+  },
+  "limitations": [
+    "Branch-control replay repropagates persisted controls in the normalized CR3BP model only.",
+    "Replay is deterministic postprocessing and does not rerun least-squares optimization.",
+    "The sidecars do not establish high-fidelity validation, SPICE/ephemeris propagation, production solver parity, fuel optimality, or quantum advantage.",
+    "All-configured evidence is limited to the outage family, target, transfer time, segment grid, thrust bound, and thresholds recorded in the manifest."
+  ],
+  "mask_index": 7,
+  "nominal_control_path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_controls.json",
+  "nominal_control_sha256": "46871d310bb008e1be5438eb0ee00d1da0b5c320eefe2fc46f8add782ae06198",
+  "nominal_control_sidecar_hash": "18062a0d384d259b111e013816994c1fecce6be2be0dfbe29e1896f5f14333c9",
+  "nominal_endpoint_control_hash": "d92ea1f185aef3d015e2b45f3fb6d67e99d0b3a5b2607ad96ac49fd93cb959a8",
+  "nominal_midpoint_control_hash": "d28a37efa1e75751007afc30c1908d0c248a9487fd6d58f33a54b3b44b6e533f",
+  "outage_lengths": [
+    1
+  ],
+  "outage_mask": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0
+  ],
+  "phase_time": 0.4,
+  "recorded_all_mask_worst_error": 0.07792080291839382,
+  "recorded_branch_terminal_error": 0.00971579073301305,
+  "recorded_selected_worst_error": 0.07792080291839382,
+  "recovery_segments": 0,
+  "recovery_start": 8,
+  "replay_semantics": "Normalized CR3BP replay of persisted nominal and selected branch controls only; no optimization rerun, high-fidelity validation, production solver parity, fuel-optimality claim, or quantum-advantage claim.",
+  "runner_base_config_hash": "026ccfa63929c1024997a5b7fc25df08cad0118f96dd5a5c7d775b93662f291a",
+  "schema_version": 1,
+  "segments": 8,
+  "selected_outage_errors": [
+    0.07792080291839382,
+    0.055793507608435974,
+    0.03790843493896796,
+    0.025073228898754976,
+    0.01752556681446922,
+    0.013358152425487681,
+    0.010536176875094644,
+    0.00971579073301305
+  ],
+  "selected_outage_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    7,
+    6,
+    5
+  ],
+  "settings_fingerprint": "f7c254647f05b5fed8338202974375cd07f84a93aeca9f41304d132e429a6907",
+  "sidecar_type": "hs_direct_collocation_branch_controls",
+  "source_states_id": "//nas/Projects/Papers/quantum-low-thrust/data/source_states.json|sha256=24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf",
+  "substeps_per_segment": 4,
+  "suite_name": "independent_hs_all_configured_headroom",
+  "target_generation": "ballistic CR3BP phase propagation of initial_nrho_like_l2_southern_halo for benchmark.phase_time",
+  "target_mode": "catalog_halo_phase_shift",
+  "target_state": [
+    1.0203486599902591,
+    -0.044383220584371316,
+    -0.1496716065328583,
+    -0.05947577997830733,
+    -0.08107887090378688,
+    0.20069967032546537
+  ],
+  "thresholds": {
+    "nominal_success": 0.09,
+    "robust_success": 0.17
+  },
+  "transfer_time": 0.5
+}

@@ -46,7 +46,7 @@ direct_collocation:
     control: 0.01
     smooth: 0.012
 suite:
-  runtime_budget_seconds: 2400
+  runtime_budget_seconds: 7200
   selected_outages: all_configured_outage_masks
   min_recovery_segments: 1
   groups:
@@ -73,3 +73,16 @@ suite:
           max_nfev: 120
           warm_start_kind: nominal_controls
           warm_start_from_case_id: ihs_source_p03_cold
+          persist_branch_controls: true
+        - case_id: ihs_all_single_p04_amax02_polish_from_p04
+          phase_time: 0.4
+          transfer_time: 0.5
+          amax: 0.2
+          segments: 8
+          outage_lengths: [1]
+          selected_outages: all_configured_outage_masks
+          max_nfev: 240
+          warm_start_kind: nominal_controls
+          warm_start_from_case_id: ihs_all_single_p04_amax02_warm_from_p03
+          branch_control_guess_from_case_id: ihs_all_single_p04_amax02_warm_from_p03
+          persist_branch_controls: true

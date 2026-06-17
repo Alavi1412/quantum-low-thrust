@@ -30,6 +30,16 @@ PRIMARY_ARTIFACT_PATHS = [
         "data/results/independent_hs_all_configured_headroom/controls/"
         "ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json"
     ),
+    (
+        "data/results/independent_hs_all_configured_headroom/controls/"
+        "ihs_all_single_p04_amax02_warm_from_p03_branch_control_manifest.json"
+    ),
+    (
+        "data/results/independent_hs_all_configured_headroom/controls/"
+        "ihs_all_single_p04_amax02_polish_from_p04_branch_control_manifest.json"
+    ),
+    "data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay.csv",
+    "data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay_metadata.json",
     "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay.csv",
     "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_metadata.json",
     "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv",
@@ -42,12 +52,15 @@ PRIMARY_ARTIFACT_PATHS = [
     "data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery.csv",
     "data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_metadata.json",
     "tables/replay_stress_validation/replay_stress_validation_table.tex",
+    "tables/independent_hs_branch_control_replay/independent_hs_branch_control_replay_table.tex",
     "tables/evidence_synthesis/evidence_synthesis_table.tex",
     "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
 ]
 
 FOCUSED_TEST_TARGETS = [
     "tests/test_replay_stress_validation.py",
+    "tests/test_independent_hs_branch_control_replay.py",
+    "tests/test_independent_hs_direct_collocation.py",
     "tests/test_claim_evidence_ledger.py",
     "tests/test_evidence_synthesis.py",
     "tests/test_horizons_ephemeris_force_model_contrast.py",

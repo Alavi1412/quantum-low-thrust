@@ -79,6 +79,20 @@ INDEPENDENT_HS_ALL_CONFIGURED_METADATA = (
     / "independent_hs_all_configured_headroom"
     / "independent_hs_all_configured_headroom_metadata.json"
 )
+INDEPENDENT_HS_BRANCH_REPLAY_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_branch_control_replay"
+    / "independent_hs_branch_control_replay.csv"
+)
+INDEPENDENT_HS_BRANCH_REPLAY_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_branch_control_replay"
+    / "independent_hs_branch_control_replay_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -206,6 +220,10 @@ def _errors_for_table(row: dict[str, str]) -> str:
     return f"{nominal} / {selected} / {all_mask}"
 
 
+def independent_hs_branch_replay_available() -> bool:
+    return INDEPENDENT_HS_BRANCH_REPLAY_CSV.is_file() and INDEPENDENT_HS_BRANCH_REPLAY_METADATA.is_file()
+
+
 def _case_metric_row(
     *,
     row_id: str,
@@ -245,6 +263,49 @@ def _case_metric_row(
         "practitioner_interpretation": practitioner_interpretation,
         "source_artifact": _relative_or_absolute(source_artifact),
         "source_row_id": source_row_id,
+    }
+
+
+def _independent_hs_branch_replay_row() -> dict[str, str]:
+    metadata = json.loads(INDEPENDENT_HS_BRANCH_REPLAY_METADATA.read_text(encoding="utf-8"))
+    summary = list(metadata["summary"])
+    if int(metadata["branch_row_count"]) != 16:
+        raise RuntimeError("expected independent-HS branch replay to contain 16 branch rows")
+    original = next(
+        row for row in summary if row["case_id"] == "ihs_all_single_p04_amax02_warm_from_p03"
+    )
+    polish = next(
+        row for row in summary if row["case_id"] == "ihs_all_single_p04_amax02_polish_from_p04"
+    )
+    max_delta = str(metadata["max_terminal_error_delta"])
+    return {
+        "row_id": "ihs_branch_control_replay_p04_amax02",
+        "artifact_family": "independent-HS branch-control replay",
+        "representative_case_or_statistic": "original and polish p=0.4, amax=0.2 branch sidecars",
+        "target_family": "catalog halo phase-shift",
+        "backend_initializer_role": "deterministic replay of persisted endpoint-plus-midpoint controls",
+        "mask_scope": "16 branch replay rows; 8/8 one-segment masks for original and polish rows",
+        "phase_time": "0.4",
+        "transfer_time": "0.5",
+        "amax": "0.2",
+        "segments": "8",
+        "nominal_error": "",
+        "selected_worst_error": str(original["recorded_selected_worst_error"]),
+        "all_mask_worst_error": str(polish["recorded_all_mask_worst_error"]),
+        "configured_pass": str(bool(metadata["passes_tolerance"])),
+        "stringent_0p065_0p10_all_mask_pass": "replay delta only",
+        "near_tight_0p05_0p10_all_mask_pass": "replay delta only",
+        "tight_0p05_0p09_all_mask_pass": "replay delta only",
+        "pass_status_note": (
+            f"max replay delta={max_delta}; original branches={original['branch_row_count']}; "
+            f"polish branches={polish['branch_row_count']}"
+        ),
+        "practitioner_interpretation": (
+            "Persisted independent-HS branch controls replay exactly under normalized CR3BP; "
+            "this strengthens recovery-side reproducibility without adding high-fidelity or production-solver evidence."
+        ),
+        "source_artifact": _relative_or_absolute(INDEPENDENT_HS_BRANCH_REPLAY_CSV),
+        "source_row_id": "independent-HS branch-control replay metadata summary",
     }
 
 
@@ -415,6 +476,7 @@ def build_synthesis() -> pd.DataFrame:
             ),
             pass_status_note="selected masks equal all configured one-segment masks for this row",
         ),
+        *([_independent_hs_branch_replay_row()] if independent_hs_branch_replay_available() else []),
         _case_metric_row(
             row_id="tail_coast_hard_catalog_all_one_two",
             artifact_family="hard-catalog tail-coast recovery",
@@ -540,6 +602,8 @@ def write_artifacts(
         TAIL_COAST_CSV,
         TAIL_COAST_METADATA,
     ]
+    if independent_hs_branch_replay_available():
+        input_artifacts.extend([INDEPENDENT_HS_BRANCH_REPLAY_CSV, INDEPENDENT_HS_BRANCH_REPLAY_METADATA])
     metadata = {
         "command": command,
         "row_count": int(len(synthesis)),
@@ -595,6 +659,10 @@ def write_artifacts(
             "Terminal-error thresholds are normalized screening tolerances, not flight targeting tolerances.",
             "Selected-branch collocation rows retain all-mask diagnostics as diagnostics unless all masks are explicitly selected.",
             "The hard-catalog positive row is scoped to the tail-coast locked-nominal fixed-final-time backend.",
+            (
+                "The independent-HS branch-control replay row, when present, is normalized-CR3BP "
+                "persisted-control replay only; it does not rerun optimization or add high-fidelity validation."
+            ),
         ],
     }
     metadata_path.write_text(json.dumps(metadata, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")

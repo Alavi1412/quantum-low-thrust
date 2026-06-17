@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -47,6 +48,10 @@ def load_script_module(name: str, path: Path):
     assert spec is not None and spec.loader is not None
     spec.loader.exec_module(module)
     return module
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def independent_minimal_config(output_subdir: str = "independent_hs_test") -> dict:
@@ -417,6 +422,129 @@ def test_independent_hs_evidence_script_fake_backend_writes_artifacts(monkeypatc
     assert "independent-midpoint-control" in metadata["semantics"]["backend"]
     assert "hermite_simpson_midpoint" in metadata["semantics"]
     assert "sidecar_schema" in metadata["semantics"]
+
+
+def test_independent_hs_branch_sidecars_are_optional_and_hash_checked(monkeypatch, tmp_path):
+    script = load_script_module(
+        "run_independent_hs_branch_sidecar_test",
+        ROOT / "scripts" / "run_independent_hs_continuation.py",
+    )
+    config = independent_minimal_config("independent_hs_branch_sidecar_test")
+    cases = config["suite"]["groups"]["phase_group"]["cases"]
+    cases[:] = [cases[0]]
+    cases[0]["selected_outages"] = 2
+    cases[0]["persist_branch_controls"] = True
+    config_path = tmp_path / "independent_hs_config.yaml"
+    config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
+    source_states = tmp_path / "source_states.json"
+    source_states.write_text("{}", encoding="utf-8")
+
+    def fake_load_states(root, case_config, source_states_path):
+        del root, case_config, source_states_path
+        return SimpleNamespace(
+            mu=0.01215058560962404,
+            initial=np.array([1.02, 0.01, 0.0, 0.0, 0.03, 0.0], dtype=float),
+            target=np.array([1.01, 0.01, 0.0, 0.0, 0.02, 0.0], dtype=float),
+            target_metadata={"target_state_generation": "fixture target generation"},
+        )
+
+    def fake_run_direct_collocation(
+        *,
+        state0,
+        target,
+        cfg,
+        masks,
+        thresholds,
+        selected_outages,
+        max_nfev,
+        min_recovery_segments,
+        collocation_config,
+        nominal_control_guess,
+        selected_branch_control_guesses,
+        warm_start_info,
+        nominal_midpoint_control_guess=None,
+        selected_branch_midpoint_control_guesses=None,
+    ):
+        del state0, target, masks, thresholds, selected_outages, max_nfev, min_recovery_segments
+        del collocation_config, nominal_control_guess, selected_branch_control_guesses
+        del warm_start_info, nominal_midpoint_control_guess, selected_branch_midpoint_control_guesses
+        n = cfg.n_segments
+        nominal = np.zeros((n, 3), dtype=float)
+        midpoint = np.ones((n, 3), dtype=float) * 0.001
+        branch0 = nominal.copy()
+        branch0[1:, 0] = 0.01
+        branch1 = nominal.copy()
+        branch1[2:, 1] = 0.012
+        branch_mid0 = midpoint.copy()
+        branch_mid0[1:, 0] = 0.011
+        branch_mid1 = midpoint.copy()
+        branch_mid1[2:, 1] = 0.013
+        return {
+            "success": True,
+            "nominal_controls": nominal,
+            "nominal_midpoint_controls": midpoint,
+            "selected_branch_controls": [branch0, branch1],
+            "selected_branch_midpoint_controls": [branch_mid0, branch_mid1],
+            "nominal_history": None,
+            "nominal_fuel": 0.1,
+            "recovery_fuel_mean": 0.2,
+            "recovery_fuel_max": 0.3,
+            "all_mask_recovery_fuel_mean": 0.2,
+            "nominal_error": 0.04,
+            "selected_worst_error": 0.06,
+            "all_mask_worst_error": 0.08,
+            "selected_outage_errors": [0.05, 0.06],
+            "all_outage_errors": [0.05, 0.06, 0.08],
+            "control_max_norm": 0.02,
+            "control_bound_violation": 0.0,
+            "fuel_quadrature": "simpson_endpoint_midpoint_endpoint",
+            "method_type": "bounded_projected_independent_midpoint_control_hermite_simpson_direct_collocation",
+            "collocation_method": "hermite_simpson_midpoint",
+            "collocation_scheme_semantics": "fixture independent midpoint HS",
+            "selected_branch_semantics": "fixture selected",
+            "all_mask_diagnostic_semantics": "fixture all mask",
+            "control_bound_semantics": "fixture bound",
+            "optimizer_success": True,
+            "message": "fixture ok",
+            "cost": 0.001,
+            "optimality": 1e-6,
+            "nfev": 2,
+            "runtime_seconds": 0.01,
+            "selected_outage_indices": [0, 1],
+            "weights": {},
+            "warm_start_info": {},
+        }
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(script, "run_direct_collocation_baseline", fake_run_direct_collocation)
+    monkeypatch.setattr(script, "load_configured_states", fake_load_states)
+
+    args = script.build_parser().parse_args(
+        ["--config", str(config_path), "--source-states", str(source_states)]
+    )
+    df = script.run(args)
+
+    row = df.iloc[0]
+    assert int(row["branch_control_sidecar_count"]) == 2
+    assert str(row["branch_control_replay_ready"]).lower() == "true"
+    manifest_path = Path(row["branch_control_manifest_path"])
+    assert manifest_path.exists()
+    assert sha256(manifest_path) == row["branch_control_manifest_hash"]
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["branch_control_replay_ready"] is True
+    assert manifest["branch_count"] == 2
+    assert manifest["nominal_control_sha256"]
+    assert "Normalized CR3BP replay" in manifest["replay_semantics"]
+    assert "high-fidelity validation" in " ".join(manifest["limitations"])
+    first_entry = manifest["branch_control_sidecars"][0]
+    branch_payload = json.loads(Path(first_entry["path"]).read_text(encoding="utf-8"))
+    assert first_entry["sha256"] == sha256(Path(first_entry["path"]))
+    assert branch_payload["mask_index"] == 0
+    assert branch_payload["outage_mask"] == [0, 1, 1]
+    assert branch_payload["recorded_branch_terminal_error"] == 0.05
+    assert branch_payload["branch_midpoint_controls"] is not None
+    assert branch_payload["branch_endpoint_control_norm_diagnostics"]["shape"] == [3, 3]
 
 
 def test_independent_hs_sidecar_requires_and_validates_midpoint_controls(tmp_path):

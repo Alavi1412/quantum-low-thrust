@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-17T05:20:44Z",
+  "generated_utc": "2026-06-17T08:00:21Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "99caecc4582e3d735119bc4b3f368f9b823062f0",
+  "git_head_at_generation": "9a464b13cbefa3cc5db0bc683fc81dc1d192fa35",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M README.md\n M REPRODUCIBILITY.md\n M data/results/replay_stress_validation/replay_stress_validation.csv\n M data/results/replay_stress_validation/replay_stress_validation_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_replay_stress_validation.py\n M tables/replay_stress_validation/replay_stress_validation_table.tex\n M tests/test_replay_stress_validation.py\n?? scripts/verify_submission_snapshot.py\n?? tests/test_verify_submission_snapshot.py",
+  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M README.md\n M REPRODUCIBILITY.md\n M configs/independent_hs_all_configured_headroom.yaml\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/evidence_synthesis/evidence_synthesis.csv\n M data/results/evidence_synthesis/evidence_synthesis_metadata.json\n M data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json\n M data/results/independent_hs_all_configured_headroom/controls/ihs_source_p03_cold_nominal_controls.json\n M data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv\n M data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_metadata.json\n M data/results/replay_stress_validation/replay_stress_validation.csv\n M data/results/replay_stress_validation/replay_stress_validation_metadata.json\n M figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.pdf\n M figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.png\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_evidence_synthesis.py\n M scripts/run_hermite_simpson_continuation.py\n M scripts/verify_submission_snapshot.py\n M src/qlt/direct_collocation.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tables/evidence_synthesis/evidence_synthesis_table.tex\n M tables/evidence_synthesis/practitioner_lessons_table.tex\n M tables/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_table.tex\n M tests/test_claim_evidence_ledger.py\n M tests/test_evidence_synthesis.py\n M tests/test_independent_hs_direct_collocation.py\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_control_manifest.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_000_mask_000_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_001_mask_001_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_002_mask_002_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_003_mask_003_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_004_mask_004_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_005_mask_007_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_006_mask_006_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_007_mask_005_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_control_manifest.json\n?? data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay.csv\n?? data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay_metadata.json\n?? scripts/run_independent_hs_branch_control_replay.py\n?? tables/independent_hs_branch_control_replay/independent_hs_branch_control_replay_table.tex\n?? tests/test_independent_hs_branch_control_replay.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 656,
+  "file_count": 680,
   "files": [
     {
       "path": ".gitignore",
@@ -40,8 +40,8 @@
     },
     {
       "path": "ARCHIVAL_RELEASE.md",
-      "sha256": "7c56a6a70a6dee1984300b15102efa695bff2239196f264b3258b31bdb2f765c",
-      "bytes": 2709
+      "sha256": "76c32dda0121f3a5a8bc29f15254fcba5cc0785d808fe2b7245e2d970bcbe068",
+      "bytes": 2764
     },
     {
       "path": "CITATION.cff",
@@ -50,13 +50,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "cb4ee708401e40ef1a5d92dac6e9d875154e727e1333c65de06c73ca037d2f02",
-      "bytes": 27435
+      "sha256": "f594c0b2ff672caf6a843d21b0b8ee92904b82f43b84ea783031936e505a3449",
+      "bytes": 29415
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "e18d0a069ea5473f38fc57074fe14fd4c3e9e0b11104f6317978390bd49cb6f5",
-      "bytes": 38458
+      "sha256": "295471ee9c42e3448d8878c76d68498be5fc660b87160270f3a967a3c0d41a4d",
+      "bytes": 41948
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -135,8 +135,8 @@
     },
     {
       "path": "configs/independent_hs_all_configured_headroom.yaml",
-      "sha256": "74b499f929525d81edd8f9b7d546b64dc23d2c4c973d33347a2b6cb0115501fd",
-      "bytes": 2220
+      "sha256": "15ae12c93e4fad9927066d52bfe7c6c23b146f67cd062b201d2b5dfcf0a5cd49",
+      "bytes": 2772
     },
     {
       "path": "configs/independent_hs_continuation_baseline.yaml",
@@ -450,13 +450,13 @@
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
-      "sha256": "7c742fb2633aa05114b208cd6d8f2c9a7920e27252240f05e12f5c9de1e50ed3",
-      "bytes": 16991
+      "sha256": "5e25f037bf7813d2b1bd7d375835b75876e6fba6db57d8a6b3da01ce23501d3c",
+      "bytes": 18761
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
-      "sha256": "da69ea584f9a4b8788f3b2e77b06ab26b2d1d1006a3de06f1950ef55f134ef0f",
-      "bytes": 10161
+      "sha256": "c6de266c1212fbd38f47af3879100a72c4b99bda97492a071faff6d193b4a1ae",
+      "bytes": 11165
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
@@ -550,13 +550,13 @@
     },
     {
       "path": "data/results/evidence_synthesis/evidence_synthesis.csv",
-      "sha256": "f627b9d2887d46df9778b75f4474e5df5bbc8d26424783d9856e5502edac6dca",
-      "bytes": 5904
+      "sha256": "ad7e9742bb53f8c2ca752483d17a6cf85d0fbb37e8add9d94240a89b887c900e",
+      "bytes": 6705
     },
     {
       "path": "data/results/evidence_synthesis/evidence_synthesis_metadata.json",
-      "sha256": "81ed63d95a0420cf6814adabaf78f9d5e0a3f981bb9be2ab5b9253030900ec10",
-      "bytes": 5018
+      "sha256": "b3c711b0d52e7dedd555f8e93e3a6a609ca661f2460e6db695ad22fce10712aa",
+      "bytes": 5717
     },
     {
       "path": "data/results/feasibility_metadata.json",
@@ -819,24 +819,129 @@
       "bytes": 10158
     },
     {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_controls.json",
+      "sha256": "e0971fc28fc5f30700acd0c379b90012891a22a1ff5268aab3b6d5b13c3a20eb",
+      "bytes": 7798
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_controls.json",
+      "sha256": "2d4e0b756892ea2b5d9fd647207a6c1652c16585dda4a130504a452c40f9b50c",
+      "bytes": 7782
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_controls.json",
+      "sha256": "542883ea5dee97baacc45e736222aaf36a4e2249493d1c4d02eabe46b93efe55",
+      "bytes": 7788
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_controls.json",
+      "sha256": "80dcf364ebc43719655686cce641289b2c718f1c5edb57f09377ad2bf263bf53",
+      "bytes": 7786
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_controls.json",
+      "sha256": "ae64d25b776b428a3d90268ee11a201987aa21dd328e7a5326a9153ea5134461",
+      "bytes": 7783
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_controls.json",
+      "sha256": "fafe30ed005fa19a0bfe392e6b81b0999b47af84eb19d8a73b42396115e1bd49",
+      "bytes": 7776
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_controls.json",
+      "sha256": "29db0576658055a952ff736e657f3c908e5b6791f53ea02b40266dd28e0c1915",
+      "bytes": 7780
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_controls.json",
+      "sha256": "ee18922dc4b0715b9d371153718e9ff08d9deba18830d7b401445088e5992ee2",
+      "bytes": 7775
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_control_manifest.json",
+      "sha256": "067099019dc31f3cd52f7b475bcf574719f299a390ca68fe074420205d8ac6ed",
+      "bytes": 12313
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_controls.json",
+      "sha256": "46871d310bb008e1be5438eb0ee00d1da0b5c320eefe2fc46f8add782ae06198",
+      "bytes": 3468
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_000_mask_000_controls.json",
+      "sha256": "53c2815456a03f73c5dea994c4f1a3383d98dcf331386f78d64b062653c94838",
+      "bytes": 7803
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_001_mask_001_controls.json",
+      "sha256": "c5acd7aed28e506caa9d5679ca7a638518cd91bc8675a99738895d3109807bdf",
+      "bytes": 7786
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_002_mask_002_controls.json",
+      "sha256": "745ef20a73e7f434ce6c49e652caaa2567e389df41c939c10c2b9cace4fea5b8",
+      "bytes": 7786
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_003_mask_003_controls.json",
+      "sha256": "e55e462718e34f570d41fe1892fcc95c0c6fc159b8179831eaf6cbcb490827f8",
+      "bytes": 7784
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_004_mask_004_controls.json",
+      "sha256": "39f77e7d84bed8be796769f498e003ddd984455043426593c6fb5b9048ea17dd",
+      "bytes": 7774
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_005_mask_007_controls.json",
+      "sha256": "8b41867e117e315f3d313aca1d5729543526b384c98b03bb113f551dbca635d4",
+      "bytes": 7770
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_006_mask_006_controls.json",
+      "sha256": "74dfd2a9211fe7b4cfda532f942321f4c80a0e43eb71db8638c3ee514d0dae28",
+      "bytes": 7772
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_007_mask_005_controls.json",
+      "sha256": "0c0299e6b11d14ddb562403581d213ec410f1fb0c7fc4191fa0b07e35d4244c0",
+      "bytes": 7767
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_branch_control_manifest.json",
+      "sha256": "b27b8f4677e942f8d14438b42f25847255998aa13a27b34f796b79ac47af0d2e",
+      "bytes": 12263
+    },
+    {
       "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json",
-      "sha256": "4301ff60600efca9ce955d4fbb8d6d1e1e11e6fb1579cf3c764f5a00ae521511",
+      "sha256": "eda26f31547a19ac9df2c37186520e9746002a1a6e363649e0b378bd9566de24",
       "bytes": 3443
     },
     {
       "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_source_p03_cold_nominal_controls.json",
-      "sha256": "1c164544be4c69641ee47abd490dab87dfcef041d2bae34e457216e0d9113124",
+      "sha256": "e7448019bf1c678766cda73ed075b900d43a17645df469db27976bb4b870fcab",
       "bytes": 3387
     },
     {
       "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
-      "sha256": "2b365b4c614f1e0eb325aab9ee103511731c481064a1e0621617f9cf206d1e39",
-      "bytes": 7261
+      "sha256": "9a50949eb40d5858658e0d667eb54a2c34b8d278bc0a667bd14b59ff07cea1ed",
+      "bytes": 10975
     },
     {
       "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_metadata.json",
-      "sha256": "07030d4b18b9875295f34af6585d5ae73db8a860aa9fd2d718c37535b0a66c26",
-      "bytes": 18122
+      "sha256": "7998fae59bdbad759d112325166acec759c7831ff6fbc20ec384a65702d0e30d",
+      "bytes": 26091
+    },
+    {
+      "path": "data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay.csv",
+      "sha256": "976357514e32fad945369b2f77f61d055d62032dc9835d76b606295389c039c0",
+      "bytes": 8714
+    },
+    {
+      "path": "data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay_metadata.json",
+      "sha256": "cbf5667c473fa126123fbd3661bc9d8ccbca1244e69aede074b99e6198c2653c",
+      "bytes": 9207
     },
     {
       "path": "data/results/independent_hs_continuation_baseline/controls/ihs_catalog_dro_tf4_amax1_selected1_nominal_controls.json",
@@ -2070,13 +2175,13 @@
     },
     {
       "path": "data/results/replay_stress_validation/replay_stress_validation.csv",
-      "sha256": "9ea473266e8a11c726e0a2d3767739fefdb95349b2f0f478a28d6e341cfbfe7f",
+      "sha256": "4d9cc662d95281ae2e1fa71ecdc65b18b95355806a72a9363f7b2f97f2463bf8",
       "bytes": 14177
     },
     {
       "path": "data/results/replay_stress_validation/replay_stress_validation_metadata.json",
-      "sha256": "802933db012332e4dcfc92e9e3a7044ffb3828a2e9a1a83cb287181bda750030",
-      "bytes": 5620
+      "sha256": "e1b1c957f4a8558a7997271351f1161b4fbb87c5dff90ccbe1d3e7edc46fe25a",
+      "bytes": 5621
     },
     {
       "path": "data/results/robust_margin_suite/robust_margin_suite.csv",
@@ -2320,13 +2425,13 @@
     },
     {
       "path": "figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.pdf",
-      "sha256": "37dc31d69a003b3e498f6dd9b37bb1e6826ec60e07fec24743d9883100e68a69",
-      "bytes": 13259
+      "sha256": "77d04e82e38712490875ab88f21771a94a145bc91f460601a32b2160f0417c00",
+      "bytes": 13366
     },
     {
       "path": "figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.png",
-      "sha256": "034739848140ea91ddc0e7fc292f52acbd92890c4dde3bc0291c2bedeec50766",
-      "bytes": 64742
+      "sha256": "18f1cc34a95dd0f86867d434f9afa7c543af34a391431b24c93f843c94f45b6a",
+      "bytes": 66589
     },
     {
       "path": "figures/independent_hs_continuation_baseline/independent_hs_continuation_baseline.pdf",
@@ -2700,13 +2805,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "4f06206c19ed6b7408467900f288d32caec0feba1aca1321f3955b0e7e64fce8",
-      "bytes": 418530
+      "sha256": "580dabe38cb5bf3f01a26f0fc366aad1afbe53d73c9932a96bc5a2c01df8dc99",
+      "bytes": 419789
     },
     {
       "path": "paper/main.tex",
-      "sha256": "371e535ea10fb17df97f3cfc0e86751a5bc6f66dae595aaacb7530edb6d0c0bb",
-      "bytes": 57783
+      "sha256": "dd988e4d4d3afbde7be926efb5647e83ad5ff8ae23075ce8cc8676154860edc0",
+      "bytes": 59123
     },
     {
       "path": "paper/references.bib",
@@ -2715,13 +2820,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "d7f2c51a7a20142fa2e6e1ed133a8d1e609887ae966248487e474211897bc980",
-      "bytes": 512882
+      "sha256": "17531d9b3ae591861ee227bf51405f74ff237a089991cee9116c14d6be7f5291",
+      "bytes": 515525
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "67c514c2e176bcbfebda0c8436ebac6324d760833464156aef36d438673e4529",
-      "bytes": 38548
+      "sha256": "dd16a1e0da7d539cb880ca7c87a00203d1f21f991fb0a0169d9779930e7cfa48",
+      "bytes": 40025
     },
     {
       "path": "requirements-lock.txt",
@@ -2780,8 +2885,8 @@
     },
     {
       "path": "scripts/run_claim_evidence_ledger.py",
-      "sha256": "d829e14b2c2b8f3a738bcf4a974ce1474539ea42e51fad8bffb694fff961d98c",
-      "bytes": 66525
+      "sha256": "9aa8db477842bcc6e01910618723070205a3c87d432b85678164b74ba7371933",
+      "bytes": 73376
     },
     {
       "path": "scripts/run_continuation_margin_suite.py",
@@ -2800,8 +2905,8 @@
     },
     {
       "path": "scripts/run_evidence_synthesis.py",
-      "sha256": "75dddb62dc1a196569916f169011584f1b3f3acda6cdf25d694ee3bea1f1f154",
-      "bytes": 25774
+      "sha256": "15c73923047df406dd68648415a1fff0ac3c8e7f2938f7c24af10b7d65395396",
+      "bytes": 29118
     },
     {
       "path": "scripts/run_experiment.py",
@@ -2815,13 +2920,18 @@
     },
     {
       "path": "scripts/run_hermite_simpson_continuation.py",
-      "sha256": "19df504b799ef477e2b361c8971b3497ef34631c17c124ef2c4d8fc6ccb7e435",
-      "bytes": 55341
+      "sha256": "f13c99810fc13db943d5b4d41ecc819cfe2685a18345cdf945e275286d95ea44",
+      "bytes": 84683
     },
     {
       "path": "scripts/run_horizons_ephemeris_force_model_contrast.py",
       "sha256": "f965ba9a9dac3b8a52eaeb4ba701f3bee9b42ae02174108bafe247eee2a3c45d",
       "bytes": 32252
+    },
+    {
+      "path": "scripts/run_independent_hs_branch_control_replay.py",
+      "sha256": "6a6486869c3baa8d88aee9e85622f3d74dabed4c27d2335da2c2d2889bff9e9a",
+      "bytes": 19860
     },
     {
       "path": "scripts/run_independent_hs_continuation.py",
@@ -2875,8 +2985,8 @@
     },
     {
       "path": "scripts/verify_submission_snapshot.py",
-      "sha256": "03603af54c0b578414a49450fd3ddb4ab9cce8950c8e6975beca56d1d6ddd7b3",
-      "bytes": 5638
+      "sha256": "088830c0e968661b172208c6481e4e3458326ac94e67c2cbdd9999409e5c8a33",
+      "bytes": 6385
     },
     {
       "path": "scripts/write_artifact_manifest.py",
@@ -2910,8 +3020,8 @@
     },
     {
       "path": "src/qlt/direct_collocation.py",
-      "sha256": "91d36ec1958975ee8618efe4a371b9798c3cd1e02cd3a796382e04503f8a5b07",
-      "bytes": 41106
+      "sha256": "9ef65d7f231e131e2dd76b91dc6d34ba6e93dd85c011d6339c1ea88ca4305e67",
+      "bytes": 42393
     },
     {
       "path": "src/qlt/ephemeris_contrast.py",
@@ -3010,8 +3120,8 @@
     },
     {
       "path": "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
-      "sha256": "8b1a63da1cf8c2e8f201e203d4173efc18a9cca144ff845e573f3ab466e95523",
-      "bytes": 6559
+      "sha256": "fcfc492e019cdeada2a73f8c7602d0426c7635b30c3d4cd77dc03b55ea01a443",
+      "bytes": 7247
     },
     {
       "path": "tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex",
@@ -3040,13 +3150,13 @@
     },
     {
       "path": "tables/evidence_synthesis/evidence_synthesis_table.tex",
-      "sha256": "95354f0468d1863d99be74a81ecb4c1cd1dd7bf945c79fb5679d29c4ddf0325d",
-      "bytes": 3547
+      "sha256": "05475fa7f18dfeb4cc6f82683c9d09ac00a2f46724e59ef81a436a447ddd9492",
+      "bytes": 4064
     },
     {
       "path": "tables/evidence_synthesis/practitioner_lessons_table.tex",
-      "sha256": "311caca103299b5cf12bc4b7a601a7b0cf68452a3910363f6f010148a69784d7",
-      "bytes": 2575
+      "sha256": "515f306e576263ababb570de27435e18eb74c72d9625cfcf7a9710c7184e9b29",
+      "bytes": 2959
     },
     {
       "path": "tables/feasibility_table.tex",
@@ -3095,8 +3205,13 @@
     },
     {
       "path": "tables/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_table.tex",
-      "sha256": "307df4c73089d26b6e3efbc729d953bf7a2695a9a0c82c6bf40441d6c5e10274",
-      "bytes": 705
+      "sha256": "821e720cab9c6d4cc7c702b0b7e392a31e5c8fe90020e9bceef2b6d0023895e2",
+      "bytes": 917
+    },
+    {
+      "path": "tables/independent_hs_branch_control_replay/independent_hs_branch_control_replay_table.tex",
+      "sha256": "750cb95b88706fc3f9339568c229bc27185d54054ea17c05d755af82ac5598c9",
+      "bytes": 473
     },
     {
       "path": "tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex",
@@ -3260,8 +3375,8 @@
     },
     {
       "path": "tests/test_claim_evidence_ledger.py",
-      "sha256": "cfff5a93f11b55343cb65e5776f38e32ad6b42118c1d96906d7424d16d439f77",
-      "bytes": 17690
+      "sha256": "f0c6e2723139b7642ce50899af3601a4361361ad7be4cb0043225563125c2544",
+      "bytes": 19184
     },
     {
       "path": "tests/test_delayed_recovery.py",
@@ -3270,8 +3385,8 @@
     },
     {
       "path": "tests/test_evidence_synthesis.py",
-      "sha256": "e7d26a5def449d1778b4b28c2fa4f738ca68936fb2765608fec99aa4cb3f7762",
-      "bytes": 5544
+      "sha256": "5d5be687e70c6268a2c1ebabc446d4d103fffbfe4f916d8462e13fb692df3a4c",
+      "bytes": 6435
     },
     {
       "path": "tests/test_hermite_simpson_continuation.py",
@@ -3284,9 +3399,14 @@
       "bytes": 13021
     },
     {
+      "path": "tests/test_independent_hs_branch_control_replay.py",
+      "sha256": "b851cff3ebe7d7d30854f037adf5903d00b4622321552bea67a62d8932ca8acd",
+      "bytes": 11531
+    },
+    {
       "path": "tests/test_independent_hs_direct_collocation.py",
-      "sha256": "8b47daaef83479953a6766a3b8fe706a124a46a7b403cf3a0988e12e6524d678",
-      "bytes": 19188
+      "sha256": "10ea0d39243e1ffd313331fcc0f16bb2fc9fc77e4ab700437f02a0b25fd453aa",
+      "bytes": 24753
     },
     {
       "path": "tests/test_locked_nominal_recovery.py",

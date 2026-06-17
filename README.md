@@ -57,6 +57,7 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/bicircular_tail_coast_recovery/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
+`data/results/independent_hs_branch_control_replay/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
 `data/results/qaoa_depth_ablation_30seed/*`,
 `data/results/hard_catalog_tail_coast_recovery/*`,
@@ -166,12 +167,13 @@ py -3.11 scripts\run_claim_evidence_ledger.py
 
 It reads recorded artifacts only and does not rerun trajectory optimization.
 The ledger separates selected-branch evidence, all-mask diagnostics,
-all-configured-mask evidence, and the completed focused accepted-control replay
-row. The current snapshot includes the new independent-HS all-configured
-headroom row, the real replay CSV, metadata, focused source recovery CSV,
-bicircular solar-tidal stress CSV/metadata, and Horizons ephemeris force-model
-contrast CSV/metadata, plus the bicircular retuned recovery CSV, summary, and
-metadata, so the ledger has 13 claim rows. The
+all-configured-mask evidence, and deterministic branch-control replay rows. The
+current snapshot includes the new independent-HS all-configured headroom row,
+the independent-HS branch-control replay CSV/metadata, the focused tail-coast
+replay CSV/metadata, focused source recovery CSV, bicircular solar-tidal stress
+CSV/metadata, and Horizons ephemeris force-model contrast CSV/metadata, plus
+the bicircular retuned recovery CSV, summary, and metadata, so the ledger has
+14 claim rows. The
 solar-tidal row is a negative stress-probe row, the retuned recovery row is a
 completed negative simple-bicircular retuning row, and the Horizons row is a
 force-model contrast row. None is high-fidelity validation or quantum evidence.
@@ -189,8 +191,8 @@ CSV/JSON artifacts only and does not rerun trajectory optimization. The table
 cross-indexes tight 30-seed threshold sensitivity, continuation-extension
 multiple-shooting rows, compact direct-collocation and independent-midpoint
 Hermite-Simpson diagnostics, the new all-configured independent-HS headroom
-row, and the scoped hard-catalog tail-coast row used in the main manuscript
-claim path.
+row, the independent-HS branch-control replay row, and the scoped hard-catalog
+tail-coast row used in the main manuscript claim path.
 
 The replay/stress validation postprocessor writes
 `data/results/replay_stress_validation/replay_stress_validation.csv`,
@@ -209,6 +211,26 @@ reproduce recorded nominal errors to within `1e-12`; refined substeps and direct
 +/-1% acceleration scaling are stress diagnostics only. It does not run
 least-squares optimization, replay branch recovery controls, or claim
 high-fidelity validation.
+
+The independent-HS branch-control replay postprocessor writes
+`data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay.csv`,
+`data/results/independent_hs_branch_control_replay/independent_hs_branch_control_replay_metadata.json`,
+and
+`tables/independent_hs_branch_control_replay/independent_hs_branch_control_replay_table.tex`:
+
+```powershell
+py -3.11 scripts\run_independent_hs_branch_control_replay.py --config configs\independent_hs_all_configured_headroom.yaml --source-states data\source_states.json
+```
+
+It validates the all-configured independent-HS branch-control manifests and
+sidecar SHA-256 hashes, then repropagates the persisted full endpoint and
+midpoint schedules under the normalized CR3BP model. The current package covers
+the original p=0.4 row and the polished p=0.4 row, with 8 branch rows each, zero
+nominal/branch/all-mask replay deltas at tolerance `1e-10`, and
+`passes_tolerance=True`. This is deterministic recorded-control replay only; it
+does not rerun optimization, certify optimizer convergence for the original
+row, add high-fidelity validation, establish production solver parity, or claim
+fuel optimality or quantum advantage.
 
 The Horizons ephemeris force-model contrast postprocessor writes
 `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,
@@ -509,15 +531,23 @@ The package writes `data/results/independent_hs_all_configured_headroom/*`,
 endpoint-plus-midpoint sidecars under
 `data/results/independent_hs_all_configured_headroom/controls/`,
 `tables/independent_hs_all_configured_headroom/*`, and
-`figures/independent_hs_all_configured_headroom/*`. The key row
+`figures/independent_hs_all_configured_headroom/*`. For rows with
+`persist_branch_controls: true`, it also writes branch-control manifests and
+full-length endpoint-plus-midpoint branch-control sidecars under the same
+controls directory. The original key row
 `ihs_all_single_p04_amax02_warm_from_p03` selects and evaluates all 8 configured
 one-segment outage masks at phase time `0.4`, transfer time `0.5`, and
 `amax=0.2`, with nominal error `0.011115187774142957` and selected/all worst
-error `0.07741645121655767`. It is normalized-CR3BP all-configured continuous
-backend evidence only; both rows hit their configured `max_nfev` caps and this
-does not claim high-fidelity validation, production solver parity, fuel
-optimality, broader outage-family robustness, QUBO/QAOA evidence, or quantum
-advantage.
+error `0.07741645121655767`; it remains threshold-feasible but reaches
+`max_nfev=120` with `optimizer_success=False`. The polish row
+`ihs_all_single_p04_amax02_polish_from_p04` warm-starts from that row and its
+branch sidecars, selects/evaluates the same 8 masks, records nominal error
+`0.011333095366088189` and selected/all worst error `0.07792080291839382`, and
+converges with `optimizer_success=True` at `nfev=25` under `max_nfev=240`.
+Both p=0.4 rows have replay-ready manifests with 8 branch-control sidecars. This
+is normalized-CR3BP all-configured continuous backend evidence only; it does not
+claim high-fidelity validation, production solver parity, fuel optimality,
+broader outage-family robustness, QUBO/QAOA evidence, or quantum advantage.
 
 For the cardinality ablation:
 

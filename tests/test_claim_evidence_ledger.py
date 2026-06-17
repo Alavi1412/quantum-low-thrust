@@ -24,6 +24,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
     )
 
     ledger = module.build_claim_evidence_ledger()
+    has_ihs_replay = module.independent_hs_branch_control_replay_artifacts_available()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
     has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
@@ -40,6 +41,9 @@ def test_claim_evidence_ledger_rows_and_semantics():
         "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
         "catalog_dro_delayed_h6_all_single_delayed_arrival",
     ]
+    if has_ihs_replay:
+        ihs_insert_at = expected_claims.index("phase_shift_independent_hs_p04_amax02_all_configured") + 1
+        expected_claims.insert(ihs_insert_at, "phase_shift_independent_hs_branch_control_replay")
     tail_insert_at = (
         expected_claims.index("catalog_dro_tail_coast_all_one_two_segment_t5_all_configured")
         + 1
@@ -109,6 +113,17 @@ def test_claim_evidence_ledger_rows_and_semantics():
     assert ihs_all["passes_configured_thresholds"] == "True"
     assert "max_nfev" in ihs_all["explicit_boundary"]
     assert "not production solver parity" in ihs_all["explicit_boundary"]
+
+    if has_ihs_replay:
+        ihs_replay = row("phase_shift_independent_hs_branch_control_replay")
+        assert ihs_replay["all_configured_mask_evidence"] == "True"
+        assert "16 branch replay rows" in ihs_replay["mask_scope"]
+        assert "8 branches per row" in ihs_replay["mask_scope"]
+        assert "polish row converges" in ihs_replay["primary_interpretation"]
+        assert "Branch-control replay only" in ihs_replay["explicit_boundary"]
+        assert "production solver parity" in ihs_replay["explicit_boundary"]
+    else:
+        assert "phase_shift_independent_hs_branch_control_replay" not in ledger["claim_id"].tolist()
 
     tail = row("catalog_dro_tail_coast_all_one_two_segment_t5_all_configured")
     assert tail["all_configured_mask_evidence"] == "True"
@@ -269,13 +284,15 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         "branch_table": first["tail_coast_branch_audit_table_tex"].read_bytes(),
     }
     second = module.write_artifacts(**kwargs)
+    has_ihs_replay = module.independent_hs_branch_control_replay_artifacts_available()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
     has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
     has_horizons = module.horizons_ephemeris_force_model_contrast_artifacts_available()
-    expected_rows = 9 + int(has_replay) + int(has_bicircular) + int(has_retuned) + int(has_horizons)
+    expected_rows = 9 + int(has_ihs_replay) + int(has_replay) + int(has_bicircular) + int(has_retuned) + int(has_horizons)
     expected_inputs = (
         11
+        + (2 if has_ihs_replay else 0)
         + (3 if has_replay else 0)
         + (2 if has_bicircular else 0)
         + (3 if has_retuned else 0)
@@ -294,6 +311,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["optimization_rerun"] is False
     assert metadata["uses_recorded_artifacts_only"] is True
     assert metadata["high_fidelity_claim"] is False
+    assert metadata["independent_hs_branch_control_replay"] is has_ihs_replay
     assert metadata["branch_control_replay"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_probe"] is has_bicircular
     assert metadata["bicircular_tail_coast_retuned_recovery"] is has_retuned
@@ -304,6 +322,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["tail_coast_threshold_audit_row_count"] == 5
     assert metadata["tail_coast_branch_audit_row_count"] == 1
     assert "no trajectory optimization" in metadata["source_mode"]
+    assert metadata["independent_hs_branch_control_replay_artifacts_available"] is has_ihs_replay
     assert metadata["branch_control_replay_artifacts_available"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_artifacts_available"] is has_bicircular
     assert metadata["bicircular_tail_coast_recovery_artifacts_available"] is has_retuned
@@ -319,6 +338,10 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
 
     table = second["claim_evidence_ledger_table_tex"].read_text(encoding="utf-8")
     assert "phase\\_shift\\_independent\\_hs\\_p04\\_amax02\\_all\\_configured" in table
+    if has_ihs_replay:
+        assert "phase\\_shift\\_independent\\_hs\\_branch\\_control\\_replay" in table
+    else:
+        assert "phase\\_shift\\_independent\\_hs\\_branch\\_control\\_replay" not in table
     assert "catalog\\_dro\\_tail\\_coast\\_all\\_one\\_two\\_segment\\_t5\\_all\\_configured" in table
     if has_replay:
         assert "catalog\\_dro\\_tail\\_coast\\_branch\\_control\\_replay\\_accepted\\_controls" in table

@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "case_id": "ihs_source_p03_cold",
-  "settings_fingerprint": "8a8e86abc5ebf1d32cf7afe79da5ff5a0c3a5b2585082f1bf97dace2f5eacfe8",
+  "settings_fingerprint": "e935bde0bc787e81a22d8ff76d154048a8108495aafe1635f07170cc32a7f3df",
   "control_hash": "04d2afc6c485a923fa3d889576fd389baf320f9b3942a7678411ad3873b37023",
   "endpoint_control_hash": "04d2afc6c485a923fa3d889576fd389baf320f9b3942a7678411ad3873b37023",
   "midpoint_control_present": true,

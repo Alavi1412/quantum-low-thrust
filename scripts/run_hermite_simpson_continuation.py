@@ -40,7 +40,7 @@ from qlt.direct_collocation import (
 )
 from qlt.experiment import load_configured_states, make_objective_config, output_directories
 from qlt.objective import outage_masks
-from qlt.reporting import write_json
+from qlt.reporting import sanitize_json, write_json
 
 
 SUITE_NAME = "hermite_simpson_continuation_baseline"
@@ -136,6 +136,10 @@ HS_CONTINUATION_COLUMNS = [
     "nominal_midpoint_control_present",
     "nominal_midpoint_control_hash",
     "nominal_midpoint_warm_start_loaded",
+    "branch_control_manifest_path",
+    "branch_control_manifest_hash",
+    "branch_control_sidecar_count",
+    "branch_control_replay_ready",
     "settings_fingerprint",
     "config_hash",
     "source_states_id",
@@ -185,6 +189,64 @@ def _control_hash(controls: np.ndarray) -> str:
         "controls": arr.astype(float).tolist(),
     }
     return _json_hash(payload)
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _artifact_path(path: Path) -> str:
+    resolved = path.resolve()
+    for base in (Path.cwd(), ROOT):
+        try:
+            return resolved.relative_to(base.resolve()).as_posix()
+        except ValueError:
+            continue
+    return resolved.as_posix()
+
+
+def _resolve_artifact_path(value: object) -> Path:
+    text = str(value or "").strip()
+    if not text:
+        raise RuntimeError("expected artifact path, got blank")
+    path = Path(text)
+    if path.is_absolute():
+        return path
+    cwd_path = Path.cwd() / path
+    if cwd_path.exists():
+        return cwd_path
+    return ROOT / path
+
+
+def _write_deterministic_json(path: Path, payload: dict) -> str:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    data = sanitize_json(payload)
+    text = json.dumps(data, indent=2, sort_keys=True, ensure_ascii=True, allow_nan=False)
+    path.write_text(text + "\n", encoding="utf-8")
+    return _sha256(path)
+
+
+def _control_norm_diagnostics(controls: np.ndarray, amax: float) -> dict[str, object]:
+    arr = np.asarray(controls, dtype=float)
+    if arr.size == 0:
+        norms = np.zeros(0, dtype=float)
+    else:
+        norms = np.linalg.norm(arr.reshape((-1, 3)), axis=1)
+    max_norm = float(np.max(norms)) if norms.size else 0.0
+    mean_norm = float(np.mean(norms)) if norms.size else 0.0
+    max_abs = float(np.max(np.abs(arr))) if arr.size else 0.0
+    violation = max(0.0, max_norm - float(amax))
+    if violation <= 1.0e-12:
+        violation = 0.0
+        max_norm = min(max_norm, float(amax))
+    return {
+        "shape": list(arr.shape),
+        "control_norm_max": max_norm,
+        "control_norm_mean": mean_norm,
+        "control_max_abs_component": max_abs,
+        "amax": float(amax),
+        "control_bound_violation": violation,
+    }
 
 
 def _combined_control_sidecar_hash(controls: np.ndarray, midpoint_controls: np.ndarray | None) -> str:
@@ -262,12 +324,16 @@ def _suite_cases(config: dict) -> list[dict]:
     default_benchmark = config.get("benchmark", {}) or {}
     default_outages = [int(v) for v in config.get("outages", {}).get("block_lengths", [1])]
     direct = config.get("direct_collocation", {}) or {}
+    branch_persistence_default = bool(
+        direct.get("persist_branch_controls", suite.get("persist_branch_controls", False))
+    )
 
     cases: list[dict] = []
     order = 0
     for group_name, group in groups.items():
         group_outages = [int(v) for v in group.get("outage_lengths", group.get("block_lengths", default_outages))]
         purpose = str(group.get("purpose", ""))
+        group_persist_branch_controls = bool(group.get("persist_branch_controls", branch_persistence_default))
         for raw_case in group.get("cases", []):
             case = dict(raw_case)
             target_mode = str(
@@ -289,6 +355,7 @@ def _suite_cases(config: dict) -> list[dict]:
                 )
             warm_from = case.get("warm_start_from_case_id")
             warm_kind = str(case.get("warm_start_kind", "nominal_controls" if warm_from else "cold"))
+            branch_guess_from = case.get("branch_control_guess_from_case_id")
             cases.append(
                 {
                     "case_id": str(case.get("case_id") or f"{group_name}_{order}"),
@@ -305,6 +372,12 @@ def _suite_cases(config: dict) -> list[dict]:
                     "selected_all_outages": int(selected) == int(outage_total),
                     "warm_start_from_case_id": None if warm_from in (None, "") else str(warm_from),
                     "warm_start_kind": warm_kind,
+                    "branch_control_guess_from_case_id": (
+                        None if branch_guess_from in (None, "") else str(branch_guess_from)
+                    ),
+                    "persist_branch_controls": bool(
+                        case.get("persist_branch_controls", group_persist_branch_controls)
+                    ),
                     "max_nfev": int(case.get("max_nfev", direct.get("max_nfev", 50))),
                     "min_recovery_segments": int(
                         case.get("min_recovery_segments", direct.get("min_recovery_segments", 1))
@@ -332,6 +405,15 @@ def _source_case(cases_by_id: dict[str, dict], case: dict) -> dict | None:
         return None
     if source_id not in cases_by_id:
         raise ValueError(f"{case['case_id']} warm-start source {source_id!r} is not in this suite")
+    return cases_by_id[source_id]
+
+
+def _branch_control_guess_source_case(cases_by_id: dict[str, dict], case: dict) -> dict | None:
+    source_id = case.get("branch_control_guess_from_case_id")
+    if not source_id:
+        return None
+    if source_id not in cases_by_id:
+        raise ValueError(f"{case['case_id']} branch-control guess source {source_id!r} is not in this suite")
     return cases_by_id[source_id]
 
 
@@ -410,6 +492,7 @@ def _settings_payload(
     *,
     source_settings_fingerprint: str | None = None,
     source_control_hash: str | None = None,
+    source_branch_control_manifest_hash: str | None = None,
 ) -> dict:
     payload = _base_settings_payload(base_config, source_states, case)
     payload["continuation_dependency"] = {
@@ -417,6 +500,11 @@ def _settings_payload(
         "source_case_id": case.get("warm_start_from_case_id"),
         "source_settings_fingerprint": source_settings_fingerprint,
         "source_control_hash": source_control_hash,
+    }
+    payload["branch_control_guess_dependency"] = {
+        "required": bool(case.get("branch_control_guess_from_case_id")),
+        "source_case_id": case.get("branch_control_guess_from_case_id"),
+        "source_branch_control_manifest_hash": source_branch_control_manifest_hash,
     }
     return payload
 
@@ -428,6 +516,7 @@ def compute_settings_fingerprint(
     *,
     source_settings_fingerprint: str | None = None,
     source_control_hash: str | None = None,
+    source_branch_control_manifest_hash: str | None = None,
 ) -> str:
     return _json_hash(
         _settings_payload(
@@ -436,6 +525,7 @@ def compute_settings_fingerprint(
             case,
             source_settings_fingerprint=source_settings_fingerprint,
             source_control_hash=source_control_hash,
+            source_branch_control_manifest_hash=source_branch_control_manifest_hash,
         )
     )
 
@@ -678,12 +768,379 @@ def _row_from_result(
         "nominal_midpoint_warm_start_loaded": bool(
             (result.get("warm_start_info") or {}).get("source_midpoint_control_present", False)
         ),
+        "branch_control_manifest_path": "",
+        "branch_control_manifest_hash": "",
+        "branch_control_sidecar_count": 0,
+        "branch_control_replay_ready": False,
         "settings_fingerprint": settings_fp,
         "config_hash": _config_hash(base_config),
         "source_states_id": _file_identity(source_states),
         "message": str(result.get("message", "")),
     }
     return {column: row.get(column) for column in HS_CONTINUATION_COLUMNS}
+
+
+# ---------------------------------------------------------------------------
+# Branch-control sidecar persistence
+# ---------------------------------------------------------------------------
+
+def _safe_file_stem(value: str) -> str:
+    return "".join(ch if ch.isalnum() or ch in {"-", "_", "."} else "_" for ch in str(value))
+
+
+def _outage_end(mask: np.ndarray) -> int:
+    missed = np.flatnonzero(np.asarray(mask, dtype=float) < 0.5)
+    if missed.size == 0:
+        return 0
+    return int(missed[-1] + 1)
+
+
+def _branch_control_replay_limitations() -> list[str]:
+    return [
+        "Branch-control replay repropagates persisted controls in the normalized CR3BP model only.",
+        "Replay is deterministic postprocessing and does not rerun least-squares optimization.",
+        "The sidecars do not establish high-fidelity validation, SPICE/ephemeris propagation, production solver parity, fuel optimality, or quantum advantage.",
+        "All-configured evidence is limited to the outage family, target, transfer time, segment grid, thrust bound, and thresholds recorded in the manifest.",
+    ]
+
+
+def _empty_branch_sidecar_columns() -> dict[str, object]:
+    return {
+        "branch_control_manifest_path": "",
+        "branch_control_manifest_hash": "",
+        "branch_control_sidecar_count": 0,
+        "branch_control_replay_ready": False,
+    }
+
+
+class BranchControlSidecarStore:
+    def __init__(
+        self,
+        *,
+        results_dir: Path,
+        case: dict,
+        case_config: dict,
+        states,
+        cfg,
+        masks: np.ndarray,
+        row: dict,
+        settings_fingerprint: str,
+        nominal_sidecar: dict,
+        source_states: Path,
+    ) -> None:
+        self.case = case
+        self.case_config = case_config
+        self.states = states
+        self.cfg = cfg
+        self.masks = np.asarray(masks, dtype=float)
+        self.row = row
+        self.settings_fingerprint = str(settings_fingerprint)
+        self.nominal_sidecar = nominal_sidecar
+        self.source_states = source_states
+        self.controls_dir = results_dir / "controls"
+        self.case_id = str(case["case_id"])
+        self.safe_case_id = _safe_file_stem(self.case_id)
+        self.manifest_path = self.controls_dir / f"{self.safe_case_id}_branch_control_manifest.json"
+        self.branch_entries: list[dict[str, object]] = []
+
+    def _common_metadata(self) -> dict[str, object]:
+        thresholds = self.case_config["objective"]["thresholds"]
+        return {
+            "suite_name": SUITE_NAME,
+            "artifact_stem": ARTIFACT_STEM,
+            "case_id": self.case_id,
+            "case_order": int(self.case["case_order"]),
+            "case_group": str(self.case["case_group"]),
+            "settings_fingerprint": self.settings_fingerprint,
+            "config_hash": _config_hash(self.case_config),
+            "runner_base_config_hash": str(self.row.get("config_hash", "")),
+            "source_states_id": _file_identity(self.source_states),
+            "target_mode": str(self.case.get("target_mode", "catalog_halo_phase_shift")),
+            "target_generation": str(self.row.get("target_generation", TARGET_GENERATION)),
+            "target_state": np.asarray(self.states.target, dtype=float).tolist(),
+            "thresholds": {
+                "nominal_success": float(thresholds["nominal_success"]),
+                "robust_success": float(thresholds["robust_success"]),
+            },
+            "phase_time": float(self.case["phase_time"]),
+            "transfer_time": float(self.cfg.tf),
+            "segments": int(self.cfg.n_segments),
+            "substeps_per_segment": int(self.cfg.substeps),
+            "amax": float(self.cfg.amax),
+            "outage_lengths": [int(value) for value in self.case["outage_lengths"]],
+            "collocation_method": str(self.row.get("collocation_method", DEFAULT_COLLOCATION_METHOD)),
+            "fuel_quadrature": str(self.row.get("fuel_quadrature", "")),
+            "implementation_identities": {
+                "runner": _file_identity(Path(__file__)),
+                "direct_collocation_module": _dc_file_identity(ROOT / "src" / "qlt" / "direct_collocation.py"),
+                "objective_module": _file_identity(ROOT / "src" / "qlt" / "objective.py"),
+                "cr3bp_module": _file_identity(ROOT / "src" / "qlt" / "cr3bp.py"),
+            },
+            "replay_semantics": (
+                "Normalized CR3BP replay of persisted nominal and selected branch controls only; "
+                "no optimization rerun, high-fidelity validation, production solver parity, "
+                "fuel-optimality claim, or quantum-advantage claim."
+            ),
+            "limitations": _branch_control_replay_limitations(),
+        }
+
+    def _nominal_sidecar_path(self) -> Path:
+        path = self.nominal_sidecar["path"]
+        return path if isinstance(path, Path) else Path(path)
+
+    def _branch_payload(
+        self,
+        *,
+        result: dict,
+        branch_order: int,
+        mask_index: int,
+        endpoint_controls: np.ndarray,
+        midpoint_controls: np.ndarray | None,
+    ) -> tuple[dict[str, object], Path]:
+        if mask_index < 0 or mask_index >= int(self.masks.shape[0]):
+            raise ValueError(f"branch sidecar mask_index {mask_index} outside configured mask array")
+        outage_mask = np.asarray(self.masks[mask_index], dtype=int)
+        recovery_start = _outage_end(outage_mask)
+        nominal_endpoint = np.asarray(self.nominal_sidecar["controls"], dtype=float).reshape(
+            (int(self.cfg.n_segments), 3)
+        )
+        endpoint_raw = np.asarray(endpoint_controls, dtype=float)
+        if endpoint_raw.shape == (int(self.cfg.n_segments), 3):
+            endpoint_controls = endpoint_raw
+        elif endpoint_raw.size == (int(self.cfg.n_segments) - int(recovery_start)) * 3:
+            endpoint_controls = nominal_endpoint.copy() * outage_mask[:, None]
+            if int(recovery_start) < int(self.cfg.n_segments):
+                endpoint_controls[int(recovery_start) :] = endpoint_raw.reshape((-1, 3))
+        else:
+            raise ValueError(
+                f"{self.case_id} branch {branch_order} endpoint controls shape {endpoint_raw.shape} "
+                f"cannot form full {(int(self.cfg.n_segments), 3)} schedule"
+            )
+        midpoint_arr = None
+        if midpoint_controls is not None:
+            midpoint_raw = np.asarray(midpoint_controls, dtype=float)
+            if midpoint_raw.shape == (int(self.cfg.n_segments), 3):
+                midpoint_arr = midpoint_raw
+            elif midpoint_raw.size == (int(self.cfg.n_segments) - int(recovery_start)) * 3:
+                nominal_midpoint = self.nominal_sidecar.get("midpoint_controls")
+                if nominal_midpoint is None:
+                    nominal_midpoint = nominal_endpoint
+                midpoint_arr = np.asarray(nominal_midpoint, dtype=float).reshape(
+                    (int(self.cfg.n_segments), 3)
+                )
+                midpoint_arr = midpoint_arr.copy() * outage_mask[:, None]
+                if int(recovery_start) < int(self.cfg.n_segments):
+                    midpoint_arr[int(recovery_start) :] = midpoint_raw.reshape((-1, 3))
+            else:
+                raise ValueError(
+                    f"{self.case_id} branch {branch_order} midpoint controls shape {midpoint_raw.shape} "
+                    f"cannot form full {(int(self.cfg.n_segments), 3)} schedule"
+                )
+        all_errors = list(result.get("all_outage_errors", []))
+        if mask_index >= len(all_errors):
+            raise ValueError(f"all_outage_errors does not contain mask_index {mask_index}")
+        endpoint_hash = _control_hash(endpoint_controls)
+        midpoint_hash = "" if midpoint_arr is None else _control_hash(midpoint_arr)
+        combined_hash = _combined_control_sidecar_hash(endpoint_controls, midpoint_arr)
+        branch_path = (
+            self.controls_dir
+            / f"{self.safe_case_id}_branch_{int(branch_order):03d}_mask_{int(mask_index):03d}_controls.json"
+        )
+        common = self._common_metadata()
+        payload = {
+            "schema_version": 1,
+            "sidecar_type": "hs_direct_collocation_branch_controls",
+            **common,
+            "branch_order": int(branch_order),
+            "mask_index": int(mask_index),
+            "outage_mask": outage_mask.astype(int).tolist(),
+            "recovery_start": int(recovery_start),
+            "recovery_segments": int(self.cfg.n_segments) - int(recovery_start),
+            "recorded_branch_terminal_error": float(all_errors[mask_index]),
+            "recorded_selected_worst_error": float(result.get("selected_worst_error", float("nan"))),
+            "recorded_all_mask_worst_error": float(result.get("all_mask_worst_error", float("nan"))),
+            "selected_outage_indices": [int(value) for value in result.get("selected_outage_indices", [])],
+            "selected_outage_errors": [float(value) for value in result.get("selected_outage_errors", [])],
+            "all_outage_errors": [float(value) for value in all_errors],
+            "nominal_control_path": _artifact_path(self._nominal_sidecar_path()),
+            "nominal_control_sha256": _sha256(self._nominal_sidecar_path()),
+            "nominal_control_sidecar_hash": str(self.nominal_sidecar.get("sidecar_hash", "")),
+            "nominal_endpoint_control_hash": str(self.nominal_sidecar.get("endpoint_control_hash", "")),
+            "nominal_midpoint_control_hash": str(self.nominal_sidecar.get("midpoint_control_hash", "")),
+            "branch_endpoint_control_hash": endpoint_hash,
+            "branch_midpoint_control_present": midpoint_arr is not None,
+            "branch_midpoint_control_hash": midpoint_hash,
+            "branch_control_hash": combined_hash,
+            "branch_endpoint_controls": endpoint_controls.tolist(),
+            "branch_controls": endpoint_controls.tolist(),
+            "branch_midpoint_controls": None if midpoint_arr is None else midpoint_arr.tolist(),
+            "branch_endpoint_control_norm_diagnostics": _control_norm_diagnostics(
+                endpoint_controls,
+                float(self.cfg.amax),
+            ),
+            "branch_midpoint_control_norm_diagnostics": (
+                None if midpoint_arr is None else _control_norm_diagnostics(midpoint_arr, float(self.cfg.amax))
+            ),
+        }
+        return payload, branch_path
+
+    def finalize(self, result: dict) -> dict[str, object]:
+        if not bool(self.case.get("persist_branch_controls", False)):
+            return _empty_branch_sidecar_columns()
+        selected_indices = [int(value) for value in result.get("selected_outage_indices", [])]
+        branch_controls = [np.asarray(value, dtype=float) for value in result.get("selected_branch_controls", [])]
+        branch_midpoint_controls_raw = list(result.get("selected_branch_midpoint_controls", []))
+        if not selected_indices or not branch_controls:
+            return _empty_branch_sidecar_columns()
+        if len(selected_indices) != len(branch_controls):
+            raise ValueError(
+                f"{self.case_id} selected_outage_indices count {len(selected_indices)} "
+                f"does not match selected_branch_controls count {len(branch_controls)}"
+            )
+        self.branch_entries = []
+        for branch_order, (mask_index, endpoint_controls) in enumerate(zip(selected_indices, branch_controls)):
+            midpoint_controls = None
+            if branch_order < len(branch_midpoint_controls_raw):
+                raw_midpoint = branch_midpoint_controls_raw[branch_order]
+                if raw_midpoint is not None:
+                    midpoint_controls = np.asarray(raw_midpoint, dtype=float)
+            payload, branch_path = self._branch_payload(
+                result=result,
+                branch_order=int(branch_order),
+                mask_index=int(mask_index),
+                endpoint_controls=endpoint_controls,
+                midpoint_controls=midpoint_controls,
+            )
+            branch_sha = _write_deterministic_json(branch_path, payload)
+            self.branch_entries.append(
+                {
+                    "branch_order": int(branch_order),
+                    "mask_index": int(mask_index),
+                    "outage_mask": payload["outage_mask"],
+                    "recovery_start": int(payload["recovery_start"]),
+                    "recovery_segments": int(payload["recovery_segments"]),
+                    "recorded_branch_terminal_error": float(payload["recorded_branch_terminal_error"]),
+                    "branch_control_hash": str(payload["branch_control_hash"]),
+                    "branch_endpoint_control_hash": str(payload["branch_endpoint_control_hash"]),
+                    "branch_midpoint_control_present": bool(payload["branch_midpoint_control_present"]),
+                    "branch_midpoint_control_hash": str(payload["branch_midpoint_control_hash"]),
+                    "path": _artifact_path(branch_path),
+                    "sha256": branch_sha,
+                }
+            )
+
+        nominal_path = self._nominal_sidecar_path()
+        expected_branch_count = len(selected_indices)
+        replay_ready = bool(len(self.branch_entries) == expected_branch_count)
+        manifest = {
+            "schema_version": 1,
+            "sidecar_type": "hs_direct_collocation_branch_control_manifest",
+            **self._common_metadata(),
+            "nominal_control_path": _artifact_path(nominal_path),
+            "nominal_control_sha256": _sha256(nominal_path),
+            "nominal_control_sidecar_hash": str(self.nominal_sidecar.get("sidecar_hash", "")),
+            "nominal_endpoint_control_hash": str(self.nominal_sidecar.get("endpoint_control_hash", "")),
+            "nominal_midpoint_control_present": bool(self.nominal_sidecar.get("midpoint_control_present", False)),
+            "nominal_midpoint_control_hash": str(self.nominal_sidecar.get("midpoint_control_hash", "")),
+            "nominal_error": float(result.get("nominal_error", float("nan"))),
+            "selected_worst_error": float(result.get("selected_worst_error", float("nan"))),
+            "all_mask_worst_error": float(result.get("all_mask_worst_error", float("nan"))),
+            "meets_thresholds": bool(self.row.get("meets_thresholds", False)),
+            "optimizer_success": bool(result.get("optimizer_success", False)),
+            "direct_collocation_success": bool(result.get("success", False)),
+            "cost": float(result.get("cost", float("nan"))),
+            "optimality": float(result.get("optimality", float("nan"))),
+            "nfev": int(result.get("nfev", 0)),
+            "runtime_seconds": float(result.get("runtime_seconds", 0.0)),
+            "expected_branch_count": expected_branch_count,
+            "branch_count": int(len(self.branch_entries)),
+            "branch_control_sidecar_count": int(len(self.branch_entries)),
+            "branch_control_replay_ready": replay_ready,
+            "selected_outage_count": expected_branch_count,
+            "selected_outage_indices": selected_indices,
+            "selected_outage_errors": [float(value) for value in result.get("selected_outage_errors", [])],
+            "all_outage_errors": [float(value) for value in result.get("all_outage_errors", [])],
+            "branch_control_sidecars": self.branch_entries,
+            "branch_control_guess_source": self.case.get("branch_control_guess_from_case_id") or "",
+            "resume_semantics": (
+                "HS branch sidecars are not mandatory for historical rows. They are written only for "
+                "cases with persist_branch_controls=true and can be replayed without optimizer reruns."
+            ),
+        }
+        manifest_sha = _write_deterministic_json(self.manifest_path, manifest)
+        return {
+            "branch_control_manifest_path": _artifact_path(self.manifest_path),
+            "branch_control_manifest_hash": manifest_sha,
+            "branch_control_sidecar_count": int(len(self.branch_entries)),
+            "branch_control_replay_ready": replay_ready,
+        }
+
+
+def _load_branch_manifest_info_from_row(
+    *,
+    row: dict,
+    case: dict,
+    expected_settings_fingerprint: str,
+    require_ready: bool,
+) -> tuple[dict[str, object] | None, str | None]:
+    ready = _as_bool(row.get("branch_control_replay_ready"))
+    path_value = row.get("branch_control_manifest_path")
+    hash_value = row.get("branch_control_manifest_hash")
+    if not ready or _is_missing(path_value) or not str(path_value).strip():
+        if require_ready:
+            return None, "branch-control manifest missing or not replay-ready"
+        return None, None
+    try:
+        path = _resolve_artifact_path(path_value)
+        if not path.is_file():
+            return None, f"branch-control manifest not found: {path}"
+        actual_hash = _sha256(path)
+        if not _is_missing(hash_value) and str(hash_value).strip() and str(hash_value).strip() != actual_hash:
+            return None, "branch-control manifest hash mismatched"
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+        if str(manifest.get("case_id", "")) != str(case["case_id"]):
+            return None, "branch-control manifest case_id mismatched"
+        if str(manifest.get("settings_fingerprint", "")) != str(expected_settings_fingerprint):
+            return None, "branch-control manifest settings_fingerprint mismatched"
+        if not bool(manifest.get("branch_control_replay_ready", False)):
+            return None, "branch-control manifest is not replay-ready"
+    except (OSError, json.JSONDecodeError, TypeError, ValueError) as exc:
+        return None, f"branch-control manifest could not be loaded: {exc}"
+    return {
+        "branch_control_manifest_path": path,
+        "branch_control_manifest_hash": actual_hash,
+        "branch_control_sidecar_count": int(manifest.get("branch_control_sidecar_count", 0)),
+        "branch_control_replay_ready": True,
+        "branch_control_manifest": manifest,
+    }, None
+
+
+def load_branch_control_guesses(branch_info: dict[str, object]) -> tuple[list[np.ndarray], list[np.ndarray | None]]:
+    manifest = branch_info.get("branch_control_manifest")
+    if not isinstance(manifest, dict):
+        manifest_path = branch_info.get("branch_control_manifest_path")
+        manifest_hash = branch_info.get("branch_control_manifest_hash")
+        path = _resolve_artifact_path(manifest_path)
+        actual_hash = _sha256(path)
+        if manifest_hash and str(manifest_hash) != actual_hash:
+            raise RuntimeError(f"branch-control manifest hash mismatch for {path}")
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+    if not bool(manifest.get("branch_control_replay_ready", False)):
+        raise RuntimeError("branch-control manifest is not replay-ready")
+    endpoint_guesses: list[np.ndarray] = []
+    midpoint_guesses: list[np.ndarray | None] = []
+    for entry in sorted(manifest.get("branch_control_sidecars", []), key=lambda item: int(item["branch_order"])):
+        path = _resolve_artifact_path(entry["path"])
+        actual_hash = _sha256(path)
+        if str(entry.get("sha256", "")) != actual_hash:
+            raise RuntimeError(f"branch-control sidecar hash mismatch for {path}")
+        sidecar = json.loads(path.read_text(encoding="utf-8"))
+        endpoint = np.asarray(sidecar.get("branch_endpoint_controls", sidecar.get("branch_controls")), dtype=float)
+        midpoint_raw = sidecar.get("branch_midpoint_controls")
+        midpoint = None if midpoint_raw is None else np.asarray(midpoint_raw, dtype=float)
+        endpoint_guesses.append(endpoint)
+        midpoint_guesses.append(midpoint)
+    return endpoint_guesses, midpoint_guesses
 
 
 # ---------------------------------------------------------------------------
@@ -696,7 +1153,8 @@ def _run_case(
     source_states: Path,
     case: dict,
     source_info: dict | None,
-) -> tuple[dict, np.ndarray, np.ndarray | None]:
+    branch_guess_info: dict[str, object] | None = None,
+) -> tuple[dict, np.ndarray, np.ndarray | None, dict[str, object]]:
     case_config = _case_config(base_config, case)
     states = load_configured_states(Path.cwd(), case_config, source_states)
     cfg = make_objective_config(case_config, states.mu)
@@ -719,12 +1177,19 @@ def _run_case(
         "source_midpoint_control_present": bool(
             source_info is not None and source_info.get("midpoint_controls") is not None
         ),
+        "branch_control_guess_enabled": branch_guess_info is not None,
+        "branch_control_guess_source_case_id": case.get("branch_control_guess_from_case_id"),
+        "branch_control_guess_manifest_hash": (
+            None if branch_guess_info is None else str(branch_guess_info.get("branch_control_manifest_hash", ""))
+        ),
         "continuous_backend_baseline": True,
         "collocation_method": collocation_method,
     }
 
     nominal_guess: np.ndarray | None = None
     nominal_midpoint_guess: np.ndarray | None = None
+    branch_control_guesses: list[np.ndarray] | None = None
+    branch_midpoint_control_guesses: list[np.ndarray | None] | None = None
     if source_info is not None:
         nominal_guess = np.asarray(source_info["controls"], dtype=float)
         if nominal_guess.shape != (cfg.n_segments, 3):
@@ -740,6 +1205,14 @@ def _run_case(
                     f"does not match {(cfg.n_segments, 3)}"
                 )
 
+    if branch_guess_info is not None:
+        branch_control_guesses, branch_midpoint_control_guesses = load_branch_control_guesses(branch_guess_info)
+        if len(branch_control_guesses) != int(case["selected_outages"]):
+            raise ValueError(
+                f"{case['case_id']} loaded {len(branch_control_guesses)} branch-control guesses, "
+                f"expected selected_outages={int(case['selected_outages'])}"
+            )
+
     backend_kwargs = {
         "state0": states.initial,
         "target": states.target,
@@ -751,11 +1224,13 @@ def _run_case(
         "min_recovery_segments": int(case["min_recovery_segments"]),
         "collocation_config": direct_cfg,
         "nominal_control_guess": nominal_guess,
-        "selected_branch_control_guesses": None,
+        "selected_branch_control_guesses": branch_control_guesses,
         "warm_start_info": warm_start_info,
     }
     if nominal_midpoint_guess is not None:
         backend_kwargs["nominal_midpoint_control_guess"] = nominal_midpoint_guess
+    if branch_midpoint_control_guesses is not None and any(value is not None for value in branch_midpoint_control_guesses):
+        backend_kwargs["selected_branch_midpoint_control_guesses"] = branch_midpoint_control_guesses
     result = run_direct_collocation_baseline(**backend_kwargs)
     result["target_generation"] = str(
         (getattr(states, "target_metadata", {}) or {}).get("target_state_generation", TARGET_GENERATION)
@@ -765,7 +1240,13 @@ def _run_case(
     nominal_midpoint_controls = (
         None if raw_midpoint_controls is None else np.asarray(raw_midpoint_controls, dtype=float)
     )
-    return result, nominal_controls, nominal_midpoint_controls
+    context = {
+        "case_config": case_config,
+        "states": states,
+        "cfg": cfg,
+        "masks": masks,
+    }
+    return result, nominal_controls, nominal_midpoint_controls, context
 
 
 # ---------------------------------------------------------------------------
@@ -826,12 +1307,37 @@ def _compatible_existing_rows(
             source_fingerprint = str(source_info["settings_fingerprint"])
             source_control_hash = str(source_info["control_hash"])
 
+        branch_source = _branch_control_guess_source_case(cases_by_id, case)
+        source_branch_manifest_hash: str | None = None
+        if branch_source is not None:
+            branch_source_info = controls_by_case_id.get(str(branch_source["case_id"]))
+            if branch_source_info is None:
+                rejected.append(
+                    {
+                        "case_id": case_id,
+                        "reason": "branch-control guess source controls are unavailable or stale",
+                        "source_case_id": str(branch_source["case_id"]),
+                    }
+                )
+                continue
+            if not _as_bool(branch_source_info.get("branch_control_replay_ready", False)):
+                rejected.append(
+                    {
+                        "case_id": case_id,
+                        "reason": "branch-control guess source manifest is unavailable or not replay-ready",
+                        "source_case_id": str(branch_source["case_id"]),
+                    }
+                )
+                continue
+            source_branch_manifest_hash = str(branch_source_info.get("branch_control_manifest_hash", ""))
+
         expected_fp = compute_settings_fingerprint(
             base_config,
             source_states,
             case,
             source_settings_fingerprint=source_fingerprint,
             source_control_hash=source_control_hash,
+            source_branch_control_manifest_hash=source_branch_manifest_hash,
         )
         found_fp = row.get("settings_fingerprint")
         if _is_missing(found_fp) or str(found_fp) != expected_fp:
@@ -889,6 +1395,22 @@ def _compatible_existing_rows(
             )
             continue
 
+        branch_manifest_info, branch_manifest_reason = _load_branch_manifest_info_from_row(
+            row=row,
+            case=case,
+            expected_settings_fingerprint=expected_fp,
+            require_ready=bool(case.get("persist_branch_controls", False)),
+        )
+        if branch_manifest_reason is not None:
+            rejected.append(
+                {
+                    "case_id": case_id,
+                    "reason": branch_manifest_reason,
+                    "expected_settings_fingerprint": expected_fp,
+                }
+            )
+            continue
+
         normalized = {column: row.get(column) for column in HS_CONTINUATION_COLUMNS}
         normalized["case_order"] = int(case["case_order"])
         normalized["nominal_control_path"] = control_path.as_posix()
@@ -897,8 +1419,17 @@ def _compatible_existing_rows(
         normalized["nominal_endpoint_control_hash"] = loaded.endpoint_control_hash
         normalized["nominal_midpoint_control_present"] = bool(loaded.midpoint_control_present)
         normalized["nominal_midpoint_control_hash"] = loaded.midpoint_control_hash
+        if branch_manifest_info is not None:
+            normalized["branch_control_manifest_path"] = _artifact_path(
+                branch_manifest_info["branch_control_manifest_path"]  # type: ignore[arg-type]
+            )
+            normalized["branch_control_manifest_hash"] = str(branch_manifest_info["branch_control_manifest_hash"])
+            normalized["branch_control_sidecar_count"] = int(branch_manifest_info["branch_control_sidecar_count"])
+            normalized["branch_control_replay_ready"] = True
+        else:
+            normalized.update(_empty_branch_sidecar_columns())
         kept_rows.append(normalized)
-        controls_by_case_id[case_id] = {
+        case_info = {
             "controls": controls,
             "midpoint_controls": loaded.midpoint_controls,
             "control_hash": control_hash,
@@ -909,6 +1440,9 @@ def _compatible_existing_rows(
             "settings_fingerprint": expected_fp,
             "row": normalized,
         }
+        if branch_manifest_info is not None:
+            case_info.update(branch_manifest_info)
+        controls_by_case_id[case_id] = case_info
         seen_case_ids.add(case_id)
 
     existing_case_ids = set(str(r.get("case_id", "")) for r in df.to_dict(orient="records"))
@@ -1208,6 +1742,8 @@ def run(args) -> pd.DataFrame:
         source_info: dict | None = None
         source_settings_fingerprint: str | None = None
         source_control_hash: str | None = None
+        branch_guess_info: dict[str, object] | None = None
+        source_branch_manifest_hash: str | None = None
         source_case = _source_case(cases_by_id, case)
         if source_case is not None:
             run_or_skip(source_case)
@@ -1228,12 +1764,31 @@ def run(args) -> pd.DataFrame:
             source_control_hash = str(source_info["control_hash"])
             case["warm_start_from_phase_time"] = float(source_case["phase_time"])
 
+        branch_guess_source_case = _branch_control_guess_source_case(cases_by_id, case)
+        if branch_guess_source_case is not None:
+            run_or_skip(branch_guess_source_case)
+            branch_guess_info = controls_by_case_id.get(str(branch_guess_source_case["case_id"]))
+            if branch_guess_info is None or not _as_bool(branch_guess_info.get("branch_control_replay_ready", False)):
+                skipped_cases.append(
+                    {
+                        "case_id": case_id,
+                        "case_group": str(case["case_group"]),
+                        "phase_time": float(case["phase_time"]),
+                        "reason": "branch-control guess source manifest is unavailable",
+                        "source_case_id": str(branch_guess_source_case["case_id"]),
+                    }
+                )
+                active_stack.remove(case_id)
+                return
+            source_branch_manifest_hash = str(branch_guess_info.get("branch_control_manifest_hash", ""))
+
         settings_fp = compute_settings_fingerprint(
             config,
             args.source_states,
             case,
             source_settings_fingerprint=source_settings_fingerprint,
             source_control_hash=source_control_hash,
+            source_branch_control_manifest_hash=source_branch_manifest_hash,
         )
         if settings_fp in completed_fingerprints and case_id in controls_by_case_id:
             active_stack.remove(case_id)
@@ -1254,11 +1809,12 @@ def run(args) -> pd.DataFrame:
             active_stack.remove(case_id)
             return
 
-        result, nominal_controls, nominal_midpoint_controls = _run_case(
+        result, nominal_controls, nominal_midpoint_controls, case_context = _run_case(
             base_config=config,
             source_states=args.source_states,
             case=case,
             source_info=source_info,
+            branch_guess_info=branch_guess_info,
         )
         row = _row_from_result(
             base_config=config,
@@ -1286,6 +1842,19 @@ def run(args) -> pd.DataFrame:
         row["nominal_midpoint_warm_start_loaded"] = bool(
             (result.get("warm_start_info") or {}).get("source_midpoint_control_present", False)
         )
+        branch_sidecars = BranchControlSidecarStore(
+            results_dir=results_dir,
+            case=case,
+            case_config=case_context["case_config"],  # type: ignore[arg-type]
+            states=case_context["states"],
+            cfg=case_context["cfg"],
+            masks=case_context["masks"],  # type: ignore[arg-type]
+            row=row,
+            settings_fingerprint=settings_fp,
+            nominal_sidecar=sidecar,
+            source_states=args.source_states,
+        ).finalize(result)
+        row.update(branch_sidecars)
         controls_by_case_id[case_id] = {
             "controls": sidecar["controls"],
             "midpoint_controls": sidecar["midpoint_controls"],
@@ -1296,6 +1865,7 @@ def run(args) -> pd.DataFrame:
             "path": sidecar["path"],
             "settings_fingerprint": settings_fp,
             "row": row,
+            **branch_sidecars,
         }
         if case_id in set(str(v) for v in df["case_id"].dropna().tolist()):
             df = df[df["case_id"].astype(str) != case_id]
