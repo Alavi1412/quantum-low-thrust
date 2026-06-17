@@ -42,7 +42,9 @@ py -3.11 -m pytest tests/test_claim_evidence_ledger.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_bicircular_solar_tidal_stress.py -q -p no:cacheprovider
+py -3.11 -m pytest tests/test_horizons_ephemeris_force_model_contrast.py -q -p no:cacheprovider
 py -3.11 scripts\run_threshold_sensitivity.py
+py -3.11 scripts\run_horizons_ephemeris_force_model_contrast.py
 py -3.11 scripts\run_bicircular_solar_tidal_stress.py
 py -3.11 scripts\run_claim_evidence_ledger.py
 py -3.11 scripts\run_evidence_synthesis.py
@@ -62,6 +64,8 @@ the pinned dependencies. The long experiment commands below are expensive; use
 the recorded artifacts unless intentionally regenerating evidence. The primary
 review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/claim_evidence_ledger/*`,
+`data/results/horizons_ephemeris_force_model_contrast/*`,
+`data/cache/horizons/*`,
 `data/results/bicircular_solar_tidal_stress/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
@@ -176,9 +180,10 @@ It reads recorded artifacts only and does not rerun trajectory optimization.
 The ledger separates selected-branch evidence, all-mask diagnostics,
 all-configured-mask evidence, and the completed focused accepted-control replay
 row. The current snapshot includes the real replay CSV, metadata, focused
-source recovery CSV, and bicircular solar-tidal stress CSV/metadata, so the
-ledger has 10 claim rows. The solar-tidal row is a negative stress-probe row,
-not all-configured robustness evidence. The tail-coast audit
+source recovery CSV, bicircular solar-tidal stress CSV/metadata, and Horizons
+ephemeris force-model contrast CSV/metadata, so the ledger has 11 claim rows.
+The solar-tidal row is a negative stress-probe row, and the Horizons row is a
+force-model contrast row, not all-configured robustness evidence. The tail-coast audit
 confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
@@ -210,6 +215,30 @@ rows. The source-substep baselines reproduce recorded nominal errors to within
 `1e-12`; refined substeps and direct +/-1% acceleration scaling are stress
 diagnostics only. It does not run least-squares optimization, replay branch
 recovery controls, or claim high-fidelity validation.
+
+The Horizons ephemeris force-model contrast postprocessor writes
+`data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,
+`data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_metadata.json`,
+and `tables/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_table.tex`:
+
+```powershell
+py -3.11 scripts\run_horizons_ephemeris_force_model_contrast.py
+```
+
+The default path is offline and reads
+`data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json`, which
+stores exact JPL Horizons API URLs, query parameters, raw responses, and parsed
+Moon/Sun vectors for the 15 hard-catalog segment nodes. The current contrast
+records Earth-Moon distance ratio range `0.931638--1.04763`, angular-rate ratio
+range `0.903116--1.1483`, Sun distance range `382.686--382.896` fixed CR3BP LU
+(`384400 km/LU`), and maximum nominal-node solar-tidal acceleration delta
+`2.19803e-3` against the aligned bicircular model. The Earth-Moon distance ratio
+is a diagnostic ratio to the window mean; Sun vectors and tidal accelerations
+use the fixed reference distance recorded in the cache metadata. This is a
+force-model contrast only; it is not SPICE validation, high-fidelity propagation,
+accepted-control retuning, or a threshold-feasibility result. Use
+`--refresh-cache` only when intentionally
+regenerating the cached Horizons data.
 
 The focused hard-catalog tail-coast accepted branch-control replay package is
 included in the current artifact snapshot. Regenerating the recovery sidecars is

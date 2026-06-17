@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this benchmark package, cite the archived release DOI once available; until then cite the repository snapshot and paper title."
+title: "A Reproducible Binary-Schedule Benchmark for Robust Low-Thrust Cislunar Initialization Under Missed-Thrust Events"
+type: software
+authors:
+  - name: "Anonymous Author"
+version: "0.1.0"
+abstract: "Reproducible normalized Earth-Moon CR3BP missed-thrust low-thrust initialization benchmark with negative QAOA evidence, continuous-backend diagnostics, accepted-control replay, cached Horizons force-model contrast, and solar-tidal stress artifacts."
+keywords:
+  - astrodynamics
+  - low-thrust trajectory optimization
+  - cislunar dynamics
+  - missed thrust
+  - CR3BP
+  - reproducibility
+  - QUBO
+  - QAOA

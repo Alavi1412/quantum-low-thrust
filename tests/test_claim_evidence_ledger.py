@@ -26,6 +26,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
     ledger = module.build_claim_evidence_ledger()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
+    has_horizons = module.horizons_ephemeris_force_model_contrast_artifacts_available()
 
     expected_claims = [
         "phase_shift_main_method_30seed_selected_branch",
@@ -43,6 +44,11 @@ def test_claim_evidence_ledger_rows_and_semantics():
         expected_claims.insert(
             8 if has_replay else 7,
             "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe",
+        )
+    if has_horizons:
+        expected_claims.insert(
+            7 + int(has_replay) + int(has_bicircular),
+            "catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast",
         )
     assert len(ledger) == len(expected_claims)
     assert ledger["claim_id"].tolist() == expected_claims
@@ -125,6 +131,19 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert "not SPICE ephemeris validation" in stress["explicit_boundary"]
     else:
         assert "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe" not in ledger["claim_id"].tolist()
+
+    if has_horizons:
+        horizons = row("catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast")
+        assert horizons["all_configured_mask_evidence"] == "False"
+        assert horizons["target_mode"] == "catalog_dro_phase"
+        assert "15 hard-catalog transfer nodes" in horizons["mask_scope"]
+        assert "max nominal tidal-acceleration delta" in horizons["nominal_error"]
+        assert horizons["passes_configured_thresholds"] == "False"
+        assert "Cached Horizons geometry quantifies" in horizons["primary_interpretation"]
+        assert "not SPICE validation" in horizons["explicit_boundary"]
+        assert "accepted-control high-fidelity replay" in horizons["explicit_boundary"]
+    else:
+        assert "catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast" not in ledger["claim_id"].tolist()
 
 
 def test_tail_coast_threshold_audit_statuses():
@@ -214,8 +233,9 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     second = module.write_artifacts(**kwargs)
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
-    expected_rows = 8 + int(has_replay) + int(has_bicircular)
-    expected_inputs = 10 + (3 if has_replay else 0) + (2 if has_bicircular else 0)
+    has_horizons = module.horizons_ephemeris_force_model_contrast_artifacts_available()
+    expected_rows = 8 + int(has_replay) + int(has_bicircular) + int(has_horizons)
+    expected_inputs = 10 + (3 if has_replay else 0) + (2 if has_bicircular else 0) + (2 if has_horizons else 0)
 
     assert second["ledger_path"].read_bytes() == first_bytes["ledger"]
     assert second["metadata_path"].read_bytes() == first_bytes["metadata"]
@@ -231,6 +251,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["high_fidelity_claim"] is False
     assert metadata["branch_control_replay"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_probe"] is has_bicircular
+    assert metadata["horizons_ephemeris_force_model_contrast"] is has_horizons
     assert metadata["fuel_optimality_claim"] is False
     assert metadata["quantum_advantage_claim"] is False
     assert metadata["row_count"] == expected_rows
@@ -239,6 +260,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert "no trajectory optimization" in metadata["source_mode"]
     assert metadata["branch_control_replay_artifacts_available"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_artifacts_available"] is has_bicircular
+    assert metadata["horizons_ephemeris_force_model_contrast_artifacts_available"] is has_horizons
     assert len(metadata["input_artifacts"]) == expected_inputs
 
     ledger = pd.read_csv(second["ledger_path"])
@@ -258,4 +280,8 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         assert "catalog\\_dro\\_tail\\_coast\\_bicircular\\_solar\\_tidal\\_stress\\_probe" in table
     else:
         assert "catalog\\_dro\\_tail\\_coast\\_bicircular\\_solar\\_tidal\\_stress\\_probe" not in table
+    if has_horizons:
+        assert "catalog\\_dro\\_tail\\_coast\\_horizons\\_ephemeris\\_force\\_model\\_contrast" in table
+    else:
+        assert "catalog\\_dro\\_tail\\_coast\\_horizons\\_ephemeris\\_force\\_model\\_contrast" not in table
     assert "No sampled-method or QAOA superiority" in table

@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-16T23:34:51Z",
+  "generated_utc": "2026-06-17T00:48:06Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "8b90b66211935029369551de8b3098fe6180373a",
+  "git_head_at_generation": "300b7df0b826c6f10e36e9f2f7ecfa0340261db6",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tests/test_claim_evidence_ledger.py\n?? ARCHIVAL_RELEASE.md\n?? data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv\n?? data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json\n?? scripts/run_bicircular_solar_tidal_stress.py\n?? src/qlt/bicircular.py\n?? tables/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_table.tex\n?? tests/test_bicircular_solar_tidal_stress.py",
+  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/references.bib\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tests/test_claim_evidence_ledger.py\n?? CITATION.cff\n?? data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json\n?? data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv\n?? data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_metadata.json\n?? scripts/run_horizons_ephemeris_force_model_contrast.py\n?? src/qlt/ephemeris_contrast.py\n?? tables/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_table.tex\n?? tests/test_horizons_ephemeris_force_model_contrast.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 600,
+  "file_count": 608,
   "files": [
     {
       "path": ".gitignore",
@@ -40,18 +40,23 @@
     },
     {
       "path": "ARCHIVAL_RELEASE.md",
-      "sha256": "63bdb9629ad0b84d6832a40efbfbda2cdfd2b44ee1dd48095d124d3aef3a1c23",
-      "bytes": 1345
+      "sha256": "f17c49053ab73d47d37a00fd73e8af47c1d6df125f4a105260613d4495a2cdf6",
+      "bytes": 2313
+    },
+    {
+      "path": "CITATION.cff",
+      "sha256": "cbc7eb2607a28c4cb448a3ec436b2e1673384a09430e66806a5610ddeee76e28",
+      "bytes": 777
     },
     {
       "path": "README.md",
-      "sha256": "bd90edcf1af0c4f05375f9800463a79a66386615f5a5e403d611e7b9c9217adf",
-      "bytes": 23729
+      "sha256": "b1799ae8abd94b93e128bacca601b0ef16ef39f8fd818fb40fed05f18a696cd0",
+      "bytes": 25509
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "37390fd3cbff2f02f06c5cff97f2d2ac73412d5263e46ca53090df7c0d331308",
-      "bytes": 31809
+      "sha256": "4cae61a7ab2d779c98fee9e64b05ccc220741b95a9434440cda6c47475bae3a6",
+      "bytes": 34245
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -189,6 +194,11 @@
       "bytes": 1487
     },
     {
+      "path": "data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json",
+      "sha256": "9b7f45113d6eb5334cfcb8a099ffebcc110bbf73e93f633d567cfc312a081ed3",
+      "bytes": 40936
+    },
+    {
       "path": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv",
       "sha256": "1342c74d412e3e2e0b85a8159bb7683c4f45fe1836831f66bfd62e6af3192c41",
       "bytes": 87121
@@ -265,13 +275,13 @@
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
-      "sha256": "aea19232e7f68757cb4ac85f2c95bc3d4c58285c4579c4305701ab85ec38a05e",
-      "bytes": 12145
+      "sha256": "5649348013b6f96be234486beb161ecf6a59b471ff4a50db963142d33ab164c1",
+      "bytes": 13967
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
-      "sha256": "e9aea6f43291bf17596276a19aee37a848c499bb82856dfade76968ece192fd4",
-      "bytes": 7679
+      "sha256": "1357086a3a6c72b9a3f0e50c12996757914711d6f3a4b6b937f4756841cad706",
+      "bytes": 8636
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
@@ -622,6 +632,16 @@
       "path": "data/results/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_metadata.json",
       "sha256": "361aa0461680739da55305709cecade2c19fd6bd3f2b8521e31ab3c4c24c5a45",
       "bytes": 26133
+    },
+    {
+      "path": "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv",
+      "sha256": "d408199f59d69864eb33d640cf28c01834be9a0688ec08669ae5b9ebfc7a3ff6",
+      "bytes": 9241
+    },
+    {
+      "path": "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_metadata.json",
+      "sha256": "6324cf0b1f98cb1f57082862108c4b30354eb041dcc78d61dcecac4f555aeafd",
+      "bytes": 10158
     },
     {
       "path": "data/results/independent_hs_continuation_baseline/controls/ihs_catalog_dro_tf4_amax1_selected1_nominal_controls.json",
@@ -2475,28 +2495,28 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "5073cffb317819dd7007d9c25136b8ef1c500fcafaa29a09814cbec69ab13860",
-      "bytes": 427671
+      "sha256": "8aeaa3f2d1aa46ef3e5db67338967c0ffbc463ecad1d09093a05af9131312c0b",
+      "bytes": 434056
     },
     {
       "path": "paper/main.tex",
-      "sha256": "051a367fdb8648f88822f07e0cc371cfdeb0a1c80a949fac549431ed1c8c5825",
-      "bytes": 59992
+      "sha256": "3702f3c9260c73257fe765c5b8d42692d03896602f000bf0fec926154d1b5095",
+      "bytes": 63744
     },
     {
       "path": "paper/references.bib",
-      "sha256": "b344f6e1a58c5030bad4fb186b6e751c58f43fd8eb88a256eb6116792875bff1",
-      "bytes": 8061
+      "sha256": "f5f04db48aa60aa5340cb5401eb92041fb0b828190722951b7f2fcce914ca314",
+      "bytes": 8592
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "ab57d9cb8f7e97ae19bf511a177ccdef6758e5c1b42ee74b03cfdbb3201e8486",
-      "bytes": 482480
+      "sha256": "886859661019f793873d5679f21c6ba2c0270b0c7222c34dd8c38b183a474322",
+      "bytes": 485502
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "848c73b4dc80d1e3494b0365d334557db0ed325631b3d315db499462f9a3087b",
-      "bytes": 29859
+      "sha256": "d11895f330a4dd8979b4eefef2578329f79d11cc6e5e300b51f04c1eb471a6a4",
+      "bytes": 32283
     },
     {
       "path": "requirements-lock.txt",
@@ -2550,8 +2570,8 @@
     },
     {
       "path": "scripts/run_claim_evidence_ledger.py",
-      "sha256": "e8e37b8424a8b66887ee52624322530275b3566a7e755926612fde7adf636301",
-      "bytes": 49491
+      "sha256": "c8efa342c998152f9e3f054a1dd5ae652a8e127142d20dcda200d308bb69f0ce",
+      "bytes": 55727
     },
     {
       "path": "scripts/run_continuation_margin_suite.py",
@@ -2587,6 +2607,11 @@
       "path": "scripts/run_hermite_simpson_continuation.py",
       "sha256": "19df504b799ef477e2b361c8971b3497ef34631c17c124ef2c4d8fc6ccb7e435",
       "bytes": 55341
+    },
+    {
+      "path": "scripts/run_horizons_ephemeris_force_model_contrast.py",
+      "sha256": "f965ba9a9dac3b8a52eaeb4ba701f3bee9b42ae02174108bafe247eee2a3c45d",
+      "bytes": 32252
     },
     {
       "path": "scripts/run_independent_hs_continuation.py",
@@ -2667,6 +2692,11 @@
       "path": "src/qlt/direct_collocation.py",
       "sha256": "91d36ec1958975ee8618efe4a371b9798c3cd1e02cd3a796382e04503f8a5b07",
       "bytes": 41106
+    },
+    {
+      "path": "src/qlt/ephemeris_contrast.py",
+      "sha256": "1bbf456e5f0bc9867be72bd0ece9ffb725539e0a28fca20288d03a8aadd1c2cd",
+      "bytes": 18905
     },
     {
       "path": "src/qlt/experiment.py",
@@ -2755,8 +2785,8 @@
     },
     {
       "path": "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
-      "sha256": "130e7c40878cbd0022b4265b173d24221593592f138657d41ee35dec676f25a1",
-      "bytes": 4569
+      "sha256": "c09bddac290fe8b57ac604328061d89f7e7b4e302d51663451c24dcec0197cd0",
+      "bytes": 5245
     },
     {
       "path": "tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex",
@@ -2832,6 +2862,11 @@
       "path": "tables/hermite_simpson_continuation_baseline/hermite_simpson_continuation_baseline_table.tex",
       "sha256": "015659e173e7c1ef2cc6006c1232ad009a006a88fd54a4c326389b70adc74282",
       "bytes": 1058
+    },
+    {
+      "path": "tables/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_table.tex",
+      "sha256": "d8bc9909097804c9976a347e6989e963bcd1cc0eae8ef548160e5c11e7eb6c16",
+      "bytes": 923
     },
     {
       "path": "tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex",
@@ -2990,8 +3025,8 @@
     },
     {
       "path": "tests/test_claim_evidence_ledger.py",
-      "sha256": "4c4402ec9fed734b3d2a927ca606b7a2d23db1dce05f4b4ea33dad86fac102a2",
-      "bytes": 12882
+      "sha256": "ad116118db777d0be5f410fea118a49fee391019a2cba13b201a6b5bfbfd8e88",
+      "bytes": 14565
     },
     {
       "path": "tests/test_delayed_recovery.py",
@@ -3007,6 +3042,11 @@
       "path": "tests/test_hermite_simpson_continuation.py",
       "sha256": "d0ba3120250d6784e1a31fe241e02bbb57d2117d61f1e814325e171aa06cee40",
       "bytes": 30584
+    },
+    {
+      "path": "tests/test_horizons_ephemeris_force_model_contrast.py",
+      "sha256": "b047ddddcf5de68a75c34800371350c6171b65a712282bf9062d1aa4f1beba72",
+      "bytes": 13021
     },
     {
       "path": "tests/test_independent_hs_direct_collocation.py",

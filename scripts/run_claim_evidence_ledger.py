@@ -90,6 +90,20 @@ BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA = (
     / "bicircular_solar_tidal_stress"
     / "bicircular_solar_tidal_stress_metadata.json"
 )
+HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "horizons_ephemeris_force_model_contrast"
+    / "horizons_ephemeris_force_model_contrast.csv"
+)
+HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "horizons_ephemeris_force_model_contrast"
+    / "horizons_ephemeris_force_model_contrast_metadata.json"
+)
 DELAYED_RECOVERY_CSV = (
     ROOT / "data" / "results" / "hard_catalog_delayed_recovery" / "delayed_locked_recovery.csv"
 )
@@ -112,6 +126,16 @@ def bicircular_solar_tidal_stress_artifacts_available() -> bool:
         for path in (
             BICIRCULAR_SOLAR_TIDAL_STRESS_CSV,
             BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA,
+        )
+    )
+
+
+def horizons_ephemeris_force_model_contrast_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_CSV,
+            HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_METADATA,
         )
     )
 
@@ -732,14 +756,88 @@ def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
     }
 
 
+def _horizons_ephemeris_force_model_contrast_ledger_row() -> dict[str, str]:
+    metadata = _read_json(HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_METADATA)
+    rows = _read_csv_rows(HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_CSV)
+    if int(metadata["row_count"]) != len(rows):
+        raise RuntimeError("Horizons contrast metadata row_count does not match CSV")
+    if bool(metadata["high_fidelity_validation"]):  # type: ignore[index]
+        raise RuntimeError("Horizons contrast metadata must not claim high_fidelity_validation")
+    geometry = metadata["geometry_summary"]  # type: ignore[index]
+    tidal = metadata["solar_tidal_acceleration_summary"]  # type: ignore[index]
+    cache = metadata["cache"]  # type: ignore[index]
+    representative = metadata["representative_states"]  # type: ignore[index]
+    return {
+        "claim_id": "catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast",
+        "evidence_family": "Horizons ephemeris force-model contrast",
+        "target_family": "catalog-DRO",
+        "target_mode": "catalog_dro_phase",
+        "source_case": TAIL_COAST_COMBINED_CASE,
+        "backend_or_method": (
+            "cached JPL Horizons Earth/Moon/Sun geometry compared with simple bicircular assumptions"
+        ),
+        "mask_scope": (
+            f"{metadata['row_count']} hard-catalog transfer nodes; accepted nominal controls and "
+            f"representative branch mask {representative['branch_mask_index']} sampled for acceleration contrast"
+        ),
+        "selected_branch_semantics": (
+            "accepted-control trajectory nodes are sampled under CR3BP only; no branch retuning or Horizons-dynamics replay"
+        ),
+        "all_mask_semantics": (
+            "not an all-mask robustness test; the source accepted-control package remains the mask-scope artifact"
+        ),
+        "all_configured_mask_evidence": "False",
+        "nominal_error": (
+            "not a terminal-error replay; max nominal tidal-acceleration delta="
+            f"{tidal['nominal_tidal_accel_delta_norm_max']}"
+        ),
+        "selected_worst_error": (
+            f"representative branch mask={representative['branch_mask_index']}; "
+            "max branch tidal-acceleration delta="
+            f"{tidal['representative_branch_tidal_accel_delta_norm_max']}"
+        ),
+        "all_mask_worst_error": (
+            "not computed; force-model contrast only and no all-configured-mask feasibility pass"
+        ),
+        "thresholds": (
+            "no trajectory threshold tested; EM distance ratio range="
+            f"{geometry['em_distance_ratio_min']}--{geometry['em_distance_ratio_max']}; "
+            "EM angular-rate ratio range="
+            f"{geometry['em_angular_rate_ratio_min']}--{geometry['em_angular_rate_ratio_max']}; "
+            "Sun distance LU range="
+            f"{geometry['sun_distance_lu_min']}--{geometry['sun_distance_lu_max']}; "
+            f"fixed reference distance={geometry.get('reference_distance_km', 'not recorded')} km/LU"
+        ),
+        "passes_configured_thresholds": "False",
+        "primary_interpretation": (
+            "Cached Horizons geometry quantifies Earth-Moon distance/rate variation and fixed-reference "
+            "Sun distance/phase differences missing from the simple circular model over the hard-catalog transfer nodes."
+        ),
+        "explicit_boundary": (
+            "Ephemeris force-model contrast only; not SPICE validation, high-fidelity flight validation, "
+            "accepted-control high-fidelity replay, production solver parity, fuel optimality, quantum, QUBO, or QAOA evidence."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_CSV)}; "
+            f"{_relative_or_absolute(HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_METADATA)}; "
+            f"{cache['path']}"
+        ),
+    }
+
+
 def build_claim_evidence_ledger(
     include_branch_control_replay: bool | None = None,
     include_bicircular_solar_tidal_stress: bool | None = None,
+    include_horizons_ephemeris_force_model_contrast: bool | None = None,
 ) -> pd.DataFrame:
     if include_branch_control_replay is None:
         include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
     if include_bicircular_solar_tidal_stress is None:
         include_bicircular_solar_tidal_stress = bicircular_solar_tidal_stress_artifacts_available()
+    if include_horizons_ephemeris_force_model_contrast is None:
+        include_horizons_ephemeris_force_model_contrast = (
+            horizons_ephemeris_force_model_contrast_artifacts_available()
+        )
     recorded_rows = _recorded_case_rows()
     rows = [
         _main_method_row(),
@@ -752,6 +850,9 @@ def build_claim_evidence_ledger(
     if include_bicircular_solar_tidal_stress:
         insert_at = 8 if include_branch_control_replay else 7
         rows.insert(insert_at, _bicircular_solar_tidal_stress_ledger_row())
+    if include_horizons_ephemeris_force_model_contrast:
+        insert_at = 7 + int(include_branch_control_replay) + int(include_bicircular_solar_tidal_stress)
+        rows.insert(insert_at, _horizons_ephemeris_force_model_contrast_ledger_row())
     return pd.DataFrame(rows, columns=LEDGER_COLUMNS)
 
 
@@ -964,6 +1065,13 @@ def _input_artifacts() -> list[Path]:
                 BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA,
             ]
         )
+    if horizons_ephemeris_force_model_contrast_artifacts_available():
+        paths.extend(
+            [
+                HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_CSV,
+                HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_METADATA,
+            ]
+        )
     return paths
 
 
@@ -975,9 +1083,11 @@ def write_artifacts(
 ) -> dict[str, object]:
     branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
     bicircular_stress_available = bicircular_solar_tidal_stress_artifacts_available()
+    horizons_contrast_available = horizons_ephemeris_force_model_contrast_artifacts_available()
     ledger = build_claim_evidence_ledger(
         include_branch_control_replay=branch_control_replay_available,
         include_bicircular_solar_tidal_stress=bicircular_stress_available,
+        include_horizons_ephemeris_force_model_contrast=horizons_contrast_available,
     )
     threshold_audit = build_tail_coast_threshold_audit()
     branch_audit = build_tail_coast_branch_audit()
@@ -1008,6 +1118,7 @@ def write_artifacts(
         "high_fidelity_claim": False,
         "branch_control_replay": branch_control_replay_available,
         "bicircular_solar_tidal_stress_probe": bicircular_stress_available,
+        "horizons_ephemeris_force_model_contrast": horizons_contrast_available,
         "fuel_optimality_claim": False,
         "quantum_advantage_claim": False,
         "source_mode": (
@@ -1022,6 +1133,11 @@ def write_artifacts(
                 " A bicircular solar-tidal stress row is included because its real stress-probe CSV and metadata exist."
                 if bicircular_stress_available
                 else " No bicircular solar-tidal stress row is included because that stress package is absent."
+            )
+            + (
+                " A Horizons ephemeris force-model contrast row is included because its real CSV and metadata exist."
+                if horizons_contrast_available
+                else " No Horizons ephemeris force-model contrast row is included because that package is absent."
             )
         ),
         "determinism_note": (
@@ -1042,6 +1158,7 @@ def write_artifacts(
         },
         "branch_control_replay_artifacts_available": branch_control_replay_available,
         "bicircular_solar_tidal_stress_artifacts_available": bicircular_stress_available,
+        "horizons_ephemeris_force_model_contrast_artifacts_available": horizons_contrast_available,
         "tail_coast_threshold_pairs": [
             {
                 "threshold_id": threshold_id,
@@ -1075,6 +1192,10 @@ def write_artifacts(
             (
                 "The bicircular solar-tidal row, when present, is a negative beyond-CR3BP stress replay "
                 "and not high-fidelity validation or production solver parity."
+            ),
+            (
+                "The Horizons ephemeris contrast row, when present, is a cached force-model contrast only "
+                "and not SPICE validation, high-fidelity replay, or a threshold-feasibility result."
             ),
             "The tail-coast positive row is fixed-final-time locked-nominal continuous-backend evidence only.",
             "The QAOA/QUBO rows are simulated initializer evidence and do not support quantum advantage or superiority claims.",

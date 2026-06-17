@@ -1,0 +1,195 @@
+{
+  "accepted_control_high_fidelity_replay": false,
+  "artifacts": {
+    "horizons_ephemeris_force_model_contrast_csv": "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv",
+    "horizons_ephemeris_force_model_contrast_metadata_json": "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_metadata.json",
+    "horizons_ephemeris_force_model_contrast_table_tex": "tables/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_table.tex"
+  },
+  "bicircular_reference_parameters": {
+    "distance_semantics": "constant circular Sun distance in Earth-Moon distance units",
+    "model_scope": "simple bicircular solar third-body tidal stress model; not SPICE ephemeris validation",
+    "mu_semantics": "GM_sun/(GM_earth+GM_moon) nondimensional mass ratio",
+    "rate_semantics": "Sun inertial mean-motion ratio to Earth-Moon mean motion; rotating-frame phase rate is n_sun - 1",
+    "rotating_frame_phase_rate": -0.9252,
+    "sun_distance_lu": 389.17,
+    "sun_inertial_angular_rate_ratio": 0.0748,
+    "sun_mu_ratio": 328900.56
+  },
+  "cache": {
+    "cache_type": "jpl_horizons_geocentric_moon_sun_vectors",
+    "metadata": {
+      "body_queries": {
+        "moon_geocentric": {
+          "CENTER": "500@399",
+          "COMMAND": "301",
+          "description": "Moon geometric vectors relative to Earth center"
+        },
+        "sun_geocentric": {
+          "CENTER": "500@399",
+          "COMMAND": "10",
+          "description": "Sun geometric vectors relative to Earth center"
+        }
+      },
+      "canonical_node_times": [
+        0.0,
+        0.2857142857142857,
+        0.5714285714285714,
+        0.8571428571428571,
+        1.1428571428571428,
+        1.4285714285714284,
+        1.7142857142857142,
+        2.0,
+        2.2857142857142856,
+        2.571428571428571,
+        2.8571428571428568,
+        3.142857142857143,
+        3.4285714285714284,
+        3.714285714285714,
+        4.0
+      ],
+      "canonical_time_unit_seconds": 375190.259,
+      "canonical_transfer_time": 4.0,
+      "ephemeris_note": "Horizons result headers for this cache report DE441 sources for the Moon and Sun vectors.",
+      "node_jd_tdb": [
+        2461041.5,
+        2461042.7407085286,
+        2461043.981417057,
+        2461045.222125585,
+        2461046.4628341137,
+        2461047.7035426423,
+        2461048.944251171,
+        2461050.184959699,
+        2461051.4256682275,
+        2461052.666376756,
+        2461053.9070852846,
+        2461055.1477938127,
+        2461056.388502341,
+        2461057.62921087,
+        2461058.8699193983
+      ],
+      "query_docs": {
+        "de440_de441": "https://ssd.jpl.nasa.gov/doc/de440_de441.html",
+        "horizons_api": "https://ssd-api.jpl.nasa.gov/doc/horizons.html",
+        "horizons_manual": "https://ssd.jpl.nasa.gov/horizons/manual.html"
+      },
+      "query_urls": {
+        "moon_geocentric": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=301&CENTER=500%40399&EPHEM_TYPE=VECTORS&TLIST=2461041.500000000%0A2461042.740708529%0A2461043.981417057%0A2461045.222125585%0A2461046.462834114%0A2461047.703542642%0A2461048.944251171%0A2461050.184959699%0A2461051.425668227%0A2461052.666376756%0A2461053.907085285%0A2461055.147793813%0A2461056.388502341%0A2461057.629210870%0A2461058.869919398&VEC_TABLE=3&OBJ_DATA=NO&CSV_FORMAT=YES",
+        "sun_geocentric": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=10&CENTER=500%40399&EPHEM_TYPE=VECTORS&TLIST=2461041.500000000%0A2461042.740708529%0A2461043.981417057%0A2461045.222125585%0A2461046.462834114%0A2461047.703542642%0A2461048.944251171%0A2461050.184959699%0A2461051.425668227%0A2461052.666376756%0A2461053.907085285%0A2461055.147793813%0A2461056.388502341%0A2461057.629210870%0A2461058.869919398&VEC_TABLE=3&OBJ_DATA=NO&CSV_FORMAT=YES"
+      },
+      "reference_distance_km": 384400.0,
+      "representative_epoch_note": "Fixed representative epoch for force-model contrast only; it is not a mission epoch.",
+      "segments": 14,
+      "start_calendar_tdb": "A.D. 2026-Jan-01 00:00:00.0000",
+      "start_jd_tdb": 2461041.5
+    },
+    "path": "data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json",
+    "sha256": "9b7f45113d6eb5334cfcb8a099ffebcc110bbf73e93f633d567cfc312a081ed3"
+  },
+  "case": {
+    "segments": 14,
+    "substeps_per_segment": 7,
+    "suite_case_id": "tail_coast_all_one_two_segment_t5_portfolio",
+    "target_mode": "catalog_dro_phase",
+    "target_state_max_abs_delta_from_manifest": 0.0,
+    "transfer_time": 4.0
+  },
+  "command": "scripts\\run_horizons_ephemeris_force_model_contrast.py",
+  "force_model_contrast_only": true,
+  "fuel_optimality_claim": false,
+  "geometry_summary": {
+    "em_angular_rate_delta_percent_max_abs": 14.829723786766236,
+    "em_angular_rate_ratio_max": 1.1482972378676624,
+    "em_angular_rate_ratio_min": 0.9031161859410848,
+    "em_distance_delta_percent_max_abs": 6.83621942227054,
+    "em_distance_ratio_max": 1.0476250521405368,
+    "em_distance_ratio_min": 0.9316378057772946,
+    "em_distance_ratio_to_reference_max": 1.0544163505390691,
+    "em_distance_ratio_to_reference_min": 0.9376772092121971,
+    "mean_em_angular_rate_rad_s": 2.6393029788198083e-06,
+    "mean_em_distance_km": 386891.89831711433,
+    "mean_em_distance_to_reference_ratio": 1.0064825658613796,
+    "node_count": 15,
+    "reference_distance_km": 384400.0,
+    "sun_distance_delta_percent_vs_bicircular_max_abs": 1.666233054297117,
+    "sun_distance_lu_max": 382.8962103908036,
+    "sun_distance_lu_min": 382.6855208225919,
+    "sun_phase_delta_degrees_wrapped_max_abs": 7.880482983058452
+  },
+  "high_fidelity_validation": false,
+  "input_artifacts": [
+    {
+      "bytes": 3001,
+      "path": "configs/hard_catalog_tail_coast_branch_control_replay.yaml",
+      "sha256": "c06aa56991f6b9fbbe9e121843a7b804832595954b799552a0eb7ad0f07495d1"
+    },
+    {
+      "bytes": 1203,
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf"
+    },
+    {
+      "bytes": 177885,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_recovery.csv",
+      "sha256": "9601d729da24ecd7c74fa467f85a80a20278e9923082371426102c92cac1c50f"
+    },
+    {
+      "bytes": 40936,
+      "path": "data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json",
+      "sha256": "9b7f45113d6eb5334cfcb8a099ffebcc110bbf73e93f633d567cfc312a081ed3"
+    },
+    {
+      "bytes": 21888,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_manifest.json",
+      "sha256": "7118ebb5255590e6b66b7f93513e0c1a73d4de18821eee9303af04409902922f"
+    },
+    {
+      "bytes": 3404,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_nominal_controls.json",
+      "sha256": "a837354a64fef991cbe32cc2ed8311f0e72f59d73250655e2bf89144da0d5ca4"
+    },
+    {
+      "bytes": 9758,
+      "path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_022_mask_022_controls.json",
+      "sha256": "85cd6ef61d77c183752b6de4f698049c8c7b61f6fe5a27c52c4bfff9df18162d"
+    }
+  ],
+  "interpretation_limits": [
+    "This package is an offline force-model contrast between simple bicircular assumptions and cached Horizons-derived geometry.",
+    "It is not SPICE validation, high-fidelity flight validation, accepted-control high-fidelity replay, production solver parity, or fuel optimality evidence.",
+    "Accepted controls are sampled only to evaluate representative solar-tidal acceleration differences at CR3BP trajectory nodes; controls are not retuned or repropagated under Horizons dynamics.",
+    "The fixed 2026-Jan-01 TDB cache epoch is representative for stress contrast only and is not a mission epoch."
+  ],
+  "length_unit_scaling": {
+    "earth_moon_distance_ratio_to_mean": "The reported Earth-Moon distance ratio to the window mean is diagnostic only and is not used to scale Sun vectors or tidal accelerations.",
+    "reference_distance_km": 384400.0,
+    "sun_vector_lu_scaling": "Cached Sun barycentric rotating vectors are divided by reference_distance_km.",
+    "trajectory_lu_scaling": "Persisted CR3BP trajectory states are interpreted in the same fixed length unit."
+  },
+  "optimization_rerun": false,
+  "production_solver_parity_claim": false,
+  "quantum_advantage_claim": false,
+  "representative_states": {
+    "branch_controls_path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_022_mask_022_controls.json",
+    "branch_controls_sha256": "85cd6ef61d77c183752b6de4f698049c8c7b61f6fe5a27c52c4bfff9df18162d",
+    "branch_mask_index": 22,
+    "branch_order": 22,
+    "branch_selection_policy": "accepted branch sidecar with largest recorded CR3BP terminal_error",
+    "branch_terminal_error": 0.0936063931709301,
+    "manifest_path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_control_manifest.json",
+    "manifest_sha256": "7118ebb5255590e6b66b7f93513e0c1a73d4de18821eee9303af04409902922f",
+    "nominal_controls_path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_nominal_controls.json",
+    "nominal_controls_sha256": "a837354a64fef991cbe32cc2ed8311f0e72f59d73250655e2bf89144da0d5ca4"
+  },
+  "row_count": 15,
+  "runtime_network_dependency": false,
+  "solar_tidal_acceleration_summary": {
+    "nominal_tidal_accel_delta_fraction_max": 0.3274381274208758,
+    "nominal_tidal_accel_delta_norm_max": 0.0021980257494029695,
+    "representative_branch_mask_index": 22,
+    "representative_branch_tidal_accel_delta_fraction_max": 0.3274381274208758,
+    "representative_branch_tidal_accel_delta_norm_max": 0.0021980257494029695
+  },
+  "spice_ephemeris_validation": false,
+  "uses_cached_horizons_vectors": true,
+  "uses_recorded_artifacts_only": true
+}

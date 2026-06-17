@@ -1,6 +1,6 @@
 {
   "command": "scripts\\run_claim_evidence_ledger.py",
-  "row_count": 10,
+  "row_count": 11,
   "tail_coast_threshold_audit_row_count": 5,
   "tail_coast_branch_audit_row_count": 1,
   "optimization_rerun": false,
@@ -8,9 +8,10 @@
   "high_fidelity_claim": false,
   "branch_control_replay": true,
   "bicircular_solar_tidal_stress_probe": true,
+  "horizons_ephemeris_force_model_contrast": true,
   "fuel_optimality_claim": false,
   "quantum_advantage_claim": false,
-  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun. A branch-control replay ledger row is included because the focused replay package is present. A bicircular solar-tidal stress row is included because its real stress-probe CSV and metadata exist.",
+  "source_mode": "Recorded CSV/JSON artifacts only. The ledger, threshold audit, and branch audit are deterministic postprocessing outputs with no trajectory optimization rerun. A branch-control replay ledger row is included because the focused replay package is present. A bicircular solar-tidal stress row is included because its real stress-probe CSV and metadata exist. A Horizons ephemeris force-model contrast row is included because its real CSV and metadata exist.",
   "determinism_note": "Runtime and wall-clock timestamps are intentionally omitted so identical inputs and command text produce byte-stable outputs.",
   "claim_semantics": {
     "selected_branch_evidence": "Rows where selected outage branches were optimized/evaluated and unselected masks, if present, remain diagnostics.",
@@ -19,6 +20,7 @@
   },
   "branch_control_replay_artifacts_available": true,
   "bicircular_solar_tidal_stress_artifacts_available": true,
+  "horizons_ephemeris_force_model_contrast_artifacts_available": true,
   "tail_coast_threshold_pairs": [
     {
       "threshold_id": "configured_0p09_0p17",
@@ -56,6 +58,7 @@
     "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
     "catalog_dro_tail_coast_branch_control_replay_accepted_controls",
     "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe",
+    "catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast",
     "catalog_dro_delayed_h6_all_single_delayed_arrival"
   ],
   "input_artifacts": [
@@ -133,6 +136,16 @@
       "path": "data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json",
       "sha256": "92847a30e7481da2e6c119ab4b73fbdde96e29d49e0d0259f3fecaf00e0a7d7c",
       "bytes": 13332
+    },
+    {
+      "path": "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv",
+      "sha256": "d408199f59d69864eb33d640cf28c01834be9a0688ec08669ae5b9ebfc7a3ff6",
+      "bytes": 9241
+    },
+    {
+      "path": "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_metadata.json",
+      "sha256": "6324cf0b1f98cb1f57082862108c4b30354eb041dcc78d61dcecac4f555aeafd",
+      "bytes": 10158
     }
   ],
   "artifacts": {
@@ -148,6 +161,7 @@
     "This ledger clarifies evidence semantics; it does not add high-fidelity validation.",
     "The historical tail-coast branch audit summarizes recorded branch_results JSON only; the focused replay row is included only when its real replay CSV and metadata exist.",
     "The bicircular solar-tidal row, when present, is a negative beyond-CR3BP stress replay and not high-fidelity validation or production solver parity.",
+    "The Horizons ephemeris contrast row, when present, is a cached force-model contrast only and not SPICE validation, high-fidelity replay, or a threshold-feasibility result.",
     "The tail-coast positive row is fixed-final-time locked-nominal continuous-backend evidence only.",
     "The QAOA/QUBO rows are simulated initializer evidence and do not support quantum advantage or superiority claims."
   ]
