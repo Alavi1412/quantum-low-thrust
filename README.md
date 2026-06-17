@@ -200,8 +200,8 @@ hard-catalog solar-tidal row is a negative stress-probe
 row, the retuned recovery row is a completed negative simple-bicircular retuning
 row, and the hard-catalog Horizons row is a force-model contrast row. The SPICE
 row is a point-mass ephemeris-source replay, not full high-fidelity/flight
-validation, production solver parity, or quantum evidence. The CasADi/IPOPT row
-is a scoped mature NLP backend bridge check, not production mission design,
+validation, broad production-solver validation/parity, or quantum evidence. The CasADi/IPOPT row
+is a scoped CasADi/IPOPT mature NLP backend bridge check, not production mission design,
 high-fidelity validation, global/fuel optimality, DOI evidence, or quantum
 evidence.
 The tail-coast audit confirms the combined row
@@ -261,7 +261,7 @@ the original p=0.4 row and the polished p=0.4 row, with 8 branch rows each, zero
 nominal/branch/all-mask replay deltas at tolerance `1e-10`, and
 `passes_tolerance=True`. This is deterministic recorded-control replay only; it
 does not rerun optimization, certify optimizer convergence for the original
-row, add high-fidelity validation, establish production solver parity, or claim
+row, add high-fidelity validation, establish broad production-solver validation/parity, or claim
 fuel optimality or quantum advantage.
 
 The independent-HS bicircular phase-sweep stress postprocessor writes
@@ -284,7 +284,7 @@ branch-phase checks pass the configured `0.09/0.17` thresholds. The maximum
 simple-bicircular nominal error is `0.022138676654057693`, and the maximum
 branch-phase error is `0.08557051343145317`. This is a deterministic
 beyond-CR3BP stress probe only; it is not SPICE validation, high-fidelity
-validation, production solver parity, fuel optimality, or quantum evidence.
+validation, broad production-solver validation/parity, fuel optimality, or quantum evidence.
 
 The independent-HS cached-Horizons-derived solar-tidal replay postprocessor
 writes
@@ -312,7 +312,7 @@ distance range `382.6857920288508--382.693044178952` LU, and cache SHA-256
 `13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2`. This is
 stronger than the simple bicircular phase sweep because it uses cached JPL
 Horizons geometry, but it remains a simplified stress probe, not SPICE,
-high-fidelity, flight-ready, or production-solver-parity validation.
+high-fidelity, flight-ready, or broad production-solver validation.
 
 The independent-HS cached-Horizons Earth/Moon/Sun point-mass retuning
 postprocessor writes
@@ -338,7 +338,7 @@ After retuning, nominal error is `0.02143944130524006`, branch worst is
 `0.02473065115224942`, branch pass count is `8/8`, SciPy success count is
 `9/9`, and total `nfev` is `71`. This is a cached-Horizons point-mass retuning
 stress package only; it is not SPICE, full high-fidelity or flight validation,
-production solver parity, fuel optimality, DOI evidence, or quantum evidence.
+broad production-solver validation/parity, fuel optimality, DOI evidence, or quantum evidence.
 
 The independent-HS multi-epoch cached-Horizons point-mass retuning wrapper writes
 `data/results/independent_hs_horizons_multi_epoch_point_mass_retuning/independent_hs_horizons_multi_epoch_point_mass_retuning.csv`,
@@ -361,7 +361,7 @@ After independent retuning, all rows pass: worst retuned nominal/branch errors
 are `0.02143944130524006`/`0.02473065115224942`, branch pass count is `32/32`,
 SciPy success is `36/36`, and total `nfev` is `197`. This is a stronger
 representative-epoch set for the point-mass stress concern, not SPICE/full
-high-fidelity/flight validation, production solver parity, fuel optimality, DOI
+high-fidelity/flight validation, broad production-solver validation/parity, fuel optimality, DOI
 evidence, or quantum evidence.
 
 The independent-HS SPICE-derived ephemeris replay postprocessor writes
@@ -388,7 +388,7 @@ worst nominal/branch errors are `0.021439441253166033`/`0.024730650824609506`,
 branch pass is `32/32`, and the maximum absolute delta from the Horizons-retuned
 replay is `3.2763991519857427e-10`. This is SPICE-derived ephemeris replay under
 the same Earth/Moon/Sun point-mass stress model, not full high-fidelity/flight
-validation, production solver parity, fuel optimality, DOI evidence, or quantum
+validation, broad production-solver validation/parity, fuel optimality, DOI evidence, or quantum
 evidence.
 
 The independent-HS CasADi/IPOPT bridge check writes
@@ -466,7 +466,7 @@ completed persisted controls under the configured normalized CR3BP model and wri
 The current replay package records one nominal row plus 27 branch rows, maximum
 branch terminal-error delta `0.0`, and `passes_tolerance=True`. It does not rerun
 optimization, branch portfolio selection, fallback search, high-fidelity
-validation, production solver parity checks, fuel-optimal analysis, or any
+validation, broad production-solver validation/parity checks, fuel-optimal analysis, or any
 QUBO/QAOA/quantum workflow.
 
 The bicircular solar-tidal stress postprocessor writes
@@ -484,7 +484,7 @@ It reuses the focused accepted-control sidecars and sweeps Sun phases
 rate `-0.9252`. The CR3BP replay delta is `0.0`, but the stress probe is
 negative: nominal solar-tidal rows fail the `0.09` threshold and only `22/108`
 branch-phase rows pass the `0.17` branch threshold. This is beyond-CR3BP stress
-evidence only, not SPICE ephemeris validation, production solver parity,
+evidence only, not SPICE ephemeris validation, broad production-solver validation/parity,
 fuel optimality, or high-fidelity flight validation.
 
 The bicircular tail-coast retuned recovery package is a completed expensive
@@ -656,7 +656,7 @@ combined row, but writes only that case under
 snapshot, the completed recovery CSV, replay CSV, metadata, and table exist and
 support the accepted-control replay row in the claim ledger. The replay is a
 normalized CR3BP accepted-control replay only; it is not an optimization rerun,
-high-fidelity validation, production solver parity, fuel optimality, or quantum
+high-fidelity validation, broad production-solver validation/parity, fuel optimality, or quantum
 advantage evidence.
 
 For the continuation-extension continuous-backend baseline:
@@ -732,7 +732,7 @@ branch sidecars, selects/evaluates the same 8 masks, records nominal error
 converges with `optimizer_success=True` at `nfev=25` under `max_nfev=240`.
 Both p=0.4 rows have replay-ready manifests with 8 branch-control sidecars. This
 is normalized-CR3BP all-configured continuous backend evidence only; it does not
-claim high-fidelity validation, production solver parity, fuel optimality,
+claim high-fidelity validation, broad production-solver validation/parity, fuel optimality,
 broader outage-family robustness, QUBO/QAOA evidence, or quantum advantage.
 
 For the cardinality ablation:

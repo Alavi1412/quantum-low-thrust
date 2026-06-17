@@ -168,8 +168,8 @@
     },
     {
       "path": "data/results/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge_metadata.json",
-      "sha256": "fbe76710fd9a345f51e7452d709c60687e8933a0d386fd3bfbe05995e2e2f0b9",
-      "bytes": 13272
+      "sha256": "867a8519aa59ba28e7ec166b5569cdace235135d9ffa23b2a0cf17aaa86ca582",
+      "bytes": 13585
     }
   ],
   "artifacts": {
@@ -184,11 +184,11 @@
     "Selected-branch collocation rows retain all-mask diagnostics as diagnostics unless all masks are explicitly selected.",
     "The hard-catalog positive row is scoped to the tail-coast locked-nominal fixed-final-time backend.",
     "The independent-HS branch-control replay row, when present, is normalized-CR3BP persisted-control replay only; it does not rerun optimization or add high-fidelity validation.",
-    "The independent-HS bicircular phase-stress row, when present, is a positive simple circular solar-tidal stress replay for the converged all-configured row; it is not SPICE/high-fidelity validation or production solver parity.",
-    "The independent-HS cached-Horizons solar-tidal replay row, when present, uses cached JPL Horizons geometry in a simplified stress replay; it is not SPICE/high-fidelity/flight validation or production solver parity.",
-    "The independent-HS cached-Horizons point-mass retuning row, when present, reports a failed persisted-control replay and an independent retuning pass; it is not SPICE/full high-fidelity/flight validation or production solver parity.",
-    "The independent-HS multi-epoch cached-Horizons point-mass retuning row, when present, extends that stress/retuning check across four fixed 2026 representative epochs; it is not SPICE/full high-fidelity/flight validation, production solver parity, fuel optimality, DOI evidence, or quantum evidence.",
-    "The independent-HS SPICE-derived ephemeris replay row, when present, replays the already-retuned controls under compact SPICE-derived Moon/Sun vectors using the same point-mass stress propagation; it is not full high-fidelity/flight validation or production solver parity.",
-    "The independent-HS CasADi/IPOPT bridge row, when present, is a scoped mature NLP backend direct-shooting refinement of the accepted normalized-CR3BP polish case; it is not production mission design, high-fidelity/flight validation, global optimality, fuel optimality, DOI evidence, or quantum evidence."
+    "The independent-HS bicircular phase-stress row, when present, is a positive simple circular solar-tidal stress replay for the converged all-configured row; it is not SPICE/high-fidelity validation or broad production-solver validation/parity.",
+    "The independent-HS cached-Horizons solar-tidal replay row, when present, uses cached JPL Horizons geometry in a simplified stress replay; it is not SPICE/high-fidelity/flight validation or broad production-solver validation/parity.",
+    "The independent-HS cached-Horizons point-mass retuning row, when present, reports a failed persisted-control replay and an independent retuning pass; it is not SPICE/full high-fidelity/flight validation or broad production-solver validation/parity.",
+    "The independent-HS multi-epoch cached-Horizons point-mass retuning row, when present, extends that stress/retuning check across four fixed 2026 representative epochs; it is not SPICE/full high-fidelity/flight validation, broad production-solver validation/parity, fuel optimality, DOI evidence, or quantum evidence.",
+    "The independent-HS SPICE-derived ephemeris replay row, when present, replays the already-retuned controls under compact SPICE-derived Moon/Sun vectors using the same point-mass stress propagation; it is not full high-fidelity/flight validation or broad production-solver validation/parity.",
+    "The independent-HS CasADi/IPOPT bridge row, when present, is a scoped mature NLP backend direct-shooting refinement for one normalized-CR3BP accepted polish case; it is not production mission design, high-fidelity/flight validation, global optimality, fuel optimality, DOI evidence, or quantum evidence."
   ]
 }

@@ -76,7 +76,7 @@ def test_independent_hs_casadi_ipopt_bridge_artifacts_are_scoped_and_stable():
     assert metadata["casadi_refinement"] is True
     assert metadata["optimization_rerun"] is True
     assert metadata["production_solver_parity_claim"] is True
-    assert "Scoped mature NLP backend bridge" in metadata["production_solver_parity_claim_scope"]
+    assert "mature NLP backend bridge check" in metadata["production_solver_parity_claim_scope"]
     for flag_name in (
         "high_fidelity_validation",
         "high_fidelity_flight_validation",

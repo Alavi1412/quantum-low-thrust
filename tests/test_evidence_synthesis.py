@@ -184,7 +184,8 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
         assert "max prefix delta 0.0" in ihs_casadi["pass_status_note"]
         assert "source replay nominal 0.011333095366088189" in ihs_casadi["pass_status_note"]
         assert "CasADi/IPOPT" in ihs_casadi["practitioner_interpretation"]
-        assert "not production mission design" in ihs_casadi["practitioner_interpretation"]
+        assert "not broad production-solver validation/parity" in ihs_casadi["practitioner_interpretation"]
+        assert "production mission design" in ihs_casadi["practitioner_interpretation"]
         assert "high-fidelity/flight validation" in ihs_casadi["practitioner_interpretation"]
 
     tail = row("tail_coast_hard_catalog_all_one_two")

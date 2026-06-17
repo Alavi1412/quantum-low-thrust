@@ -189,7 +189,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
     assert ihs_all["all_mask_worst_error"] == "0.07741645121655767"
     assert ihs_all["passes_configured_thresholds"] == "True"
     assert "max_nfev" in ihs_all["explicit_boundary"]
-    assert "not production solver parity" in ihs_all["explicit_boundary"]
+    assert "not broad production-solver validation/parity" in ihs_all["explicit_boundary"]
 
     if has_ihs_replay:
         ihs_replay = row("phase_shift_independent_hs_branch_control_replay")
@@ -198,7 +198,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert "8 branches per row" in ihs_replay["mask_scope"]
         assert "polish row converges" in ihs_replay["primary_interpretation"]
         assert "Branch-control replay only" in ihs_replay["explicit_boundary"]
-        assert "production solver parity" in ihs_replay["explicit_boundary"]
+        assert "broad production-solver validation/parity" in ihs_replay["explicit_boundary"]
     else:
         assert "phase_shift_independent_hs_branch_control_replay" not in ledger["claim_id"].tolist()
 
@@ -213,7 +213,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert ihs_stress["passes_configured_thresholds"] == "True"
         assert "Positive simple bicircular phase-sweep stress replay" in ihs_stress["primary_interpretation"]
         assert "not SPICE ephemeris validation" in ihs_stress["explicit_boundary"]
-        assert "production solver parity" in ihs_stress["explicit_boundary"]
+        assert "broad production-solver validation/parity" in ihs_stress["explicit_boundary"]
     else:
         assert "phase_shift_independent_hs_bicircular_phase_stress_probe" not in ledger["claim_id"].tolist()
 
@@ -229,7 +229,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert ihs_horizons["passes_configured_thresholds"] == "True"
         assert "stronger than the simple bicircular phase sweep" in ihs_horizons["primary_interpretation"]
         assert "not SPICE validation" in ihs_horizons["explicit_boundary"]
-        assert "production solver parity" in ihs_horizons["explicit_boundary"]
+        assert "broad production-solver validation/parity" in ihs_horizons["explicit_boundary"]
     else:
         assert "phase_shift_independent_hs_horizons_solar_tidal_replay_probe" not in ledger["claim_id"].tolist()
 
@@ -246,7 +246,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert ihs_point_mass["passes_configured_thresholds"] == "True"
         assert "Persisted controls fail direct ephemeris point-mass replay" in ihs_point_mass["primary_interpretation"]
         assert "not SPICE/full high-fidelity/flight validation" in ihs_point_mass["explicit_boundary"]
-        assert "production solver parity" in ihs_point_mass["explicit_boundary"]
+        assert "broad production-solver validation/parity" in ihs_point_mass["explicit_boundary"]
     else:
         assert "phase_shift_independent_hs_horizons_point_mass_retuning" not in ledger["claim_id"].tolist()
 
@@ -267,7 +267,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
             "primary_interpretation"
         ]
         assert "not SPICE/full high-fidelity/flight validation" in ihs_multi_point_mass["explicit_boundary"]
-        assert "not production solver parity" in ihs_multi_point_mass["explicit_boundary"]
+        assert "not broad production-solver validation/parity" in ihs_multi_point_mass["explicit_boundary"]
         assert "not DOI evidence" in ihs_multi_point_mass["explicit_boundary"]
         assert "not quantum" in ihs_multi_point_mass["explicit_boundary"]
     else:
@@ -290,7 +290,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert "SPICE-derived ephemeris replay" in ihs_spice["explicit_boundary"]
         assert "no retuning or optimization rerun" in ihs_spice["explicit_boundary"]
         assert "not full high-fidelity/flight validation" in ihs_spice["explicit_boundary"]
-        assert "not production solver parity" in ihs_spice["explicit_boundary"]
+        assert "not broad production-solver validation/parity" in ihs_spice["explicit_boundary"]
     else:
         assert "phase_shift_independent_hs_spice_ephemeris_replay" not in ledger["claim_id"].tolist()
 
@@ -307,7 +307,8 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert "max branch prefix delta=0.0" in ihs_casadi["thresholds"]
         assert ihs_casadi["passes_configured_thresholds"] == "True"
         assert "mature CasADi/IPOPT NLP backend" in ihs_casadi["primary_interpretation"]
-        assert "Scoped production-solver bridge/parity check only" in ihs_casadi["explicit_boundary"]
+        assert "Scoped CasADi/IPOPT mature NLP backend bridge check only" in ihs_casadi["explicit_boundary"]
+        assert "not broad production-solver validation/parity" in ihs_casadi["explicit_boundary"]
         assert "not production mission design" in ihs_casadi["explicit_boundary"]
         assert "not high-fidelity" in ihs_casadi["explicit_boundary"]
         assert "not quantum" in ihs_casadi["explicit_boundary"]
@@ -369,7 +370,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert "strict meets=False" in retuned["thresholds"]
         assert "still fails" in retuned["primary_interpretation"]
         assert "not SPICE/high-fidelity/flight validation" in retuned["explicit_boundary"]
-        assert "production solver parity" in retuned["explicit_boundary"]
+        assert "broad production-solver validation/parity" in retuned["explicit_boundary"]
         assert "quantum, QUBO, or QAOA" in retuned["explicit_boundary"]
     else:
         assert "bicircular_tail_coast_retuned_recovery" not in ledger["claim_id"].tolist()

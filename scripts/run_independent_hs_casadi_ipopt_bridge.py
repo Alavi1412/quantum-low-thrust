@@ -6,9 +6,10 @@ endpoint-plus-midpoint control sidecars for
 NLP. It refines active controls only under the same normalized CR3BP target,
 scales, thresholds, and branch-mask semantics used by the source artifacts.
 
-The output is intentionally narrow: it is a mature NLP backend bridge/parity
-check, not production flight validation, high-fidelity propagation, global or
-fuel optimality evidence, DOI evidence, or quantum-advantage evidence.
+The output is intentionally narrow: it is a scoped CasADi/IPOPT mature NLP
+backend bridge check, not production flight validation, high-fidelity
+propagation, global or fuel optimality evidence, DOI evidence, or
+quantum-advantage evidence.
 """
 from __future__ import annotations
 
@@ -627,7 +628,7 @@ def _write_refined_sidecar(
         "Branch variables are restricted to post-recovery active endpoint-plus-midpoint controls.",
         "Pre-recovery branch prefixes are fixed to the refined nominal controls with the outage mask applied.",
         "Outage-masked branch segments are fixed inactive/zero.",
-        "This is a local refinement/parity check, not global optimality, fuel optimality, production flight validation, DOI evidence, or quantum advantage evidence.",
+        "This is a local mature-backend bridge check, not global optimality, fuel optimality, production flight validation, DOI evidence, or quantum advantage evidence.",
         "The force model remains the original normalized CR3BP target and scales; this is not high-fidelity or flight validation.",
     ]
     payload = {
@@ -661,7 +662,7 @@ def _write_refined_sidecar(
         "optimization_rerun": True,
         "production_solver_parity_claim": True,
         "production_solver_parity_claim_scope": (
-            "Scoped mature NLP backend bridge check for this normalized-CR3BP benchmark instance only."
+            "Scoped CasADi/IPOPT mature NLP backend bridge check for one normalized-CR3BP accepted case only."
         ),
         "high_fidelity_validation": False,
         "high_fidelity_flight_validation": False,
@@ -1162,8 +1163,8 @@ def run(args: argparse.Namespace) -> pd.DataFrame:
         "optimization_rerun": True,
         "production_solver_parity_claim": True,
         "production_solver_parity_claim_scope": (
-            "Scoped mature NLP backend bridge/parity check for one accepted normalized-CR3BP "
-            "independent-HS benchmark instance; not a production flight-design claim."
+            "Scoped CasADi/IPOPT mature NLP backend bridge check for one normalized-CR3BP "
+            "accepted independent-HS benchmark case; not a production flight-design claim."
         ),
         "high_fidelity_validation": False,
         "high_fidelity_flight_validation": False,

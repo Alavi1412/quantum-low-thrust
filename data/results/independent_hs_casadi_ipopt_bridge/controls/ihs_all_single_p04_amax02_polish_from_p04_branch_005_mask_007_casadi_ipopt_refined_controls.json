@@ -45,7 +45,7 @@
     "Branch variables are restricted to post-recovery active endpoint-plus-midpoint controls.",
     "Pre-recovery branch prefixes are fixed to the refined nominal controls with the outage mask applied.",
     "Outage-masked branch segments are fixed inactive/zero.",
-    "This is a local refinement/parity check, not global optimality, fuel optimality, production flight validation, DOI evidence, or quantum advantage evidence.",
+    "This is a local mature-backend bridge check, not global optimality, fuel optimality, production flight validation, DOI evidence, or quantum advantage evidence.",
     "The force model remains the original normalized CR3BP target and scales; this is not high-fidelity or flight validation."
   ],
   "mask_index": 7,
@@ -67,7 +67,7 @@
     "max_prefix_midpoint_delta_from_refined_nominal_masked": 0.0
   },
   "production_solver_parity_claim": true,
-  "production_solver_parity_claim_scope": "Scoped mature NLP backend bridge check for this normalized-CR3BP benchmark instance only.",
+  "production_solver_parity_claim_scope": "Scoped CasADi/IPOPT mature NLP backend bridge check for one normalized-CR3BP accepted case only.",
   "quantum_advantage_claim": false,
   "record_type": "branch",
   "recovery_start": 8,

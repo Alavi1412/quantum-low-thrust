@@ -514,7 +514,7 @@ def _independent_hs_horizons_solar_tidal_replay_row() -> dict[str, str]:
         "practitioner_interpretation": (
             "This is stronger than the simple bicircular phase sweep because the Sun geometry comes "
             "from cached JPL Horizons vectors, but it remains a simplified stress replay, not "
-            "SPICE/high-fidelity/flight validation or production solver parity."
+            "SPICE/high-fidelity/flight validation or broad production-solver validation/parity."
         ),
         "source_artifact": _relative_or_absolute(INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV),
         "source_row_id": "polish_case_summary in independent-HS cached-Horizons replay metadata",
@@ -559,7 +559,7 @@ def _independent_hs_horizons_point_mass_retuning_row() -> dict[str, str]:
         "practitioner_interpretation": (
             "Persisted controls fail direct ephemeris point-mass replay, but independent retuning "
             "restores feasibility for nominal and all 8 branches at the representative epoch; this is "
-            "not SPICE/full high-fidelity/flight validation or production solver parity."
+            "not SPICE/full high-fidelity/flight validation or broad production-solver validation/parity."
         ),
         "source_artifact": _relative_or_absolute(INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV),
         "source_row_id": "polish_case_summary in independent-HS point-mass retuning metadata",
@@ -624,7 +624,7 @@ def _independent_hs_horizons_multi_epoch_point_mass_retuning_row() -> dict[str, 
             "check: nominal direct replay fails in all four fixed 2026 epochs; direct branch replay "
             f"passes {direct_branch_pass}/{branch_count} overall (July {july_direct_branch_pass}/"
             f"{july_branch_count}); retuning restores feasibility. "
-            "This is still not SPICE/full high-fidelity/flight validation, production solver parity, "
+            "This is still not SPICE/full high-fidelity/flight validation, broad production-solver validation/parity, "
             "fuel optimality, DOI evidence, or quantum evidence."
         ),
         "source_artifact": _relative_or_absolute(INDEPENDENT_HS_HORIZONS_MULTI_EPOCH_POINT_MASS_RETUNING_CSV),
@@ -682,7 +682,7 @@ def _independent_hs_spice_ephemeris_replay_row() -> dict[str, str]:
             "The multi-epoch point-mass retuned controls replay under SPICE-derived Moon/Sun vectors "
             "with sub-1e-9 normalized-error deltas relative to the cached-Horizons-retuned replay. "
             "This strengthens ephemeris-source provenance but remains point-mass stress replay, not "
-            "full high-fidelity/flight validation or production solver parity."
+            "full high-fidelity/flight validation or broad production-solver validation/parity."
         ),
         "source_artifact": _relative_or_absolute(INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV),
         "source_row_id": "overall_summary in independent-HS SPICE ephemeris replay metadata",
@@ -695,7 +695,7 @@ def _independent_hs_casadi_ipopt_bridge_row() -> dict[str, str]:
     if not bool(metadata["casadi_refinement"]) or not bool(metadata["optimization_rerun"]):
         raise RuntimeError("CasADi/IPOPT bridge metadata must disclose refinement optimizer rerun")
     if not bool(metadata["production_solver_parity_claim"]):
-        raise RuntimeError("CasADi/IPOPT bridge metadata must disclose scoped production-solver parity claim")
+        raise RuntimeError("CasADi/IPOPT bridge metadata must disclose scoped mature-backend bridge claim")
     for flag_name in (
         "high_fidelity_validation",
         "high_fidelity_flight_validation",
@@ -718,10 +718,10 @@ def _independent_hs_casadi_ipopt_bridge_row() -> dict[str, str]:
     zero_variable_branch_count = int(summary["zero_variable_branch_count"])
     return {
         "row_id": "ihs_casadi_ipopt_bridge_polish_p04_amax02",
-        "artifact_family": "independent-HS CasADi/IPOPT bridge check",
+        "artifact_family": "independent-HS scoped CasADi/IPOPT bridge check",
         "representative_case_or_statistic": "ihs_all_single_p04_amax02_polish_from_p04",
         "target_family": "catalog halo phase-shift",
-        "backend_initializer_role": "mature NLP backend direct-shooting refinement from accepted sidecars",
+        "backend_initializer_role": "scoped mature NLP backend direct-shooting bridge check from accepted sidecars",
         "mask_scope": (
             "1 nominal and 8 configured one-segment branch rows; branch outage segments fixed inactive; "
             f"branch prefixes fixed to refined nominal masked controls; zero-variable branches={zero_variable_branch_count}"
@@ -743,10 +743,12 @@ def _independent_hs_casadi_ipopt_bridge_row() -> dict[str, str]:
             f"max bound violation {max_violation}; max prefix delta {max_prefix_delta}"
         ),
         "practitioner_interpretation": (
-            "The accepted independent-HS polish case exports to CasADi/IPOPT and locally refines under "
-            "the same normalized CR3BP target/scales/branch masks while preserving source branch-recovery "
-            "semantics. This narrowly addresses production-solver parity, but it is not production mission "
-            "design, high-fidelity/flight validation, global or fuel optimality, DOI evidence, or quantum evidence."
+            "One normalized-CR3BP accepted independent-HS polish case exports to CasADi/IPOPT and locally "
+            "refines under the same target/scales/branch masks while preserving source branch-recovery "
+            "semantics. This is a scoped mature-backend portability/bridge check that addresses the "
+            "production-solver-parity concern only in that narrow sense; it is not broad production-solver "
+            "validation/parity, production mission design, high-fidelity/flight validation, global or fuel "
+            "optimality, DOI evidence, or quantum evidence."
         ),
         "source_artifact": _relative_or_absolute(INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_CSV),
         "source_row_id": "polish_case_summary in independent-HS CasADi/IPOPT bridge metadata",
@@ -1179,33 +1181,33 @@ def write_artifacts(
             (
                 "The independent-HS bicircular phase-stress row, when present, is a positive simple "
                 "circular solar-tidal stress replay for the converged all-configured row; it is not "
-                "SPICE/high-fidelity validation or production solver parity."
+                "SPICE/high-fidelity validation or broad production-solver validation/parity."
             ),
             (
                 "The independent-HS cached-Horizons solar-tidal replay row, when present, uses cached "
                 "JPL Horizons geometry in a simplified stress replay; it is not SPICE/high-fidelity/"
-                "flight validation or production solver parity."
+                "flight validation or broad production-solver validation/parity."
             ),
             (
                 "The independent-HS cached-Horizons point-mass retuning row, when present, reports a "
                 "failed persisted-control replay and an independent retuning pass; it is not SPICE/"
-                "full high-fidelity/flight validation or production solver parity."
+                "full high-fidelity/flight validation or broad production-solver validation/parity."
             ),
             (
                 "The independent-HS multi-epoch cached-Horizons point-mass retuning row, when present, "
                 "extends that stress/retuning check across four fixed 2026 representative epochs; it "
-                "is not SPICE/full high-fidelity/flight validation, production solver parity, fuel "
+                "is not SPICE/full high-fidelity/flight validation, broad production-solver validation/parity, fuel "
                 "optimality, DOI evidence, or quantum evidence."
             ),
             (
                 "The independent-HS SPICE-derived ephemeris replay row, when present, replays the "
                 "already-retuned controls under compact SPICE-derived Moon/Sun vectors using the same "
                 "point-mass stress propagation; it is not full high-fidelity/flight validation or "
-                "production solver parity."
+                "broad production-solver validation/parity."
             ),
             (
                 "The independent-HS CasADi/IPOPT bridge row, when present, is a scoped mature NLP "
-                "backend direct-shooting refinement of the accepted normalized-CR3BP polish case; it "
+                "backend direct-shooting refinement for one normalized-CR3BP accepted polish case; it "
                 "is not production mission design, high-fidelity/flight validation, global optimality, "
                 "fuel optimality, DOI evidence, or quantum evidence."
             ),

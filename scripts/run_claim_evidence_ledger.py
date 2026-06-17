@@ -810,7 +810,7 @@ def _recorded_case_rows() -> list[dict[str, str]]:
             ),
             explicit_boundary=(
                 "Normalized-CR3BP all-configured one-segment evidence only; optimizer reached "
-                "the max_nfev cap, and this is not production solver parity, high-fidelity "
+                "the max_nfev cap, and this is not broad production-solver validation/parity, high-fidelity "
                 "validation, fuel optimality, broader outage-family robustness, QUBO, QAOA, "
                 "or quantum evidence."
             ),
@@ -921,7 +921,7 @@ def _tail_coast_branch_control_replay_ledger_row() -> dict[str, str]:
             f"with max terminal-error delta {max_delta} across nominal plus {branch_row_count} branch rows."
         ),
         "explicit_boundary": (
-            "Accepted-control replay only; no optimization rerun, high-fidelity validation, production solver parity, "
+            "Accepted-control replay only; no optimization rerun, high-fidelity validation, broad production-solver validation/parity, "
             "fuel optimality, quantum, QUBO, or QAOA claim."
         ),
         "source_artifact": (
@@ -1002,7 +1002,7 @@ def _independent_hs_branch_control_replay_ledger_row() -> dict[str, str]:
             "but has slightly higher selected/all error than the capped source row."
         ),
         "explicit_boundary": (
-            "Branch-control replay only; no optimization rerun, high-fidelity validation, production solver parity, "
+            "Branch-control replay only; no optimization rerun, high-fidelity validation, broad production-solver validation/parity, "
             "fuel optimality, broader outage-family robustness, quantum, QUBO, or QAOA claim."
         ),
         "source_artifact": (
@@ -1079,7 +1079,7 @@ def _independent_hs_bicircular_phase_stress_ledger_row() -> dict[str, str]:
         ),
         "explicit_boundary": (
             "Deterministic beyond-CR3BP stress probe only; not SPICE ephemeris validation, high-fidelity "
-            "flight validation, production solver parity, fuel optimality, quantum, QUBO, or QAOA evidence."
+            "flight validation, broad production-solver validation/parity, fuel optimality, quantum, QUBO, or QAOA evidence."
         ),
         "source_artifact": (
             f"{_relative_or_absolute(INDEPENDENT_HS_BICIRCULAR_PHASE_STRESS_CSV)}; "
@@ -1161,7 +1161,7 @@ def _independent_hs_horizons_solar_tidal_replay_ledger_row() -> dict[str, str]:
         ),
         "explicit_boundary": (
             "Cached-Horizons-derived solar-tidal stress probe only; not SPICE validation, high-fidelity "
-            "or flight validation, accepted-control high-fidelity replay, production solver parity, "
+            "or flight validation, accepted-control high-fidelity replay, broad production-solver validation/parity, "
             "fuel optimality, quantum, QUBO, or QAOA evidence."
         ),
         "source_artifact": (
@@ -1239,7 +1239,7 @@ def _independent_hs_horizons_point_mass_retuning_ledger_row() -> dict[str, str]:
         ),
         "explicit_boundary": (
             "Cached-Horizons Earth/Moon/Sun point-mass retuning stress model only; not SPICE/full "
-            "high-fidelity/flight validation, not production solver parity, not fuel optimality, not DOI "
+            "high-fidelity/flight validation, not broad production-solver validation/parity, not fuel optimality, not DOI "
             "evidence, and not quantum, QUBO, or QAOA evidence."
         ),
         "source_artifact": (
@@ -1338,7 +1338,7 @@ def _independent_hs_horizons_multi_epoch_point_mass_retuning_ledger_row() -> dic
         ),
         "explicit_boundary": (
             "Multi-epoch cached-Horizons Earth/Moon/Sun point-mass retuning stress model only; not "
-            "SPICE/full high-fidelity/flight validation, not production solver parity, not fuel "
+            "SPICE/full high-fidelity/flight validation, not broad production-solver validation/parity, not fuel "
             "optimality, not DOI evidence, and not quantum, QUBO, or QAOA evidence."
         ),
         "source_artifact": (
@@ -1429,8 +1429,9 @@ def _independent_hs_spice_ephemeris_replay_ledger_row() -> dict[str, str]:
         ),
         "explicit_boundary": (
             "SPICE-derived ephemeris replay under the paper Earth/Moon/Sun point-mass model only; no "
-            "retuning or optimization rerun, not full high-fidelity/flight validation, not production "
-            "solver parity, not fuel optimality, not DOI evidence, and not quantum, QUBO, or QAOA evidence."
+            "retuning or optimization rerun, not full high-fidelity/flight validation, not broad "
+            "production-solver validation/parity, not fuel optimality, not DOI evidence, and not quantum, "
+            "QUBO, or QAOA evidence."
         ),
         "source_artifact": (
             f"{_relative_or_absolute(INDEPENDENT_HS_SPICE_EPHEMERIS_REPLAY_CSV)}; "
@@ -1448,7 +1449,7 @@ def _independent_hs_casadi_ipopt_bridge_ledger_row() -> dict[str, str]:
     if not bool(metadata["casadi_refinement"]) or not bool(metadata["optimization_rerun"]):  # type: ignore[index]
         raise RuntimeError("independent-HS CasADi/IPOPT bridge must disclose refinement optimizer rerun")
     if not bool(metadata["production_solver_parity_claim"]):  # type: ignore[index]
-        raise RuntimeError("independent-HS CasADi/IPOPT bridge must disclose scoped production-solver parity claim")
+        raise RuntimeError("independent-HS CasADi/IPOPT bridge must disclose scoped mature-backend bridge claim")
     for flag_name in (
         "high_fidelity_validation",
         "high_fidelity_flight_validation",
@@ -1473,7 +1474,7 @@ def _independent_hs_casadi_ipopt_bridge_ledger_row() -> dict[str, str]:
     iterations = int(summary["ipopt_total_iterations"])  # type: ignore[index]
     return {
         "claim_id": "phase_shift_independent_hs_casadi_ipopt_bridge",
-        "evidence_family": "independent-HS CasADi/IPOPT mature NLP backend bridge",
+        "evidence_family": "independent-HS scoped CasADi/IPOPT mature NLP backend bridge check",
         "target_family": "halo phase-shift",
         "target_mode": "catalog_halo_phase_shift",
         "source_case": "ihs_all_single_p04_amax02_polish_from_p04",
@@ -1507,14 +1508,15 @@ def _independent_hs_casadi_ipopt_bridge_ledger_row() -> dict[str, str]:
         ),
         "passes_configured_thresholds": str(bool(bridge_pass == row_count and ipopt_success == row_count)),
         "primary_interpretation": (
-            "The accepted independent-HS polish case can be exported to a mature CasADi/IPOPT NLP backend "
-            "and locally replayed/refined under the same normalized CR3BP target, scales, branch masks, "
+            "One normalized-CR3BP accepted independent-HS polish case can be exported to a mature "
+            "CasADi/IPOPT NLP backend and locally replayed/refined under the same target, scales, branch masks, "
             "and source branch-recovery semantics."
         ),
         "explicit_boundary": (
-            "Scoped production-solver bridge/parity check only; local direct-shooting refinement, not "
-            "production mission design, not high-fidelity or flight validation, global optimality, fuel "
-            "optimality, DOI evidence, not quantum, QUBO, or QAOA evidence."
+            "Scoped CasADi/IPOPT mature NLP backend bridge check only for one normalized-CR3BP accepted case; "
+            "local direct-shooting refinement, not broad production-solver validation/parity, not production "
+            "mission design, not high-fidelity or flight validation, global optimality, fuel optimality, "
+            "DOI evidence, not quantum, QUBO, or QAOA evidence."
         ),
         "source_artifact": (
             f"{_relative_or_absolute(INDEPENDENT_HS_CASADI_IPOPT_BRIDGE_CSV)}; "
@@ -1579,7 +1581,7 @@ def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
         ),
         "explicit_boundary": (
             "Beyond-CR3BP stress probe only; not SPICE ephemeris validation, high-fidelity flight validation, "
-            "production solver parity, fuel optimality, quantum, QUBO, or QAOA evidence."
+            "broad production-solver validation/parity, fuel optimality, quantum, QUBO, or QAOA evidence."
         ),
         "source_artifact": (
             f"{_relative_or_absolute(BICIRCULAR_SOLAR_TIDAL_STRESS_CSV)}; "
@@ -1672,7 +1674,7 @@ def _bicircular_tail_coast_retuned_recovery_ledger_row() -> dict[str, str]:
         ),
         "explicit_boundary": (
             f"Simple bicircular solar-tidal retuning at fixed phase {phase_degrees} deg only; original fixed "
-            "target and final time; not SPICE/high-fidelity/flight validation, production solver parity, "
+            "target and final time; not SPICE/high-fidelity/flight validation, broad production-solver validation/parity, "
             "fuel optimality, quantum, QUBO, or QAOA evidence."
         ),
         "source_artifact": (
@@ -1742,7 +1744,7 @@ def _horizons_ephemeris_force_model_contrast_ledger_row() -> dict[str, str]:
         ),
         "explicit_boundary": (
             "Ephemeris force-model contrast only; not SPICE validation, high-fidelity flight validation, "
-            "accepted-control high-fidelity replay, production solver parity, fuel optimality, quantum, QUBO, or QAOA evidence."
+            "accepted-control high-fidelity replay, broad production-solver validation/parity, fuel optimality, quantum, QUBO, or QAOA evidence."
         ),
         "source_artifact": (
             f"{_relative_or_absolute(HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_CSV)}; "
@@ -2315,12 +2317,12 @@ def write_artifacts(
             (
                 "The independent-HS branch-control replay row, when present, repropagates persisted "
                 "endpoint-plus-midpoint controls under normalized CR3BP only; it is not an optimizer rerun, "
-                "high-fidelity validation, production solver parity, or fuel-optimality evidence."
+                "high-fidelity validation, broad production-solver validation/parity, or fuel-optimality evidence."
             ),
             (
                 "The independent-HS bicircular phase-stress row, when present, is a positive simple "
                 "circular solar-tidal stress replay for the converged all-configured row; it is not "
-                "SPICE/high-fidelity validation or production solver parity."
+                "SPICE/high-fidelity validation or broad production-solver validation/parity."
             ),
             (
                 "The independent-HS cached-Horizons solar-tidal replay row, when present, uses cached "
@@ -2332,23 +2334,23 @@ def write_artifacts(
                 "The independent-HS cached-Horizons point-mass retuning row, when present, reports "
                 "that persisted controls fail direct Earth/Moon/Sun point-mass replay and that "
                 "independent retuning restores representative-epoch feasibility; it is not SPICE/"
-                "full high-fidelity/flight validation or production solver parity."
+                "full high-fidelity/flight validation or broad production-solver validation/parity."
             ),
             (
                 "The independent-HS multi-epoch cached-Horizons point-mass retuning row, when present, "
                 "extends that stress/retuning check across four fixed 2026 representative epochs; it "
-                "is not SPICE/full high-fidelity/flight validation, production solver parity, fuel "
+                "is not SPICE/full high-fidelity/flight validation, broad production-solver validation/parity, fuel "
                 "optimality, DOI evidence, or quantum evidence."
             ),
             (
                 "The independent-HS SPICE-derived ephemeris replay row, when present, replays the "
                 "already-retuned controls under compact SPICE-derived Moon/Sun geometric J2000 vectors "
                 "using the same point-mass stress propagation; it is not full high-fidelity/flight "
-                "validation or production solver parity."
+                "validation or broad production-solver validation/parity."
             ),
             (
                 "The independent-HS CasADi/IPOPT bridge row, when present, is a scoped mature NLP "
-                "backend direct-shooting refinement of the accepted normalized-CR3BP polish case; it "
+                "backend direct-shooting refinement for one normalized-CR3BP accepted polish case; it "
                 "is not production mission design, high-fidelity/flight validation, global optimality, "
                 "fuel optimality, DOI evidence, or quantum evidence."
             ),
@@ -2358,12 +2360,12 @@ def write_artifacts(
             ),
             (
                 "The bicircular solar-tidal row, when present, is a negative beyond-CR3BP stress replay "
-                "and not high-fidelity validation or production solver parity."
+                "and not high-fidelity validation or broad production-solver validation/parity."
             ),
             (
                 "The bicircular retuned recovery row, when present, is a simple bicircular retuning stress "
                 "experiment that reports a completed negative threshold result; it is not SPICE/high-fidelity "
-                "validation, production solver parity, fuel optimality, or quantum evidence."
+                "validation, broad production-solver validation/parity, fuel optimality, or quantum evidence."
             ),
             (
                 "The Horizons ephemeris contrast row, when present, is a cached force-model contrast only "
