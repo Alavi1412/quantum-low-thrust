@@ -1,0 +1,214 @@
+{
+  "accepted_candidate": "optimizer",
+  "accepted_nominal_weight_variant_index": null,
+  "accepted_nominal_weight_variant_label": null,
+  "accepted_nominal_weights": null,
+  "amax": 1.0,
+  "branch_controls": [
+    [
+      0.027245883457801028,
+      -0.9894514699093134,
+      0.12999229063264206
+    ],
+    [
+      0.234675184351432,
+      -0.8040301570060422,
+      0.25024315740051783
+    ],
+    [
+      0.6099342331354219,
+      0.7785658412931884,
+      -0.10277990675133093
+    ],
+    [
+      0.24081332357731938,
+      -0.423380913687096,
+      -0.38993697713541803
+    ],
+    [
+      0.771724288460559,
+      -0.04502129211910529,
+      -0.21678461038244792
+    ],
+    [
+      0.5953960441403133,
+      0.29763128825099644,
+      -0.46851819826660474
+    ],
+    [
+      0.031642267351756515,
+      0.39822798611123356,
+      -0.23571090516555468
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      -0.9920126943327678,
+      -0.007435785723827727,
+      -0.1259187173271398
+    ],
+    [
+      -0.9141311277764489,
+      0.3833363128629572,
+      -0.13197557528114992
+    ],
+    [
+      -0.6533792624715199,
+      0.7445133884756022,
+      -0.13709614784066623
+    ],
+    [
+      -0.20419041149994713,
+      0.9659989521124773,
+      -0.15859476778594572
+    ],
+    [
+      0.3387607942251638,
+      0.928321201496212,
+      -0.15316941975657497
+    ]
+  ],
+  "branch_fuel": 3.02042072568548,
+  "branch_order": 21,
+  "branch_weights": {
+    "continuity": 0.0,
+    "control": 0.0,
+    "smooth": 0.0,
+    "terminal": 4.0
+  },
+  "configured_threshold": 0.17,
+  "control_bound_violation": 0.0,
+  "control_max_norm": 1.0,
+  "control_norms": [
+    0.9983258711938794,
+    0.8741616402881791,
+    0.9943582087009076,
+    0.6239337312763131,
+    0.8028579335366248,
+    0.8139963975539862,
+    0.4638387573492905,
+    0.0,
+    0.0,
+    1.0,
+    0.9999999999999999,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "cost": 290.87798934203545,
+  "initial_bicircular_terminal_error": 13.564672338128863,
+  "mask_index": 21,
+  "message": "`ftol` termination condition is satisfied.",
+  "nfev": 15,
+  "nominal_weight_portfolio_candidates": null,
+  "optimality": 1.0150230395178237,
+  "optimizer_ran": true,
+  "optimizer_success": true,
+  "outage_mask": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "passes_configured_threshold": false,
+  "passes_strict_threshold": false,
+  "phase_degrees": 0.0,
+  "phase_radians": 0.0,
+  "recovery_control_norms": [
+    1.0,
+    0.9999999999999999,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "recovery_controls": [
+    [
+      -0.9920126943327678,
+      -0.007435785723827727,
+      -0.1259187173271398
+    ],
+    [
+      -0.9141311277764489,
+      0.3833363128629572,
+      -0.13197557528114992
+    ],
+    [
+      -0.6533792624715199,
+      0.7445133884756022,
+      -0.13709614784066623
+    ],
+    [
+      -0.20419041149994713,
+      0.9659989521124773,
+      -0.15859476778594572
+    ],
+    [
+      0.3387607942251638,
+      0.928321201496212,
+      -0.15316941975657497
+    ]
+  ],
+  "recovery_segments": 5,
+  "recovery_start": 9,
+  "retuned_bicircular_terminal_error": 6.029904532225566,
+  "retuning_semantics": "Controls were retuned under the simple bicircular solar-tidal dynamics against the original fixed target; this sidecar is not high-fidelity validation or fuel-optimality evidence.",
+  "runtime_seconds": 10.478200200013816,
+  "schema_version": 1,
+  "segments": 14,
+  "settings_fingerprint": "42c89f2d586ab8759e96e7da10b8e44d53ba93b5dc2846f5e9783b26a5bf2723",
+  "sidecar_type": "bicircular_tail_coast_branch_controls",
+  "solar_tidal_parameters": {
+    "distance_semantics": "constant circular Sun distance in Earth-Moon distance units",
+    "model_scope": "simple bicircular solar third-body tidal stress model; not SPICE ephemeris validation",
+    "mu_semantics": "GM_sun/(GM_earth+GM_moon) nondimensional mass ratio",
+    "rate_semantics": "Sun inertial mean-motion ratio to Earth-Moon mean motion; rotating-frame phase rate is n_sun - 1",
+    "rotating_frame_phase_rate": -0.9252,
+    "sun_distance_lu": 389.17,
+    "sun_inertial_angular_rate_ratio": 0.0748,
+    "sun_mu_ratio": 328900.56
+  },
+  "source_cr3bp_controls_path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_021_mask_021_controls.json",
+  "source_cr3bp_controls_sha256": "1ba787bc23e4193dbbb4b8fb1102998dcfc62707f5ea8ccc8d799aaeb784b6b4",
+  "source_cr3bp_terminal_error": 2.541356404936555e-06,
+  "strict_threshold": 0.09,
+  "strict_thresholds": {
+    "nominal_success": 0.05,
+    "robust_success": 0.09
+  },
+  "substeps_per_segment": 7,
+  "suite_case_id": "tail_coast_all_one_two_segment_t5_portfolio",
+  "tail_coast_segments": 5,
+  "target_mode": "catalog_dro_phase",
+  "target_state": [
+    1.189539279349344,
+    -0.26858144973580916,
+    0.0,
+    -0.06633294887425278,
+    -0.3152469277967268,
+    0.0
+  ],
+  "thresholds": {
+    "nominal_success": 0.09,
+    "robust_success": 0.17
+  },
+  "transfer_time": 4.0,
+  "weight_source": "accepted_cr3bp_branch_weights"
+}

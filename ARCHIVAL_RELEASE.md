@@ -25,6 +25,7 @@ and assigned a real identifier.
 - `data/results/claim_evidence_ledger/`
 - `data/results/horizons_ephemeris_force_model_contrast/`
 - `data/results/bicircular_solar_tidal_stress/`
+- `data/results/bicircular_tail_coast_recovery/`
 - `data/results/evidence_synthesis/`
 - `data/results/replay_stress_validation/`
 - `data/results/phase_shift_cardinality_30seed/`
@@ -48,7 +49,10 @@ git diff --check
 
 Build `paper/main.pdf` and `paper/supplement.pdf` locally with `latexmk` before
 deposit. Do not rerun expensive long experiments unless intentionally refreshing
-the evidence package.
+the evidence package. The completed bicircular retuned recovery package is
+archived under `data/results/bicircular_tail_coast_recovery/`; refresh it only
+when intentionally rerunning the expensive negative retuning batch with
+`py -3.11 scripts\run_bicircular_tail_coast_recovery.py --resume`.
 
 ## Post-Deposit Updates
 

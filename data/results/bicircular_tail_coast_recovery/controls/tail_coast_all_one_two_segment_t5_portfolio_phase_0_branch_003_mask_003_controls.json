@@ -1,0 +1,244 @@
+{
+  "accepted_candidate": "optimizer",
+  "accepted_nominal_weight_variant_index": null,
+  "accepted_nominal_weight_variant_label": null,
+  "accepted_nominal_weights": null,
+  "amax": 1.0,
+  "branch_controls": [
+    [
+      0.027245883457801028,
+      -0.9894514699093134,
+      0.12999229063264206
+    ],
+    [
+      0.234675184351432,
+      -0.8040301570060422,
+      0.25024315740051783
+    ],
+    [
+      0.6099342331354219,
+      0.7785658412931884,
+      -0.10277990675133093
+    ],
+    [
+      0.0,
+      -0.0,
+      -0.0
+    ],
+    [
+      0.7122586000290585,
+      -0.005918900789493017,
+      -0.17211407426392863
+    ],
+    [
+      0.527618319406105,
+      0.3225708505872884,
+      -0.4038235472810455
+    ],
+    [
+      -0.013611498613631593,
+      0.4371737814444797,
+      -0.1491447900766511
+    ],
+    [
+      -0.28641881579573397,
+      -0.14510237070223206,
+      0.9185546838233871
+    ],
+    [
+      -0.07083240110297907,
+      -0.563329666405125,
+      0.08771359229409842
+    ],
+    [
+      0.05447789082655665,
+      0.4609227370430849,
+      0.8819226340411874
+    ],
+    [
+      0.08263345742884351,
+      0.9875779909471365,
+      -0.07275285698071114
+    ],
+    [
+      0.06362417970830861,
+      -0.3034789987662474,
+      0.07287781174324102
+    ],
+    [
+      0.004680154180474986,
+      -0.5288776500932463,
+      0.047430021009203314
+    ],
+    [
+      -0.48200995745874253,
+      -0.24742209523515116,
+      -0.02783112335048374
+    ]
+  ],
+  "branch_fuel": 2.7800684184917355,
+  "branch_order": 3,
+  "branch_weights": {
+    "continuity": 0.0,
+    "control": 0.0,
+    "smooth": 0.0,
+    "terminal": 4.0
+  },
+  "configured_threshold": 0.17,
+  "control_bound_violation": 0.0,
+  "control_max_norm": 0.9983258711938794,
+  "control_norms": [
+    0.9983258711938794,
+    0.8741616402881791,
+    0.9943582087009076,
+    0.0,
+    0.7327827790427661,
+    0.7385841197589996,
+    0.4621150900846919,
+    0.9730535150746444,
+    0.574500841053569,
+    0.9965967803210811,
+    0.9936959065472106,
+    0.3185258457020441,
+    0.5310207900866413,
+    0.5425180768664588
+  ],
+  "cost": 9.933514003998663,
+  "initial_bicircular_terminal_error": 1.1288838271149795,
+  "mask_index": 3,
+  "message": "`xtol` termination condition is satisfied.",
+  "nfev": 2,
+  "nominal_weight_portfolio_candidates": null,
+  "optimality": 84565.77634191247,
+  "optimizer_ran": true,
+  "optimizer_success": true,
+  "outage_mask": [
+    1,
+    1,
+    1,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "passes_configured_threshold": false,
+  "passes_strict_threshold": false,
+  "phase_degrees": 0.0,
+  "phase_radians": 0.0,
+  "recovery_control_norms": [
+    0.7327827790427661,
+    0.7385841197589996,
+    0.4621150900846919,
+    0.9730535150746444,
+    0.574500841053569,
+    0.9965967803210811,
+    0.9936959065472106,
+    0.3185258457020441,
+    0.5310207900866413,
+    0.5425180768664588
+  ],
+  "recovery_controls": [
+    [
+      0.7122586000290585,
+      -0.005918900789493017,
+      -0.17211407426392863
+    ],
+    [
+      0.527618319406105,
+      0.3225708505872884,
+      -0.4038235472810455
+    ],
+    [
+      -0.013611498613631593,
+      0.4371737814444797,
+      -0.1491447900766511
+    ],
+    [
+      -0.28641881579573397,
+      -0.14510237070223206,
+      0.9185546838233871
+    ],
+    [
+      -0.07083240110297907,
+      -0.563329666405125,
+      0.08771359229409842
+    ],
+    [
+      0.05447789082655665,
+      0.4609227370430849,
+      0.8819226340411874
+    ],
+    [
+      0.08263345742884351,
+      0.9875779909471365,
+      -0.07275285698071114
+    ],
+    [
+      0.06362417970830861,
+      -0.3034789987662474,
+      0.07287781174324102
+    ],
+    [
+      0.004680154180474986,
+      -0.5288776500932463,
+      0.047430021009203314
+    ],
+    [
+      -0.48200995745874253,
+      -0.24742209523515116,
+      -0.02783112335048374
+    ]
+  ],
+  "recovery_segments": 10,
+  "recovery_start": 4,
+  "retuned_bicircular_terminal_error": 1.1143111102828656,
+  "retuning_semantics": "Controls were retuned under the simple bicircular solar-tidal dynamics against the original fixed target; this sidecar is not high-fidelity validation or fuel-optimality evidence.",
+  "runtime_seconds": 2.975017300021136,
+  "schema_version": 1,
+  "segments": 14,
+  "settings_fingerprint": "42c89f2d586ab8759e96e7da10b8e44d53ba93b5dc2846f5e9783b26a5bf2723",
+  "sidecar_type": "bicircular_tail_coast_branch_controls",
+  "solar_tidal_parameters": {
+    "distance_semantics": "constant circular Sun distance in Earth-Moon distance units",
+    "model_scope": "simple bicircular solar third-body tidal stress model; not SPICE ephemeris validation",
+    "mu_semantics": "GM_sun/(GM_earth+GM_moon) nondimensional mass ratio",
+    "rate_semantics": "Sun inertial mean-motion ratio to Earth-Moon mean motion; rotating-frame phase rate is n_sun - 1",
+    "rotating_frame_phase_rate": -0.9252,
+    "sun_distance_lu": 389.17,
+    "sun_inertial_angular_rate_ratio": 0.0748,
+    "sun_mu_ratio": 328900.56
+  },
+  "source_cr3bp_controls_path": "data/results/hard_catalog_tail_coast_branch_control_replay/controls/tail_coast_all_one_two_segment_t5_portfolio_branch_003_mask_003_controls.json",
+  "source_cr3bp_controls_sha256": "3edba56d8ede21d879506f25e33b9a6f9e7d0217069e63895c0e3dc475e654e0",
+  "source_cr3bp_terminal_error": 0.00180623593433249,
+  "strict_threshold": 0.09,
+  "strict_thresholds": {
+    "nominal_success": 0.05,
+    "robust_success": 0.09
+  },
+  "substeps_per_segment": 7,
+  "suite_case_id": "tail_coast_all_one_two_segment_t5_portfolio",
+  "tail_coast_segments": 5,
+  "target_mode": "catalog_dro_phase",
+  "target_state": [
+    1.189539279349344,
+    -0.26858144973580916,
+    0.0,
+    -0.06633294887425278,
+    -0.3152469277967268,
+    0.0
+  ],
+  "thresholds": {
+    "nominal_success": 0.09,
+    "robust_success": 0.17
+  },
+  "transfer_time": 4.0,
+  "weight_source": "accepted_cr3bp_branch_weights"
+}

@@ -42,6 +42,7 @@ py -3.11 -m pytest tests/test_claim_evidence_ledger.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_bicircular_solar_tidal_stress.py -q -p no:cacheprovider
+py -3.11 -m pytest tests/test_bicircular_tail_coast_recovery.py -q -p no:cacheprovider
 py -3.11 -m pytest tests/test_horizons_ephemeris_force_model_contrast.py -q -p no:cacheprovider
 py -3.11 scripts\run_threshold_sensitivity.py
 py -3.11 scripts\run_horizons_ephemeris_force_model_contrast.py
@@ -67,6 +68,7 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/horizons_ephemeris_force_model_contrast/*`,
 `data/cache/horizons/*`,
 `data/results/bicircular_solar_tidal_stress/*`,
+`data/results/bicircular_tail_coast_recovery/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
@@ -181,10 +183,12 @@ The ledger separates selected-branch evidence, all-mask diagnostics,
 all-configured-mask evidence, and the completed focused accepted-control replay
 row. The current snapshot includes the real replay CSV, metadata, focused
 source recovery CSV, bicircular solar-tidal stress CSV/metadata, and Horizons
-ephemeris force-model contrast CSV/metadata, so the ledger has 11 claim rows.
-The solar-tidal row is a negative stress-probe row, and the Horizons row is a
-force-model contrast row, not all-configured robustness evidence. The tail-coast audit
-confirms the combined row
+ephemeris force-model contrast CSV/metadata, plus the bicircular retuned
+recovery CSV, summary, and metadata, so the ledger has 12 claim rows. The
+solar-tidal row is a negative stress-probe row, the retuned recovery row is a
+completed negative simple-bicircular retuning row, and the Horizons row is a
+force-model contrast row. None is high-fidelity validation or quantum evidence.
+The tail-coast audit confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
 JSON summary of the historical four-row package only.
@@ -284,6 +288,27 @@ negative: nominal solar-tidal rows fail the `0.09` threshold and only `22/108`
 branch-phase rows pass the `0.17` branch threshold. This is beyond-CR3BP stress
 evidence only, not SPICE ephemeris validation, production solver parity,
 fuel optimality, or high-fidelity flight validation.
+
+The bicircular tail-coast retuned recovery package is a completed expensive
+negative retuning batch:
+
+```powershell
+py -3.11 scripts\run_bicircular_tail_coast_recovery.py --resume
+```
+
+It uses the same focused tail-coast accepted-control sidecars as seeds, retunes
+under the simple circular solar-tidal model at fixed Sun phase `0` degrees, and
+keeps the original fixed target and final time. The current package covers all
+27 configured one- and two-segment masks and writes
+`data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery.csv`,
+`data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_summary.csv`,
+`data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_metadata.json`,
+and `tables/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_table.tex`.
+It retunes but still fails: nominal error is `0.316772` against the `0.09`
+configured threshold, configured branch pass count is `19/27`, maximum retuned
+branch error is `6.0299`, and the strict `(0.05,0.09)` branch pass count is
+`16/27`. This is not SPICE/high-fidelity/flight validation, production solver
+parity, fuel optimality, quantum, QUBO, or QAOA evidence.
 
 For the QAOA depth ablation:
 

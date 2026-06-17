@@ -26,6 +26,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
     ledger = module.build_claim_evidence_ledger()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
+    has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
     has_horizons = module.horizons_ephemeris_force_model_contrast_artifacts_available()
 
     expected_claims = [
@@ -45,9 +46,14 @@ def test_claim_evidence_ledger_rows_and_semantics():
             8 if has_replay else 7,
             "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe",
         )
-    if has_horizons:
+    if has_retuned:
         expected_claims.insert(
             7 + int(has_replay) + int(has_bicircular),
+            "bicircular_tail_coast_retuned_recovery",
+        )
+    if has_horizons:
+        expected_claims.insert(
+            7 + int(has_replay) + int(has_bicircular) + int(has_retuned),
             "catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast",
         )
     assert len(ledger) == len(expected_claims)
@@ -131,6 +137,28 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert "not SPICE ephemeris validation" in stress["explicit_boundary"]
     else:
         assert "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe" not in ledger["claim_id"].tolist()
+
+    if has_retuned:
+        retuned = row("bicircular_tail_coast_retuned_recovery")
+        assert retuned["all_configured_mask_evidence"] == "True"
+        assert retuned["target_mode"] == "catalog_dro_phase"
+        assert "all 27/27 configured one- and two-segment masks retuned" in retuned["mask_scope"]
+        assert retuned["passes_configured_thresholds"] == "False"
+        assert "initial bicircular=2.481764912283746" in retuned["nominal_error"]
+        assert "retuned nominal=0.31677192167859453" in retuned["nominal_error"]
+        assert "configured pass=False" in retuned["nominal_error"]
+        assert "configured branch pass count=19/27" in retuned["selected_worst_error"]
+        assert "strict branch pass count=16/27" in retuned["selected_worst_error"]
+        assert "max retuned branch error=6.029904532225566" in retuned["selected_worst_error"]
+        assert retuned["all_mask_worst_error"] == "6.029904532225566"
+        assert "meets configured=False" in retuned["thresholds"]
+        assert "strict meets=False" in retuned["thresholds"]
+        assert "still fails" in retuned["primary_interpretation"]
+        assert "not SPICE/high-fidelity/flight validation" in retuned["explicit_boundary"]
+        assert "production solver parity" in retuned["explicit_boundary"]
+        assert "quantum, QUBO, or QAOA" in retuned["explicit_boundary"]
+    else:
+        assert "bicircular_tail_coast_retuned_recovery" not in ledger["claim_id"].tolist()
 
     if has_horizons:
         horizons = row("catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast")
@@ -233,9 +261,16 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     second = module.write_artifacts(**kwargs)
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
+    has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
     has_horizons = module.horizons_ephemeris_force_model_contrast_artifacts_available()
-    expected_rows = 8 + int(has_replay) + int(has_bicircular) + int(has_horizons)
-    expected_inputs = 10 + (3 if has_replay else 0) + (2 if has_bicircular else 0) + (2 if has_horizons else 0)
+    expected_rows = 8 + int(has_replay) + int(has_bicircular) + int(has_retuned) + int(has_horizons)
+    expected_inputs = (
+        10
+        + (3 if has_replay else 0)
+        + (2 if has_bicircular else 0)
+        + (3 if has_retuned else 0)
+        + (2 if has_horizons else 0)
+    )
 
     assert second["ledger_path"].read_bytes() == first_bytes["ledger"]
     assert second["metadata_path"].read_bytes() == first_bytes["metadata"]
@@ -251,6 +286,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["high_fidelity_claim"] is False
     assert metadata["branch_control_replay"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_probe"] is has_bicircular
+    assert metadata["bicircular_tail_coast_retuned_recovery"] is has_retuned
     assert metadata["horizons_ephemeris_force_model_contrast"] is has_horizons
     assert metadata["fuel_optimality_claim"] is False
     assert metadata["quantum_advantage_claim"] is False
@@ -260,6 +296,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert "no trajectory optimization" in metadata["source_mode"]
     assert metadata["branch_control_replay_artifacts_available"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_artifacts_available"] is has_bicircular
+    assert metadata["bicircular_tail_coast_recovery_artifacts_available"] is has_retuned
     assert metadata["horizons_ephemeris_force_model_contrast_artifacts_available"] is has_horizons
     assert len(metadata["input_artifacts"]) == expected_inputs
 
@@ -280,6 +317,10 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         assert "catalog\\_dro\\_tail\\_coast\\_bicircular\\_solar\\_tidal\\_stress\\_probe" in table
     else:
         assert "catalog\\_dro\\_tail\\_coast\\_bicircular\\_solar\\_tidal\\_stress\\_probe" not in table
+    if has_retuned:
+        assert "bicircular\\_tail\\_coast\\_retuned\\_recovery" in table
+    else:
+        assert "bicircular\\_tail\\_coast\\_retuned\\_recovery" not in table
     if has_horizons:
         assert "catalog\\_dro\\_tail\\_coast\\_horizons\\_ephemeris\\_force\\_model\\_contrast" in table
     else:

@@ -90,6 +90,27 @@ BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA = (
     / "bicircular_solar_tidal_stress"
     / "bicircular_solar_tidal_stress_metadata.json"
 )
+BICIRCULAR_TAIL_COAST_RECOVERY_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "bicircular_tail_coast_recovery"
+    / "bicircular_tail_coast_recovery.csv"
+)
+BICIRCULAR_TAIL_COAST_RECOVERY_SUMMARY_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "bicircular_tail_coast_recovery"
+    / "bicircular_tail_coast_recovery_summary.csv"
+)
+BICIRCULAR_TAIL_COAST_RECOVERY_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "bicircular_tail_coast_recovery"
+    / "bicircular_tail_coast_recovery_metadata.json"
+)
 HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_CSV = (
     ROOT
     / "data"
@@ -126,6 +147,17 @@ def bicircular_solar_tidal_stress_artifacts_available() -> bool:
         for path in (
             BICIRCULAR_SOLAR_TIDAL_STRESS_CSV,
             BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA,
+        )
+    )
+
+
+def bicircular_tail_coast_recovery_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            BICIRCULAR_TAIL_COAST_RECOVERY_CSV,
+            BICIRCULAR_TAIL_COAST_RECOVERY_SUMMARY_CSV,
+            BICIRCULAR_TAIL_COAST_RECOVERY_METADATA,
         )
     )
 
@@ -756,6 +788,101 @@ def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
     }
 
 
+def _bicircular_tail_coast_retuned_recovery_ledger_row() -> dict[str, str]:
+    metadata = _read_json(BICIRCULAR_TAIL_COAST_RECOVERY_METADATA)
+    rows = _read_csv_rows(BICIRCULAR_TAIL_COAST_RECOVERY_CSV)
+    summary_rows = _read_csv_rows(BICIRCULAR_TAIL_COAST_RECOVERY_SUMMARY_CSV)
+    if int(metadata["row_count"]) != len(rows):
+        raise RuntimeError("bicircular retuned recovery metadata row_count does not match CSV")
+    if int(metadata["summary_row_count"]) != len(summary_rows):
+        raise RuntimeError("bicircular retuned recovery metadata summary_row_count does not match summary CSV")
+    if bool(metadata["high_fidelity_validation"]):  # type: ignore[index]
+        raise RuntimeError("bicircular retuned recovery metadata must not claim high_fidelity_validation")
+    for flag_name in (
+        "spice_ephemeris_validation",
+        "production_solver_parity_claim",
+        "fuel_optimality_claim",
+        "quantum_advantage_claim",
+    ):
+        if bool(metadata[flag_name]):  # type: ignore[index]
+            raise RuntimeError(f"bicircular retuned recovery metadata must not claim {flag_name}")
+    if len(summary_rows) != 1:
+        raise RuntimeError("bicircular retuned recovery summary CSV must contain exactly one row")
+    summary = summary_rows[0]
+    settings = metadata["settings"]  # type: ignore[index]
+    branch_rows = int(summary["branch_row_count"])  # type: ignore[index]
+    expected = int(summary["expected_branch_count"])  # type: ignore[index]
+    complete = str(summary["package_complete"]).strip().lower() == "true"  # type: ignore[index]
+    branch_pass = int(summary["branch_pass_count"])  # type: ignore[index]
+    strict_branch_pass = int(summary["strict_branch_pass_count"])  # type: ignore[index]
+    phase_degrees = ", ".join(str(value) for value in settings["phase_degrees"])  # type: ignore[index]
+    all_configured = bool(complete and branch_rows == expected)
+    nominal_rows = [row for row in rows if row.get("record_type") == "nominal"]
+    if len(nominal_rows) != 1:
+        raise RuntimeError("bicircular retuned recovery CSV must contain exactly one nominal row")
+    nominal_row = nominal_rows[0]
+    initial_nominal = nominal_row["initial_bicircular_terminal_error"]
+    retuned_nominal = summary["nominal_error"]  # type: ignore[index]
+    if not all_configured:
+        raise RuntimeError("bicircular retuned recovery package is not complete; ledger row would be partial")
+    return {
+        "claim_id": "bicircular_tail_coast_retuned_recovery",
+        "evidence_family": "bicircular tail-coast retuned recovery, negative",
+        "target_family": "catalog-DRO",
+        "target_mode": str(settings.get("target_mode", "catalog_dro_phase")),  # type: ignore[union-attr]
+        "source_case": TAIL_COAST_COMBINED_CASE,
+        "backend_or_method": "simple bicircular solar-tidal retuning from persisted CR3BP accepted controls",
+        "mask_scope": (
+            f"fixed Sun phase {phase_degrees} deg; all {branch_rows}/{expected} configured "
+            f"one- and two-segment masks retuned; package_complete={complete}"
+        ),
+        "selected_branch_semantics": (
+            "nominal and every configured branch row are retuned against the original fixed target "
+            "and original fixed final time under the simple bicircular solar-tidal model"
+        ),
+        "all_mask_semantics": (
+            "all configured one- and two-segment masks are covered, but the full package still fails "
+            "the recorded configured and strict threshold checks"
+        ),
+        "all_configured_mask_evidence": str(all_configured),
+        "nominal_error": (
+            f"initial bicircular={initial_nominal}; retuned nominal={retuned_nominal}; "
+            f"configured pass={_bool_text(summary['nominal_pass'])}"  # type: ignore[index]
+        ),
+        "selected_worst_error": (
+            f"configured branch pass count={branch_pass}/{branch_rows}; "
+            f"strict branch pass count={strict_branch_pass}/{branch_rows}; "
+            f"max retuned branch error={summary['max_branch_error']}"  # type: ignore[index]
+        ),
+        "all_mask_worst_error": str(summary["all_mask_worst_error"]),  # type: ignore[index]
+        "thresholds": (
+            f"configured nominal<={metadata['thresholds']['configured_nominal_success']}; "  # type: ignore[index]
+            f"configured branch<={metadata['thresholds']['configured_robust_success']}; "  # type: ignore[index]
+            f"strict=({metadata['thresholds']['strict_nominal_success']}, "  # type: ignore[index]
+            f"{metadata['thresholds']['strict_robust_success']}); "  # type: ignore[index]
+            f"meets configured={_bool_text(summary['meets_thresholds'])}; "  # type: ignore[index]
+            f"strict meets={_bool_text(summary['strict_meets_thresholds'])}"  # type: ignore[index]
+        ),
+        "passes_configured_thresholds": _bool_text(summary["meets_thresholds"]),  # type: ignore[index]
+        "primary_interpretation": (
+            f"Completed fixed-phase simple bicircular retuning lowers the nominal error from {initial_nominal} "
+            f"to {retuned_nominal} but still fails: nominal configured pass={_bool_text(summary['nominal_pass'])}, "  # type: ignore[index]
+            f"branch pass count={branch_pass}/{branch_rows}, max branch error={summary['max_branch_error']}, "  # type: ignore[index]
+            f"strict branch pass count={strict_branch_pass}/{branch_rows}."
+        ),
+        "explicit_boundary": (
+            f"Simple bicircular solar-tidal retuning at fixed phase {phase_degrees} deg only; original fixed "
+            "target and final time; not SPICE/high-fidelity/flight validation, production solver parity, "
+            "fuel optimality, quantum, QUBO, or QAOA evidence."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(BICIRCULAR_TAIL_COAST_RECOVERY_CSV)}; "
+            f"{_relative_or_absolute(BICIRCULAR_TAIL_COAST_RECOVERY_SUMMARY_CSV)}; "
+            f"{_relative_or_absolute(BICIRCULAR_TAIL_COAST_RECOVERY_METADATA)}"
+        ),
+    }
+
+
 def _horizons_ephemeris_force_model_contrast_ledger_row() -> dict[str, str]:
     metadata = _read_json(HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_METADATA)
     rows = _read_csv_rows(HORIZONS_EPHEMERIS_FORCE_MODEL_CONTRAST_CSV)
@@ -828,12 +955,15 @@ def _horizons_ephemeris_force_model_contrast_ledger_row() -> dict[str, str]:
 def build_claim_evidence_ledger(
     include_branch_control_replay: bool | None = None,
     include_bicircular_solar_tidal_stress: bool | None = None,
+    include_bicircular_tail_coast_recovery: bool | None = None,
     include_horizons_ephemeris_force_model_contrast: bool | None = None,
 ) -> pd.DataFrame:
     if include_branch_control_replay is None:
         include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
     if include_bicircular_solar_tidal_stress is None:
         include_bicircular_solar_tidal_stress = bicircular_solar_tidal_stress_artifacts_available()
+    if include_bicircular_tail_coast_recovery is None:
+        include_bicircular_tail_coast_recovery = bicircular_tail_coast_recovery_artifacts_available()
     if include_horizons_ephemeris_force_model_contrast is None:
         include_horizons_ephemeris_force_model_contrast = (
             horizons_ephemeris_force_model_contrast_artifacts_available()
@@ -850,8 +980,16 @@ def build_claim_evidence_ledger(
     if include_bicircular_solar_tidal_stress:
         insert_at = 8 if include_branch_control_replay else 7
         rows.insert(insert_at, _bicircular_solar_tidal_stress_ledger_row())
-    if include_horizons_ephemeris_force_model_contrast:
+    if include_bicircular_tail_coast_recovery:
         insert_at = 7 + int(include_branch_control_replay) + int(include_bicircular_solar_tidal_stress)
+        rows.insert(insert_at, _bicircular_tail_coast_retuned_recovery_ledger_row())
+    if include_horizons_ephemeris_force_model_contrast:
+        insert_at = (
+            7
+            + int(include_branch_control_replay)
+            + int(include_bicircular_solar_tidal_stress)
+            + int(include_bicircular_tail_coast_recovery)
+        )
         rows.insert(insert_at, _horizons_ephemeris_force_model_contrast_ledger_row())
     return pd.DataFrame(rows, columns=LEDGER_COLUMNS)
 
@@ -1065,6 +1203,14 @@ def _input_artifacts() -> list[Path]:
                 BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA,
             ]
         )
+    if bicircular_tail_coast_recovery_artifacts_available():
+        paths.extend(
+            [
+                BICIRCULAR_TAIL_COAST_RECOVERY_CSV,
+                BICIRCULAR_TAIL_COAST_RECOVERY_SUMMARY_CSV,
+                BICIRCULAR_TAIL_COAST_RECOVERY_METADATA,
+            ]
+        )
     if horizons_ephemeris_force_model_contrast_artifacts_available():
         paths.extend(
             [
@@ -1083,10 +1229,12 @@ def write_artifacts(
 ) -> dict[str, object]:
     branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
     bicircular_stress_available = bicircular_solar_tidal_stress_artifacts_available()
+    bicircular_retuned_available = bicircular_tail_coast_recovery_artifacts_available()
     horizons_contrast_available = horizons_ephemeris_force_model_contrast_artifacts_available()
     ledger = build_claim_evidence_ledger(
         include_branch_control_replay=branch_control_replay_available,
         include_bicircular_solar_tidal_stress=bicircular_stress_available,
+        include_bicircular_tail_coast_recovery=bicircular_retuned_available,
         include_horizons_ephemeris_force_model_contrast=horizons_contrast_available,
     )
     threshold_audit = build_tail_coast_threshold_audit()
@@ -1118,6 +1266,7 @@ def write_artifacts(
         "high_fidelity_claim": False,
         "branch_control_replay": branch_control_replay_available,
         "bicircular_solar_tidal_stress_probe": bicircular_stress_available,
+        "bicircular_tail_coast_retuned_recovery": bicircular_retuned_available,
         "horizons_ephemeris_force_model_contrast": horizons_contrast_available,
         "fuel_optimality_claim": False,
         "quantum_advantage_claim": False,
@@ -1133,6 +1282,12 @@ def write_artifacts(
                 " A bicircular solar-tidal stress row is included because its real stress-probe CSV and metadata exist."
                 if bicircular_stress_available
                 else " No bicircular solar-tidal stress row is included because that stress package is absent."
+            )
+            + (
+                " A completed negative bicircular retuned recovery row is included because its real "
+                "retuning CSV, summary CSV, and metadata exist."
+                if bicircular_retuned_available
+                else " No bicircular retuned recovery row is included because that package is absent."
             )
             + (
                 " A Horizons ephemeris force-model contrast row is included because its real CSV and metadata exist."
@@ -1158,6 +1313,7 @@ def write_artifacts(
         },
         "branch_control_replay_artifacts_available": branch_control_replay_available,
         "bicircular_solar_tidal_stress_artifacts_available": bicircular_stress_available,
+        "bicircular_tail_coast_recovery_artifacts_available": bicircular_retuned_available,
         "horizons_ephemeris_force_model_contrast_artifacts_available": horizons_contrast_available,
         "tail_coast_threshold_pairs": [
             {
@@ -1192,6 +1348,11 @@ def write_artifacts(
             (
                 "The bicircular solar-tidal row, when present, is a negative beyond-CR3BP stress replay "
                 "and not high-fidelity validation or production solver parity."
+            ),
+            (
+                "The bicircular retuned recovery row, when present, is a simple bicircular retuning stress "
+                "experiment that reports a completed negative threshold result; it is not SPICE/high-fidelity "
+                "validation, production solver parity, fuel optimality, or quantum evidence."
             ),
             (
                 "The Horizons ephemeris contrast row, when present, is a cached force-model contrast only "
