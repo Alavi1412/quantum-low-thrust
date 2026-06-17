@@ -173,17 +173,22 @@ all-configured-mask evidence, and deterministic branch-control replay rows. The
 current snapshot includes the new independent-HS all-configured headroom row,
 the independent-HS branch-control replay CSV/metadata, the independent-HS
 simple bicircular phase-sweep stress CSV/metadata, the independent-HS
-cached-Horizons-derived solar-tidal replay CSV/metadata, the focused tail-coast
-replay CSV/metadata, focused source recovery CSV, bicircular solar-tidal stress
-CSV/metadata, and Horizons ephemeris force-model contrast CSV/metadata, plus the
-bicircular retuned recovery CSV, summary, and metadata, so the ledger has 16
+cached-Horizons-derived solar-tidal replay CSV/metadata, the independent-HS
+cached-Horizons Earth/Moon/Sun point-mass retuning CSV/metadata, the focused
+tail-coast replay CSV/metadata, focused source recovery CSV, bicircular
+solar-tidal stress CSV/metadata, and Horizons ephemeris force-model contrast
+CSV/metadata, plus the bicircular retuned recovery CSV, summary, and metadata,
+so the ledger has 17
 claim rows. The independent-HS bicircular row is a positive simple stress-probe
 replay for the converged all-configured row; the independent-HS cached-Horizons
 row is a stronger representative-epoch stress replay using cached JPL Horizons
-geometry; the hard-catalog solar-tidal row is a negative stress-probe row, the
-retuned recovery row is a completed negative simple-bicircular retuning row, and
-the hard-catalog Horizons row is a force-model contrast row. None is
-SPICE/high-fidelity/flight validation or quantum evidence.
+geometry; the new point-mass row reports that persisted controls fail direct
+Earth/Moon/Sun point-mass replay but independent retuning restores representative
+epoch feasibility; the hard-catalog solar-tidal row is a negative stress-probe
+row, the retuned recovery row is a completed negative simple-bicircular retuning
+row, and the hard-catalog Horizons row is a force-model contrast row. None is
+SPICE/full high-fidelity/flight validation, production solver parity, or quantum
+evidence.
 The tail-coast audit confirms the combined row
 passes recorded-error thresholds through `(0.025, 0.095)` and fails the tighter
 `0.09` robust threshold and the `0.02` nominal threshold. The branch audit is a
@@ -200,8 +205,9 @@ multiple-shooting rows, compact direct-collocation and independent-midpoint
 Hermite-Simpson diagnostics, the new all-configured independent-HS headroom
 row, the independent-HS branch-control replay row, the positive independent-HS
 simple bicircular phase-sweep stress row, the independent-HS
-cached-Horizons-derived solar-tidal replay row, and the scoped hard-catalog
-tail-coast row used in the main manuscript claim path.
+cached-Horizons-derived solar-tidal replay row, the independent-HS
+cached-Horizons point-mass retuning row, and the scoped hard-catalog tail-coast
+row used in the main manuscript claim path.
 
 The replay/stress validation postprocessor writes
 `data/results/replay_stress_validation/replay_stress_validation.csv`,
@@ -290,6 +296,32 @@ distance range `382.6857920288508--382.693044178952` LU, and cache SHA-256
 stronger than the simple bicircular phase sweep because it uses cached JPL
 Horizons geometry, but it remains a simplified stress probe, not SPICE,
 high-fidelity, flight-ready, or production-solver-parity validation.
+
+The independent-HS cached-Horizons Earth/Moon/Sun point-mass retuning
+postprocessor writes
+`data/results/independent_hs_horizons_point_mass_retuning/independent_hs_horizons_point_mass_retuning.csv`,
+`data/results/independent_hs_horizons_point_mass_retuning/independent_hs_horizons_point_mass_retuning_metadata.json`,
+retuned endpoint-plus-midpoint control sidecars under
+`data/results/independent_hs_horizons_point_mass_retuning/controls/`, and
+`tables/independent_hs_horizons_point_mass_retuning/independent_hs_horizons_point_mass_retuning_table.tex`:
+
+```powershell
+py -3.11 scripts\run_independent_hs_horizons_point_mass_retuning.py
+```
+
+The default path is offline and uses the same committed representative
+2026-Jan-01 JPL Horizons Moon/Sun vector cache. It converts the CR3BP rotating
+barycentric state to a geocentric inertial frame, propagates Earth central
+gravity plus indirect Moon/Sun point-mass terms, and retunes the nominal and
+each branch independently with endpoint-plus-midpoint controls bounded at
+`amax=0.2`; branch outage-masked segments remain inactive. Persisted controls
+honestly fail direct replay: nominal error is `0.3812580376880591`, branch
+worst is `0.3797450961017463`, and persisted branch pass count is `0/8`.
+After retuning, nominal error is `0.02143944130524006`, branch worst is
+`0.02473065115224942`, branch pass count is `8/8`, SciPy success count is
+`9/9`, and total `nfev` is `71`. This is a cached-Horizons point-mass retuning
+stress package only; it is not SPICE, full high-fidelity or flight validation,
+production solver parity, fuel optimality, DOI evidence, or quantum evidence.
 
 The Horizons ephemeris force-model contrast postprocessor writes
 `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,

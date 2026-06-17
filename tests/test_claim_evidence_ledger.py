@@ -27,6 +27,7 @@ def test_claim_evidence_ledger_rows_and_semantics():
     has_ihs_replay = module.independent_hs_branch_control_replay_artifacts_available()
     has_ihs_bicircular = module.independent_hs_bicircular_phase_stress_artifacts_available()
     has_ihs_horizons = module.independent_hs_horizons_solar_tidal_replay_artifacts_available()
+    has_ihs_point_mass = module.independent_hs_horizons_point_mass_retuning_artifacts_available()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
     has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
@@ -62,6 +63,19 @@ def test_claim_evidence_ledger_rows_and_semantics():
         expected_claims.insert(
             ihs_horizons_insert_at,
             "phase_shift_independent_hs_horizons_solar_tidal_replay_probe",
+        )
+    if has_ihs_point_mass:
+        ihs_point_mass_insert_at = expected_claims.index("phase_shift_independent_hs_p04_amax02_all_configured") + 1
+        for claim_id in (
+            "phase_shift_independent_hs_branch_control_replay",
+            "phase_shift_independent_hs_bicircular_phase_stress_probe",
+            "phase_shift_independent_hs_horizons_solar_tidal_replay_probe",
+        ):
+            if claim_id in expected_claims:
+                ihs_point_mass_insert_at = expected_claims.index(claim_id) + 1
+        expected_claims.insert(
+            ihs_point_mass_insert_at,
+            "phase_shift_independent_hs_horizons_point_mass_retuning",
         )
     tail_insert_at = (
         expected_claims.index("catalog_dro_tail_coast_all_one_two_segment_t5_all_configured")
@@ -174,6 +188,23 @@ def test_claim_evidence_ledger_rows_and_semantics():
         assert "production solver parity" in ihs_horizons["explicit_boundary"]
     else:
         assert "phase_shift_independent_hs_horizons_solar_tidal_replay_probe" not in ledger["claim_id"].tolist()
+
+    if has_ihs_point_mass:
+        ihs_point_mass = row("phase_shift_independent_hs_horizons_point_mass_retuning")
+        assert ihs_point_mass["all_configured_mask_evidence"] == "True"
+        assert ihs_point_mass["target_mode"] == "catalog_halo_phase_shift"
+        assert "representative 2026-Jan-01 epoch" in ihs_point_mass["mask_scope"]
+        assert "directly replayed and independently retuned" in ihs_point_mass["mask_scope"]
+        assert "persisted point-mass replay nominal=" in ihs_point_mass["nominal_error"]
+        assert "retuned nominal=" in ihs_point_mass["nominal_error"]
+        assert "persisted branch pass count=0/8" in ihs_point_mass["selected_worst_error"]
+        assert "retuned pass count=8/8" in ihs_point_mass["selected_worst_error"]
+        assert ihs_point_mass["passes_configured_thresholds"] == "True"
+        assert "Persisted controls fail direct ephemeris point-mass replay" in ihs_point_mass["primary_interpretation"]
+        assert "not SPICE/full high-fidelity/flight validation" in ihs_point_mass["explicit_boundary"]
+        assert "production solver parity" in ihs_point_mass["explicit_boundary"]
+    else:
+        assert "phase_shift_independent_hs_horizons_point_mass_retuning" not in ledger["claim_id"].tolist()
 
     tail = row("catalog_dro_tail_coast_all_one_two_segment_t5_all_configured")
     assert tail["all_configured_mask_evidence"] == "True"
@@ -337,6 +368,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     has_ihs_replay = module.independent_hs_branch_control_replay_artifacts_available()
     has_ihs_bicircular = module.independent_hs_bicircular_phase_stress_artifacts_available()
     has_ihs_horizons = module.independent_hs_horizons_solar_tidal_replay_artifacts_available()
+    has_ihs_point_mass = module.independent_hs_horizons_point_mass_retuning_artifacts_available()
     has_replay = module.tail_coast_branch_control_replay_artifacts_available()
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
     has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
@@ -346,6 +378,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         + int(has_ihs_replay)
         + int(has_ihs_bicircular)
         + int(has_ihs_horizons)
+        + int(has_ihs_point_mass)
         + int(has_replay)
         + int(has_bicircular)
         + int(has_retuned)
@@ -356,6 +389,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         + (2 if has_ihs_replay else 0)
         + (2 if has_ihs_bicircular else 0)
         + (2 if has_ihs_horizons else 0)
+        + (2 if has_ihs_point_mass else 0)
         + (3 if has_replay else 0)
         + (2 if has_bicircular else 0)
         + (3 if has_retuned else 0)
@@ -377,6 +411,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["independent_hs_branch_control_replay"] is has_ihs_replay
     assert metadata["independent_hs_bicircular_phase_stress_probe"] is has_ihs_bicircular
     assert metadata["independent_hs_horizons_solar_tidal_replay_probe"] is has_ihs_horizons
+    assert metadata["independent_hs_horizons_point_mass_retuning"] is has_ihs_point_mass
     assert metadata["branch_control_replay"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_probe"] is has_bicircular
     assert metadata["bicircular_tail_coast_retuned_recovery"] is has_retuned
@@ -390,6 +425,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert metadata["independent_hs_branch_control_replay_artifacts_available"] is has_ihs_replay
     assert metadata["independent_hs_bicircular_phase_stress_artifacts_available"] is has_ihs_bicircular
     assert metadata["independent_hs_horizons_solar_tidal_replay_artifacts_available"] is has_ihs_horizons
+    assert metadata["independent_hs_horizons_point_mass_retuning_artifacts_available"] is has_ihs_point_mass
     assert metadata["branch_control_replay_artifacts_available"] is has_replay
     assert metadata["bicircular_solar_tidal_stress_artifacts_available"] is has_bicircular
     assert metadata["bicircular_tail_coast_recovery_artifacts_available"] is has_retuned
@@ -417,6 +453,10 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
         assert "phase\\_shift\\_independent\\_hs\\_horizons\\_solar\\_tidal\\_replay\\_probe" in table
     else:
         assert "phase\\_shift\\_independent\\_hs\\_horizons\\_solar\\_tidal\\_replay\\_probe" not in table
+    if has_ihs_point_mass:
+        assert "phase\\_shift\\_independent\\_hs\\_horizons\\_point\\_mass\\_retuning" in table
+    else:
+        assert "phase\\_shift\\_independent\\_hs\\_horizons\\_point\\_mass\\_retuning" not in table
     assert "catalog\\_dro\\_tail\\_coast\\_all\\_one\\_two\\_segment\\_t5\\_all\\_configured" in table
     if has_replay:
         assert "catalog\\_dro\\_tail\\_coast\\_branch\\_control\\_replay\\_accepted\\_controls" in table

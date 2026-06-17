@@ -1,0 +1,372 @@
+{
+  "artifacts": {
+    "independent_hs_horizons_point_mass_retuning_csv": "data/results/independent_hs_horizons_point_mass_retuning/independent_hs_horizons_point_mass_retuning.csv",
+    "independent_hs_horizons_point_mass_retuning_metadata_json": "data/results/independent_hs_horizons_point_mass_retuning/independent_hs_horizons_point_mass_retuning_metadata.json",
+    "independent_hs_horizons_point_mass_retuning_table_tex": "tables/independent_hs_horizons_point_mass_retuning/independent_hs_horizons_point_mass_retuning_table.tex",
+    "retuned_control_manifest_json": "data/results/independent_hs_horizons_point_mass_retuning/controls/independent_hs_horizons_point_mass_retuned_control_manifest.json",
+    "retuned_control_manifest_sha256": "743b6b875f581f0e24100385ec6cd7958c4f6bd147df65762e5ab191282b50bd",
+    "retuned_control_sidecars": [
+      {
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.02143944130524006,
+        "record_type": "nominal",
+        "sha256": "c789dbfe00718275b578ddb74f80ecdf8b3ab535fd49cb980a3ee3b588596549"
+      },
+      {
+        "branch_order": 0,
+        "mask_index": 0,
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.017367326509765427,
+        "record_type": "branch",
+        "sha256": "e3dbaef2c8056ed4211bae4691188444c08972febdc075c40357f307a72ca324"
+      },
+      {
+        "branch_order": 1,
+        "mask_index": 1,
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.0222911235516329,
+        "record_type": "branch",
+        "sha256": "26b2e973cecdc4e13b51f8111ada55ec364df7695ceb10e13b32ab41f5ffdd97"
+      },
+      {
+        "branch_order": 2,
+        "mask_index": 2,
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.02316978360022084,
+        "record_type": "branch",
+        "sha256": "ea4ae2b3e5d17b052365c883b61e0330b1ee23d6946cf778f255b1bf77c4763d"
+      },
+      {
+        "branch_order": 3,
+        "mask_index": 3,
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.020645340276872908,
+        "record_type": "branch",
+        "sha256": "bafadf5c8b12e4509f968d488e2ac340663c7c6fc20af5d1c458f165f465b452"
+      },
+      {
+        "branch_order": 4,
+        "mask_index": 4,
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.024209385445486238,
+        "record_type": "branch",
+        "sha256": "14ec706164f078a24fc347200be4adf7f22077da41b3883b27b609a0e57a5e7a"
+      },
+      {
+        "branch_order": 5,
+        "mask_index": 7,
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.02473065115224942,
+        "record_type": "branch",
+        "sha256": "7760b4af97bab83bfcfd1632c9b8c4eed94ff6c0e8fc8044d2a2dfcf128b7f20"
+      },
+      {
+        "branch_order": 6,
+        "mask_index": 6,
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.020989918062632694,
+        "record_type": "branch",
+        "sha256": "5563849002206d77869a2e79075b3c41f42fa97f26751f42f93a5b25febe07e0"
+      },
+      {
+        "branch_order": 7,
+        "mask_index": 5,
+        "path": "data/results/independent_hs_horizons_point_mass_retuning/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_point_mass_retuned_controls.json",
+        "point_mass_retuned_terminal_error": 0.01743704533214496,
+        "record_type": "branch",
+        "sha256": "335041dd035142a768fa6d6640deffca789a72f020f1e4bca349f5b02ded3d20"
+      }
+    ]
+  },
+  "branch_row_count": 8,
+  "cache": {
+    "cache_type": "jpl_horizons_geocentric_moon_sun_vectors",
+    "metadata": {
+      "body_queries": {
+        "moon_geocentric": {
+          "CENTER": "500@399",
+          "COMMAND": "301",
+          "description": "Moon geometric vectors relative to Earth center"
+        },
+        "sun_geocentric": {
+          "CENTER": "500@399",
+          "COMMAND": "10",
+          "description": "Sun geometric vectors relative to Earth center"
+        }
+      },
+      "canonical_node_times": [
+        0.0,
+        0.0625,
+        0.125,
+        0.1875,
+        0.25,
+        0.3125,
+        0.375,
+        0.4375,
+        0.5
+      ],
+      "canonical_time_unit_seconds": 375190.259,
+      "canonical_transfer_time": 0.5,
+      "ephemeris_note": "Horizons result headers for this cache report the active Horizons vector source; the replay remains a simplified solar-tidal stress probe.",
+      "node_jd_tdb": [
+        2461041.5,
+        2461041.7714049905,
+        2461042.0428099814,
+        2461042.314214972,
+        2461042.5856199623,
+        2461042.857024953,
+        2461043.1284299437,
+        2461043.399834934,
+        2461043.6712399246
+      ],
+      "query_docs": {
+        "de440_de441": "https://ssd.jpl.nasa.gov/doc/de440_de441.html",
+        "horizons_api": "https://ssd-api.jpl.nasa.gov/doc/horizons.html",
+        "horizons_manual": "https://ssd.jpl.nasa.gov/horizons/manual.html"
+      },
+      "query_urls": {
+        "moon_geocentric": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=301&CENTER=500%40399&EPHEM_TYPE=VECTORS&TLIST=2461041.500000000%0A2461041.771404990%0A2461042.042809981%0A2461042.314214972%0A2461042.585619962%0A2461042.857024953%0A2461043.128429944%0A2461043.399834934%0A2461043.671239925&VEC_TABLE=3&OBJ_DATA=NO&CSV_FORMAT=YES",
+        "sun_geocentric": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=10&CENTER=500%40399&EPHEM_TYPE=VECTORS&TLIST=2461041.500000000%0A2461041.771404990%0A2461042.042809981%0A2461042.314214972%0A2461042.585619962%0A2461042.857024953%0A2461043.128429944%0A2461043.399834934%0A2461043.671239925&VEC_TABLE=3&OBJ_DATA=NO&CSV_FORMAT=YES"
+      },
+      "reference_distance_km": 384400.0,
+      "representative_epoch_note": "Fixed representative 2026-Jan-01 TDB epoch for an independent-HS cached-Horizons-derived solar-tidal replay/stress probe only; it is not a mission epoch.",
+      "segments": 8,
+      "start_calendar_tdb": "A.D. 2026-Jan-01 00:00:00.0000",
+      "start_jd_tdb": 2461041.5
+    },
+    "path": "data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json",
+    "sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2"
+  },
+  "cache_sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2",
+  "cached_horizons_earth_moon_sun_point_mass_retuning": true,
+  "canonical_point_mass_constants": {
+    "canonical_time_unit_seconds": 375190.259,
+    "control_acceleration_scale_km_s2": 2.730739486779382e-06,
+    "gm_earth_km3_s2": 398600.44116732327,
+    "gm_moon_km3_s2": 4902.800683873804,
+    "gm_sun_km3_s2": 132712442206.67413,
+    "gm_total_km3_s2": 403503.24185119703,
+    "reference_distance_km": 384400.0,
+    "velocity_scale_km_s": 1.0245468553062833
+  },
+  "command": "scripts\\run_independent_hs_horizons_point_mass_retuning.py",
+  "doi_claim": false,
+  "fuel_optimality_claim": false,
+  "high_fidelity_flight_validation": false,
+  "high_fidelity_validation": false,
+  "input_artifacts": [
+    {
+      "bytes": 2772,
+      "path": "configs/independent_hs_all_configured_headroom.yaml",
+      "sha256": "15ae12c93e4fad9927066d52bfe7c6c23b146f67cd062b201d2b5dfcf0a5cd49"
+    },
+    {
+      "bytes": 1203,
+      "path": "data/source_states.json",
+      "sha256": "24f3e8900a33e87ed60f28cb61da10346e71f481288202350db5617c6e3d15cf"
+    },
+    {
+      "bytes": 10975,
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
+      "sha256": "9a50949eb40d5858658e0d667eb54a2c34b8d278bc0a667bd14b59ff07cea1ed"
+    },
+    {
+      "bytes": 30227,
+      "path": "data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json",
+      "sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2"
+    },
+    {
+      "bytes": 12313,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_control_manifest.json",
+      "sha256": "067099019dc31f3cd52f7b475bcf574719f299a390ca68fe074420205d8ac6ed"
+    },
+    {
+      "bytes": 3468,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_controls.json",
+      "sha256": "46871d310bb008e1be5438eb0ee00d1da0b5c320eefe2fc46f8add782ae06198"
+    },
+    {
+      "bytes": 7798,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_controls.json",
+      "sha256": "e0971fc28fc5f30700acd0c379b90012891a22a1ff5268aab3b6d5b13c3a20eb"
+    },
+    {
+      "bytes": 7782,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_controls.json",
+      "sha256": "2d4e0b756892ea2b5d9fd647207a6c1652c16585dda4a130504a452c40f9b50c"
+    },
+    {
+      "bytes": 7788,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_controls.json",
+      "sha256": "542883ea5dee97baacc45e736222aaf36a4e2249493d1c4d02eabe46b93efe55"
+    },
+    {
+      "bytes": 7786,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_controls.json",
+      "sha256": "80dcf364ebc43719655686cce641289b2c718f1c5edb57f09377ad2bf263bf53"
+    },
+    {
+      "bytes": 7783,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_controls.json",
+      "sha256": "ae64d25b776b428a3d90268ee11a201987aa21dd328e7a5326a9153ea5134461"
+    },
+    {
+      "bytes": 7776,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_controls.json",
+      "sha256": "fafe30ed005fa19a0bfe392e6b81b0999b47af84eb19d8a73b42396115e1bd49"
+    },
+    {
+      "bytes": 7780,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_controls.json",
+      "sha256": "29db0576658055a952ff736e657f3c908e5b6791f53ea02b40266dd28e0c1915"
+    },
+    {
+      "bytes": 7775,
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_controls.json",
+      "sha256": "ee18922dc4b0715b9d371153718e9ff08d9deba18830d7b401445088e5992ee2"
+    }
+  ],
+  "interpretation_limits": [
+    "Cached JPL Horizons Moon/Sun vectors provide a representative 2026-Jan-01 epoch only.",
+    "The force model is Earth central gravity plus indirect Moon/Sun point masses in a geocentric inertial frame.",
+    "Persisted controls fail direct point-mass replay; feasibility is restored only after independent retuning.",
+    "The retuning optimizer runs for this package, so this is not a recorded-controls-only replay.",
+    "This is not SPICE propagation, full high-fidelity or flight validation, production solver parity, fuel optimality, DOI evidence, or quantum advantage evidence."
+  ],
+  "limitations": [
+    "Cached JPL Horizons Moon/Sun vectors provide a representative 2026-Jan-01 epoch only.",
+    "The force model is Earth central gravity plus indirect Moon/Sun point masses in a geocentric inertial frame.",
+    "Persisted controls fail direct point-mass replay; feasibility is restored only after independent retuning.",
+    "The retuning optimizer runs for this package, so this is not a recorded-controls-only replay.",
+    "This is not SPICE propagation, full high-fidelity or flight validation, production solver parity, fuel optimality, DOI evidence, or quantum advantage evidence."
+  ],
+  "nominal_row_count": 1,
+  "optimization_rerun": true,
+  "point_mass_replay_summary": {
+    "branch_row_count": 8,
+    "persisted_branch_point_mass_replay_worst_error": 0.3797450961017463,
+    "persisted_branch_replay_pass_count": 0,
+    "persisted_nominal_point_mass_replay_error": 0.3812580376880591,
+    "persisted_nominal_replay_passes_configured_threshold": false
+  },
+  "point_mass_retuned_summary": {
+    "branch_row_count": 8,
+    "max_endpoint_bound_violation": 5.551115123125783e-17,
+    "max_midpoint_bound_violation": 0.0,
+    "retuned_all_rows_pass": true,
+    "retuned_branch_pass_count": 8,
+    "retuned_branch_point_mass_worst_error": 0.02473065115224942,
+    "retuned_nominal_pass_count": 1,
+    "retuned_nominal_point_mass_error": 0.02143944130524006,
+    "retuned_nominal_row_count": 1,
+    "scipy_success_count": 9,
+    "total_nfev": 71,
+    "total_runtime_seconds": 90.64400020003086
+  },
+  "polish_case_summary": {
+    "branch_errors_by_mask": [
+      {
+        "configured_threshold": 0.17,
+        "mask_index": 0,
+        "nfev": 13,
+        "point_mass_replay_terminal_error": 0.31981121886319147,
+        "point_mass_retuned_terminal_error": 0.017367326509765427,
+        "retuned_passes_configured_threshold": true,
+        "runtime_seconds": 17.32159780000802
+      },
+      {
+        "configured_threshold": 0.17,
+        "mask_index": 1,
+        "nfev": 6,
+        "point_mass_replay_terminal_error": 0.33882497532945927,
+        "point_mass_retuned_terminal_error": 0.0222911235516329,
+        "retuned_passes_configured_threshold": true,
+        "runtime_seconds": 8.532509899989236
+      },
+      {
+        "configured_threshold": 0.17,
+        "mask_index": 2,
+        "nfev": 7,
+        "point_mass_replay_terminal_error": 0.35471152821434526,
+        "point_mass_retuned_terminal_error": 0.02316978360022084,
+        "retuned_passes_configured_threshold": true,
+        "runtime_seconds": 8.47566620001453
+      },
+      {
+        "configured_threshold": 0.17,
+        "mask_index": 3,
+        "nfev": 9,
+        "point_mass_replay_terminal_error": 0.36636015703145636,
+        "point_mass_retuned_terminal_error": 0.020645340276872908,
+        "retuned_passes_configured_threshold": true,
+        "runtime_seconds": 10.07266060000984
+      },
+      {
+        "configured_threshold": 0.17,
+        "mask_index": 4,
+        "nfev": 6,
+        "point_mass_replay_terminal_error": 0.373374520504078,
+        "point_mass_retuned_terminal_error": 0.024209385445486238,
+        "retuned_passes_configured_threshold": true,
+        "runtime_seconds": 7.174252500000875
+      },
+      {
+        "configured_threshold": 0.17,
+        "mask_index": 5,
+        "nfev": 11,
+        "point_mass_replay_terminal_error": 0.3767582159655654,
+        "point_mass_retuned_terminal_error": 0.01743704533214496,
+        "retuned_passes_configured_threshold": true,
+        "runtime_seconds": 14.23426820000168
+      },
+      {
+        "configured_threshold": 0.17,
+        "mask_index": 6,
+        "nfev": 7,
+        "point_mass_replay_terminal_error": 0.3785208397273946,
+        "point_mass_retuned_terminal_error": 0.020989918062632694,
+        "retuned_passes_configured_threshold": true,
+        "runtime_seconds": 9.918614199996227
+      },
+      {
+        "configured_threshold": 0.17,
+        "mask_index": 7,
+        "nfev": 6,
+        "point_mass_replay_terminal_error": 0.3797450961017463,
+        "point_mass_retuned_terminal_error": 0.02473065115224942,
+        "retuned_passes_configured_threshold": true,
+        "runtime_seconds": 7.209264200006146
+      }
+    ],
+    "branch_row_count": 8,
+    "cache_sha256": "13fe699371ad67bf1616d38b7afd316bbff72811bbc0f8337cff51d6333897b2",
+    "case_id": "ihs_all_single_p04_amax02_polish_from_p04",
+    "persisted_branch_point_mass_replay_worst_error": 0.3797450961017463,
+    "persisted_branch_replay_pass_count": 0,
+    "persisted_nominal_point_mass_replay_error": 0.3812580376880591,
+    "persisted_nominal_replay_passes_configured_threshold": false,
+    "retuned_all_rows_pass": true,
+    "retuned_branch_pass_count": 8,
+    "retuned_branch_point_mass_worst_error": 0.02473065115224942,
+    "retuned_nominal_pass_count": 1,
+    "retuned_nominal_point_mass_error": 0.02143944130524006,
+    "retuned_nominal_row_count": 1
+  },
+  "production_solver_parity_claim": false,
+  "quantum_advantage_claim": false,
+  "retuning": true,
+  "retuning_settings": {
+    "branch_outage_segments_fixed_inactive": true,
+    "control_regularization_weight": 0.0001,
+    "ftol": 1e-05,
+    "gtol": 0.0001,
+    "max_nfev": 40,
+    "smooth_regularization_weight": 0.0005,
+    "terminal_residual_weight": 1.0,
+    "xtol": 1e-05
+  },
+  "row_count": 9,
+  "runtime_network_dependency": false,
+  "spice_ephemeris_validation": false,
+  "uses_cached_horizons_vectors": true
+}

@@ -121,6 +121,20 @@ INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA = (
     / "independent_hs_horizons_solar_tidal_replay"
     / "independent_hs_horizons_solar_tidal_replay_metadata.json"
 )
+INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_horizons_point_mass_retuning"
+    / "independent_hs_horizons_point_mass_retuning.csv"
+)
+INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_horizons_point_mass_retuning"
+    / "independent_hs_horizons_point_mass_retuning_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -263,6 +277,13 @@ def independent_hs_horizons_solar_tidal_replay_available() -> bool:
     return (
         INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV.is_file()
         and INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA.is_file()
+    )
+
+
+def independent_hs_horizons_point_mass_retuning_available() -> bool:
+    return (
+        INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV.is_file()
+        and INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA.is_file()
     )
 
 
@@ -434,6 +455,51 @@ def _independent_hs_horizons_solar_tidal_replay_row() -> dict[str, str]:
         ),
         "source_artifact": _relative_or_absolute(INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV),
         "source_row_id": "polish_case_summary in independent-HS cached-Horizons replay metadata",
+    }
+
+
+def _independent_hs_horizons_point_mass_retuning_row() -> dict[str, str]:
+    metadata = json.loads(INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA.read_text(encoding="utf-8"))
+    polish = metadata["polish_case_summary"]
+    replay_nominal = str(polish["persisted_nominal_point_mass_replay_error"])
+    replay_branch = str(polish["persisted_branch_point_mass_replay_worst_error"])
+    retuned_nominal = str(polish["retuned_nominal_point_mass_error"])
+    retuned_branch = str(polish["retuned_branch_point_mass_worst_error"])
+    branch_pass = int(polish["retuned_branch_pass_count"])
+    branch_count = int(polish["branch_row_count"])
+    if branch_count != 8:
+        raise RuntimeError("expected independent-HS point-mass retuning to contain 8 polish branch rows")
+    if bool(polish["persisted_nominal_replay_passes_configured_threshold"]):
+        raise RuntimeError("point-mass retuning row should capture a failed persisted nominal replay")
+    return {
+        "row_id": "ihs_horizons_point_mass_retuning_polish_p04_amax02",
+        "artifact_family": "independent-HS cached-Horizons Earth/Moon/Sun point-mass retuning",
+        "representative_case_or_statistic": "ihs_all_single_p04_amax02_polish_from_p04",
+        "target_family": "catalog halo phase-shift",
+        "backend_initializer_role": "independent endpoint-plus-midpoint retuning under cached-Horizons point-mass dynamics",
+        "mask_scope": "8/8 configured one-segment masks at representative 2026-Jan-01 epoch",
+        "phase_time": "0.4",
+        "transfer_time": "0.5",
+        "amax": "0.2",
+        "segments": "8",
+        "nominal_error": retuned_nominal,
+        "selected_worst_error": retuned_branch,
+        "all_mask_worst_error": retuned_branch,
+        "configured_pass": str(bool(float(retuned_nominal) <= 0.09 and branch_pass == branch_count)),
+        "stringent_0p065_0p10_all_mask_pass": _threshold_pass(retuned_nominal, retuned_branch, STRINGENT_THRESHOLDS),
+        "near_tight_0p05_0p10_all_mask_pass": _threshold_pass(retuned_nominal, retuned_branch, NEAR_TIGHT_THRESHOLDS),
+        "tight_0p05_0p09_all_mask_pass": _threshold_pass(retuned_nominal, retuned_branch, TIGHT_THRESHOLDS),
+        "pass_status_note": (
+            f"persisted replay failed: nominal {replay_nominal}, branch worst {replay_branch}; "
+            f"retuned branch {branch_pass}/{branch_count}"
+        ),
+        "practitioner_interpretation": (
+            "Persisted controls fail direct ephemeris point-mass replay, but independent retuning "
+            "restores feasibility for nominal and all 8 branches at the representative epoch; this is "
+            "not SPICE/full high-fidelity/flight validation or production solver parity."
+        ),
+        "source_artifact": _relative_or_absolute(INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV),
+        "source_row_id": "polish_case_summary in independent-HS point-mass retuning metadata",
     }
 
 
@@ -615,6 +681,11 @@ def build_synthesis() -> pd.DataFrame:
             if independent_hs_horizons_solar_tidal_replay_available()
             else []
         ),
+        *(
+            [_independent_hs_horizons_point_mass_retuning_row()]
+            if independent_hs_horizons_point_mass_retuning_available()
+            else []
+        ),
         _case_metric_row(
             row_id="tail_coast_hard_catalog_all_one_two",
             artifact_family="hard-catalog tail-coast recovery",
@@ -753,6 +824,13 @@ def write_artifacts(
                 INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA,
             ]
         )
+    if independent_hs_horizons_point_mass_retuning_available():
+        input_artifacts.extend(
+            [
+                INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV,
+                INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA,
+            ]
+        )
     metadata = {
         "command": command,
         "row_count": int(len(synthesis)),
@@ -821,6 +899,11 @@ def write_artifacts(
                 "The independent-HS cached-Horizons solar-tidal replay row, when present, uses cached "
                 "JPL Horizons geometry in a simplified stress replay; it is not SPICE/high-fidelity/"
                 "flight validation or production solver parity."
+            ),
+            (
+                "The independent-HS cached-Horizons point-mass retuning row, when present, reports a "
+                "failed persisted-control replay and an independent retuning pass; it is not SPICE/"
+                "full high-fidelity/flight validation or production solver parity."
             ),
         ],
     }

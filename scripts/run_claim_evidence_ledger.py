@@ -101,6 +101,20 @@ INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA = (
     / "independent_hs_horizons_solar_tidal_replay"
     / "independent_hs_horizons_solar_tidal_replay_metadata.json"
 )
+INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_horizons_point_mass_retuning"
+    / "independent_hs_horizons_point_mass_retuning.csv"
+)
+INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_horizons_point_mass_retuning"
+    / "independent_hs_horizons_point_mass_retuning_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -216,6 +230,16 @@ def independent_hs_horizons_solar_tidal_replay_artifacts_available() -> bool:
         for path in (
             INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_CSV,
             INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA,
+        )
+    )
+
+
+def independent_hs_horizons_point_mass_retuning_artifacts_available() -> bool:
+    return all(
+        path.is_file()
+        for path in (
+            INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV,
+            INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA,
         )
     )
 
@@ -1076,6 +1100,84 @@ def _independent_hs_horizons_solar_tidal_replay_ledger_row() -> dict[str, str]:
     }
 
 
+def _independent_hs_horizons_point_mass_retuning_ledger_row() -> dict[str, str]:
+    metadata = _read_json(INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA)
+    rows = _read_csv_rows(INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV)
+    if int(metadata["row_count"]) != len(rows):
+        raise RuntimeError("independent-HS point-mass retuning metadata row_count does not match CSV")
+    for flag_name in (
+        "spice_ephemeris_validation",
+        "high_fidelity_validation",
+        "high_fidelity_flight_validation",
+        "production_solver_parity_claim",
+        "fuel_optimality_claim",
+        "doi_claim",
+        "quantum_advantage_claim",
+    ):
+        if bool(metadata[flag_name]):  # type: ignore[index]
+            raise RuntimeError(f"independent-HS point-mass retuning metadata must not claim {flag_name}")
+    if not bool(metadata["optimization_rerun"]) or not bool(metadata["retuning"]):  # type: ignore[index]
+        raise RuntimeError("independent-HS point-mass package must disclose retuning optimizer rerun")
+    summary = metadata["polish_case_summary"]  # type: ignore[index]
+    cache = metadata["cache"]  # type: ignore[index]
+    replay_nominal = str(summary["persisted_nominal_point_mass_replay_error"])  # type: ignore[index]
+    replay_branch = str(summary["persisted_branch_point_mass_replay_worst_error"])  # type: ignore[index]
+    retuned_nominal = str(summary["retuned_nominal_point_mass_error"])  # type: ignore[index]
+    retuned_branch = str(summary["retuned_branch_point_mass_worst_error"])  # type: ignore[index]
+    branch_pass = int(summary["retuned_branch_pass_count"])  # type: ignore[index]
+    branch_count = int(summary["branch_row_count"])  # type: ignore[index]
+    replay_branch_pass = int(summary["persisted_branch_replay_pass_count"])  # type: ignore[index]
+    return {
+        "claim_id": "phase_shift_independent_hs_horizons_point_mass_retuning",
+        "evidence_family": "independent-HS cached-Horizons Earth/Moon/Sun point-mass retuning",
+        "target_family": "halo phase-shift",
+        "target_mode": "catalog_halo_phase_shift",
+        "source_case": "ihs_all_single_p04_amax02_polish_from_p04",
+        "backend_or_method": (
+            "independent least-squares retuning of endpoint-plus-midpoint controls under cached-Horizons "
+            "Earth/Moon/Sun point-mass dynamics"
+        ),
+        "mask_scope": (
+            f"representative 2026-Jan-01 epoch; persisted nominal plus {branch_count} branch controls "
+            "directly replayed and independently retuned"
+        ),
+        "selected_branch_semantics": (
+            "direct replay evaluates persisted controls; retuning then optimizes nominal and each branch separately"
+        ),
+        "all_mask_semantics": (
+            "all eight configured one-segment masks are covered; branch outage-masked segments remain inactive"
+        ),
+        "all_configured_mask_evidence": "True",
+        "nominal_error": (
+            f"persisted point-mass replay nominal={replay_nominal}; retuned nominal={retuned_nominal}"
+        ),
+        "selected_worst_error": (
+            f"persisted point-mass branch worst={replay_branch}; persisted branch pass count={replay_branch_pass}/"
+            f"{branch_count}; retuned branch worst={retuned_branch}; retuned pass count={branch_pass}/{branch_count}"
+        ),
+        "all_mask_worst_error": f"retuned all-mask point-mass worst={retuned_branch}",
+        "thresholds": (
+            "source nominal<=0.09; source branch<=0.17; "
+            f"cache sha256={metadata['cache_sha256']}; cache path={cache['path']}"  # type: ignore[index]
+        ),
+        "passes_configured_thresholds": str(bool(branch_pass == branch_count and float(retuned_nominal) <= 0.09)),
+        "primary_interpretation": (
+            "Persisted controls fail direct ephemeris point-mass replay, but independent retuning restores "
+            "feasibility for nominal and all 8 branches at the representative epoch."
+        ),
+        "explicit_boundary": (
+            "Cached-Horizons Earth/Moon/Sun point-mass retuning stress model only; not SPICE/full "
+            "high-fidelity/flight validation, not production solver parity, not fuel optimality, not DOI "
+            "evidence, and not quantum, QUBO, or QAOA evidence."
+        ),
+        "source_artifact": (
+            f"{_relative_or_absolute(INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV)}; "
+            f"{_relative_or_absolute(INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA)}; "
+            f"{cache['path']}"
+        ),
+    }
+
+
 def _bicircular_solar_tidal_stress_ledger_row() -> dict[str, str]:
     metadata = _read_json(BICIRCULAR_SOLAR_TIDAL_STRESS_METADATA)
     rows = _read_csv_rows(BICIRCULAR_SOLAR_TIDAL_STRESS_CSV)
@@ -1308,6 +1410,7 @@ def build_claim_evidence_ledger(
     include_independent_hs_branch_control_replay: bool | None = None,
     include_independent_hs_bicircular_phase_stress: bool | None = None,
     include_independent_hs_horizons_solar_tidal_replay: bool | None = None,
+    include_independent_hs_horizons_point_mass_retuning: bool | None = None,
     include_branch_control_replay: bool | None = None,
     include_bicircular_solar_tidal_stress: bool | None = None,
     include_bicircular_tail_coast_recovery: bool | None = None,
@@ -1320,6 +1423,10 @@ def build_claim_evidence_ledger(
     if include_independent_hs_horizons_solar_tidal_replay is None:
         include_independent_hs_horizons_solar_tidal_replay = (
             independent_hs_horizons_solar_tidal_replay_artifacts_available()
+        )
+    if include_independent_hs_horizons_point_mass_retuning is None:
+        include_independent_hs_horizons_point_mass_retuning = (
+            independent_hs_horizons_point_mass_retuning_artifacts_available()
         )
     if include_branch_control_replay is None:
         include_branch_control_replay = tail_coast_branch_control_replay_artifacts_available()
@@ -1351,6 +1458,9 @@ def build_claim_evidence_ledger(
         ihs_insert_at += 1
     if include_independent_hs_horizons_solar_tidal_replay:
         rows.insert(ihs_insert_at, _independent_hs_horizons_solar_tidal_replay_ledger_row())
+        ihs_insert_at += 1
+    if include_independent_hs_horizons_point_mass_retuning:
+        rows.insert(ihs_insert_at, _independent_hs_horizons_point_mass_retuning_ledger_row())
     tail_insert_at = next(
         index
         for index, row in enumerate(rows)
@@ -1594,6 +1704,13 @@ def _input_artifacts() -> list[Path]:
                 INDEPENDENT_HS_HORIZONS_SOLAR_TIDAL_REPLAY_METADATA,
             ]
         )
+    if independent_hs_horizons_point_mass_retuning_artifacts_available():
+        paths.extend(
+            [
+                INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_CSV,
+                INDEPENDENT_HS_HORIZONS_POINT_MASS_RETUNING_METADATA,
+            ]
+        )
     if bicircular_solar_tidal_stress_artifacts_available():
         paths.extend(
             [
@@ -1628,6 +1745,7 @@ def write_artifacts(
     ihs_branch_replay_available = independent_hs_branch_control_replay_artifacts_available()
     ihs_bicircular_phase_stress_available = independent_hs_bicircular_phase_stress_artifacts_available()
     ihs_horizons_replay_available = independent_hs_horizons_solar_tidal_replay_artifacts_available()
+    ihs_point_mass_retuning_available = independent_hs_horizons_point_mass_retuning_artifacts_available()
     branch_control_replay_available = tail_coast_branch_control_replay_artifacts_available()
     bicircular_stress_available = bicircular_solar_tidal_stress_artifacts_available()
     bicircular_retuned_available = bicircular_tail_coast_recovery_artifacts_available()
@@ -1636,6 +1754,7 @@ def write_artifacts(
         include_independent_hs_branch_control_replay=ihs_branch_replay_available,
         include_independent_hs_bicircular_phase_stress=ihs_bicircular_phase_stress_available,
         include_independent_hs_horizons_solar_tidal_replay=ihs_horizons_replay_available,
+        include_independent_hs_horizons_point_mass_retuning=ihs_point_mass_retuning_available,
         include_branch_control_replay=branch_control_replay_available,
         include_bicircular_solar_tidal_stress=bicircular_stress_available,
         include_bicircular_tail_coast_recovery=bicircular_retuned_available,
@@ -1671,6 +1790,7 @@ def write_artifacts(
         "independent_hs_branch_control_replay": ihs_branch_replay_available,
         "independent_hs_bicircular_phase_stress_probe": ihs_bicircular_phase_stress_available,
         "independent_hs_horizons_solar_tidal_replay_probe": ihs_horizons_replay_available,
+        "independent_hs_horizons_point_mass_retuning": ihs_point_mass_retuning_available,
         "branch_control_replay": branch_control_replay_available,
         "bicircular_solar_tidal_stress_probe": bicircular_stress_available,
         "bicircular_tail_coast_retuned_recovery": bicircular_retuned_available,
@@ -1694,6 +1814,11 @@ def write_artifacts(
                 " A positive independent-HS cached-Horizons-derived solar-tidal replay row is included because its CSV and metadata exist."
                 if ihs_horizons_replay_available
                 else " No independent-HS cached-Horizons-derived solar-tidal replay row is included because that package is absent."
+            )
+            + (
+                " An independent-HS cached-Horizons Earth/Moon/Sun point-mass retuning row is included because its CSV and metadata exist."
+                if ihs_point_mass_retuning_available
+                else " No independent-HS cached-Horizons point-mass retuning row is included because that package is absent."
             )
             + (
                 " A branch-control replay ledger row is included because the focused replay package is present."
@@ -1736,6 +1861,7 @@ def write_artifacts(
         "independent_hs_branch_control_replay_artifacts_available": ihs_branch_replay_available,
         "independent_hs_bicircular_phase_stress_artifacts_available": ihs_bicircular_phase_stress_available,
         "independent_hs_horizons_solar_tidal_replay_artifacts_available": ihs_horizons_replay_available,
+        "independent_hs_horizons_point_mass_retuning_artifacts_available": ihs_point_mass_retuning_available,
         "branch_control_replay_artifacts_available": branch_control_replay_available,
         "bicircular_solar_tidal_stress_artifacts_available": bicircular_stress_available,
         "bicircular_tail_coast_recovery_artifacts_available": bicircular_retuned_available,
@@ -1781,6 +1907,12 @@ def write_artifacts(
                 "JPL Horizons geometry in a simplified solar-tidal stress replay for the converged "
                 "all-configured row; it is not SPICE/high-fidelity/flight validation or production "
                 "solver parity."
+            ),
+            (
+                "The independent-HS cached-Horizons point-mass retuning row, when present, reports "
+                "that persisted controls fail direct Earth/Moon/Sun point-mass replay and that "
+                "independent retuning restores representative-epoch feasibility; it is not SPICE/"
+                "full high-fidelity/flight validation or production solver parity."
             ),
             (
                 "The historical tail-coast branch audit summarizes recorded branch_results JSON only; "

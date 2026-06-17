@@ -14,6 +14,7 @@ import numpy as np
 
 from .cr3bp import cr3bp_derivative
 from .direct_collocation import quadratic_midpoint_control
+from .objective import state_error
 from .refinement import project_controls_to_ball
 
 
@@ -32,6 +33,37 @@ class HorizonsVectorSample:
     light_time_s: float
     range_km: float
     range_rate_km_s: float
+
+
+@dataclass(frozen=True)
+class CanonicalPointMassScales:
+    """Canonical-to-physical constants for cached-Horizons stress models.
+
+    The constants are derived from the fixed CR3BP length and time units used
+    by the paper artifacts. They support an Earth/Moon/Sun point-mass retuning
+    stress test only; they are not a SPICE or mission-operations model.
+    """
+
+    reference_distance_km: float
+    canonical_time_unit_seconds: float
+    gm_total_km3_s2: float
+    gm_earth_km3_s2: float
+    gm_moon_km3_s2: float
+    gm_sun_km3_s2: float
+    velocity_scale_km_s: float
+    acceleration_scale_km_s2: float
+
+
+@dataclass(frozen=True)
+class HorizonsPointMassProfile:
+    """Interpolatable cached Horizons Moon/Sun vectors over canonical time."""
+
+    canonical_time: np.ndarray
+    jd_tdb: np.ndarray
+    moon_position_km: np.ndarray
+    moon_velocity_km_s: np.ndarray
+    sun_position_km: np.ndarray
+    sun_velocity_km_s: np.ndarray
 
 
 def canonical_node_times(tf: float, n_segments: int) -> np.ndarray:
@@ -531,6 +563,402 @@ def interpolate_horizons_sun_vector(
         raise ValueError(f"canonical time {value:.17g} is outside cached Horizons range {lower:.17g}--{upper:.17g}")
     value = min(max(value, lower), upper)
     return np.asarray([np.interp(value, times, vectors[:, axis]) for axis in range(3)], dtype=float)
+
+
+def canonical_point_mass_scales(
+    *,
+    mu: float,
+    reference_distance_km: float = DEFAULT_REFERENCE_DISTANCE_KM,
+    canonical_time_unit_seconds: float = DEFAULT_CANONICAL_TIME_UNIT_SECONDS,
+    sun_gm_ratio: float = 328900.56,
+) -> CanonicalPointMassScales:
+    """Return Earth/Moon/Sun GM constants implied by the CR3BP units.
+
+    The Sun GM is represented as ``sun_gm_ratio`` times the Earth-Moon system
+    GM to support a conservative point-mass retuning stress test. This is not a
+    high-fidelity ephemeris or flight-validation force model.
+    """
+
+    length = float(reference_distance_km)
+    time_unit = float(canonical_time_unit_seconds)
+    if length <= 0.0:
+        raise ValueError("reference_distance_km must be positive")
+    if time_unit <= 0.0:
+        raise ValueError("canonical_time_unit_seconds must be positive")
+    gm_total = length**3 / time_unit**2
+    return CanonicalPointMassScales(
+        reference_distance_km=length,
+        canonical_time_unit_seconds=time_unit,
+        gm_total_km3_s2=float(gm_total),
+        gm_earth_km3_s2=float((1.0 - float(mu)) * gm_total),
+        gm_moon_km3_s2=float(float(mu) * gm_total),
+        gm_sun_km3_s2=float(float(sun_gm_ratio) * gm_total),
+        velocity_scale_km_s=float(length / time_unit),
+        acceleration_scale_km_s2=float(length / time_unit**2),
+    )
+
+
+def horizons_point_mass_profile_from_cache(cache: dict[str, object]) -> HorizonsPointMassProfile:
+    """Build an interpolatable Moon/Sun geocentric profile from a validated cache."""
+
+    metadata = cache.get("metadata")
+    if not isinstance(metadata, dict):
+        raise ValueError("Horizons cache missing metadata")
+    canonical_times = _metadata_float_array(metadata, "canonical_node_times")
+    moon_samples = samples_from_cache(cache, "moon_geocentric")
+    sun_samples = samples_from_cache(cache, "sun_geocentric")
+    if len(moon_samples) != len(sun_samples):
+        raise ValueError("Moon/Sun Horizons caches have different sample counts")
+    if canonical_times.shape != (len(moon_samples),):
+        raise ValueError("canonical_node_times length does not match Moon/Sun sample count")
+    if np.any(np.diff(canonical_times) <= 0.0):
+        raise ValueError("canonical_node_times must be strictly increasing")
+    moon_jd = np.asarray([sample.jd_tdb for sample in moon_samples], dtype=float)
+    sun_jd = np.asarray([sample.jd_tdb for sample in sun_samples], dtype=float)
+    if not np.allclose(moon_jd, sun_jd, rtol=0.0, atol=5.0e-10):
+        raise ValueError("Moon/Sun Horizons caches have different JD grids")
+    return HorizonsPointMassProfile(
+        canonical_time=np.asarray(canonical_times, dtype=float),
+        jd_tdb=moon_jd,
+        moon_position_km=np.asarray([sample.position_km for sample in moon_samples], dtype=float),
+        moon_velocity_km_s=np.asarray([sample.velocity_km_s for sample in moon_samples], dtype=float),
+        sun_position_km=np.asarray([sample.position_km for sample in sun_samples], dtype=float),
+        sun_velocity_km_s=np.asarray([sample.velocity_km_s for sample in sun_samples], dtype=float),
+    )
+
+
+def _interp_profile_vector(t: float, times: np.ndarray, vectors: np.ndarray, *, tolerance: float) -> np.ndarray:
+    value = float(t)
+    lower = float(times[0])
+    upper = float(times[-1])
+    if value < lower - float(tolerance) or value > upper + float(tolerance):
+        raise ValueError(f"canonical time {value:.17g} is outside cached Horizons range {lower:.17g}--{upper:.17g}")
+    value = min(max(value, lower), upper)
+    return np.asarray([np.interp(value, times, vectors[:, axis]) for axis in range(3)], dtype=float)
+
+
+def interpolate_horizons_point_mass_profile(
+    profile: HorizonsPointMassProfile,
+    t: float,
+    *,
+    tolerance: float = 1.0e-12,
+) -> tuple[HorizonsVectorSample, HorizonsVectorSample]:
+    """Linearly interpolate cached Moon/Sun vectors at canonical time ``t``."""
+
+    times = np.asarray(profile.canonical_time, dtype=float)
+    if times.ndim != 1 or times.size < 2:
+        raise ValueError("profile canonical_time must contain at least two samples")
+    if np.any(np.diff(times) <= 0.0):
+        raise ValueError("profile canonical_time must be strictly increasing")
+    jd = float(np.interp(min(max(float(t), float(times[0])), float(times[-1])), times, profile.jd_tdb))
+    moon_position = _interp_profile_vector(t, times, profile.moon_position_km, tolerance=float(tolerance))
+    moon_velocity = _interp_profile_vector(t, times, profile.moon_velocity_km_s, tolerance=float(tolerance))
+    sun_position = _interp_profile_vector(t, times, profile.sun_position_km, tolerance=float(tolerance))
+    sun_velocity = _interp_profile_vector(t, times, profile.sun_velocity_km_s, tolerance=float(tolerance))
+    moon = HorizonsVectorSample(
+        jd_tdb=jd,
+        calendar_tdb=f"interpolated canonical t={float(t):.12g}",
+        position_km=moon_position,
+        velocity_km_s=moon_velocity,
+        light_time_s=0.0,
+        range_km=float(np.linalg.norm(moon_position)),
+        range_rate_km_s=0.0,
+    )
+    sun = HorizonsVectorSample(
+        jd_tdb=jd,
+        calendar_tdb=f"interpolated canonical t={float(t):.12g}",
+        position_km=sun_position,
+        velocity_km_s=sun_velocity,
+        light_time_s=0.0,
+        range_km=float(np.linalg.norm(sun_position)),
+        range_rate_km_s=0.0,
+    )
+    return moon, sun
+
+
+def moon_rotating_angular_velocity_vector(sample: HorizonsVectorSample) -> np.ndarray:
+    """Angular velocity vector of the Moon-defined rotating frame in rad/s."""
+
+    r_moon = np.asarray(sample.position_km, dtype=float)
+    v_moon = np.asarray(sample.velocity_km_s, dtype=float)
+    distance_sq = float(np.dot(r_moon, r_moon))
+    if distance_sq <= 0.0:
+        raise ValueError("Moon geocentric position has zero norm")
+    return np.cross(r_moon, v_moon) / distance_sq
+
+
+def rotating_state_to_geocentric_inertial(
+    state_rotating: np.ndarray,
+    moon_sample: HorizonsVectorSample,
+    *,
+    mu: float,
+    scales: CanonicalPointMassScales,
+) -> np.ndarray:
+    """Convert CR3BP rotating barycentric normalized state to geocentric inertial.
+
+    The output is ``[r_km, v_km_s]`` in the cached Horizons frame. The transform
+    follows the Moon-defined rotating basis and barycenter convention used by
+    the retuning stress model; it is not a SPICE state transformation.
+    """
+
+    state = np.asarray(state_rotating, dtype=float)
+    if state.shape != (6,):
+        raise ValueError(f"state_rotating must have shape (6,), got {state.shape}")
+    basis = rotating_basis_from_moon(moon_sample)
+    omega = moon_rotating_angular_velocity_vector(moon_sample)
+    bary_pos = float(mu) * np.asarray(moon_sample.position_km, dtype=float)
+    bary_vel = float(mu) * np.asarray(moon_sample.velocity_km_s, dtype=float)
+    rel = basis @ (state[:3] * float(scales.reference_distance_km))
+    vel_rel = basis @ (state[3:] * float(scales.velocity_scale_km_s))
+    return np.concatenate((bary_pos + rel, bary_vel + vel_rel + np.cross(omega, rel)))
+
+
+def geocentric_inertial_state_to_rotating(
+    state_geocentric: np.ndarray,
+    moon_sample: HorizonsVectorSample,
+    *,
+    mu: float,
+    scales: CanonicalPointMassScales,
+) -> np.ndarray:
+    """Convert geocentric inertial ``[r_km, v_km_s]`` to normalized CR3BP state."""
+
+    state = np.asarray(state_geocentric, dtype=float)
+    if state.shape != (6,):
+        raise ValueError(f"state_geocentric must have shape (6,), got {state.shape}")
+    basis = rotating_basis_from_moon(moon_sample)
+    omega = moon_rotating_angular_velocity_vector(moon_sample)
+    bary_pos = float(mu) * np.asarray(moon_sample.position_km, dtype=float)
+    bary_vel = float(mu) * np.asarray(moon_sample.velocity_km_s, dtype=float)
+    rel = state[:3] - bary_pos
+    v_rel = state[3:] - bary_vel
+    r_rot = basis.T @ rel / float(scales.reference_distance_km)
+    v_rot = basis.T @ (v_rel - np.cross(omega, rel)) / float(scales.velocity_scale_km_s)
+    return np.concatenate((r_rot, v_rot))
+
+
+def _third_body_indirect_acceleration(
+    r_sc_km: np.ndarray,
+    r_body_km: np.ndarray,
+    gm_body_km3_s2: float,
+) -> np.ndarray:
+    rel = np.asarray(r_body_km, dtype=float) - np.asarray(r_sc_km, dtype=float)
+    rel_norm = max(float(np.linalg.norm(rel)), 1.0e-12)
+    body_norm = max(float(np.linalg.norm(r_body_km)), 1.0e-12)
+    return float(gm_body_km3_s2) * (rel / rel_norm**3 - np.asarray(r_body_km, dtype=float) / body_norm**3)
+
+
+def horizons_point_mass_geocentric_derivative_seconds(
+    t: float,
+    state_geocentric: np.ndarray,
+    *,
+    profile: HorizonsPointMassProfile,
+    mu: float,
+    scales: CanonicalPointMassScales,
+    control_accel_rotating: np.ndarray | None = None,
+) -> np.ndarray:
+    """Derivative for the cached-Horizons Earth/Moon/Sun point-mass stress model.
+
+    The independent variable of the returned derivative is physical seconds,
+    while ``t`` is the canonical time used to interpolate the cached profile.
+    """
+
+    state = np.asarray(state_geocentric, dtype=float)
+    if state.shape != (6,):
+        raise ValueError(f"state_geocentric must have shape (6,), got {state.shape}")
+    moon_sample, sun_sample = interpolate_horizons_point_mass_profile(profile, t)
+    r_sc = state[:3]
+    r_norm = max(float(np.linalg.norm(r_sc)), 1.0e-12)
+    accel = -float(scales.gm_earth_km3_s2) * r_sc / r_norm**3
+    accel += _third_body_indirect_acceleration(r_sc, moon_sample.position_km, scales.gm_moon_km3_s2)
+    accel += _third_body_indirect_acceleration(r_sc, sun_sample.position_km, scales.gm_sun_km3_s2)
+    if control_accel_rotating is not None:
+        basis = rotating_basis_from_moon(moon_sample)
+        accel += basis @ (np.asarray(control_accel_rotating, dtype=float) * float(scales.acceleration_scale_km_s2))
+    return np.concatenate((state[3:], accel))
+
+
+def _rk4_horizons_point_mass_step_quadratic_control(
+    state_geocentric: np.ndarray,
+    t: float,
+    dt: float,
+    endpoint_control: np.ndarray,
+    midpoint_control: np.ndarray | None,
+    tau0: float,
+    tau1: float,
+    *,
+    profile: HorizonsPointMassProfile,
+    mu: float,
+    scales: CanonicalPointMassScales,
+) -> np.ndarray:
+    tau_mid = 0.5 * (float(tau0) + float(tau1))
+    if midpoint_control is None:
+        u1 = np.asarray(endpoint_control, dtype=float)
+        u2 = u1
+        u4 = u1
+    else:
+        u1 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau0)
+        u2 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau_mid)
+        u4 = quadratic_midpoint_control(endpoint_control, midpoint_control, tau1)
+    dt_seconds = float(dt) * float(scales.canonical_time_unit_seconds)
+    k1 = horizons_point_mass_geocentric_derivative_seconds(
+        t,
+        state_geocentric,
+        profile=profile,
+        mu=mu,
+        scales=scales,
+        control_accel_rotating=u1,
+    )
+    k2 = horizons_point_mass_geocentric_derivative_seconds(
+        t + 0.5 * dt,
+        state_geocentric + 0.5 * dt_seconds * k1,
+        profile=profile,
+        mu=mu,
+        scales=scales,
+        control_accel_rotating=u2,
+    )
+    k3 = horizons_point_mass_geocentric_derivative_seconds(
+        t + 0.5 * dt,
+        state_geocentric + 0.5 * dt_seconds * k2,
+        profile=profile,
+        mu=mu,
+        scales=scales,
+        control_accel_rotating=u2,
+    )
+    k4 = horizons_point_mass_geocentric_derivative_seconds(
+        t + dt,
+        state_geocentric + dt_seconds * k3,
+        profile=profile,
+        mu=mu,
+        scales=scales,
+        control_accel_rotating=u4,
+    )
+    return state_geocentric + (dt_seconds / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4)
+
+
+def propagate_piecewise_controls_horizons_point_mass(
+    state0: np.ndarray,
+    controls: np.ndarray,
+    mu: float,
+    tf: float,
+    substeps_per_segment: int,
+    *,
+    profile: HorizonsPointMassProfile,
+    midpoint_controls: np.ndarray | None = None,
+    reference_distance_km: float = DEFAULT_REFERENCE_DISTANCE_KM,
+    canonical_time_unit_seconds: float = DEFAULT_CANONICAL_TIME_UNIT_SECONDS,
+    return_nodes: bool = False,
+) -> tuple[np.ndarray, np.ndarray | None]:
+    """Replay endpoint/midpoint controls in a cached Horizons point-mass model.
+
+    Dynamics are geocentric inertial Earth central gravity plus indirect Moon
+    and Sun point-mass terms from linearly interpolated cached Horizons vectors.
+    Controls remain CR3BP rotating-frame accelerations and are rotated to the
+    inertial frame at each RK4 stage. This is an ephemeris point-mass retuning
+    or stress model, not SPICE propagation, high-fidelity flight validation, or
+    production solver parity.
+    """
+
+    controls = project_controls_to_ball(np.asarray(controls, dtype=float), np.inf)
+    if controls.ndim != 2 or controls.shape[1] != 3:
+        raise ValueError(f"controls must have shape (segments, 3), got {controls.shape}")
+    if midpoint_controls is not None:
+        midpoint_controls = project_controls_to_ball(np.asarray(midpoint_controls, dtype=float), np.inf)
+        if midpoint_controls.shape != controls.shape:
+            raise ValueError(
+                f"midpoint_controls shape {midpoint_controls.shape} does not match controls shape {controls.shape}"
+            )
+    if int(substeps_per_segment) <= 0:
+        raise ValueError("substeps_per_segment must be positive")
+    n_segments = int(controls.shape[0])
+    if n_segments == 0:
+        nodes = np.asarray([np.asarray(state0, dtype=float).copy()]) if return_nodes else None
+        return np.asarray(state0, dtype=float).copy(), nodes
+
+    scales = canonical_point_mass_scales(
+        mu=float(mu),
+        reference_distance_km=float(reference_distance_km),
+        canonical_time_unit_seconds=float(canonical_time_unit_seconds),
+    )
+    moon0, _ = interpolate_horizons_point_mass_profile(profile, 0.0)
+    state_geo = rotating_state_to_geocentric_inertial(
+        np.asarray(state0, dtype=float),
+        moon0,
+        mu=float(mu),
+        scales=scales,
+    )
+    h = float(tf) / float(n_segments)
+    dt = h / float(substeps_per_segment)
+    steps = int(substeps_per_segment)
+    t = 0.0
+    nodes = [np.asarray(state0, dtype=float).copy()] if return_nodes else None
+
+    for segment_index, endpoint_control in enumerate(controls):
+        midpoint_control = None if midpoint_controls is None else midpoint_controls[segment_index]
+        for step_index in range(steps):
+            tau0 = step_index / float(steps)
+            tau1 = (step_index + 1) / float(steps)
+            state_geo = _rk4_horizons_point_mass_step_quadratic_control(
+                state_geo,
+                t,
+                dt,
+                endpoint_control,
+                midpoint_control,
+                tau0,
+                tau1,
+                profile=profile,
+                mu=float(mu),
+                scales=scales,
+            )
+            t += dt
+        if return_nodes:
+            moon_node, _ = interpolate_horizons_point_mass_profile(profile, t)
+            nodes.append(
+                geocentric_inertial_state_to_rotating(
+                    state_geo,
+                    moon_node,
+                    mu=float(mu),
+                    scales=scales,
+                )
+            )
+    moon_final, _ = interpolate_horizons_point_mass_profile(profile, float(tf))
+    final_rotating = geocentric_inertial_state_to_rotating(
+        state_geo,
+        moon_final,
+        mu=float(mu),
+        scales=scales,
+    )
+    return final_rotating, np.asarray(nodes) if return_nodes else None
+
+
+def horizons_point_mass_terminal_error(
+    state0: np.ndarray,
+    target: np.ndarray,
+    controls: np.ndarray,
+    mu: float,
+    tf: float,
+    substeps_per_segment: int,
+    *,
+    profile: HorizonsPointMassProfile,
+    position_scale: float,
+    velocity_scale: float,
+    midpoint_controls: np.ndarray | None = None,
+    reference_distance_km: float = DEFAULT_REFERENCE_DISTANCE_KM,
+    canonical_time_unit_seconds: float = DEFAULT_CANONICAL_TIME_UNIT_SECONDS,
+) -> float:
+    """Return normalized terminal error for the point-mass stress propagation."""
+
+    final, _ = propagate_piecewise_controls_horizons_point_mass(
+        state0,
+        controls,
+        mu,
+        tf,
+        substeps_per_segment,
+        profile=profile,
+        midpoint_controls=midpoint_controls,
+        reference_distance_km=float(reference_distance_km),
+        canonical_time_unit_seconds=float(canonical_time_unit_seconds),
+    )
+    return float(state_error(final, target, float(position_scale), float(velocity_scale)))
 
 
 def horizons_solar_tidal_derivative(

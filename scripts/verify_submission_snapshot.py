@@ -51,6 +51,18 @@ PRIMARY_ARTIFACT_PATHS = [
         "data/results/independent_hs_horizons_solar_tidal_replay/"
         "independent_hs_horizons_solar_tidal_replay_metadata.json"
     ),
+    (
+        "data/results/independent_hs_horizons_point_mass_retuning/"
+        "independent_hs_horizons_point_mass_retuning.csv"
+    ),
+    (
+        "data/results/independent_hs_horizons_point_mass_retuning/"
+        "independent_hs_horizons_point_mass_retuning_metadata.json"
+    ),
+    (
+        "data/results/independent_hs_horizons_point_mass_retuning/controls/"
+        "independent_hs_horizons_point_mass_retuned_control_manifest.json"
+    ),
     "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay.csv",
     "data/results/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_metadata.json",
     "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv",
@@ -69,6 +81,10 @@ PRIMARY_ARTIFACT_PATHS = [
         "tables/independent_hs_horizons_solar_tidal_replay/"
         "independent_hs_horizons_solar_tidal_replay_table.tex"
     ),
+    (
+        "tables/independent_hs_horizons_point_mass_retuning/"
+        "independent_hs_horizons_point_mass_retuning_table.tex"
+    ),
     "tables/evidence_synthesis/evidence_synthesis_table.tex",
     "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
 ]
@@ -78,6 +94,7 @@ FOCUSED_TEST_TARGETS = [
     "tests/test_independent_hs_branch_control_replay.py",
     "tests/test_independent_hs_bicircular_phase_stress.py",
     "tests/test_independent_hs_horizons_solar_tidal_replay.py",
+    "tests/test_independent_hs_horizons_point_mass_retuning.py",
     "tests/test_independent_hs_direct_collocation.py",
     "tests/test_claim_evidence_ledger.py",
     "tests/test_evidence_synthesis.py",

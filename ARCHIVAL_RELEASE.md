@@ -29,6 +29,7 @@ and assigned a real identifier.
 - `data/results/bicircular_tail_coast_recovery/`
 - `data/results/independent_hs_bicircular_phase_stress/`
 - `data/results/independent_hs_horizons_solar_tidal_replay/`
+- `data/results/independent_hs_horizons_point_mass_retuning/`
 - `data/results/evidence_synthesis/`
 - `data/results/replay_stress_validation/`
 - `data/results/independent_hs_all_configured_headroom/`
@@ -66,6 +67,12 @@ short deterministic postprocessor artifact archived under
 `data/cache/horizons/independent_hs_phase_shift_2026jan01_vectors.json`; it is a
 representative 2026-Jan-01 stress probe, not SPICE/high-fidelity/flight
 validation or production solver parity.
+The independent-HS cached-Horizons Earth/Moon/Sun point-mass retuning package is
+archived under `data/results/independent_hs_horizons_point_mass_retuning/` and
+uses the same cache. It reports failed direct persisted-control replay followed
+by independent retuning feasibility at the representative epoch; it is not
+SPICE/full high-fidelity/flight validation, production solver parity, fuel
+optimality, DOI evidence, or quantum evidence.
 
 ## Post-Deposit Updates
 

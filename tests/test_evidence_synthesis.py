@@ -27,6 +27,7 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
     has_ihs_replay = module.independent_hs_branch_replay_available()
     has_ihs_bicircular = module.independent_hs_bicircular_phase_stress_available()
     has_ihs_horizons = module.independent_hs_horizons_solar_tidal_replay_available()
+    has_ihs_point_mass = module.independent_hs_horizons_point_mass_retuning_available()
 
     expected_rows = {
         "phase_shift_tight_threshold_counts",
@@ -44,6 +45,8 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
         expected_rows.add("ihs_bicircular_phase_stress_polish_p04_amax02")
     if has_ihs_horizons:
         expected_rows.add("ihs_horizons_solar_tidal_replay_polish_p04_amax02")
+    if has_ihs_point_mass:
+        expected_rows.add("ihs_horizons_point_mass_retuning_polish_p04_amax02")
     assert len(synthesis) == len(expected_rows)
     assert set(synthesis["row_id"]) == expected_rows
 
@@ -117,6 +120,18 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
         assert "cached JPL Horizons vectors" in ihs_horizons["practitioner_interpretation"]
         assert "not SPICE/high-fidelity/flight validation" in ihs_horizons["practitioner_interpretation"]
 
+    if has_ihs_point_mass:
+        ihs_point_mass = row("ihs_horizons_point_mass_retuning_polish_p04_amax02")
+        assert ihs_point_mass["configured_pass"] == "True"
+        assert float(ihs_point_mass["nominal_error"]) < 0.09
+        assert float(ihs_point_mass["selected_worst_error"]) < 0.17
+        assert ihs_point_mass["all_mask_worst_error"] == ihs_point_mass["selected_worst_error"]
+        assert ihs_point_mass["tight_0p05_0p09_all_mask_pass"] == "True"
+        assert "persisted replay failed" in ihs_point_mass["pass_status_note"]
+        assert "retuned branch 8/8" in ihs_point_mass["pass_status_note"]
+        assert "Persisted controls fail direct ephemeris point-mass replay" in ihs_point_mass["practitioner_interpretation"]
+        assert "not SPICE/full high-fidelity/flight validation" in ihs_point_mass["practitioner_interpretation"]
+
     tail = row("tail_coast_hard_catalog_all_one_two")
     assert tail["nominal_error"] == "0.02299233817855882"
     assert tail["selected_worst_error"] == "0.0936063931709301"
@@ -158,12 +173,20 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
     has_ihs_replay = module.independent_hs_branch_replay_available()
     has_ihs_bicircular = module.independent_hs_bicircular_phase_stress_available()
     has_ihs_horizons = module.independent_hs_horizons_solar_tidal_replay_available()
-    expected_rows = 8 + int(has_ihs_replay) + int(has_ihs_bicircular) + int(has_ihs_horizons)
+    has_ihs_point_mass = module.independent_hs_horizons_point_mass_retuning_available()
+    expected_rows = (
+        8
+        + int(has_ihs_replay)
+        + int(has_ihs_bicircular)
+        + int(has_ihs_horizons)
+        + int(has_ihs_point_mass)
+    )
     expected_inputs = (
         12
         + (2 if has_ihs_replay else 0)
         + (2 if has_ihs_bicircular else 0)
         + (2 if has_ihs_horizons else 0)
+        + (2 if has_ihs_point_mass else 0)
     )
     assert metadata["optimization_rerun"] is False
     assert metadata["row_count"] == expected_rows
@@ -181,6 +204,8 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
         assert "ihs_bicircular_phase_stress_polish_p04_amax02" in set(csv_df["row_id"])
     if has_ihs_horizons:
         assert "ihs_horizons_solar_tidal_replay_polish_p04_amax02" in set(csv_df["row_id"])
+    if has_ihs_point_mass:
+        assert "ihs_horizons_point_mass_retuning_polish_p04_amax02" in set(csv_df["row_id"])
     table = table_path.read_text(encoding="utf-8")
     assert "0.05/0.10: True; 0.05/0.09: False" in table
     assert "sampled methods 0/30; all-windows 30/30" in table
