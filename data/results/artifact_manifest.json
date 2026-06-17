@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-17T04:52:10Z",
+  "generated_utc": "2026-06-17T05:20:44Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "80df998213bde12ee1502545d24e24b874269ce1",
+  "git_head_at_generation": "99caecc4582e3d735119bc4b3f368f9b823062f0",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M REPRODUCIBILITY.md\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/evidence_synthesis/evidence_synthesis.csv\n M data/results/evidence_synthesis/evidence_synthesis_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_evidence_synthesis.py\n M scripts/run_independent_hs_continuation.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tables/evidence_synthesis/evidence_synthesis_table.tex\n M tables/evidence_synthesis/practitioner_lessons_table.tex\n M tests/test_claim_evidence_ledger.py\n M tests/test_evidence_synthesis.py\n M tests/test_independent_hs_direct_collocation.py\n?? configs/independent_hs_all_configured_headroom.yaml\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_source_p03_cold_nominal_controls.json\n?? data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv\n?? data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_metadata.json\n?? figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.pdf\n?? figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.png\n?? tables/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_table.tex",
+  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M README.md\n M REPRODUCIBILITY.md\n M data/results/replay_stress_validation/replay_stress_validation.csv\n M data/results/replay_stress_validation/replay_stress_validation_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_replay_stress_validation.py\n M tables/replay_stress_validation/replay_stress_validation_table.tex\n M tests/test_replay_stress_validation.py\n?? scripts/verify_submission_snapshot.py\n?? tests/test_verify_submission_snapshot.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 654,
+  "file_count": 656,
   "files": [
     {
       "path": ".gitignore",
@@ -40,8 +40,8 @@
     },
     {
       "path": "ARCHIVAL_RELEASE.md",
-      "sha256": "487d505504f4c8d0f266cceefa7f425084c0110b3ff716dc64b23d4b7446e068",
-      "bytes": 2690
+      "sha256": "7c56a6a70a6dee1984300b15102efa695bff2239196f264b3258b31bdb2f765c",
+      "bytes": 2709
     },
     {
       "path": "CITATION.cff",
@@ -50,13 +50,13 @@
     },
     {
       "path": "README.md",
-      "sha256": "9c55dc63eda6771afd7995ec119292e59a9bb61b75dda7ee7a4f67d3c4535c9e",
-      "bytes": 28260
+      "sha256": "cb4ee708401e40ef1a5d92dac6e9d875154e727e1333c65de06c73ca037d2f02",
+      "bytes": 27435
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "d726d9af52cf0a6306c28edc90c997b50efc37e1346c72fd0a29a64e2a700ca7",
-      "bytes": 39362
+      "sha256": "e18d0a069ea5473f38fc57074fe14fd4c3e9e0b11104f6317978390bd49cb6f5",
+      "bytes": 38458
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -2070,13 +2070,13 @@
     },
     {
       "path": "data/results/replay_stress_validation/replay_stress_validation.csv",
-      "sha256": "6311771d712426430efaa785ac58cc864430d093ea0f4bc6b830a3e2cab2dfc3",
-      "bytes": 10556
+      "sha256": "9ea473266e8a11c726e0a2d3767739fefdb95349b2f0f478a28d6e341cfbfe7f",
+      "bytes": 14177
     },
     {
       "path": "data/results/replay_stress_validation/replay_stress_validation_metadata.json",
-      "sha256": "bb59dc45dc1f43610edc6cdf53d1f1b284ad3e514f8feee200df5b53edbdd812",
-      "bytes": 4933
+      "sha256": "802933db012332e4dcfc92e9e3a7044ffb3828a2e9a1a83cb287181bda750030",
+      "bytes": 5620
     },
     {
       "path": "data/results/robust_margin_suite/robust_margin_suite.csv",
@@ -2700,13 +2700,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "c0fde571c8f165dbf03c55b6e7626d5de63497045f2158031045288bcdcbca49",
-      "bytes": 416247
+      "sha256": "4f06206c19ed6b7408467900f288d32caec0feba1aca1321f3955b0e7e64fce8",
+      "bytes": 418530
     },
     {
       "path": "paper/main.tex",
-      "sha256": "d19599db8233b52c7e664e1c522941b5a54be8375238ed4d2251a61f72b46b70",
-      "bytes": 57154
+      "sha256": "371e535ea10fb17df97f3cfc0e86751a5bc6f66dae595aaacb7530edb6d0c0bb",
+      "bytes": 57783
     },
     {
       "path": "paper/references.bib",
@@ -2715,13 +2715,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "c09b481227fa2c313b95a9dfb327ace00e0789d9915cabf01b07a98d2476b08f",
-      "bytes": 511802
+      "sha256": "d7f2c51a7a20142fa2e6e1ed133a8d1e609887ae966248487e474211897bc980",
+      "bytes": 512882
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "27b5644af1e4ee4c53c8ad41bfcdf468ddabb7bb3966b1e83189ca91ad333e13",
-      "bytes": 38009
+      "sha256": "67c514c2e176bcbfebda0c8436ebac6324d760833464156aef36d438673e4529",
+      "bytes": 38548
     },
     {
       "path": "requirements-lock.txt",
@@ -2850,8 +2850,8 @@
     },
     {
       "path": "scripts/run_replay_stress_validation.py",
-      "sha256": "ef546290163fe83bc5d860681c674e81ceffebebb710c72301bf67779151a78c",
-      "bytes": 19801
+      "sha256": "ff2bf6e5b9fb1fd2ecde8eda62c9092f6e1420bfc79b39dc841a6674d7b611df",
+      "bytes": 20368
     },
     {
       "path": "scripts/run_robust_margin_suite.py",
@@ -2872,6 +2872,11 @@
       "path": "scripts/run_threshold_sensitivity.py",
       "sha256": "75c7a5fd1386a2e91914e1507fd83b10ad94c1ccdd77e07f3c680601f5acb860",
       "bytes": 9768
+    },
+    {
+      "path": "scripts/verify_submission_snapshot.py",
+      "sha256": "03603af54c0b578414a49450fd3ddb4ab9cce8950c8e6975beca56d1d6ddd7b3",
+      "bytes": 5638
     },
     {
       "path": "scripts/write_artifact_manifest.py",
@@ -3215,8 +3220,8 @@
     },
     {
       "path": "tables/replay_stress_validation/replay_stress_validation_table.tex",
-      "sha256": "7a2f7ed0fb101e9d628f36a23f948aa20747fcea2d246146c1bc10788ee2802c",
-      "bytes": 4795
+      "sha256": "381ab8531d42c80b43f86a429bfe692a8dc9e8fa26cb49275983fe5948ba72a5",
+      "bytes": 6418
     },
     {
       "path": "tables/results_table.tex",
@@ -3290,8 +3295,8 @@
     },
     {
       "path": "tests/test_replay_stress_validation.py",
-      "sha256": "fd5711dc438505c17266fd29eb814931baba8a73b3c286c8f82d120d7c71774f",
-      "bytes": 4451
+      "sha256": "f54c111b4d60072cf36a378f29d9dc864930144d62a69738fe6083f1cfefcfab",
+      "bytes": 5057
     },
     {
       "path": "tests/test_smoke.py",
@@ -3302,6 +3307,11 @@
       "path": "tests/test_tail_coast_recovery.py",
       "sha256": "41aab3d2dce4d7a1a9a7ae4b17bcf76c6a5bee10f0a988bfa82ae4f114cfcf1d",
       "bytes": 96805
+    },
+    {
+      "path": "tests/test_verify_submission_snapshot.py",
+      "sha256": "af34a8bec9d173af31039c4afb7fdf9cf2688f9b72a3667ff218066d7ea56e64",
+      "bytes": 2742
     }
   ]
 }

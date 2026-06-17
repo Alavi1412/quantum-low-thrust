@@ -109,6 +109,21 @@ REPLAY_CASES = [
         role_backend="independent-midpoint Hermite-Simpson collocation; endpoint and midpoint nominal controls",
         require_midpoint_controls=True,
     ),
+    ReplayCase(
+        case_id="ihs_all_single_p04_amax02_warm_from_p03",
+        source_csv=ROOT
+        / "data"
+        / "results"
+        / "independent_hs_all_configured_headroom"
+        / "independent_hs_all_configured_headroom.csv",
+        source_config=ROOT / "configs" / "independent_hs_all_configured_headroom.yaml",
+        source_row_key="case_id",
+        role_backend=(
+            "all-configured independent-midpoint Hermite-Simpson; "
+            "endpoint and midpoint nominal controls"
+        ),
+        require_midpoint_controls=True,
+    ),
 ]
 
 REPLAY_VARIANTS = [

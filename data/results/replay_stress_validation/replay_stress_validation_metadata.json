@@ -1,7 +1,7 @@
 {
   "command": "scripts\\run_replay_stress_validation.py",
-  "row_count": 15,
-  "case_count": 3,
+  "row_count": 20,
+  "case_count": 4,
   "skipped_cases": [],
   "optimization_rerun": false,
   "uses_only_recorded_control_sidecars": true,
@@ -57,6 +57,11 @@
       "bytes": 3716
     },
     {
+      "path": "configs/independent_hs_all_configured_headroom.yaml",
+      "sha256": "74b499f929525d81edd8f9b7d546b64dc23d2c4c973d33347a2b6cb0115501fd",
+      "bytes": 2220
+    },
+    {
       "path": "configs/independent_hs_continuation_baseline.yaml",
       "sha256": "8743d2febd75b922974040089a58389a1bda4467bd2172e939ee132b965640c6",
       "bytes": 3506
@@ -75,6 +80,16 @@
       "path": "data/results/continuation_extension_suite/controls/two_segment_n8_p03_cold_nominal_controls.json",
       "sha256": "86bb319acbd4cdd40d8161988739205a4dc358d12a40eaa98ed1659a9a30cf84",
       "bytes": 1310
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json",
+      "sha256": "4301ff60600efca9ce955d4fbb8d6d1e1e11e6fb1579cf3c764f5a00ae521511",
+      "bytes": 3443
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
+      "sha256": "2b365b4c614f1e0eb325aab9ee103511731c481064a1e0621617f9cf206d1e39",
+      "bytes": 7261
     },
     {
       "path": "data/results/independent_hs_continuation_baseline/controls/ihs_phase_p04_amax02_warm_from_p03_nominal_controls.json",

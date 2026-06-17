@@ -28,11 +28,12 @@ def test_replay_stress_validation_reproduces_recorded_nominal_baselines():
     df, skipped = module.build_replay_stress_validation()
 
     assert skipped == []
-    assert len(df) == 15
+    assert len(df) == 20
     assert set(df["case"]) == {
         "all_single_p04_warm_from_p03",
         "two_segment_n8_p03_cold",
         "ihs_phase_p04_amax02_warm_from_p03",
+        "ihs_all_single_p04_amax02_warm_from_p03",
     }
     assert set(df["replay_variant"]) == {
         "baseline_source_substeps",
@@ -43,7 +44,7 @@ def test_replay_stress_validation_reproduces_recorded_nominal_baselines():
     }
 
     baseline = df[df["replay_variant"] == "baseline_source_substeps"].copy()
-    assert len(baseline) == 3
+    assert len(baseline) == 4
     assert baseline["baseline_reproduces_recorded"].map(bool).all()
     assert (baseline["absolute_delta_from_recorded_nominal_error"] <= 1.0e-12).all()
 
@@ -51,15 +52,20 @@ def test_replay_stress_validation_reproduces_recorded_nominal_baselines():
         "all_single_p04_warm_from_p03": 0.0530980832118395,
         "two_segment_n8_p03_cold": 0.0612012101866208,
         "ihs_phase_p04_amax02_warm_from_p03": 0.0197147568098046,
+        "ihs_all_single_p04_amax02_warm_from_p03": 0.011115187774142957,
     }
     for case, recorded in expected.items():
         row = baseline.loc[baseline["case"] == case].iloc[0]
         assert abs(float(row["nominal_error"]) - recorded) <= 1.0e-12
         assert abs(float(row["recorded_nominal_error"]) - recorded) <= 1.0e-15
 
-    ihs = df[df["case"] == "ihs_phase_p04_amax02_warm_from_p03"]
+    ihs_cases = {
+        "ihs_phase_p04_amax02_warm_from_p03",
+        "ihs_all_single_p04_amax02_warm_from_p03",
+    }
+    ihs = df[df["case"].isin(ihs_cases)]
     assert ihs["midpoint_controls_replayed"].map(bool).all()
-    continuation = df[df["case"] != "ihs_phase_p04_amax02_warm_from_p03"]
+    continuation = df[~df["case"].isin(ihs_cases)]
     assert not continuation["midpoint_controls_replayed"].map(bool).any()
 
 
@@ -103,8 +109,17 @@ def test_replay_stress_validation_writes_deterministic_artifacts_without_optimiz
         "data/results/independent_hs_continuation_baseline/controls/"
         "ihs_phase_p04_amax02_warm_from_p03_nominal_controls.json"
     ) in input_paths
+    assert "configs/independent_hs_all_configured_headroom.yaml" in input_paths
+    assert (
+        "data/results/independent_hs_all_configured_headroom/"
+        "independent_hs_all_configured_headroom.csv"
+    ) in input_paths
+    assert (
+        "data/results/independent_hs_all_configured_headroom/controls/"
+        "ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json"
+    ) in input_paths
 
     csv_df = pd.read_csv(second["csv_path"])
-    assert len(csv_df) == 15
+    assert len(csv_df) == 20
     assert "accel_scale_0p99_source_substeps" in set(csv_df["replay_variant"])
     assert "accel_scale_1p01_source_substeps" in set(csv_df["replay_variant"])

@@ -29,35 +29,18 @@ benchmark-resource paper with explicit negative evidence and provenance.
 
 ```powershell
 py -3.11 -m pip install -r requirements-lock.txt
-git status --short
-py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_claim_evidence_ledger.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_bicircular_solar_tidal_stress.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_bicircular_tail_coast_recovery.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_horizons_ephemeris_force_model_contrast.py -q -p no:cacheprovider
-py -3.11 scripts\run_threshold_sensitivity.py
-py -3.11 scripts\run_horizons_ephemeris_force_model_contrast.py
-py -3.11 scripts\run_bicircular_solar_tidal_stress.py
-py -3.11 scripts\run_claim_evidence_ledger.py
-py -3.11 scripts\run_evidence_synthesis.py
-py -3.11 scripts\run_replay_stress_validation.py
-py -3.11 scripts\run_tail_coast_branch_control_replay.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml
-py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --regenerate-artifacts-only --allow-artifact-refresh-fingerprint-mismatch
-cd paper
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
-cd ..
-py -3.11 scripts\write_artifact_manifest.py --check
-git diff --check
+py -3.11 scripts\verify_submission_snapshot.py
 ```
 
-The focused tests, deterministic postprocessors, manifest check, and LaTeX
-builds are the intended short reviewer-facing verification path. A broader local check can run
-`py -3.11 -m pytest tests -q`. Do not rerun the long experiments unless the
-paper artifacts need to be regenerated; use the recorded artifacts for normal
-verification. The primary review artifacts are `paper/main.pdf`,
+The verifier is read-only by default. It checks key primary artifact paths, runs
+`scripts\write_artifact_manifest.py --check`, runs a focused pytest subset for
+paper/reproducibility artifacts, and runs `git diff --check`; it does not
+regenerate artifacts, rerun trajectory optimization, rebuild PDFs, clean LaTeX
+auxiliary files, or create an archive DOI. A broader local check can run
+`py -3.11 scripts\verify_submission_snapshot.py --full-tests`. Do not rerun the
+long experiments unless the paper artifacts need to be regenerated; use the
+recorded artifacts for normal verification. The primary review artifacts are
+`paper/main.pdf`,
 `paper/supplement.pdf`, `data/results/claim_evidence_ledger/*`,
 `data/results/horizons_ephemeris_force_model_contrast/*`,
 `data/cache/horizons/*`,
@@ -80,7 +63,7 @@ verification. The primary review artifacts are `paper/main.pdf`,
 | Smoke tests | `python -m pytest tests` | `tests/test_smoke.py`, `src/qlt/*`, `configs/smoke.yaml` | pytest pass/fail output | Short. |
 | Claim evidence ledger | `py -3.11 scripts\run_claim_evidence_ledger.py` | Recorded summary/statistical CSV/JSON artifacts from the 30-seed main-method package, QAOA/QUBO ablation, continuation extension, direct collocation, independent-midpoint Hermite-Simpson baseline, independent-HS all-configured headroom, tail-coast, delayed-recovery, focused branch-control replay, Horizons ephemeris contrast, bicircular solar-tidal stress, and bicircular retuned recovery packages | `data/results/claim_evidence_ledger/claim_evidence_ledger.csv`, `data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json`, `data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv`, `data/results/claim_evidence_ledger/tail_coast_branch_audit.csv`, `tables/claim_evidence_ledger/*` | Short deterministic postprocessor; no trajectory optimization or high-fidelity validation. The current snapshot emits the independent-HS all-configured headroom row, the normalized CR3BP accepted-control replay row, the Horizons force-model contrast row, the negative bicircular solar-tidal stress row, and the completed negative bicircular retuned recovery row because those packages exist. |
 | Evidence synthesis replay | `py -3.11 scripts\run_evidence_synthesis.py` | Recorded CSV/JSON artifacts from threshold sensitivity, continuation extension, direct collocation, independent-midpoint Hermite-Simpson baseline, independent-HS all-configured headroom, and tail-coast packages | `data/results/evidence_synthesis/evidence_synthesis.csv`, `data/results/evidence_synthesis/evidence_synthesis_metadata.json`, `tables/evidence_synthesis/evidence_synthesis_table.tex`, `tables/evidence_synthesis/practitioner_lessons_table.tex` | Short deterministic postprocessor; no trajectory optimization is rerun. |
-| Recorded-control replay/stress validation | `py -3.11 scripts\run_replay_stress_validation.py` | Recorded nominal-control sidecars and source rows from continuation extension and independent-midpoint Hermite-Simpson packages; `data/source_states.json` | `data/results/replay_stress_validation/replay_stress_validation.csv`, `data/results/replay_stress_validation/replay_stress_validation_metadata.json`, `tables/replay_stress_validation/replay_stress_validation_table.tex` | Short deterministic postprocessor; repropagates nominal controls only. No least-squares optimization, branch recovery replay, high-fidelity force model, or operational validation claim. |
+| Recorded-control replay/stress validation | `py -3.11 scripts\run_replay_stress_validation.py` | Recorded nominal-control sidecars and source rows from continuation extension, independent-midpoint Hermite-Simpson baseline, and independent-HS all-configured headroom packages; `data/source_states.json` | `data/results/replay_stress_validation/replay_stress_validation.csv`, `data/results/replay_stress_validation/replay_stress_validation_metadata.json`, `tables/replay_stress_validation/replay_stress_validation_table.tex` | Short deterministic postprocessor; repropagates nominal endpoint controls and, for IHS rows, midpoint controls. No least-squares optimization, branch recovery replay, high-fidelity force model, or operational validation claim. |
 | Horizons ephemeris force-model contrast | `py -3.11 scripts\run_horizons_ephemeris_force_model_contrast.py` | Committed cache `data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json`, focused accepted-control sidecars, `configs/hard_catalog_tail_coast_branch_control_replay.yaml`, `src/qlt/ephemeris_contrast.py`, `data/source_states.json` | `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`, `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_metadata.json`, `tables/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_table.tex` | Short deterministic postprocessor; default path is offline. It validates cache metadata against the configured epoch, transfer time, segment grid, canonical time unit, and fixed reference distance before comparing cached Earth/Moon/Sun geometry and solar-tidal acceleration assumptions. Not SPICE validation, high-fidelity propagation, accepted-control retuning, or a threshold-feasibility result. Use `--refresh-cache` only when intentionally regenerating the JPL Horizons cache. |
 | Tail-coast accepted branch-control replay | `py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml --resume`, then `py -3.11 scripts\run_tail_coast_branch_control_replay.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml` | `configs/hard_catalog_tail_coast_branch_control_replay.yaml`, `src/qlt/tail_coast_recovery.py`, `scripts/run_tail_coast_recovery.py`, incremental accepted-control sidecars, progress CSV, manifest, `data/source_states.json` | `data/results/hard_catalog_tail_coast_branch_control_replay/*`, `tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_table.tex` | Included current evidence package, optional to regenerate. The recovery run is checkpointed/resumable and expensive because it reruns the combined tail-coast case; the replay postprocessor is deterministic and should run only after the completed recovery package exists. Replay is normalized CR3BP accepted-control replay only; no optimization rerun, high-fidelity validation, production solver parity, fuel optimality, or quantum advantage claim. |
 | Bicircular solar-tidal stress replay | `py -3.11 scripts\run_bicircular_solar_tidal_stress.py` | Focused accepted-control replay package under `data/results/hard_catalog_tail_coast_branch_control_replay/`, `configs/hard_catalog_tail_coast_branch_control_replay.yaml`, `src/qlt/bicircular.py`, `data/source_states.json` | `data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress.csv`, `data/results/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_metadata.json`, `tables/bicircular_solar_tidal_stress/bicircular_solar_tidal_stress_table.tex` | Short deterministic postprocessor; no optimizer rerun. Replays nominal plus 27 accepted branch controls for Sun phases 0/90/180/270 deg. Negative external-validity stress result: CR3BP replay delta is 0.0, but nominal solar-tidal rows fail and only 22/108 branch-phase rows pass. Not SPICE, high-fidelity validation, production solver parity, or fuel optimality. |
@@ -147,9 +130,10 @@ verification. The primary review artifacts are `paper/main.pdf`,
   `data/results/replay_stress_validation/replay_stress_validation.csv`,
   `data/results/replay_stress_validation/replay_stress_validation_metadata.json`,
   and `tables/replay_stress_validation/replay_stress_validation_table.tex`.
-  This repropagates persisted nominal-control sidecars only; it does not run
-  optimization, replay branch recovery controls, or claim high-fidelity
-  validation.
+  This repropagates persisted nominal-control sidecars only, now including the
+  all-configured independent-HS headroom row with endpoint and midpoint nominal
+  controls; it does not run optimization, replay branch recovery controls, or
+  claim high-fidelity validation.
 - Horizons ephemeris force-model contrast:
   `data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json`,
   `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,

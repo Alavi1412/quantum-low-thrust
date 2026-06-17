@@ -33,35 +33,20 @@ python -m pip install -r requirements-lock.txt
 
 ## Short Verification
 
-Reviewer-facing checklist for the current artifact snapshot:
+Reviewer-facing read-only check for the current artifact snapshot:
 
 ```powershell
-git status --short
-py -3.11 -m pytest tests/test_smoke.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_claim_evidence_ledger.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_evidence_synthesis.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_replay_stress_validation.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_bicircular_solar_tidal_stress.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_bicircular_tail_coast_recovery.py -q -p no:cacheprovider
-py -3.11 -m pytest tests/test_horizons_ephemeris_force_model_contrast.py -q -p no:cacheprovider
-py -3.11 scripts\run_threshold_sensitivity.py
-py -3.11 scripts\run_horizons_ephemeris_force_model_contrast.py
-py -3.11 scripts\run_bicircular_solar_tidal_stress.py
-py -3.11 scripts\run_claim_evidence_ledger.py
-py -3.11 scripts\run_evidence_synthesis.py
-py -3.11 scripts\run_replay_stress_validation.py
-py -3.11 scripts\run_tail_coast_branch_control_replay.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml
-py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_recovery.yaml --regenerate-artifacts-only --allow-artifact-refresh-fingerprint-mismatch
-cd paper
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
-cd ..
-py -3.11 scripts\write_artifact_manifest.py --check
-git diff --check
+py -3.11 -m pip install -r requirements-lock.txt
+py -3.11 scripts\verify_submission_snapshot.py
 ```
 
-For a broader local check, run `py -3.11 -m pytest tests -q` after installing
-the pinned dependencies. The long experiment commands below are expensive; use
+The verifier checks key primary artifact paths, runs
+`scripts\write_artifact_manifest.py --check`, runs the focused reproducibility
+pytest subset, and runs `git diff --check`. It does not regenerate artifacts,
+rerun trajectory optimization, rebuild PDFs, clean LaTeX auxiliary files, or
+create an archive DOI. Use `--full-tests` to replace the focused pytest subset
+with the full suite; `--skip-tests` and `--skip-git-diff-check` are available for
+constrained environments. The long experiment commands below are expensive; use
 the recorded artifacts unless intentionally regenerating evidence. The primary
 review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/claim_evidence_ledger/*`,
@@ -218,10 +203,12 @@ py -3.11 scripts\run_replay_stress_validation.py
 
 It repropagates persisted nominal-control sidecars for representative
 continuation-extension and independent-midpoint Hermite-Simpson phase-shift
-rows. The source-substep baselines reproduce recorded nominal errors to within
-`1e-12`; refined substeps and direct +/-1% acceleration scaling are stress
-diagnostics only. It does not run least-squares optimization, replay branch
-recovery controls, or claim high-fidelity validation.
+rows, including the all-configured independent-HS headroom row
+`ihs_all_single_p04_amax02_warm_from_p03`. The source-substep baselines
+reproduce recorded nominal errors to within `1e-12`; refined substeps and direct
++/-1% acceleration scaling are stress diagnostics only. It does not run
+least-squares optimization, replay branch recovery controls, or claim
+high-fidelity validation.
 
 The Horizons ephemeris force-model contrast postprocessor writes
 `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`,

@@ -40,19 +40,17 @@ and assigned a real identifier.
 Run the short verification path from `REPRODUCIBILITY.md`, including:
 
 ```powershell
-py -3.11 scripts\run_horizons_ephemeris_force_model_contrast.py
-py -3.11 scripts\run_bicircular_solar_tidal_stress.py
-py -3.11 scripts\run_claim_evidence_ledger.py
-py -3.11 scripts\write_artifact_manifest.py
-py -3.11 scripts\write_artifact_manifest.py --check
-git diff --check
+py -3.11 scripts\verify_submission_snapshot.py
 ```
 
-Build `paper/main.pdf` and `paper/supplement.pdf` locally with `latexmk` before
-deposit. Do not rerun expensive long experiments unless intentionally refreshing
-the evidence package. The completed bicircular retuned recovery package is
-archived under `data/results/bicircular_tail_coast_recovery/`; refresh it only
-when intentionally rerunning the expensive negative retuning batch with
+The verifier is read-only and checks the manifest, focused tests, primary
+artifact paths, and whitespace diffs; it does not mint or imply a DOI. Build
+`paper/main.pdf` and `paper/supplement.pdf` locally with `latexmk` before
+deposit, then refresh `data/results/artifact_manifest.json` if any archived file
+changed and rerun the verifier. Do not rerun expensive long experiments unless
+intentionally refreshing the evidence package. The completed bicircular retuned
+recovery package is archived under `data/results/bicircular_tail_coast_recovery/`;
+refresh it only when intentionally rerunning the expensive negative retuning batch with
 `py -3.11 scripts\run_bicircular_tail_coast_recovery.py --resume`.
 
 ## Post-Deposit Updates
