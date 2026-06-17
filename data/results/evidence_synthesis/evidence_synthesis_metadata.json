@@ -1,6 +1,6 @@
 {
   "command": "scripts\\run_evidence_synthesis.py",
-  "row_count": 7,
+  "row_count": 8,
   "optimization_rerun": false,
   "source_mode": "Recorded CSV/JSON artifacts only; no trajectory optimization is launched.",
   "determinism_note": "Runtime is intentionally omitted so rerunning this deterministic postprocessor leaves metadata unchanged when inputs and command are unchanged.",
@@ -29,6 +29,7 @@
     "continuation_two_segment_n8_p03",
     "direct_collocation_selected_p04",
     "ihs_tighter_thrust_p04",
+    "ihs_all_configured_headroom_p04_amax02",
     "tail_coast_hard_catalog_all_one_two",
     "ihs_hard_catalog_selected_failure"
   ],
@@ -72,6 +73,16 @@
       "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline_metadata.json",
       "sha256": "8e5646119bab7e029e7bc9e5e8e55397310597c583a86a1d922b9d5252e8b517",
       "bytes": 36854
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
+      "sha256": "2b365b4c614f1e0eb325aab9ee103511731c481064a1e0621617f9cf206d1e39",
+      "bytes": 7261
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_metadata.json",
+      "sha256": "07030d4b18b9875295f34af6585d5ae73db8a860aa9fd2d718c37535b0a66c26",
+      "bytes": 18122
     },
     {
       "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery.csv",

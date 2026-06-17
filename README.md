@@ -1,8 +1,8 @@
 # Robust Low-Thrust Cislunar Initialization Benchmark
 
-Research-code scaffold for the controlled CR3BP initialization benchmark:
-"A Reproducible Binary-Schedule Benchmark for Robust Low-Thrust Cislunar
-Initialization Under Missed-Thrust Events".
+Research-code scaffold for the controlled CR3BP initialization benchmark
+resource: "A Reproducible CR3BP Benchmark Resource for Low-Thrust Cislunar
+Missed-Thrust Initialization".
 
 This is not a flight-ready trajectory design tool. It is a reproducible
 normalized Earth-Moon CR3BP benchmark for comparing binary thrust-window
@@ -65,6 +65,7 @@ the pinned dependencies. The long experiment commands below are expensive; use
 the recorded artifacts unless intentionally regenerating evidence. The primary
 review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 `data/results/claim_evidence_ledger/*`,
+`data/results/independent_hs_all_configured_headroom/*`,
 `data/results/horizons_ephemeris_force_model_contrast/*`,
 `data/cache/horizons/*`,
 `data/results/bicircular_solar_tidal_stress/*`,
@@ -181,10 +182,11 @@ py -3.11 scripts\run_claim_evidence_ledger.py
 It reads recorded artifacts only and does not rerun trajectory optimization.
 The ledger separates selected-branch evidence, all-mask diagnostics,
 all-configured-mask evidence, and the completed focused accepted-control replay
-row. The current snapshot includes the real replay CSV, metadata, focused
-source recovery CSV, bicircular solar-tidal stress CSV/metadata, and Horizons
-ephemeris force-model contrast CSV/metadata, plus the bicircular retuned
-recovery CSV, summary, and metadata, so the ledger has 12 claim rows. The
+row. The current snapshot includes the new independent-HS all-configured
+headroom row, the real replay CSV, metadata, focused source recovery CSV,
+bicircular solar-tidal stress CSV/metadata, and Horizons ephemeris force-model
+contrast CSV/metadata, plus the bicircular retuned recovery CSV, summary, and
+metadata, so the ledger has 13 claim rows. The
 solar-tidal row is a negative stress-probe row, the retuned recovery row is a
 completed negative simple-bicircular retuning row, and the Horizons row is a
 force-model contrast row. None is high-fidelity validation or quantum evidence.
@@ -201,8 +203,9 @@ The evidence synthesis postprocessor writes
 CSV/JSON artifacts only and does not rerun trajectory optimization. The table
 cross-indexes tight 30-seed threshold sensitivity, continuation-extension
 multiple-shooting rows, compact direct-collocation and independent-midpoint
-Hermite-Simpson diagnostics, and the scoped hard-catalog tail-coast row used in
-the main manuscript claim path.
+Hermite-Simpson diagnostics, the new all-configured independent-HS headroom
+row, and the scoped hard-catalog tail-coast row used in the main manuscript
+claim path.
 
 The replay/stress validation postprocessor writes
 `data/results/replay_stress_validation/replay_stress_validation.csv`,
@@ -507,6 +510,27 @@ combined sidecar hashes so midpoint-control trajectory, fuel, and terminal-error
 diagnostics are reproducible. This is continuous-backend evidence only; the
 phase-time `0.2` diagnostic and bounded catalog-DRO selected-outage row remain
 unresolved.
+
+For the independent-midpoint-control Hermite-Simpson all-configured headroom
+package:
+
+```powershell
+py -3.11 scripts\run_independent_hs_continuation.py --config configs\independent_hs_all_configured_headroom.yaml --source-states data\source_states.json --resume
+```
+
+The package writes `data/results/independent_hs_all_configured_headroom/*`,
+endpoint-plus-midpoint sidecars under
+`data/results/independent_hs_all_configured_headroom/controls/`,
+`tables/independent_hs_all_configured_headroom/*`, and
+`figures/independent_hs_all_configured_headroom/*`. The key row
+`ihs_all_single_p04_amax02_warm_from_p03` selects and evaluates all 8 configured
+one-segment outage masks at phase time `0.4`, transfer time `0.5`, and
+`amax=0.2`, with nominal error `0.011115187774142957` and selected/all worst
+error `0.07741645121655767`. It is normalized-CR3BP all-configured continuous
+backend evidence only; both rows hit their configured `max_nfev` caps and this
+does not claim high-fidelity validation, production solver parity, fuel
+optimality, broader outage-family robustness, QUBO/QAOA evidence, or quantum
+advantage.
 
 For the cardinality ablation:
 

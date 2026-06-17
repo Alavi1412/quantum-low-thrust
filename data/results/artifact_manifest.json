@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-17T03:03:31Z",
+  "generated_utc": "2026-06-17T04:52:10Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "66250efc786d8122c27a718b8ace34e603b13efb",
+  "git_head_at_generation": "80df998213bde12ee1502545d24e24b874269ce1",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tests/test_claim_evidence_ledger.py\n?? data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery.csv\n?? data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_checkpoint.json\n?? data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_metadata.json\n?? data/results/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_summary.csv\n?? data/results/bicircular_tail_coast_recovery/controls/bicircular_tail_coast_recovery_control_manifest.json\n?? data/results/bicircular_tail_coast_recovery/controls/bicircular_tail_coast_recovery_progress.csv\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_000_mask_000_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_001_mask_001_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_002_mask_002_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_003_mask_003_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_004_mask_004_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_005_mask_005_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_006_mask_006_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_007_mask_007_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_008_mask_008_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_009_mask_009_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_010_mask_010_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_011_mask_011_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_012_mask_012_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_013_mask_013_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_014_mask_014_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_015_mask_015_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_016_mask_016_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_017_mask_017_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_018_mask_018_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_019_mask_019_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_020_mask_020_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_021_mask_021_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_022_mask_022_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_023_mask_023_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_024_mask_024_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_025_mask_025_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_branch_026_mask_026_controls.json\n?? data/results/bicircular_tail_coast_recovery/controls/tail_coast_all_one_two_segment_t5_portfolio_phase_0_nominal_controls.json\n?? scripts/run_bicircular_tail_coast_recovery.py\n?? src/qlt/bicircular_tail_coast_recovery.py\n?? tables/bicircular_tail_coast_recovery/bicircular_tail_coast_recovery_table.tex\n?? tests/test_bicircular_tail_coast_recovery.py",
+  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M REPRODUCIBILITY.md\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/evidence_synthesis/evidence_synthesis.csv\n M data/results/evidence_synthesis/evidence_synthesis_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_evidence_synthesis.py\n M scripts/run_independent_hs_continuation.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tables/evidence_synthesis/evidence_synthesis_table.tex\n M tables/evidence_synthesis/practitioner_lessons_table.tex\n M tests/test_claim_evidence_ledger.py\n M tests/test_evidence_synthesis.py\n M tests/test_independent_hs_direct_collocation.py\n?? configs/independent_hs_all_configured_headroom.yaml\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json\n?? data/results/independent_hs_all_configured_headroom/controls/ihs_source_p03_cold_nominal_controls.json\n?? data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv\n?? data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_metadata.json\n?? figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.pdf\n?? figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.png\n?? tables/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_table.tex",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -31,7 +31,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 646,
+  "file_count": 654,
   "files": [
     {
       "path": ".gitignore",
@@ -40,23 +40,23 @@
     },
     {
       "path": "ARCHIVAL_RELEASE.md",
-      "sha256": "84cabf17b0c5fa9e89082663457bd20747f2cb07b26a92018814dcba05be9f0f",
-      "bytes": 2633
+      "sha256": "487d505504f4c8d0f266cceefa7f425084c0110b3ff716dc64b23d4b7446e068",
+      "bytes": 2690
     },
     {
       "path": "CITATION.cff",
-      "sha256": "ac13a4a693f24163373d4bb7a5ed72681cf35174516be8d2580bdfec05385295",
-      "bytes": 827
+      "sha256": "79115b21151a2f5b8e239e33dc6309e4d28ee6573f3dbf6c5a285d7ed70a5f26",
+      "bytes": 855
     },
     {
       "path": "README.md",
-      "sha256": "615faa91ca42fe4222687e8f76cb87162094150bb530fda9546d90c759afcffb",
-      "bytes": 26998
+      "sha256": "9c55dc63eda6771afd7995ec119292e59a9bb61b75dda7ee7a4f67d3c4535c9e",
+      "bytes": 28260
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "c7df03ef80d38f22b7171d638dbe138e7023e0fb0e43a2f8566b36bd83afdc50",
-      "bytes": 36520
+      "sha256": "d726d9af52cf0a6306c28edc90c997b50efc37e1346c72fd0a29a64e2a700ca7",
+      "bytes": 39362
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -132,6 +132,11 @@
       "path": "configs/hermite_simpson_continuation_baseline.yaml",
       "sha256": "d2840adf1e39e035f40c6790fd3cb8a6b1d3246777e3aea11c1d0a2804d3f4eb",
       "bytes": 2816
+    },
+    {
+      "path": "configs/independent_hs_all_configured_headroom.yaml",
+      "sha256": "74b499f929525d81edd8f9b7d546b64dc23d2c4c973d33347a2b6cb0115501fd",
+      "bytes": 2220
     },
     {
       "path": "configs/independent_hs_continuation_baseline.yaml",
@@ -445,13 +450,13 @@
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
-      "sha256": "93ff658249951d1d026443bb30e4ecb34d20ba9721f5414b17cd0bdfb95ec50f",
-      "bytes": 15719
+      "sha256": "7c742fb2633aa05114b208cd6d8f2c9a7920e27252240f05e12f5c9de1e50ed3",
+      "bytes": 16991
     },
     {
       "path": "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
-      "sha256": "7d718d0469415ae58d5fa5f88a325c8eca39338d7820d0bfb182ad2e6fde5406",
-      "bytes": 9866
+      "sha256": "da69ea584f9a4b8788f3b2e77b06ab26b2d1d1006a3de06f1950ef55f134ef0f",
+      "bytes": 10161
     },
     {
       "path": "data/results/claim_evidence_ledger/tail_coast_branch_audit.csv",
@@ -545,13 +550,13 @@
     },
     {
       "path": "data/results/evidence_synthesis/evidence_synthesis.csv",
-      "sha256": "c20299160f6da85c2cff52d95ed4ec350b9b7356ecc08437097577724a6df427",
-      "bytes": 5111
+      "sha256": "f627b9d2887d46df9778b75f4474e5df5bbc8d26424783d9856e5502edac6dca",
+      "bytes": 5904
     },
     {
       "path": "data/results/evidence_synthesis/evidence_synthesis_metadata.json",
-      "sha256": "07b8bb28a56122ec549140f2458d4d219d9b45dd51a452f8700181c868287fbf",
-      "bytes": 4492
+      "sha256": "81ed63d95a0420cf6814adabaf78f9d5e0a3f981bb9be2ab5b9253030900ec10",
+      "bytes": 5018
     },
     {
       "path": "data/results/feasibility_metadata.json",
@@ -812,6 +817,26 @@
       "path": "data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_metadata.json",
       "sha256": "6324cf0b1f98cb1f57082862108c4b30354eb041dcc78d61dcecac4f555aeafd",
       "bytes": 10158
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_all_single_p04_amax02_warm_from_p03_nominal_controls.json",
+      "sha256": "4301ff60600efca9ce955d4fbb8d6d1e1e11e6fb1579cf3c764f5a00ae521511",
+      "bytes": 3443
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/controls/ihs_source_p03_cold_nominal_controls.json",
+      "sha256": "1c164544be4c69641ee47abd490dab87dfcef041d2bae34e457216e0d9113124",
+      "bytes": 3387
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
+      "sha256": "2b365b4c614f1e0eb325aab9ee103511731c481064a1e0621617f9cf206d1e39",
+      "bytes": 7261
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_metadata.json",
+      "sha256": "07030d4b18b9875295f34af6585d5ae73db8a860aa9fd2d718c37535b0a66c26",
+      "bytes": 18122
     },
     {
       "path": "data/results/independent_hs_continuation_baseline/controls/ihs_catalog_dro_tf4_amax1_selected1_nominal_controls.json",
@@ -2294,6 +2319,16 @@
       "bytes": 96786
     },
     {
+      "path": "figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.pdf",
+      "sha256": "37dc31d69a003b3e498f6dd9b37bb1e6826ec60e07fec24743d9883100e68a69",
+      "bytes": 13259
+    },
+    {
+      "path": "figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.png",
+      "sha256": "034739848140ea91ddc0e7fc292f52acbd92890c4dde3bc0291c2bedeec50766",
+      "bytes": 64742
+    },
+    {
       "path": "figures/independent_hs_continuation_baseline/independent_hs_continuation_baseline.pdf",
       "sha256": "28af1ee84c7b14a86410a8650f6304baf02e525a44792b181cfca2c9213deda5",
       "bytes": 16413
@@ -2665,13 +2700,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "eaa9eed849b1fe068e502ba22fcaef026764fb16bb433bcf6e1460ea418c4801",
-      "bytes": 436167
+      "sha256": "c0fde571c8f165dbf03c55b6e7626d5de63497045f2158031045288bcdcbca49",
+      "bytes": 416247
     },
     {
       "path": "paper/main.tex",
-      "sha256": "8f1a97b7db6c18a8158bb7e7d91b5c8d671aa8903bca8692ec9c5767ba4797ab",
-      "bytes": 65031
+      "sha256": "d19599db8233b52c7e664e1c522941b5a54be8375238ed4d2251a61f72b46b70",
+      "bytes": 57154
     },
     {
       "path": "paper/references.bib",
@@ -2680,13 +2715,13 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "5bbbc0aa853b00b30c6d08a5e5c9e266f9971978962275d5593a5f2686e2fe15",
-      "bytes": 487816
+      "sha256": "c09b481227fa2c313b95a9dfb327ace00e0789d9915cabf01b07a98d2476b08f",
+      "bytes": 511802
     },
     {
       "path": "paper/supplement.tex",
-      "sha256": "537297082f90eb002df41190f75127a3f0a8e7151127e13e9e03da8c74bfeaea",
-      "bytes": 34564
+      "sha256": "27b5644af1e4ee4c53c8ad41bfcdf468ddabb7bb3966b1e83189ca91ad333e13",
+      "bytes": 38009
     },
     {
       "path": "requirements-lock.txt",
@@ -2745,8 +2780,8 @@
     },
     {
       "path": "scripts/run_claim_evidence_ledger.py",
-      "sha256": "1717fe1fc73980e3020d8f84692fd99c8e6d3160b9ec77373439fdbcf6fd9ded",
-      "bytes": 64529
+      "sha256": "d829e14b2c2b8f3a738bcf4a974ce1474539ea42e51fad8bffb694fff961d98c",
+      "bytes": 66525
     },
     {
       "path": "scripts/run_continuation_margin_suite.py",
@@ -2765,8 +2800,8 @@
     },
     {
       "path": "scripts/run_evidence_synthesis.py",
-      "sha256": "b15168667e6684eff3f1f95c825191d5b4d45124389c7cabd7bdb63f327851a3",
-      "bytes": 23940
+      "sha256": "75dddb62dc1a196569916f169011584f1b3f3acda6cdf25d694ee3bea1f1f154",
+      "bytes": 25774
     },
     {
       "path": "scripts/run_experiment.py",
@@ -2790,8 +2825,8 @@
     },
     {
       "path": "scripts/run_independent_hs_continuation.py",
-      "sha256": "e026c53a28cc189bc5610df0fd0643db83411a64e00449dd70e205e1ae555fb8",
-      "bytes": 5663
+      "sha256": "384b33ee1c5c2ec375aa43d54e5f11882b6eb5bd13374fc4c6c41980846983db",
+      "bytes": 6122
     },
     {
       "path": "scripts/run_locked_nominal_recovery.py",
@@ -2970,8 +3005,8 @@
     },
     {
       "path": "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
-      "sha256": "ddaee783baa94b33f543ea9a29a169341d95d7b5c30193467f25f33f21a2bf70",
-      "bytes": 5960
+      "sha256": "8b1a63da1cf8c2e8f201e203d4173efc18a9cca144ff845e573f3ab466e95523",
+      "bytes": 6559
     },
     {
       "path": "tables/claim_evidence_ledger/tail_coast_branch_audit_table.tex",
@@ -3000,13 +3035,13 @@
     },
     {
       "path": "tables/evidence_synthesis/evidence_synthesis_table.tex",
-      "sha256": "8eb59b78a00825740ff2ad7bbaee0620d9d0dfa04384d0a0c8d30015a6571ca4",
-      "bytes": 3038
+      "sha256": "95354f0468d1863d99be74a81ecb4c1cd1dd7bf945c79fb5679d29c4ddf0325d",
+      "bytes": 3547
     },
     {
       "path": "tables/evidence_synthesis/practitioner_lessons_table.tex",
-      "sha256": "15c103eb7432b0a01c7b863c81ab30eab8fb7ffba87d74a40a628190e359f900",
-      "bytes": 2160
+      "sha256": "311caca103299b5cf12bc4b7a601a7b0cf68452a3910363f6f010148a69784d7",
+      "bytes": 2575
     },
     {
       "path": "tables/feasibility_table.tex",
@@ -3052,6 +3087,11 @@
       "path": "tables/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_table.tex",
       "sha256": "d8bc9909097804c9976a347e6989e963bcd1cc0eae8ef548160e5c11e7eb6c16",
       "bytes": 923
+    },
+    {
+      "path": "tables/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_table.tex",
+      "sha256": "307df4c73089d26b6e3efbc729d953bf7a2695a9a0c82c6bf40441d6c5e10274",
+      "bytes": 705
     },
     {
       "path": "tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex",
@@ -3215,8 +3255,8 @@
     },
     {
       "path": "tests/test_claim_evidence_ledger.py",
-      "sha256": "2efe28718c1c26ec1536f7820e8da48376156d9041d3ade6679355ef8fa5e433",
-      "bytes": 16822
+      "sha256": "cfff5a93f11b55343cb65e5776f38e32ad6b42118c1d96906d7424d16d439f77",
+      "bytes": 17690
     },
     {
       "path": "tests/test_delayed_recovery.py",
@@ -3225,8 +3265,8 @@
     },
     {
       "path": "tests/test_evidence_synthesis.py",
-      "sha256": "ffb6755e9fddb20a0853c0370b8a903c0e0550e3099e20f0e272aebebd772a9b",
-      "bytes": 4977
+      "sha256": "e7d26a5def449d1778b4b28c2fa4f738ca68936fb2765608fec99aa4cb3f7762",
+      "bytes": 5544
     },
     {
       "path": "tests/test_hermite_simpson_continuation.py",
@@ -3240,8 +3280,8 @@
     },
     {
       "path": "tests/test_independent_hs_direct_collocation.py",
-      "sha256": "ee550116afac3d9a3e6418ebd374e21547f9051bff0571184fe623d41fc366c4",
-      "bytes": 18466
+      "sha256": "8b47daaef83479953a6766a3b8fe706a124a46a7b403cf3a0988e12e6524d678",
+      "bytes": 19188
     },
     {
       "path": "tests/test_locked_nominal_recovery.py",

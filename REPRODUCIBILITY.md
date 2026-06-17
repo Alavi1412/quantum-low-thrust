@@ -1,10 +1,10 @@
 # Reproducibility and Artifact Manifest
 
 This package captures the current paper artifacts for the normalized Earth-Moon
-CR3BP low-thrust initialization benchmark. It is a research benchmark package,
-not a flight-ready trajectory design tool. The manuscript is currently framed
-for `Astrodynamics` as a focused astrodynamics benchmark paper with explicit
-negative evidence and provenance.
+CR3BP low-thrust missed-thrust initialization benchmark resource. It is a
+research benchmark package, not a flight-ready trajectory design tool. The
+manuscript is currently framed for `Astrodynamics` as a focused astrodynamics
+benchmark-resource paper with explicit negative evidence and provenance.
 
 ## Provenance Snapshot
 
@@ -65,6 +65,7 @@ verification. The primary review artifacts are `paper/main.pdf`,
 `data/results/bicircular_tail_coast_recovery/*`,
 `data/results/evidence_synthesis/*`,
 `data/results/replay_stress_validation/*`,
+`data/results/independent_hs_all_configured_headroom/*`,
 `data/results/phase_shift_cardinality_30seed/*`,
 `data/results/qaoa_depth_ablation_30seed/*`,
 `data/results/hard_catalog_tail_coast_recovery/*`,
@@ -77,8 +78,8 @@ verification. The primary review artifacts are `paper/main.pdf`,
 | --- | --- | --- | --- | --- |
 | Paper PDFs | `latexmk -pdf paper/main.tex` and `latexmk -pdf paper/supplement.tex` or equivalent local LaTeX build | `paper/main.tex`, `paper/supplement.tex`, `paper/references.bib`, generated `tables/`, `figures/` | `paper/main.pdf`, `paper/supplement.pdf` | Build time depends on local TeX install; not an experiment. |
 | Smoke tests | `python -m pytest tests` | `tests/test_smoke.py`, `src/qlt/*`, `configs/smoke.yaml` | pytest pass/fail output | Short. |
-| Claim evidence ledger | `py -3.11 scripts\run_claim_evidence_ledger.py` | Recorded summary/statistical CSV/JSON artifacts from the 30-seed main-method package, QAOA/QUBO ablation, continuation extension, direct collocation, independent-midpoint Hermite-Simpson, tail-coast, delayed-recovery, focused branch-control replay, Horizons ephemeris contrast, bicircular solar-tidal stress, and bicircular retuned recovery packages | `data/results/claim_evidence_ledger/claim_evidence_ledger.csv`, `data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json`, `data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv`, `data/results/claim_evidence_ledger/tail_coast_branch_audit.csv`, `tables/claim_evidence_ledger/*` | Short deterministic postprocessor; no trajectory optimization or high-fidelity validation. The current snapshot emits the normalized CR3BP accepted-control replay row, the Horizons force-model contrast row, the negative bicircular solar-tidal stress row, and the completed negative bicircular retuned recovery row because those packages exist. |
-| Evidence synthesis replay | `py -3.11 scripts\run_evidence_synthesis.py` | Recorded CSV/JSON artifacts from threshold sensitivity, continuation extension, direct collocation, independent-midpoint Hermite-Simpson, and tail-coast packages | `data/results/evidence_synthesis/evidence_synthesis.csv`, `data/results/evidence_synthesis/evidence_synthesis_metadata.json`, `tables/evidence_synthesis/evidence_synthesis_table.tex`, `tables/evidence_synthesis/practitioner_lessons_table.tex` | Short deterministic postprocessor; no trajectory optimization is rerun. |
+| Claim evidence ledger | `py -3.11 scripts\run_claim_evidence_ledger.py` | Recorded summary/statistical CSV/JSON artifacts from the 30-seed main-method package, QAOA/QUBO ablation, continuation extension, direct collocation, independent-midpoint Hermite-Simpson baseline, independent-HS all-configured headroom, tail-coast, delayed-recovery, focused branch-control replay, Horizons ephemeris contrast, bicircular solar-tidal stress, and bicircular retuned recovery packages | `data/results/claim_evidence_ledger/claim_evidence_ledger.csv`, `data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json`, `data/results/claim_evidence_ledger/tail_coast_threshold_audit.csv`, `data/results/claim_evidence_ledger/tail_coast_branch_audit.csv`, `tables/claim_evidence_ledger/*` | Short deterministic postprocessor; no trajectory optimization or high-fidelity validation. The current snapshot emits the independent-HS all-configured headroom row, the normalized CR3BP accepted-control replay row, the Horizons force-model contrast row, the negative bicircular solar-tidal stress row, and the completed negative bicircular retuned recovery row because those packages exist. |
+| Evidence synthesis replay | `py -3.11 scripts\run_evidence_synthesis.py` | Recorded CSV/JSON artifacts from threshold sensitivity, continuation extension, direct collocation, independent-midpoint Hermite-Simpson baseline, independent-HS all-configured headroom, and tail-coast packages | `data/results/evidence_synthesis/evidence_synthesis.csv`, `data/results/evidence_synthesis/evidence_synthesis_metadata.json`, `tables/evidence_synthesis/evidence_synthesis_table.tex`, `tables/evidence_synthesis/practitioner_lessons_table.tex` | Short deterministic postprocessor; no trajectory optimization is rerun. |
 | Recorded-control replay/stress validation | `py -3.11 scripts\run_replay_stress_validation.py` | Recorded nominal-control sidecars and source rows from continuation extension and independent-midpoint Hermite-Simpson packages; `data/source_states.json` | `data/results/replay_stress_validation/replay_stress_validation.csv`, `data/results/replay_stress_validation/replay_stress_validation_metadata.json`, `tables/replay_stress_validation/replay_stress_validation_table.tex` | Short deterministic postprocessor; repropagates nominal controls only. No least-squares optimization, branch recovery replay, high-fidelity force model, or operational validation claim. |
 | Horizons ephemeris force-model contrast | `py -3.11 scripts\run_horizons_ephemeris_force_model_contrast.py` | Committed cache `data/cache/horizons/hard_catalog_tail_coast_2026jan01_vectors.json`, focused accepted-control sidecars, `configs/hard_catalog_tail_coast_branch_control_replay.yaml`, `src/qlt/ephemeris_contrast.py`, `data/source_states.json` | `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast.csv`, `data/results/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_metadata.json`, `tables/horizons_ephemeris_force_model_contrast/horizons_ephemeris_force_model_contrast_table.tex` | Short deterministic postprocessor; default path is offline. It validates cache metadata against the configured epoch, transfer time, segment grid, canonical time unit, and fixed reference distance before comparing cached Earth/Moon/Sun geometry and solar-tidal acceleration assumptions. Not SPICE validation, high-fidelity propagation, accepted-control retuning, or a threshold-feasibility result. Use `--refresh-cache` only when intentionally regenerating the JPL Horizons cache. |
 | Tail-coast accepted branch-control replay | `py -3.11 scripts\run_tail_coast_recovery.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml --resume`, then `py -3.11 scripts\run_tail_coast_branch_control_replay.py --config configs\hard_catalog_tail_coast_branch_control_replay.yaml` | `configs/hard_catalog_tail_coast_branch_control_replay.yaml`, `src/qlt/tail_coast_recovery.py`, `scripts/run_tail_coast_recovery.py`, incremental accepted-control sidecars, progress CSV, manifest, `data/source_states.json` | `data/results/hard_catalog_tail_coast_branch_control_replay/*`, `tables/hard_catalog_tail_coast_branch_control_replay/tail_coast_branch_control_replay_table.tex` | Included current evidence package, optional to regenerate. The recovery run is checkpointed/resumable and expensive because it reruns the combined tail-coast case; the replay postprocessor is deterministic and should run only after the completed recovery package exists. Replay is normalized CR3BP accepted-control replay only; no optimization rerun, high-fidelity validation, production solver parity, fuel optimality, or quantum advantage claim. |
@@ -92,6 +93,7 @@ verification. The primary review artifacts are `paper/main.pdf`,
 | Direct-collocation baseline | `python scripts/run_direct_collocation_baseline.py --config configs/direct_collocation_baseline.yaml` | `configs/direct_collocation_baseline.yaml`, `src/qlt/direct_collocation.py`, `data/source_states.json` | `data/results/direct_collocation_baseline/*`, `figures/direct_collocation_baseline/*`, `tables/direct_collocation_baseline/*` | Expensive if regenerated; use recorded artifacts for short verification. |
 | Constant-control Hermite-Simpson continuation baseline/probe | `py -3.11 scripts\run_hermite_simpson_continuation.py --resume` | `configs/hermite_simpson_continuation_baseline.yaml`, `data/source_states.json`, persisted nominal-control sidecars for warm rows | `data/results/hermite_simpson_continuation_baseline/*`, `data/results/hermite_simpson_continuation_baseline/controls/*`, `figures/hermite_simpson_continuation_baseline/*`, `tables/hermite_simpson_continuation_baseline/*` | Expensive if regenerated; continuous-backend diagnostic with constant segment controls and no independent midpoint controls. Not quantum/discrete evidence. |
 | Independent-midpoint-control Hermite-Simpson continuation evidence | `py -3.11 scripts\run_independent_hs_continuation.py --config configs\independent_hs_continuation_baseline.yaml --source-states data\source_states.json --resume` | `configs/independent_hs_continuation_baseline.yaml`, `data/source_states.json`, persisted endpoint-plus-midpoint nominal-control sidecars for warm rows | `data/results/independent_hs_continuation_baseline/*`, `data/results/independent_hs_continuation_baseline/controls/*`, `figures/independent_hs_continuation_baseline/*`, `tables/independent_hs_continuation_baseline/*` | Expensive if regenerated; continuous-backend diagnostic with independent midpoint controls and endpoint/midpoint sidecar hashes. Not quantum/discrete evidence. The phase-time `0.2` and bounded catalog-DRO diagnostics remain negative. |
+| Independent-midpoint-control Hermite-Simpson all-configured headroom | `py -3.11 scripts\run_independent_hs_continuation.py --config configs\independent_hs_all_configured_headroom.yaml --source-states data\source_states.json --resume` | `configs/independent_hs_all_configured_headroom.yaml`, `data/source_states.json`, persisted endpoint-plus-midpoint nominal-control sidecars from the p=0.3 source row | `data/results/independent_hs_all_configured_headroom/*`, `data/results/independent_hs_all_configured_headroom/controls/*`, `figures/independent_hs_all_configured_headroom/*`, `tables/independent_hs_all_configured_headroom/*` | Expensive if regenerated; recorded run took about 3239 s total. Normalized-CR3BP continuous-backend evidence only. The key p=0.4, `amax=0.2` row selects/evaluates all 8 configured one-segment masks, records nominal `0.011115187774142957`, selected/all worst `0.07741645121655767`, and reaches `max_nfev=120` with `optimizer_success=False`. Not high-fidelity validation, production solver parity, fuel optimality, broader outage-family robustness, QUBO/QAOA, or quantum evidence. |
 | Phase-shift cardinality main-method 30-seed package | `py -3.11 scripts\run_experiment.py --config configs\q1_phase_shift_cardinality_30seed.yaml`, `py -3.11 scripts\run_main_method_statistics.py --config configs\q1_phase_shift_cardinality_30seed.yaml`, and `py -3.11 scripts\run_threshold_sensitivity.py` | `configs/q1_phase_shift_cardinality_30seed.yaml`, `data/source_states.json`, recorded `data/results/phase_shift_cardinality_30seed/raw_results.csv` | `data/results/phase_shift_cardinality_30seed/*`, `figures/phase_shift_cardinality_30seed/*`, `tables/phase_shift_cardinality_30seed/*`, including `threshold_sensitivity.csv`, `threshold_sensitivity_metadata.json`, and `threshold_sensitivity_table.tex` | Expensive to regenerate the raw run; statistics and threshold-sensitivity generation are short. 210 rows = 30 seeds x 7 methods; threshold sensitivity is derived from recorded raw results only and does not rerun optimization. No quantum-advantage or QAOA-superiority claim. |
 | QAOA depth ablation, 30-seed statistics | `python scripts/run_qaoa_depth_ablation.py --config configs/qaoa_depth_ablation_30seed.yaml --angle-restarts 1 --maxiter 10` | `configs/qaoa_depth_ablation_30seed.yaml`, `configs/q1_phase_shift_cardinality.yaml` | `data/results/qaoa_depth_ablation_30seed/*`, `figures/qaoa_depth_ablation_30seed/*`, `tables/qaoa_depth_ablation_30seed/*` | Expensive; recorded runtime is 3301.5 s. QAOA-depth statistical package; no superiority or quantum-advantage claim. |
 | Cardinality ablation | `python scripts/run_cardinality_ablation.py` | `configs/q1_phase_shift_cardinality.yaml` | `data/results/phase_shift_cardinality_ablation/*`, `figures/phase_shift_cardinality_ablation/*`, `tables/phase_shift_cardinality_ablation/*` | Expensive; recorded runtime is 2069.8 s. |
@@ -118,9 +120,10 @@ verification. The primary review artifacts are `paper/main.pdf`,
   evidence, all-mask diagnostics, and all-configured-mask evidence; it is a
   deterministic replay over recorded artifacts and does not rerun trajectory
   optimization or claim high-fidelity validation. The current snapshot includes
-  the focused branch-control replay row, the Horizons force-model contrast row,
-  the negative bicircular solar-tidal stress row, and the completed negative
-  bicircular retuned recovery row because their real artifacts exist.
+  the independent-HS all-configured headroom row, the focused branch-control
+  replay row, the Horizons force-model contrast row, the negative bicircular
+  solar-tidal stress row, and the completed negative bicircular retuned
+  recovery row because their real artifacts exist.
 - Cross-backend evidence synthesis and practitioner lessons:
   `data/results/evidence_synthesis/evidence_synthesis.csv`,
   `data/results/evidence_synthesis/evidence_synthesis_metadata.json`,
@@ -128,6 +131,18 @@ verification. The primary review artifacts are `paper/main.pdf`,
   `tables/evidence_synthesis/practitioner_lessons_table.tex`. The synthesis is
   a deterministic replay over recorded CSV/JSON artifacts and does not rerun
   trajectory optimization.
+- Independent-HS all-configured CR3BP headroom:
+  `configs/independent_hs_all_configured_headroom.yaml`,
+  `data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv`,
+  `data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_metadata.json`,
+  `data/results/independent_hs_all_configured_headroom/controls/*`,
+  `tables/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_table.tex`,
+  and `figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.*`.
+  This package optimizes all eight configured one-segment masks for
+  `ihs_all_single_p04_amax02_warm_from_p03` and records nominal
+  `0.011115187774142957` and selected/all worst `0.07741645121655767`.
+  It is normalized-CR3BP continuous-backend evidence only and retains the
+  `max_nfev` optimizer-status caveat.
 - Recorded-control replay/stress validation:
   `data/results/replay_stress_validation/replay_stress_validation.csv`,
   `data/results/replay_stress_validation/replay_stress_validation_metadata.json`,
@@ -213,6 +228,12 @@ verification. The primary review artifacts are `paper/main.pdf`,
   `data/results/independent_hs_continuation_baseline/controls/*`,
   `tables/independent_hs_continuation_baseline/independent_hs_continuation_baseline_table.tex`,
   and `figures/independent_hs_continuation_baseline/independent_hs_continuation_baseline.*`.
+- Independent-midpoint-control Hermite-Simpson all-configured headroom:
+  `data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_metadata.json`,
+  `data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv`,
+  `data/results/independent_hs_all_configured_headroom/controls/*`,
+  `tables/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom_table.tex`,
+  and `figures/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.*`.
 - Duty-cycle-prior 30-seed main-method statistics:
   `data/results/phase_shift_cardinality_30seed/raw_results.csv`,
   `data/results/phase_shift_cardinality_30seed/success_intervals.csv`,

@@ -52,6 +52,13 @@ INDEPENDENT_HS_CSV = (
     / "independent_hs_continuation_baseline"
     / "independent_hs_continuation_baseline.csv"
 )
+INDEPENDENT_HS_ALL_CONFIGURED_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_all_configured_headroom"
+    / "independent_hs_all_configured_headroom.csv"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -499,6 +506,7 @@ def _recorded_case_rows() -> list[dict[str, str]]:
     continuation_rows = _read_csv_rows(CONTINUATION_CSV)
     direct_rows = _read_csv_rows(DIRECT_COLLOCATION_CSV)
     ihs_rows = _read_csv_rows(INDEPENDENT_HS_CSV)
+    ihs_all_configured_rows = _read_csv_rows(INDEPENDENT_HS_ALL_CONFIGURED_CSV)
     tail_rows = _read_csv_rows(TAIL_COAST_CSV)
     delayed_rows = _read_csv_rows(DELAYED_RECOVERY_CSV)
 
@@ -517,6 +525,11 @@ def _recorded_case_rows() -> list[dict[str, str]]:
         ihs_rows,
         INDEPENDENT_HS_CSV,
         case_id="ihs_phase_p04_amax02_warm_from_p03",
+    )
+    ihs_all_configured = _first_matching(
+        ihs_all_configured_rows,
+        INDEPENDENT_HS_ALL_CONFIGURED_CSV,
+        case_id="ihs_all_single_p04_amax02_warm_from_p03",
     )
     tail_combined = _first_matching(
         tail_rows,
@@ -609,6 +622,33 @@ def _recorded_case_rows() -> list[dict[str, str]]:
             source_artifact=INDEPENDENT_HS_CSV,
             source_row_key="case_id=ihs_phase_p04_amax02_warm_from_p03",
             source_row=ihs_p04,
+        ),
+        _case_metric_row(
+            claim_id="phase_shift_independent_hs_p04_amax02_all_configured",
+            evidence_family="independent-midpoint Hermite-Simpson all-configured headroom",
+            target_family="halo phase-shift",
+            source_case="ihs_all_single_p04_amax02_warm_from_p03",
+            backend_or_method="independent midpoint controls",
+            mask_scope="8/8 configured one-segment masks selected and evaluated",
+            selected_branch_semantics=str(ihs_all_configured.get("selected_branch_semantics", "")),
+            all_mask_semantics=(
+                "all-mask diagnostic equals selected-worst error because every configured "
+                "one-segment mask was selected and evaluated"
+            ),
+            all_configured_mask_evidence=True,
+            primary_interpretation=(
+                "The new independent-midpoint HS package gives all-configured one-segment "
+                "phase-shift headroom at p=0.4 and amax=0.2 in normalized CR3BP."
+            ),
+            explicit_boundary=(
+                "Normalized-CR3BP all-configured one-segment evidence only; optimizer reached "
+                "the max_nfev cap, and this is not production solver parity, high-fidelity "
+                "validation, fuel optimality, broader outage-family robustness, QUBO, QAOA, "
+                "or quantum evidence."
+            ),
+            source_artifact=INDEPENDENT_HS_ALL_CONFIGURED_CSV,
+            source_row_key="case_id=ihs_all_single_p04_amax02_warm_from_p03",
+            source_row=ihs_all_configured,
         ),
         _case_metric_row(
             claim_id="catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
@@ -975,22 +1015,22 @@ def build_claim_evidence_ledger(
         *recorded_rows[:5],
         *recorded_rows[5:],
     ]
+    tail_insert_at = next(
+        index
+        for index, row in enumerate(rows)
+        if row["claim_id"] == "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured"
+    ) + 1
     if include_branch_control_replay:
-        rows.insert(7, _tail_coast_branch_control_replay_ledger_row())
+        rows.insert(tail_insert_at, _tail_coast_branch_control_replay_ledger_row())
+        tail_insert_at += 1
     if include_bicircular_solar_tidal_stress:
-        insert_at = 8 if include_branch_control_replay else 7
-        rows.insert(insert_at, _bicircular_solar_tidal_stress_ledger_row())
+        rows.insert(tail_insert_at, _bicircular_solar_tidal_stress_ledger_row())
+        tail_insert_at += 1
     if include_bicircular_tail_coast_recovery:
-        insert_at = 7 + int(include_branch_control_replay) + int(include_bicircular_solar_tidal_stress)
-        rows.insert(insert_at, _bicircular_tail_coast_retuned_recovery_ledger_row())
+        rows.insert(tail_insert_at, _bicircular_tail_coast_retuned_recovery_ledger_row())
+        tail_insert_at += 1
     if include_horizons_ephemeris_force_model_contrast:
-        insert_at = (
-            7
-            + int(include_branch_control_replay)
-            + int(include_bicircular_solar_tidal_stress)
-            + int(include_bicircular_tail_coast_recovery)
-        )
-        rows.insert(insert_at, _horizons_ephemeris_force_model_contrast_ledger_row())
+        rows.insert(tail_insert_at, _horizons_ephemeris_force_model_contrast_ledger_row())
     return pd.DataFrame(rows, columns=LEDGER_COLUMNS)
 
 
@@ -1185,6 +1225,7 @@ def _input_artifacts() -> list[Path]:
         CONTINUATION_CSV,
         DIRECT_COLLOCATION_CSV,
         INDEPENDENT_HS_CSV,
+        INDEPENDENT_HS_ALL_CONFIGURED_CSV,
         TAIL_COAST_CSV,
         DELAYED_RECOVERY_CSV,
     ]

@@ -36,26 +36,25 @@ def test_claim_evidence_ledger_rows_and_semantics():
         "phase_shift_continuation_two_segment_n8_p03_all_configured",
         "phase_shift_direct_collocation_p04_selected_branch_diagnostic",
         "phase_shift_independent_hs_p04_amax02_selected_branch_diagnostic",
+        "phase_shift_independent_hs_p04_amax02_all_configured",
         "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
         "catalog_dro_delayed_h6_all_single_delayed_arrival",
     ]
+    tail_insert_at = (
+        expected_claims.index("catalog_dro_tail_coast_all_one_two_segment_t5_all_configured")
+        + 1
+    )
     if has_replay:
-        expected_claims.insert(7, "catalog_dro_tail_coast_branch_control_replay_accepted_controls")
+        expected_claims.insert(tail_insert_at, "catalog_dro_tail_coast_branch_control_replay_accepted_controls")
+        tail_insert_at += 1
     if has_bicircular:
-        expected_claims.insert(
-            8 if has_replay else 7,
-            "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe",
-        )
+        expected_claims.insert(tail_insert_at, "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe")
+        tail_insert_at += 1
     if has_retuned:
-        expected_claims.insert(
-            7 + int(has_replay) + int(has_bicircular),
-            "bicircular_tail_coast_retuned_recovery",
-        )
+        expected_claims.insert(tail_insert_at, "bicircular_tail_coast_retuned_recovery")
+        tail_insert_at += 1
     if has_horizons:
-        expected_claims.insert(
-            7 + int(has_replay) + int(has_bicircular) + int(has_retuned),
-            "catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast",
-        )
+        expected_claims.insert(tail_insert_at, "catalog_dro_tail_coast_horizons_ephemeris_force_model_contrast")
     assert len(ledger) == len(expected_claims)
     assert ledger["claim_id"].tolist() == expected_claims
 
@@ -99,6 +98,17 @@ def test_claim_evidence_ledger_rows_and_semantics():
     assert ihs["backend_or_method"] == "independent midpoint controls"
     assert ihs["nominal_error"] == "0.0197147568098046"
     assert ihs["all_mask_worst_error"] == "0.0531572965780589"
+
+    ihs_all = row("phase_shift_independent_hs_p04_amax02_all_configured")
+    assert ihs_all["all_configured_mask_evidence"] == "True"
+    assert ihs_all["backend_or_method"] == "independent midpoint controls"
+    assert "8/8 configured one-segment masks" in ihs_all["mask_scope"]
+    assert ihs_all["nominal_error"] == "0.011115187774142957"
+    assert ihs_all["selected_worst_error"] == "0.07741645121655767"
+    assert ihs_all["all_mask_worst_error"] == "0.07741645121655767"
+    assert ihs_all["passes_configured_thresholds"] == "True"
+    assert "max_nfev" in ihs_all["explicit_boundary"]
+    assert "not production solver parity" in ihs_all["explicit_boundary"]
 
     tail = row("catalog_dro_tail_coast_all_one_two_segment_t5_all_configured")
     assert tail["all_configured_mask_evidence"] == "True"
@@ -263,9 +273,9 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     has_bicircular = module.bicircular_solar_tidal_stress_artifacts_available()
     has_retuned = module.bicircular_tail_coast_recovery_artifacts_available()
     has_horizons = module.horizons_ephemeris_force_model_contrast_artifacts_available()
-    expected_rows = 8 + int(has_replay) + int(has_bicircular) + int(has_retuned) + int(has_horizons)
+    expected_rows = 9 + int(has_replay) + int(has_bicircular) + int(has_retuned) + int(has_horizons)
     expected_inputs = (
-        10
+        11
         + (3 if has_replay else 0)
         + (2 if has_bicircular else 0)
         + (3 if has_retuned else 0)
@@ -308,6 +318,7 @@ def test_claim_evidence_ledger_writes_deterministic_artifacts_without_optimizati
     assert len(branch) == 1
 
     table = second["claim_evidence_ledger_table_tex"].read_text(encoding="utf-8")
+    assert "phase\\_shift\\_independent\\_hs\\_p04\\_amax02\\_all\\_configured" in table
     assert "catalog\\_dro\\_tail\\_coast\\_all\\_one\\_two\\_segment\\_t5\\_all\\_configured" in table
     if has_replay:
         assert "catalog\\_dro\\_tail\\_coast\\_branch\\_control\\_replay\\_accepted\\_controls" in table

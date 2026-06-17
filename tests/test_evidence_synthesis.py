@@ -25,13 +25,14 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
 
     synthesis = module.build_synthesis()
 
-    assert len(synthesis) == 7
+    assert len(synthesis) == 8
     assert set(synthesis["row_id"]) == {
         "phase_shift_tight_threshold_counts",
         "continuation_all_single_p04",
         "continuation_two_segment_n8_p03",
         "direct_collocation_selected_p04",
         "ihs_tighter_thrust_p04",
+        "ihs_all_configured_headroom_p04_amax02",
         "tail_coast_hard_catalog_all_one_two",
         "ihs_hard_catalog_selected_failure",
     }
@@ -69,6 +70,14 @@ def test_evidence_synthesis_replays_representative_recorded_rows():
     assert ihs_phase["selected_worst_error"] == "0.0187821107883081"
     assert ihs_phase["all_mask_worst_error"] == "0.0531572965780589"
     assert ihs_phase["tight_0p05_0p09_all_mask_pass"] == "True"
+
+    ihs_all = row("ihs_all_configured_headroom_p04_amax02")
+    assert ihs_all["nominal_error"] == "0.011115187774142957"
+    assert ihs_all["selected_worst_error"] == "0.07741645121655767"
+    assert ihs_all["all_mask_worst_error"] == "0.07741645121655767"
+    assert ihs_all["configured_pass"] == "True"
+    assert ihs_all["tight_0p05_0p09_all_mask_pass"] == "True"
+    assert "8/8 configured one-segment masks" in ihs_all["mask_scope"]
 
     tail = row("tail_coast_hard_catalog_all_one_two")
     assert tail["nominal_error"] == "0.02299233817855882"
@@ -109,14 +118,15 @@ def test_evidence_synthesis_writes_deterministic_artifacts_without_optimization(
 
     metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
     assert metadata["optimization_rerun"] is False
-    assert metadata["row_count"] == 7
+    assert metadata["row_count"] == 8
     assert "Recorded CSV/JSON artifacts only" in metadata["source_mode"]
     assert "Runtime is intentionally omitted" in metadata["determinism_note"]
-    assert len(metadata["input_artifacts"]) == 10
+    assert len(metadata["input_artifacts"]) == 12
 
     csv_df = pd.read_csv(csv_path)
-    assert len(csv_df) == 7
+    assert len(csv_df) == 8
     assert "tail_coast_hard_catalog_all_one_two" in set(csv_df["row_id"])
+    assert "ihs_all_configured_headroom_p04_amax02" in set(csv_df["row_id"])
     table = table_path.read_text(encoding="utf-8")
     assert "0.05/0.10: True; 0.05/0.09: False" in table
     assert "sampled methods 0/30; all-windows 30/30" in table

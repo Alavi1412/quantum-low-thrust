@@ -61,9 +61,17 @@ outage_masks = _base.outage_masks
 write_json = _base.write_json
 
 
-def _configure_base() -> None:
-    _base.SUITE_NAME = SUITE_NAME
-    _base.ARTIFACT_STEM = ARTIFACT_STEM
+def _configured_names(config: dict | None = None) -> tuple[str, str]:
+    run_cfg = dict((config or {}).get("run", {}) or {})
+    suite_name = str(run_cfg.get("suite_name", SUITE_NAME))
+    artifact_stem = str(run_cfg.get("artifact_stem", ARTIFACT_STEM))
+    return suite_name, artifact_stem
+
+
+def _configure_base(config: dict | None = None) -> None:
+    suite_name, artifact_stem = _configured_names(config)
+    _base.SUITE_NAME = suite_name
+    _base.ARTIFACT_STEM = artifact_stem
     _base.DEFAULT_CONFIG_PATH = DEFAULT_CONFIG_PATH
     _base.DEFAULT_COLLOCATION_METHOD = DEFAULT_COLLOCATION_METHOD
     _base.FORCE_COLLOCATION_METHOD = DEFAULT_COLLOCATION_METHOD
@@ -123,7 +131,8 @@ def load_control_sidecar(*args, **kwargs):
 
 
 def run(args) -> "_base.pd.DataFrame":
-    _configure_base()
+    config = _base.yaml.safe_load(args.config.read_text(encoding="utf-8"))
+    _configure_base(config)
     return _base.run(args)
 
 

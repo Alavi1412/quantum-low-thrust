@@ -28,6 +28,7 @@ and assigned a real identifier.
 - `data/results/bicircular_tail_coast_recovery/`
 - `data/results/evidence_synthesis/`
 - `data/results/replay_stress_validation/`
+- `data/results/independent_hs_all_configured_headroom/`
 - `data/results/phase_shift_cardinality_30seed/`
 - `data/results/qaoa_depth_ablation_30seed/`
 - `data/results/hard_catalog_tail_coast_recovery/`

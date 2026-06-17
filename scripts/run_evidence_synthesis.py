@@ -65,6 +65,20 @@ INDEPENDENT_HS_METADATA = (
     / "independent_hs_continuation_baseline"
     / "independent_hs_continuation_baseline_metadata.json"
 )
+INDEPENDENT_HS_ALL_CONFIGURED_CSV = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_all_configured_headroom"
+    / "independent_hs_all_configured_headroom.csv"
+)
+INDEPENDENT_HS_ALL_CONFIGURED_METADATA = (
+    ROOT
+    / "data"
+    / "results"
+    / "independent_hs_all_configured_headroom"
+    / "independent_hs_all_configured_headroom_metadata.json"
+)
 TAIL_COAST_CSV = (
     ROOT / "data" / "results" / "hard_catalog_tail_coast_recovery" / "tail_coast_recovery.csv"
 )
@@ -283,6 +297,7 @@ def build_synthesis() -> pd.DataFrame:
     continuation_rows = _read_csv_rows(CONTINUATION_CSV)
     direct_rows = _read_csv_rows(DIRECT_COLLOCATION_CSV)
     ihs_rows = _read_csv_rows(INDEPENDENT_HS_CSV)
+    ihs_all_configured_rows = _read_csv_rows(INDEPENDENT_HS_ALL_CONFIGURED_CSV)
     tail_rows = _read_csv_rows(TAIL_COAST_CSV)
 
     all_single_p04 = _first_matching(
@@ -300,6 +315,11 @@ def build_synthesis() -> pd.DataFrame:
         ihs_rows,
         INDEPENDENT_HS_CSV,
         case_id="ihs_phase_p04_amax02_warm_from_p03",
+    )
+    ihs_all_configured = _first_matching(
+        ihs_all_configured_rows,
+        INDEPENDENT_HS_ALL_CONFIGURED_CSV,
+        case_id="ihs_all_single_p04_amax02_warm_from_p03",
     )
     ihs_hard_failure = _first_matching(
         ihs_rows,
@@ -377,6 +397,23 @@ def build_synthesis() -> pd.DataFrame:
                 "this phase-shift row even at amax=0.2."
             ),
             pass_status_note="tight status uses the all-mask diagnostic, not only the optimized selected branches",
+        ),
+        _case_metric_row(
+            row_id="ihs_all_configured_headroom_p04_amax02",
+            artifact_family="independent-midpoint Hermite-Simpson all-configured headroom",
+            representative_case_or_statistic="ihs_all_single_p04_amax02_warm_from_p03",
+            target_family="catalog halo phase-shift",
+            backend_initializer_role="all one-segment independent-midpoint collocation with tighter thrust",
+            mask_scope="8/8 configured one-segment masks selected and evaluated",
+            source_artifact=INDEPENDENT_HS_ALL_CONFIGURED_CSV,
+            source_row_id="case_id=ihs_all_single_p04_amax02_warm_from_p03",
+            source_row=ihs_all_configured,
+            practitioner_interpretation=(
+                "The independent-midpoint HS headroom package upgrades the earlier "
+                "selected-branch row to all-configured one-segment evidence at "
+                "p=0.4 and amax=0.2, while retaining the max-nfev optimizer caveat."
+            ),
+            pass_status_note="selected masks equal all configured one-segment masks for this row",
         ),
         _case_metric_row(
             row_id="tail_coast_hard_catalog_all_one_two",
@@ -498,6 +535,8 @@ def write_artifacts(
         DIRECT_COLLOCATION_METADATA,
         INDEPENDENT_HS_CSV,
         INDEPENDENT_HS_METADATA,
+        INDEPENDENT_HS_ALL_CONFIGURED_CSV,
+        INDEPENDENT_HS_ALL_CONFIGURED_METADATA,
         TAIL_COAST_CSV,
         TAIL_COAST_METADATA,
     ]

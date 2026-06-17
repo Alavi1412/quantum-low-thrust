@@ -1,6 +1,6 @@
 {
   "command": "scripts\\run_claim_evidence_ledger.py",
-  "row_count": 12,
+  "row_count": 13,
   "tail_coast_threshold_audit_row_count": 5,
   "tail_coast_branch_audit_row_count": 1,
   "optimization_rerun": false,
@@ -57,6 +57,7 @@
     "phase_shift_continuation_two_segment_n8_p03_all_configured",
     "phase_shift_direct_collocation_p04_selected_branch_diagnostic",
     "phase_shift_independent_hs_p04_amax02_selected_branch_diagnostic",
+    "phase_shift_independent_hs_p04_amax02_all_configured",
     "catalog_dro_tail_coast_all_one_two_segment_t5_all_configured",
     "catalog_dro_tail_coast_branch_control_replay_accepted_controls",
     "catalog_dro_tail_coast_bicircular_solar_tidal_stress_probe",
@@ -104,6 +105,11 @@
       "path": "data/results/independent_hs_continuation_baseline/independent_hs_continuation_baseline.csv",
       "sha256": "cebebee6c4d8925954c81629df6d58885012005b7adff6d3403b37dd4e71dd65",
       "bytes": 15920
+    },
+    {
+      "path": "data/results/independent_hs_all_configured_headroom/independent_hs_all_configured_headroom.csv",
+      "sha256": "2b365b4c614f1e0eb325aab9ee103511731c481064a1e0621617f9cf206d1e39",
+      "bytes": 7261
     },
     {
       "path": "data/results/hard_catalog_tail_coast_recovery/tail_coast_recovery.csv",

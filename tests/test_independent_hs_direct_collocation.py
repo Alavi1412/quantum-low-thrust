@@ -149,6 +149,29 @@ def test_independent_hs_method_normalization_type_and_aliases():
         normalize_collocation_method("not_a_method")
 
 
+def test_independent_hs_wrapper_supports_configured_artifact_family():
+    script = load_script_module(
+        "run_independent_hs_names_test",
+        ROOT / "scripts" / "run_independent_hs_continuation.py",
+    )
+
+    assert script._configured_names({}) == (
+        "independent_hs_continuation_baseline",
+        "independent_hs_continuation_baseline",
+    )
+    assert script._configured_names(
+        {
+            "run": {
+                "suite_name": "independent_hs_all_configured_headroom",
+                "artifact_stem": "independent_hs_all_configured_headroom",
+            }
+        }
+    ) == (
+        "independent_hs_all_configured_headroom",
+        "independent_hs_all_configured_headroom",
+    )
+
+
 def test_independent_hs_layout_adds_midpoint_controls_only_for_independent_method():
     from qlt.direct_collocation import DirectCollocationLayout, initial_guess
 
