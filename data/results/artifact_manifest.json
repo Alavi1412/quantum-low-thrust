@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-18T20:55:42Z",
+  "generated_utc": "2026-06-18T21:02:54Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "9508a2cf63ee731f3b3bcf6fdf237e3d5096ccdb",
+  "git_head_at_generation": "f5a69a314bd603c3b940741273a85d4a2e6474b0",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M REPRODUCIBILITY.md\n M paper/main.pdf\n M paper/main.tex\n M scripts/verify_submission_snapshot.py\n?? data/results/online_branch_refinement/online_branch_refinement.csv\n?? data/results/online_branch_refinement/online_branch_refinement_metadata.json\n?? scripts/run_online_branch_refinement.py\n?? tables/online_branch_refinement/online_branch_refinement_table.tex\n?? tests/test_online_branch_refinement.py",
+  "working_tree_status_at_generation": "",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
