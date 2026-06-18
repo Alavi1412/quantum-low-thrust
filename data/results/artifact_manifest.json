@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-18T21:02:54Z",
+  "generated_utc": "2026-06-18T21:15:36Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "f5a69a314bd603c3b940741273a85d4a2e6474b0",
+  "git_head_at_generation": "bb935caccc0c47e3bbaea0f4a08c59fc33fb91a0",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "",
+  "working_tree_status_at_generation": "M paper/main.pdf\n M paper/main.tex",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -3688,13 +3688,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "1f1a12a7d2d6095b671130b53128cf04f8bcdab72f959655d2da33a7d177a582",
-      "bytes": 551085
+      "sha256": "0da5a40f808b084b876379c24bd47cc9d174e923e7486c6319ac3d5f7029e46a",
+      "bytes": 577447
     },
     {
       "path": "paper/main.tex",
-      "sha256": "b32a91ecd0b3794fc0e40c5e38901ac2c5bd08f36dfd719460a6293931ca82c7",
-      "bytes": 102248
+      "sha256": "f67683e656b6e06d8db5952176809800a9b9b0525502e8b1440300d5d43316c3",
+      "bytes": 104662
     },
     {
       "path": "paper/references.bib",
