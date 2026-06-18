@@ -5,14 +5,14 @@ release identifiers associated with that archive record.
 
 ## Release Identifiers
 
-- Release tag: `v1.0.0`
-- Tagged commit: `1164cb36367ca37d4860e7f137cba2afc67b2999`
-- Archive DOI: `10.5281/zenodo.20739420`
-- DOI URL: <https://doi.org/10.5281/zenodo.20739420>
-- Zenodo record URL: <https://zenodo.org/records/20739420>
+- Release tag: `v1.0.1`
+- Tagged commit: `af8443871bae7e0adbbe906c117ddbfe011bf207`
+- Archive DOI: `10.5281/zenodo.20746480`
+- DOI URL: <https://doi.org/10.5281/zenodo.20746480>
+- Zenodo record URL: <https://zenodo.org/records/20746480>
 
 Note: this file revision is a post-deposit metadata update. The Zenodo
-`v1.0.0` source archive was created from the tagged commit above, so the
+`v1.0.1` source archive was created from the tagged commit above, so the
 DOI-bearing updates to this file and other metadata files are not inside that
 source archive. A later release is needed if those DOI-bearing metadata files
 themselves must be archived.

@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-18T01:31:25Z",
+  "generated_utc": "2026-06-18T14:20:48Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "1164cb36367ca37d4860e7f137cba2afc67b2999",
+  "git_head_at_generation": "af8443871bae7e0adbbe906c117ddbfe011bf207",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M data/results/artifact_manifest.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf",
+  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -43,13 +43,13 @@
     },
     {
       "path": "ARCHIVAL_RELEASE.md",
-      "sha256": "13befb3b1f785fce345e31cf8251e06703f007a23b58ab2890267aa515f2c7f0",
+      "sha256": "e85016a75a6b8eb9b520c1efbced933848fd31953a6200f24f2c1c52733e0587",
       "bytes": 6439
     },
     {
       "path": "CITATION.cff",
-      "sha256": "d3d0cab89914659b63bfd8b046af1512218eb13e3436996e6349779a562d4849",
-      "bytes": 1154
+      "sha256": "e8d2f732414fe6361146cdf25ad11cd7a97f562fab2db00e1d1fbe2f493f76e4",
+      "bytes": 1161
     },
     {
       "path": "LICENSE",
@@ -58,7 +58,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "820257bfee7db20a03ee4b4335944fb4e616e33d0ae6a6b4770939663c4d78a8",
+      "sha256": "615c7b0fa2ee2c389269ba9c22617ce50461ad74022a5f7977daa0b721ecc755",
       "bytes": 41835
     },
     {
@@ -3253,13 +3253,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "85a43dbd31a7c406b6463173f352394d785bc7e09dced4b7e96f4a9a4561cd74",
-      "bytes": 435540
+      "sha256": "df453804f2ac411fccce38c6b9e47fbbe36160c2c7c8fa364f24c1e45cddb67d",
+      "bytes": 435712
     },
     {
       "path": "paper/main.tex",
-      "sha256": "bc47b7ca7afc3d11e49ff16e669b019f4f77af83b625f84441261e6206209252",
-      "bytes": 73163
+      "sha256": "fa690e9b7a0cb75a253334898a8c716a25ec37dc340580db4e4fae79bcc90707",
+      "bytes": 73207
     },
     {
       "path": "paper/references.bib",
@@ -3268,7 +3268,7 @@
     },
     {
       "path": "paper/supplement.pdf",
-      "sha256": "cedd768ca24ded8b3137d079867e38ffbb4c39e62a4cfdda2a1b1e0585d44807",
+      "sha256": "3bbe73a503523e4d0e31da13ed8b9dd3e3be5ffff01baeba96da024903f450b8",
       "bytes": 536392
     },
     {
