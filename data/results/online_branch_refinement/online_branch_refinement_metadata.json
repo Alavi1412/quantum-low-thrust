@@ -1,0 +1,75 @@
+{
+  "command": "C:\\Users\\alavi\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts\\run_online_branch_refinement.py",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "packages": {
+    "numpy": "2.4.6",
+    "pandas": "3.0.3",
+    "pyyaml": "6.0.3",
+    "scipy": "1.17.1"
+  },
+  "git_head": "9508a2cf63ee731f3b3bcf6fdf237e3d5096ccdb",
+  "git_status_short": "M REPRODUCIBILITY.md\n M paper/main.tex\n M scripts/verify_submission_snapshot.py\n?? data/results/online_branch_refinement/\n?? scripts/run_online_branch_refinement.py\n?? tables/online_branch_refinement/\n?? tests/test_online_branch_refinement.py",
+  "tracked_file_count": 900,
+  "untracked_file_count": 5,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 173,
+  "project_manifest_total_bytes": 5156600,
+  "project_manifest_hash": "8aaa2852121891026a1c159734bf7bcf17ccf71a99ed37b8e48c8113cdb67a70",
+  "config": "configs/q1_phase_shift_cardinality.yaml",
+  "input_dir": "data/results/online_quantum_search",
+  "cases": [
+    {
+      "case_id": "feedback_N16_k12",
+      "n_segments": 16,
+      "active_count": 12,
+      "M": 1820,
+      "top_n": 1,
+      "runtime_seconds": 69.93158860004041
+    },
+    {
+      "case_id": "feedback_N20_k16",
+      "n_segments": 20,
+      "active_count": 16,
+      "M": 4845,
+      "top_n": 1,
+      "runtime_seconds": 86.11094540002523
+    }
+  ],
+  "default_policy": "Default run refines only the top feedback-screening schedule per large case with the configured branch_recovery max_nfev cap; no multistart expansion is enabled.",
+  "thresholds": {
+    "nominal_success": 0.09,
+    "robust_success": 0.17
+  },
+  "threshold_dimensional_bounds": [
+    {
+      "threshold": "nominal",
+      "nondimensional_error": 0.09,
+      "position_bound_km_if_velocity_error_zero": 34596.0,
+      "velocity_bound_m_per_s_if_position_error_zero": 32.273225942147924
+    },
+    {
+      "threshold": "robust",
+      "nondimensional_error": 0.17,
+      "position_bound_km_if_velocity_error_zero": 65348.00000000001,
+      "velocity_bound_m_per_s_if_position_error_zero": 60.96053789072385
+    }
+  ],
+  "threshold_dimensional_caveat": "The reported error is sqrt((||dr||/position_scale)^2 + (||dv||/velocity_scale)^2). Dimensional rows are component upper-bound interpretations when the other component is zero, not flight-dynamics targeting tolerances.",
+  "claim_limits": [
+    "This is a targeted diagnostic for feedback-screening winners, not a full branch-refined enumeration.",
+    "The larger online-search rows remain screening evidence unless branch-refined feasible seeds are demonstrated.",
+    "Optimizer status is reported separately from threshold pass/fail.",
+    "All-mask worst is a diagnostic over outage masks not selected for refinement."
+  ],
+  "runtime_seconds": 161.29310910002096,
+  "artifact_paths": {
+    "csv": "data/results/online_branch_refinement/online_branch_refinement.csv",
+    "metadata_json": "data/results/online_branch_refinement/online_branch_refinement_metadata.json",
+    "table_tex": "tables/online_branch_refinement/online_branch_refinement_table.tex"
+  }
+}

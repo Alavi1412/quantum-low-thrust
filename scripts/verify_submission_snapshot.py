@@ -34,6 +34,8 @@ PRIMARY_ARTIFACT_PATHS = [
     "data/results/online_quantum_search/paired_comparisons.json",
     "data/results/online_quantum_search/feedback_N16_k12_subspace_costs.csv",
     "data/results/online_quantum_search/feedback_N20_k16_subspace_costs.csv",
+    "data/results/online_branch_refinement/online_branch_refinement.csv",
+    "data/results/online_branch_refinement/online_branch_refinement_metadata.json",
     "data/results/structured_grover_one_coast/summary.csv",
     "data/results/structured_grover_one_coast/summary.json",
     "data/results/structured_grover_one_coast/metadata.json",
@@ -150,6 +152,7 @@ PRIMARY_ARTIFACT_PATHS = [
     "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
     "tables/online_quantum_search/online_quantum_search_table.tex",
     "tables/online_quantum_search/online_quantum_search_statistics_table.tex",
+    "tables/online_branch_refinement/online_branch_refinement_table.tex",
     "tables/structured_grover_one_coast/structured_grover_table.tex",
     "tables/structured_grover_one_coast/structured_grover_query_scaling_table.tex",
     "tables/structured_grover_one_coast/structured_grover_comparison_table.tex",
@@ -159,6 +162,7 @@ PRIMARY_ARTIFACT_PATHS = [
     "tables/structured_grover_k10_full/structured_grover_comparison_table.tex",
     "tables/structured_grover_k10_full/structured_grover_selection_bias_audit_table.tex",
     "figures/online_quantum_search/online_quantum_search_success.pdf",
+    "scripts/run_online_branch_refinement.py",
 ]
 
 FOCUSED_TEST_TARGETS = [
@@ -178,6 +182,7 @@ FOCUSED_TEST_TARGETS = [
     "tests/test_bicircular_tail_coast_recovery.py",
     "tests/test_tail_coast_recovery.py",
     "tests/test_online_quantum_search.py",
+    "tests/test_online_branch_refinement.py",
     "tests/test_structured_grover.py",
 ]
 

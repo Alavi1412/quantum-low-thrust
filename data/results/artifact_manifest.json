@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-18T20:16:18Z",
+  "generated_utc": "2026-06-18T20:55:42Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "0545f8de6506ada36680ba971384e5f3bcca5273",
+  "git_head_at_generation": "9508a2cf63ee731f3b3bcf6fdf237e3d5096ccdb",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "",
+  "working_tree_status_at_generation": "M REPRODUCIBILITY.md\n M paper/main.pdf\n M paper/main.tex\n M scripts/verify_submission_snapshot.py\n?? data/results/online_branch_refinement/online_branch_refinement.csv\n?? data/results/online_branch_refinement/online_branch_refinement_metadata.json\n?? scripts/run_online_branch_refinement.py\n?? tables/online_branch_refinement/online_branch_refinement_table.tex\n?? tests/test_online_branch_refinement.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -34,7 +34,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 899,
+  "file_count": 904,
   "files": [
     {
       "path": ".gitignore",
@@ -63,8 +63,8 @@
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "9792c2a14ec298ea533f457ef26cf915a20ecf2202c828578c0857b47129ad03",
-      "bytes": 66422
+      "sha256": "d90f3bcff5c81b2c5aa364e316b75441d4f054f75e94140fb9305e2d23f54dcd",
+      "bytes": 67738
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -1440,6 +1440,16 @@
       "path": "data/results/multiple_shooting_metadata.json",
       "sha256": "ff947d466391f296acd879c088e644ffe53329b292a4a674a02f1b809bdcbcc3",
       "bytes": 4165
+    },
+    {
+      "path": "data/results/online_branch_refinement/online_branch_refinement.csv",
+      "sha256": "6d5a8bd77f63b3cb4204d71bab00daf9142babc2f293538690c5d23724a860ea",
+      "bytes": 1118
+    },
+    {
+      "path": "data/results/online_branch_refinement/online_branch_refinement_metadata.json",
+      "sha256": "12e114be2cb0f4f580cc4e17f65e6f1605ac774cad0c8213cbc5dacf4f6676f1",
+      "bytes": 3284
     },
     {
       "path": "data/results/online_quantum_search/feedback_N16_k12_subspace_costs.csv",
@@ -3678,13 +3688,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "9abfad51c39fee087181d6bfca8d4d2f38439eaefc2d841e62bbaccfb475316b",
-      "bytes": 541192
+      "sha256": "1f1a12a7d2d6095b671130b53128cf04f8bcdab72f959655d2da33a7d177a582",
+      "bytes": 551085
     },
     {
       "path": "paper/main.tex",
-      "sha256": "606a363e15daad85890fb0a74dc59b4668d2b7b0dde51d314de9d28b8fc81eb2",
-      "bytes": 97231
+      "sha256": "b32a91ecd0b3794fc0e40c5e38901ac2c5bd08f36dfd719460a6293931ca82c7",
+      "bytes": 102248
     },
     {
       "path": "paper/references.bib",
@@ -3857,6 +3867,11 @@
       "bytes": 234
     },
     {
+      "path": "scripts/run_online_branch_refinement.py",
+      "sha256": "b83edf2570da76da34cb7762ca48f0933b3505c057101d66b634901bd092c901",
+      "bytes": 14340
+    },
+    {
       "path": "scripts/run_online_quantum_search.py",
       "sha256": "4a2660274ac3af6f2ae183343e9b9793bb33a1865853909f21426c53496c6c46",
       "bytes": 28629
@@ -3908,8 +3923,8 @@
     },
     {
       "path": "scripts/verify_submission_snapshot.py",
-      "sha256": "f89bf084eb9a089e60da9b3d885d311da1e76ed12183c68040ed00fbb2a08a89",
-      "bytes": 11955
+      "sha256": "1efbf297927bd84b1910d230c8421e13ee8177f819cfbb6441b73a1c09ab16a9",
+      "bytes": 12280
     },
     {
       "path": "scripts/write_artifact_manifest.py",
@@ -4212,6 +4227,11 @@
       "bytes": 332
     },
     {
+      "path": "tables/online_branch_refinement/online_branch_refinement_table.tex",
+      "sha256": "37108ef780d3591a3c188835fac2bb15da5b8a976e2e5235ff510dbac31938c7",
+      "bytes": 551
+    },
+    {
       "path": "tables/online_quantum_search/online_quantum_search_statistics_table.tex",
       "sha256": "7f49bbd674dd3029de1978056dfff1cb9f2d8ccfe6e50dfbb92f5bbe3f93d7ee",
       "bytes": 6217
@@ -4500,6 +4520,11 @@
       "path": "tests/test_locked_nominal_recovery.py",
       "sha256": "893261ba03f4a346f8ff446faee324b2462115a1f09d03733afbf04c2c669eaf",
       "bytes": 13630
+    },
+    {
+      "path": "tests/test_online_branch_refinement.py",
+      "sha256": "164cfcf7fec31baa51eae1e5a0e6c7aaa087e0381f34e82c1734337f2de598a9",
+      "bytes": 4938
     },
     {
       "path": "tests/test_online_quantum_search.py",
