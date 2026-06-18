@@ -72,10 +72,11 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 ## Reproducibility Manifest
 
 See `REPRODUCIBILITY.md` for the artifact map, expected outputs, known expensive
-runs, and commands used for the paper evidence. `ARCHIVAL_RELEASE.md` lists the
-files to include in an external repository deposit and does not claim a DOI. A
-machine-readable SHA-256
-manifest is written to `data/results/artifact_manifest.json` with:
+runs, and commands used for the paper evidence. `ARCHIVAL_RELEASE.md` records
+that the external `v1.0.0` repository/artifact snapshot is archived at Zenodo
+with DOI `10.5281/zenodo.20739420`, and notes that post-deposit DOI metadata
+updates on `main` are not part of that source archive. A machine-readable
+SHA-256 manifest is written to `data/results/artifact_manifest.json` with:
 
 ```powershell
 py -3.11 scripts\write_artifact_manifest.py

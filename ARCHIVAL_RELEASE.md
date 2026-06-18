@@ -1,18 +1,23 @@
-# Archival Release Checklist
+# Archival Release Metadata
 
-This repository snapshot does not claim a DOI. Add one only after an external
-archival deposit, such as Zenodo or an institutional repository, has completed
-and assigned a real identifier.
+Zenodo has assigned the external archive DOI below. This document records the
+release identifiers associated with that archive record.
 
 ## Release Identifiers
 
-- Release tag: `TBD`
-- Archive DOI: `TBD`
-- Archive URL: `TBD`
-- Clean commit or archive hash: `TBD`
-- Release date: `TBD`
+- Release tag: `v1.0.0`
+- Tagged commit: `1164cb36367ca37d4860e7f137cba2afc67b2999`
+- Archive DOI: `10.5281/zenodo.20739420`
+- DOI URL: <https://doi.org/10.5281/zenodo.20739420>
+- Zenodo record URL: <https://zenodo.org/records/20739420>
 
-## Files To Archive
+Note: this file revision is a post-deposit metadata update. The Zenodo
+`v1.0.0` source archive was created from the tagged commit above, so the
+DOI-bearing updates to this file and other metadata files are not inside that
+source archive. A later release is needed if those DOI-bearing metadata files
+themselves must be archived.
+
+## Archive Scope
 
 - `paper/main.tex`, `paper/main.pdf`, `paper/supplement.tex`,
   `paper/supplement.pdf`, and `paper/references.bib`
@@ -45,7 +50,7 @@ and assigned a real identifier.
 - `data/results/hard_catalog_tail_coast_branch_control_replay/`
 - `tables/` and `figures/`
 
-## Pre-Deposit Checks
+## Archive Verification
 
 Run the short verification path from `REPRODUCIBILITY.md`, including:
 
@@ -54,13 +59,14 @@ py -3.11 scripts\verify_submission_snapshot.py
 ```
 
 The verifier is read-only and checks the manifest, focused tests, primary
-artifact paths, and whitespace diffs; it does not mint or imply a DOI. Build
-`paper/main.pdf` and `paper/supplement.pdf` locally with `latexmk` before
-deposit, then refresh `data/results/artifact_manifest.json` if any archived file
-changed and rerun the verifier. Do not rerun expensive long experiments unless
-intentionally refreshing the evidence package. The completed bicircular retuned
-recovery package is archived under `data/results/bicircular_tail_coast_recovery/`;
-refresh it only when intentionally rerunning the expensive negative retuning batch with
+artifact paths, and whitespace diffs; it does not mint or imply a DOI. Rebuild
+`paper/main.pdf` and `paper/supplement.pdf` locally with `latexmk` after
+manuscript changes, then refresh `data/results/artifact_manifest.json` if any
+archived file changed and rerun the verifier. Do not rerun expensive long
+experiments unless intentionally refreshing the evidence package. The completed
+bicircular retuned recovery package is archived under
+`data/results/bicircular_tail_coast_recovery/`; refresh it only when
+intentionally rerunning the expensive negative retuning batch with
 `py -3.11 scripts\run_bicircular_tail_coast_recovery.py --resume`.
 The independent-HS bicircular phase-sweep stress package is a short deterministic
 postprocessor artifact archived under
@@ -106,16 +112,3 @@ fixed to refined nominal masked controls, post-recovery active branch controls
 as IPOPT variables, IPOPT success `9/9`, and max prefix delta `0.0`; it is a scoped
 mature NLP backend bridge check, not production mission design, high-fidelity
 or flight validation, global/fuel optimality, DOI evidence, or quantum evidence.
-
-## Post-Deposit Updates
-
-After the archive assigns a DOI:
-
-- Replace `Archive DOI: TBD` above with the real DOI.
-- Add the real DOI to `CITATION.cff` if desired by the release workflow.
-- Update the manuscript Data and Code Availability statement with the real DOI.
-- Regenerate `data/results/artifact_manifest.json`.
-- Rebuild both PDFs.
-
-Do not write a placeholder DOI into the manuscript or claim archival release
-readiness before those steps are complete.

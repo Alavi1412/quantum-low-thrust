@@ -1,10 +1,12 @@
 cff-version: 1.2.0
-message: "If you use this benchmark package, cite the archived release DOI once available; until then cite the repository snapshot and paper title."
+message: "If you use this benchmark package, cite the archived Zenodo release DOI: 10.5281/zenodo.20739420."
 title: "A Reproducible CR3BP Benchmark Resource for Low-Thrust Cislunar Missed-Thrust Initialization"
 type: software
 authors:
   - name: "Anonymous Author"
-version: "0.1.0"
+version: "1.0.0"
+doi: "10.5281/zenodo.20739420"
+url: "https://doi.org/10.5281/zenodo.20739420"
 abstract: "Reproducible normalized Earth-Moon CR3BP low-thrust missed-thrust initialization benchmark resource with negative QAOA evidence, all-configured independent-midpoint Hermite-Simpson headroom artifacts, accepted-control replay, cached Horizons force-model contrast, cached-Horizons-derived independent-HS solar-tidal replay, single- and multi-epoch cached-Horizons independent-HS Earth/Moon/Sun point-mass retuning, SPICE-derived independent-HS ephemeris replay, a scoped CasADi/IPOPT mature NLP backend bridge check, solar-tidal stress artifacts, and completed negative bicircular retuning artifacts."
 keywords:
   - astrodynamics
