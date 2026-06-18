@@ -26,6 +26,20 @@ PRIMARY_ARTIFACT_PATHS = [
     "data/cache/spice/independent_hs_phase_shift_2026jul01_spice_vectors.json",
     "data/cache/spice/independent_hs_phase_shift_2026oct01_spice_vectors.json",
     "data/results/artifact_manifest.json",
+    "data/results/online_quantum_search/summary.csv",
+    "data/results/online_quantum_search/summary.json",
+    "data/results/online_quantum_search/metadata.json",
+    "data/results/online_quantum_search/raw_results.csv",
+    "data/results/online_quantum_search/paired_comparisons.csv",
+    "data/results/online_quantum_search/paired_comparisons.json",
+    "data/results/online_quantum_search/feedback_N16_k12_subspace_costs.csv",
+    "data/results/online_quantum_search/feedback_N20_k16_subspace_costs.csv",
+    "data/results/structured_grover_one_coast/summary.csv",
+    "data/results/structured_grover_one_coast/summary.json",
+    "data/results/structured_grover_one_coast/metadata.json",
+    "data/results/structured_grover_k10_full/summary.csv",
+    "data/results/structured_grover_k10_full/summary.json",
+    "data/results/structured_grover_k10_full/metadata.json",
     "data/results/claim_evidence_ledger/claim_evidence_ledger.csv",
     "data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json",
     "data/results/evidence_synthesis/evidence_synthesis.csv",
@@ -134,6 +148,17 @@ PRIMARY_ARTIFACT_PATHS = [
     ),
     "tables/evidence_synthesis/evidence_synthesis_table.tex",
     "tables/claim_evidence_ledger/claim_evidence_ledger_table.tex",
+    "tables/online_quantum_search/online_quantum_search_table.tex",
+    "tables/online_quantum_search/online_quantum_search_statistics_table.tex",
+    "tables/structured_grover_one_coast/structured_grover_table.tex",
+    "tables/structured_grover_one_coast/structured_grover_query_scaling_table.tex",
+    "tables/structured_grover_one_coast/structured_grover_comparison_table.tex",
+    "tables/structured_grover_one_coast/structured_grover_selection_bias_audit_table.tex",
+    "tables/structured_grover_k10_full/structured_grover_table.tex",
+    "tables/structured_grover_k10_full/structured_grover_query_scaling_table.tex",
+    "tables/structured_grover_k10_full/structured_grover_comparison_table.tex",
+    "tables/structured_grover_k10_full/structured_grover_selection_bias_audit_table.tex",
+    "figures/online_quantum_search/online_quantum_search_success.pdf",
 ]
 
 FOCUSED_TEST_TARGETS = [
@@ -152,6 +177,8 @@ FOCUSED_TEST_TARGETS = [
     "tests/test_bicircular_solar_tidal_stress.py",
     "tests/test_bicircular_tail_coast_recovery.py",
     "tests/test_tail_coast_recovery.py",
+    "tests/test_online_quantum_search.py",
+    "tests/test_structured_grover.py",
 ]
 
 

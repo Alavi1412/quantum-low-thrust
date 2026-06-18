@@ -1,0 +1,34 @@
+\begin{tabular}{lllrrrrrrrl}
+\toprule
+method & mixer\_topology & warm\_start\_mode & depth & best\_restart\_count & restart\_grid\_expected\_selected\_worst\_error\_min & restart\_grid\_expected\_selected\_worst\_error\_max & expected\_selected\_worst\_error & probability\_best\_state & probability\_pareto\_frontier & top\_schedule \\
+\midrule
+uniform\_feasible & none & uniform & 0 & 0 & NaN & NaN & 0.0875 & 0.0833 & 0.2500 & 011111111111 \\
+warm\_start\_only\_inverse & none & inverse & 0 & 0 & NaN & NaN & 0.0843 & 0.4774 & 0.6361 & 111111111110 \\
+warm\_start\_only\_exponential & none & exponential & 0 & 0 & NaN & NaN & 0.0850 & 0.1801 & 0.4405 & 111111111110 \\
+uniform\_match\_complete\_p4\_r8 & complete & uniform & 4 & 8 & 0.0837 & 0.0837 & 0.0837 & 0.4498 & 0.6431 & 111111111110 \\
+structured\_inverse\_complete\_p4\_r8 & complete & inverse & 4 & 8 & 0.0835 & 0.0837 & 0.0835 & 0.6531 & 0.7563 & 111111111110 \\
+structured\_inverse\_complete\_p3\_r4 & complete & inverse & 3 & 4 & 0.0837 & 0.0843 & 0.0837 & 0.5571 & 0.7164 & 111111111110 \\
+structured\_exponential\_complete\_p4\_r8 & complete & exponential & 4 & 8 & 0.0837 & 0.0837 & 0.0837 & 0.4809 & 0.6550 & 111111111110 \\
+structured\_inverse\_complete\_p2\_r8 & complete & inverse & 2 & 8 & 0.0837 & 0.0838 & 0.0837 & 0.5383 & 0.7064 & 111111111110 \\
+structured\_inverse\_complete\_p1\_r8 & complete & inverse & 1 & 8 & 0.0839 & 0.0843 & 0.0839 & 0.5088 & 0.6795 & 111111111110 \\
+structured\_exponential\_complete\_p3\_r4 & complete & exponential & 3 & 4 & 0.0839 & 0.0850 & 0.0839 & 0.3364 & 0.5972 & 111111111110 \\
+structured\_inverse\_cycle\_p4\_r4 & cycle & inverse & 4 & 4 & 0.0840 & 0.0843 & 0.0840 & 0.6233 & 0.7784 & 111111111110 \\
+structured\_exponential\_cycle\_p4\_r8 & cycle & exponential & 4 & 8 & 0.0840 & 0.0850 & 0.0840 & 0.5223 & 0.7519 & 111111111110 \\
+structured\_exponential\_complete\_p2\_r8 & complete & exponential & 2 & 8 & 0.0840 & 0.0844 & 0.0840 & 0.2834 & 0.5689 & 111111111110 \\
+structured\_inverse\_path\_p4\_r8 & path & inverse & 4 & 8 & 0.0843 & 0.0843 & 0.0843 & 0.4160 & 0.5352 & 111111111110 \\
+structured\_inverse\_cycle\_p3\_r8 & cycle & inverse & 3 & 8 & 0.0843 & 0.0843 & 0.0843 & 0.2950 & 0.6593 & 111111111110 \\
+structured\_inverse\_cycle\_p1\_r1 & cycle & inverse & 1 & 1 & 0.0843 & 0.0843 & 0.0843 & 0.4774 & 0.6361 & 111111111110 \\
+structured\_inverse\_cycle\_p2\_r1 & cycle & inverse & 2 & 1 & 0.0843 & 0.0843 & 0.0843 & 0.4774 & 0.6361 & 111111111110 \\
+structured\_inverse\_path\_p1\_r1 & path & inverse & 1 & 1 & 0.0843 & 0.0843 & 0.0843 & 0.4774 & 0.6361 & 111111111110 \\
+structured\_inverse\_path\_p3\_r4 & path & inverse & 3 & 4 & 0.0843 & 0.0843 & 0.0843 & 0.4774 & 0.6361 & 111111111110 \\
+structured\_inverse\_path\_p2\_r4 & path & inverse & 2 & 4 & 0.0843 & 0.0843 & 0.0843 & 0.4774 & 0.6361 & 111111111110 \\
+structured\_exponential\_cycle\_p3\_r8 & cycle & exponential & 3 & 8 & 0.0843 & 0.0850 & 0.0843 & 0.3183 & 0.6330 & 111111111110 \\
+structured\_exponential\_complete\_p1\_r8 & complete & exponential & 1 & 8 & 0.0844 & 0.0850 & 0.0844 & 0.2205 & 0.5075 & 111111111110 \\
+structured\_exponential\_cycle\_p2\_r8 & cycle & exponential & 2 & 8 & 0.0847 & 0.0850 & 0.0847 & 0.3058 & 0.4088 & 111111111110 \\
+structured\_exponential\_cycle\_p1\_r1 & cycle & exponential & 1 & 1 & 0.0850 & 0.0850 & 0.0850 & 0.1801 & 0.4405 & 111111111110 \\
+structured\_exponential\_path\_p4\_r1 & path & exponential & 4 & 1 & 0.0850 & 0.0850 & 0.0850 & 0.1801 & 0.4405 & 111111111110 \\
+structured\_exponential\_path\_p1\_r1 & path & exponential & 1 & 1 & 0.0850 & 0.0850 & 0.0850 & 0.1801 & 0.4405 & 111111111110 \\
+structured\_exponential\_path\_p2\_r1 & path & exponential & 2 & 1 & 0.0850 & 0.0850 & 0.0850 & 0.1801 & 0.4405 & 111111111110 \\
+structured\_exponential\_path\_p3\_r1 & path & exponential & 3 & 1 & 0.0850 & 0.0850 & 0.0850 & 0.1801 & 0.4405 & 111111111110 \\
+\bottomrule
+\end{tabular}

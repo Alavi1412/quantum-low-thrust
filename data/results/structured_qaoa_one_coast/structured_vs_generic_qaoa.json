@@ -1,0 +1,17 @@
+[
+  {
+    "structured_method": "warm_start_xy_qaoa_p4",
+    "generic_method": "qaoa_statevector",
+    "comparison_scope": "descriptive_not_like_for_like",
+    "comparison_basis": "structured expected selected-worst error versus generic 30-seed median selected-worst error",
+    "structured_expected_selected_worst_error": 0.08353137637791036,
+    "generic_median_selected_worst_error": 0.1208303741178268,
+    "structured_minus_generic_selected_worst_error": -0.037298997739916434,
+    "structured_probability_best_one_coast": 0.653075051576728,
+    "structured_probability_pareto_frontier": 0.7563159666531695,
+    "structured_top_schedule": "111111111110",
+    "structured_top_schedule_probability": 0.653075051576728,
+    "generic_refinement_success_rate": 0.4333333333333333,
+    "generic_runs": 30
+  }
+]

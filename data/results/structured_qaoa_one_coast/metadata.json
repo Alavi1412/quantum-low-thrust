@@ -1,0 +1,52 @@
+{
+  "command": "C:\\Users\\alavi\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_structured_qaoa_one_coast.py",
+  "python": "py -3.11",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3"
+  },
+  "git_head": "e3f028019249d455d248eb3adfe14ef11e8531b2",
+  "git_status_short": "M paper/main.pdf\n M paper/main.tex\n M paper/references.bib\n?? data/results/structured_qaoa_one_coast/\n?? figures/structured_qaoa_one_coast/\n?? scripts/run_structured_qaoa_one_coast.py\n?? src/qlt/structured_qaoa.py\n?? tables/structured_qaoa_one_coast/",
+  "tracked_file_count": 792,
+  "untracked_file_count": 12,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 163,
+  "project_manifest_total_bytes": 4930385,
+  "project_manifest_hash": "166e78445e5dfe5e71fce04dc7dbb31b3df2dfed2c6546c9881ee115286925b5",
+  "cardinality_source": "data\\results\\phase_shift_cardinality_ablation\\cardinality_refinements.csv",
+  "generic_qaoa_summary_source": "data\\results\\phase_shift_cardinality_30seed\\summary.csv",
+  "mixer_topology": "complete",
+  "depths": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "cost_column": "refined_selected_worst_error",
+  "cost_normalization": {
+    "offset": 0.0832614239111052,
+    "scale": 0.010813105181177188,
+    "formula": "(selected_worst_error - offset) / scale"
+  },
+  "feasible_subspace": "the 12 Hamming-weight-11 one-coast schedules from the phase-shift cardinality benchmark",
+  "constraint_preservation": "all probability mass remains on the one-coast feasible subspace; no penalty terms or infeasible bitstrings are used",
+  "warm_start": {
+    "initial_state": "inverse_cost",
+    "epsilon": 0.02,
+    "beta": 3.0,
+    "formula": "initial probability proportional to 1 / (normalized selected-worst error + epsilon)"
+  },
+  "runtime_seconds": 265.0545572999981,
+  "interpretation_limits": [
+    "This is a statevector simulation over the one-coast feasible subspace, not hardware evidence.",
+    "The cost oracle uses already persisted branch-refined selected-worst errors from the cardinality ablation.",
+    "The all-windows continuous row is outside the one-coast feasible subspace and remains the lower-error dense-control baseline."
+  ]
+}

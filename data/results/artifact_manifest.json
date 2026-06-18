@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-18T14:20:48Z",
+  "generated_utc": "2026-06-18T20:11:41Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "af8443871bae7e0adbbe906c117ddbfe011bf207",
+  "git_head_at_generation": "e3f028019249d455d248eb3adfe14ef11e8531b2",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf",
+  "working_tree_status_at_generation": "M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M paper/main.pdf\n M paper/main.tex\n M paper/references.bib\n M scripts/verify_submission_snapshot.py\n?? data/results/online_quantum_search/feedback_N16_k12_subspace_costs.csv\n?? data/results/online_quantum_search/feedback_N20_k16_subspace_costs.csv\n?? data/results/online_quantum_search/k10_full_subspace_costs.csv\n?? data/results/online_quantum_search/metadata.json\n?? data/results/online_quantum_search/one_coast_k11_full_subspace_costs.csv\n?? data/results/online_quantum_search/paired_comparisons.csv\n?? data/results/online_quantum_search/paired_comparisons.json\n?? data/results/online_quantum_search/raw_results.csv\n?? data/results/online_quantum_search/summary.csv\n?? data/results/online_quantum_search/summary.json\n?? data/results/structured_grover_k10_full/comparisons.csv\n?? data/results/structured_grover_k10_full/comparisons.json\n?? data/results/structured_grover_k10_full/distribution.csv\n?? data/results/structured_grover_k10_full/distribution.json\n?? data/results/structured_grover_k10_full/generic_qaoa_summary.csv\n?? data/results/structured_grover_k10_full/metadata.json\n?? data/results/structured_grover_k10_full/query_scaling.csv\n?? data/results/structured_grover_k10_full/query_scaling.json\n?? data/results/structured_grover_k10_full/selection_bias_audit.csv\n?? data/results/structured_grover_k10_full/selection_bias_audit.json\n?? data/results/structured_grover_k10_full/summary.csv\n?? data/results/structured_grover_k10_full/summary.json\n?? data/results/structured_grover_one_coast/comparisons.csv\n?? data/results/structured_grover_one_coast/comparisons.json\n?? data/results/structured_grover_one_coast/distribution.csv\n?? data/results/structured_grover_one_coast/distribution.json\n?? data/results/structured_grover_one_coast/generic_qaoa_summary.csv\n?? data/results/structured_grover_one_coast/metadata.json\n?? data/results/structured_grover_one_coast/query_scaling.csv\n?? data/results/structured_grover_one_coast/query_scaling.json\n?? data/results/structured_grover_one_coast/selection_bias_audit.csv\n?? data/results/structured_grover_one_coast/selection_bias_audit.json\n?? data/results/structured_grover_one_coast/summary.csv\n?? data/results/structured_grover_one_coast/summary.json\n?? data/results/structured_qaoa_k10_full/distribution.csv\n?? data/results/structured_qaoa_k10_full/distribution.json\n?? data/results/structured_qaoa_k10_full/generic_qaoa_summary.csv\n?? data/results/structured_qaoa_k10_full/matched_uniform_restart_grid.csv\n?? data/results/structured_qaoa_k10_full/matched_uniform_restart_grid.json\n?? data/results/structured_qaoa_k10_full/metadata.json\n?? data/results/structured_qaoa_k10_full/restart_grid.csv\n?? data/results/structured_qaoa_k10_full/restart_grid.json\n?? data/results/structured_qaoa_k10_full/structured_vs_generic_qaoa.csv\n?? data/results/structured_qaoa_k10_full/structured_vs_generic_qaoa.json\n?? data/results/structured_qaoa_k10_full/structured_vs_matched_uniform.csv\n?? data/results/structured_qaoa_k10_full/structured_vs_matched_uniform.json\n?? data/results/structured_qaoa_k10_full/structured_vs_matched_uniform_family.csv\n?? data/results/structured_qaoa_k10_full/structured_vs_matched_uniform_family.json\n?? data/results/structured_qaoa_k10_full/summary.csv\n?? data/results/structured_qaoa_k10_full/summary.json\n?? data/results/structured_qaoa_one_coast/distribution.csv\n?? data/results/structured_qaoa_one_coast/generic_qaoa_summary.csv\n?? data/results/structured_qaoa_one_coast/metadata.json\n?? data/results/structured_qaoa_one_coast/structured_vs_generic_qaoa.csv\n?? data/results/structured_qaoa_one_coast/structured_vs_generic_qaoa.json\n?? data/results/structured_qaoa_one_coast/summary.csv\n?? data/results/structured_qaoa_one_coast/summary.json\n?? data/results/structured_qaoa_sensitivity/distribution.csv\n?? data/results/structured_qaoa_sensitivity/distribution.json\n?? data/results/structured_qaoa_sensitivity/generic_qaoa_summary.csv\n?? data/results/structured_qaoa_sensitivity/matched_uniform_restart_grid.csv\n?? data/results/structured_qaoa_sensitivity/matched_uniform_restart_grid.json\n?? data/results/structured_qaoa_sensitivity/metadata.json\n?? data/results/structured_qaoa_sensitivity/restart_grid.csv\n?? data/results/structured_qaoa_sensitivity/restart_grid.json\n?? data/results/structured_qaoa_sensitivity/structured_vs_generic_qaoa.csv\n?? data/results/structured_qaoa_sensitivity/structured_vs_generic_qaoa.json\n?? data/results/structured_qaoa_sensitivity/structured_vs_matched_uniform.csv\n?? data/results/structured_qaoa_sensitivity/structured_vs_matched_uniform.json\n?? data/results/structured_qaoa_sensitivity/structured_vs_matched_uniform_family.csv\n?? data/results/structured_qaoa_sensitivity/structured_vs_matched_uniform_family.json\n?? data/results/structured_qaoa_sensitivity/summary.csv\n?? data/results/structured_qaoa_sensitivity/summary.json\n?? figures/online_quantum_search/online_quantum_search_success.pdf\n?? figures/online_quantum_search/online_quantum_search_success.png\n?? figures/structured_grover_k10_full/structured_grover_sweep.pdf\n?? figures/structured_grover_k10_full/structured_grover_sweep.png\n?? figures/structured_grover_one_coast/structured_grover_sweep.pdf\n?? figures/structured_grover_one_coast/structured_grover_sweep.png\n?? figures/structured_qaoa_k10_full/structured_qaoa_sensitivity_heatmap.pdf\n?? figures/structured_qaoa_k10_full/structured_qaoa_sensitivity_heatmap.png\n?? figures/structured_qaoa_one_coast/structured_qaoa_distribution.pdf\n?? figures/structured_qaoa_one_coast/structured_qaoa_distribution.png\n?? figures/structured_qaoa_sensitivity/structured_qaoa_sensitivity_heatmap.pdf\n?? figures/structured_qaoa_sensitivity/structured_qaoa_sensitivity_heatmap.png\n?? scripts/run_online_quantum_search.py\n?? scripts/run_structured_grover.py\n?? scripts/run_structured_qaoa_one_coast.py\n?? scripts/run_structured_qaoa_sensitivity.py\n?? src/qlt/online_quantum_search.py\n?? src/qlt/structured_grover.py\n?? src/qlt/structured_qaoa.py\n?? tables/online_quantum_search/online_quantum_search_statistics_table.tex\n?? tables/online_quantum_search/online_quantum_search_table.tex\n?? tables/structured_grover_k10_full/structured_grover_comparison_table.tex\n?? tables/structured_grover_k10_full/structured_grover_query_scaling_table.tex\n?? tables/structured_grover_k10_full/structured_grover_selection_bias_audit_table.tex\n?? tables/structured_grover_k10_full/structured_grover_table.tex\n?? tables/structured_grover_one_coast/structured_grover_comparison_table.tex\n?? tables/structured_grover_one_coast/structured_grover_query_scaling_table.tex\n?? tables/structured_grover_one_coast/structured_grover_selection_bias_audit_table.tex\n?? tables/structured_grover_one_coast/structured_grover_table.tex\n?? tables/structured_qaoa_k10_full/structured_qaoa_sensitivity_table.tex\n?? tables/structured_qaoa_one_coast/structured_qaoa_one_coast_table.tex\n?? tables/structured_qaoa_one_coast/structured_vs_generic_qaoa_table.tex\n?? tables/structured_qaoa_sensitivity/structured_qaoa_sensitivity_table.tex\n?? tests/test_online_quantum_search.py\n?? tests/test_structured_grover.py",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -34,7 +34,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 791,
+  "file_count": 899,
   "files": [
     {
       "path": ".gitignore",
@@ -63,8 +63,8 @@
     },
     {
       "path": "REPRODUCIBILITY.md",
-      "sha256": "b18578d06754981dae5aea9f2f4a99b496ea5721caf4922e77b582ad73f405e0",
-      "bytes": 62006
+      "sha256": "9792c2a14ec298ea533f457ef26cf915a20ecf2202c828578c0857b47129ad03",
+      "bytes": 66422
     },
     {
       "path": "configs/bounded_collocation_phase_or_catalog.yaml",
@@ -1442,6 +1442,56 @@
       "bytes": 4165
     },
     {
+      "path": "data/results/online_quantum_search/feedback_N16_k12_subspace_costs.csv",
+      "sha256": "206ce016fb1505536eac6ab26275107e7daae523b06401114895470756457736",
+      "bytes": 209873
+    },
+    {
+      "path": "data/results/online_quantum_search/feedback_N20_k16_subspace_costs.csv",
+      "sha256": "2b1bacd0b63b7c1ded46c812a23c083c7c6778c3d355d86221379f7c5216df2b",
+      "bytes": 599138
+    },
+    {
+      "path": "data/results/online_quantum_search/k10_full_subspace_costs.csv",
+      "sha256": "f67acf7797536983942fde69939fce23ab1c2a84a43e4d62f93359fec415f15e",
+      "bytes": 36645
+    },
+    {
+      "path": "data/results/online_quantum_search/metadata.json",
+      "sha256": "37674aa4a5c78bf7aea54564e4ca9325c79f4ba17ed4550414536a0294ab4b65",
+      "bytes": 7950
+    },
+    {
+      "path": "data/results/online_quantum_search/one_coast_k11_full_subspace_costs.csv",
+      "sha256": "29c46fc132c92e4728c878e762cc9aef3d025b8425e17d6b21abc4048d031b63",
+      "bytes": 7235
+    },
+    {
+      "path": "data/results/online_quantum_search/paired_comparisons.csv",
+      "sha256": "f3f5fe609da2b48351dfa814baada0c9f5df5aab0f123d0ed10373cc26f6cb94",
+      "bytes": 16294
+    },
+    {
+      "path": "data/results/online_quantum_search/paired_comparisons.json",
+      "sha256": "248f921a6b6754a96a9daee927671b964e4224c6a3bb2e7cb8648163de0ea4bd",
+      "bytes": 61819
+    },
+    {
+      "path": "data/results/online_quantum_search/raw_results.csv",
+      "sha256": "13c728a4b39bf2dae69ac9b39f611731c2cdbba78049b95890784141052d1f15",
+      "bytes": 4613810
+    },
+    {
+      "path": "data/results/online_quantum_search/summary.csv",
+      "sha256": "5c627b76af8bad68477db22327d147ab3fa1c9b3d1482516a3ffc478dd6463e8",
+      "bytes": 19428
+    },
+    {
+      "path": "data/results/online_quantum_search/summary.json",
+      "sha256": "638600dbd41233b5afad2166de7313d5e5cd8e57be489ecf60401bcf19d157aa",
+      "bytes": 70176
+    },
+    {
       "path": "data/results/phase_shift/qubo_coefficients_seed11.json",
       "sha256": "68b1bc9ae699159faa1bfdd8993fc18a015fe7a8c176563e43774503c003b5f7",
       "bytes": 2578
@@ -2647,6 +2697,321 @@
       "bytes": 4081
     },
     {
+      "path": "data/results/structured_grover_k10_full/comparisons.csv",
+      "sha256": "9aee3f6bb8f6afd87847ea893c8f79043827974d0e82edaa1a0c001246d2e153",
+      "bytes": 1129
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/comparisons.json",
+      "sha256": "c1db8479e1c78ce9e072195aabaec41a6341bed45660d46976d902d0b2ff4758",
+      "bytes": 2128
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/distribution.csv",
+      "sha256": "d613498a79d2f80a8f3af6f0e98b50d32a6091ef579302dd4c72ee3e4c37131b",
+      "bytes": 2331480
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/distribution.json",
+      "sha256": "f475fc888f9594336e3514a4437984d5ad7e7c0c1dc523c5cfe34c431d77079f",
+      "bytes": 6157546
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/generic_qaoa_summary.csv",
+      "sha256": "ea1dfd42d0427d2b1a3a1a5e3bd0d5ed897b3fd2f641f9cdb04bb07effc18c54",
+      "bytes": 2469
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/metadata.json",
+      "sha256": "02ec08b33d95c53a4a7e29eb0eb617c9875ddd582d6f43e101f3a068f4f695f7",
+      "bytes": 12080
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/query_scaling.csv",
+      "sha256": "c7086dcfa7e153a61ad654f0c045878f50780ddbc91ad683abb0130e9b28f7c7",
+      "bytes": 598
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/query_scaling.json",
+      "sha256": "cabfd4b05662b7632a9aa8907a14f2207f826f4b323bfb2bef209e56ffab7682",
+      "bytes": 688
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/selection_bias_audit.csv",
+      "sha256": "7e71971f69873233a6c3ed5496abc8098b8208fadeee277a9014ac314c5e8996",
+      "bytes": 1143
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/selection_bias_audit.json",
+      "sha256": "1ea533b4f03ed782be10962a055d155f80550518649abd8259f4bbb150866c4b",
+      "bytes": 2527
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/summary.csv",
+      "sha256": "139804fdd60e3a38ad98a70b5905c8a5f17b966b2c893975638af50fa47a9885",
+      "bytes": 88299
+    },
+    {
+      "path": "data/results/structured_grover_k10_full/summary.json",
+      "sha256": "01c2e07a17395d3d98bf3f9370fe7a356e53f10b4c478c689dcf609e59a60f4f",
+      "bytes": 267560
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/comparisons.csv",
+      "sha256": "3b182b80aee5f5839416128fd99b28bad6b583a86088d12d20f143f098db7f58",
+      "bytes": 1239
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/comparisons.json",
+      "sha256": "fd76706615ba60a81b22d549903771a7c20087842b081b2fc62180340b11ae32",
+      "bytes": 2250
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/distribution.csv",
+      "sha256": "2c14cf84a10a64268d03992bdabe7e43a5f8422c7aadf9ef9a006081345c3815",
+      "bytes": 397309
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/distribution.json",
+      "sha256": "d926c79f127f18595956d0d900f7e3114303627285d6d77a04021600aaa091b3",
+      "bytes": 1106793
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/generic_qaoa_summary.csv",
+      "sha256": "ea1dfd42d0427d2b1a3a1a5e3bd0d5ed897b3fd2f641f9cdb04bb07effc18c54",
+      "bytes": 2469
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/metadata.json",
+      "sha256": "f007692f6955392339536e68b601b727652ed6569e15e87447abe2b953061c67",
+      "bytes": 12286
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/query_scaling.csv",
+      "sha256": "a56a1d5d399efb0433b968af42cca151eb24a27afe96deb6d6612ccc98173401",
+      "bytes": 596
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/query_scaling.json",
+      "sha256": "9f57406984ebf1936f0e49a5e18a8fa008ef80275aeee057984e7888f1d5d3ac",
+      "bytes": 690
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/selection_bias_audit.csv",
+      "sha256": "9458a1eced6bde3e41b6db621be79e57a63d999436ff685a0d41bd3c89534c0f",
+      "bytes": 1172
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/selection_bias_audit.json",
+      "sha256": "92f8e4dfa70468b5f15992766759287e74ac8abe33f9a80d321ba68d55716620",
+      "bytes": 2559
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/summary.csv",
+      "sha256": "42b9eae2c2eec0587c5dbd229ec61967f45b747bce53571db356f41ec374a476",
+      "bytes": 87879
+    },
+    {
+      "path": "data/results/structured_grover_one_coast/summary.json",
+      "sha256": "24a84fad3175c6a584bfbb32d767c643d582eda5ea00bdbc5c5b1f5fa6945aaa",
+      "bytes": 267554
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/distribution.csv",
+      "sha256": "a85c1ce1b71005cd00f5910d6c284138ac9d3f974a8420d82dd99913c8051669",
+      "bytes": 699698
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/distribution.json",
+      "sha256": "97d386083e51975a7e3b8ac24689208a3e03e608ecefc3b66c265cf0b88f6585",
+      "bytes": 1882143
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/generic_qaoa_summary.csv",
+      "sha256": "b8c2db51071408652513629da2799e120166a2cac0505ca460e97599f377f6d3",
+      "bytes": 367
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/matched_uniform_restart_grid.csv",
+      "sha256": "233d6930d84d8960ba6cd6910d1446caeda02b706fb3597714d8d4c20687e339",
+      "bytes": 11930
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/matched_uniform_restart_grid.json",
+      "sha256": "5b9eec7cce5ee2bb02cc299b36e6fd3d1346f03fe72a2e80fa4c8314381cf726",
+      "bytes": 26348
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/metadata.json",
+      "sha256": "c24505d3848672572f24dcb8a1f9689b236e94e7d520591e564dd1a32d3014f5",
+      "bytes": 7354
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/restart_grid.csv",
+      "sha256": "4a2b5d16d53e1b6408fe5f24656c5c483c94e78081d06d52cd48315f3c38bfd3",
+      "bytes": 24075
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/restart_grid.json",
+      "sha256": "556b4cfa188f4fe4b06b33ab9c2db1da7859d88dac35bc5c11a832d34027a89f",
+      "bytes": 53949
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/structured_vs_generic_qaoa.csv",
+      "sha256": "4f28acab9dbe0771a282c4bd5e9b89717d7ebda522e9bbd7920666a5e4e170f0",
+      "bytes": 697
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/structured_vs_generic_qaoa.json",
+      "sha256": "4a8fdb182d2c11adf058ca6865716c0d34fe5a9e292a3ce7fa99ee13d9e492e9",
+      "bytes": 835
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/structured_vs_matched_uniform.csv",
+      "sha256": "a2d5bbb58b2dcd07727b868e0a6a9d9a3bb75db73b4c55675b926063f22711d3",
+      "bytes": 30307
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/structured_vs_matched_uniform.json",
+      "sha256": "8e0ef5b1a2c7190109a9f9f105a0d7bb829743b748a6409ee4600c11b5db02a5",
+      "bytes": 89149
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/structured_vs_matched_uniform_family.csv",
+      "sha256": "c2271fa85fdd9bb439b574b37a59411220bf55647c0af4705f19e30dad6b0e44",
+      "bytes": 10973
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/structured_vs_matched_uniform_family.json",
+      "sha256": "915b531291d52e40f98be5201263893901f3b5776204b7942240c33331457472",
+      "bytes": 29927
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/summary.csv",
+      "sha256": "d1503e59268fee102d3bdc86809672fac64656b97d00dac9dde133d324f4dae6",
+      "bytes": 17957
+    },
+    {
+      "path": "data/results/structured_qaoa_k10_full/summary.json",
+      "sha256": "cff51ad5f3d1a2c1108d95db925ae6bdf58a30f34eb45b61ff32ecdedbe946a5",
+      "bytes": 45914
+    },
+    {
+      "path": "data/results/structured_qaoa_one_coast/distribution.csv",
+      "sha256": "356f704db14fb01b6383ea12c38fc06eaff4b35857209e98571d1a4f2b95ead6",
+      "bytes": 13036
+    },
+    {
+      "path": "data/results/structured_qaoa_one_coast/generic_qaoa_summary.csv",
+      "sha256": "b8c2db51071408652513629da2799e120166a2cac0505ca460e97599f377f6d3",
+      "bytes": 367
+    },
+    {
+      "path": "data/results/structured_qaoa_one_coast/metadata.json",
+      "sha256": "f59f32ea99579005cc179f2cc7134e55efff87082e425fd0f07012e916a4c2dc",
+      "bytes": 2353
+    },
+    {
+      "path": "data/results/structured_qaoa_one_coast/structured_vs_generic_qaoa.csv",
+      "sha256": "3bfb47cc60940992eb92aacc05a721582bb62b34e5aeccaf13bdda5839938b25",
+      "bytes": 686
+    },
+    {
+      "path": "data/results/structured_qaoa_one_coast/structured_vs_generic_qaoa.json",
+      "sha256": "7a9b082da4a72ed731349a5173380344eb9c7ca8891afe242f77eb8a3f6e38d7",
+      "bytes": 824
+    },
+    {
+      "path": "data/results/structured_qaoa_one_coast/summary.csv",
+      "sha256": "f4576bfcd108c081bfad6ec3fdd1d2bdda096c5211d0a0713d982b62978b6cdb",
+      "bytes": 4528
+    },
+    {
+      "path": "data/results/structured_qaoa_one_coast/summary.json",
+      "sha256": "938f5e145b024abb3f1981b48c1c56113b379174280d15514bc398566a46df2c",
+      "bytes": 10712
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/distribution.csv",
+      "sha256": "ac821e35afbc876a02a9dd974395be50d78cc9b99ead04fc3cd342fc4b780c47",
+      "bytes": 118358
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/distribution.json",
+      "sha256": "fb0418cb2e1124c2dd204c94e1b166c72ecb533272ed7ef792ace7a52cb6aaea",
+      "bytes": 337284
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/generic_qaoa_summary.csv",
+      "sha256": "b8c2db51071408652513629da2799e120166a2cac0505ca460e97599f377f6d3",
+      "bytes": 367
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/matched_uniform_restart_grid.csv",
+      "sha256": "1b762234ab8bdccfa55e649f6a72351ba18508b6fc2ad615ec473dc77351d446",
+      "bytes": 11985
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/matched_uniform_restart_grid.json",
+      "sha256": "1d5fbeea9d1d91f7eb93160c31ec8218aada1a08bb9a3ab754b7fc9c96a1ca5e",
+      "bytes": 26472
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/metadata.json",
+      "sha256": "13ef261d5388b8f68cdeaf75bc0ab1675388933041486ab2645cce96c7baf1d5",
+      "bytes": 7284
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/restart_grid.csv",
+      "sha256": "5cf4d7f89294f60bbb465c320b4920b1e2204f503b3e103181c689d4e4a21790",
+      "bytes": 24323
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/restart_grid.json",
+      "sha256": "b9e98fbe447067756811efd86b6b5bf2c1dd7bccfdd374dc43416ca6a3e2e8d7",
+      "bytes": 54176
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/structured_vs_generic_qaoa.csv",
+      "sha256": "1b1ed00e7aa3f96b42a7f1ecfdaf7b30891026fb84144f0c66ff796ba5f79b7a",
+      "bytes": 700
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/structured_vs_generic_qaoa.json",
+      "sha256": "f15726384418dcc1e4a00c50e430e9507ed4d196115ca4a06f80f776d79f83cf",
+      "bytes": 838
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/structured_vs_matched_uniform.csv",
+      "sha256": "5367ec3253df5a154c421c20b690ef13092f54c5a31a6dd2b9a81f096b9a9ecf",
+      "bytes": 30135
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/structured_vs_matched_uniform.json",
+      "sha256": "a4cf9a79e56bbeb7bf903502f897c48e83e28172f88a88b669cd3eec88ad71cd",
+      "bytes": 89022
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/structured_vs_matched_uniform_family.csv",
+      "sha256": "2a660208f87d944ddb4764cd35eb6d6c5f61a706b71dad031d5b385372d476d3",
+      "bytes": 11088
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/structured_vs_matched_uniform_family.json",
+      "sha256": "651de8074023cdc978fd64a16e676c5bc44d194c34adc8f44a557b66c1f73bcb",
+      "bytes": 29991
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/summary.csv",
+      "sha256": "0b22e2ffebdeeff3a34ba2a9b83460674c92ea0eb0f2627c8538be12a4092aa6",
+      "bytes": 18303
+    },
+    {
+      "path": "data/results/structured_qaoa_sensitivity/summary.json",
+      "sha256": "1843776e43dfaf6f19e1b6e909f06cbc3145e15a59e3c7dc4c424ed49a648713",
+      "bytes": 46202
+    },
+    {
       "path": "data/results/summary.csv",
       "sha256": "2a1c96c335765adc6a7224d4b3d755b09687037a6118fc9de7fbb5016329670b",
       "bytes": 4573
@@ -2910,6 +3275,16 @@
       "path": "figures/multiple_shooting_feasibility.png",
       "sha256": "37779c1b68de468fb5b201744a1deb1ea5658a598f18997e20f4fbf3c25f5877",
       "bytes": 55003
+    },
+    {
+      "path": "figures/online_quantum_search/online_quantum_search_success.pdf",
+      "sha256": "1ac0e40f0c6f79573f2d1b8f7bfd249c277a76849d471dcc93a3a75f13ba457b",
+      "bytes": 24640
+    },
+    {
+      "path": "figures/online_quantum_search/online_quantum_search_success.png",
+      "sha256": "fd60eae5718981ecb4a879dc151ae8593d36cdc7a30b309e4414c978011f1e4a",
+      "bytes": 333614
     },
     {
       "path": "figures/phase_shift/method_comparison.pdf",
@@ -3192,6 +3567,56 @@
       "bytes": 165029
     },
     {
+      "path": "figures/structured_grover_k10_full/structured_grover_sweep.pdf",
+      "sha256": "a36a4cf27f25e37eaeb56af1d093250b1d904138ed1367eccc8b193b334d714e",
+      "bytes": 18287
+    },
+    {
+      "path": "figures/structured_grover_k10_full/structured_grover_sweep.png",
+      "sha256": "5db4d71180d312f88ebd2162ea7e524f76c9737a12d05b9f199ddba9d6a6edbd",
+      "bytes": 243311
+    },
+    {
+      "path": "figures/structured_grover_one_coast/structured_grover_sweep.pdf",
+      "sha256": "68b18dbd175358ca1ca0697a179a086cf5d3214a5952b6cf0cd70621991dee2e",
+      "bytes": 18157
+    },
+    {
+      "path": "figures/structured_grover_one_coast/structured_grover_sweep.png",
+      "sha256": "a095536bf1aa19deabc43f67fe97c63efa668e1556bbebb6d6820ef49bfccdc0",
+      "bytes": 239409
+    },
+    {
+      "path": "figures/structured_qaoa_k10_full/structured_qaoa_sensitivity_heatmap.pdf",
+      "sha256": "7ce678d3e35e2dedb0a9cc800d38c1c69ad6d85b4dbc73d246fd126c37b6e1c2",
+      "bytes": 20885
+    },
+    {
+      "path": "figures/structured_qaoa_k10_full/structured_qaoa_sensitivity_heatmap.png",
+      "sha256": "74115b1380a8f69e38cdd15423afaddec279fcf6172d0876c719b79ac566552e",
+      "bytes": 155776
+    },
+    {
+      "path": "figures/structured_qaoa_one_coast/structured_qaoa_distribution.pdf",
+      "sha256": "8379e954ea9d327991fc3d27c84b77e67d1609a86933bdf861141d731b78675b",
+      "bytes": 20003
+    },
+    {
+      "path": "figures/structured_qaoa_one_coast/structured_qaoa_distribution.png",
+      "sha256": "085c0cec37f42991ce9c9b9ecf6aa2b8744117aa6594050fe2fcaf26a900e313",
+      "bytes": 136032
+    },
+    {
+      "path": "figures/structured_qaoa_sensitivity/structured_qaoa_sensitivity_heatmap.pdf",
+      "sha256": "0af97844bcaaae823dd3e3f9c2383182664b001401cb0f9c637187e6b3714b35",
+      "bytes": 21455
+    },
+    {
+      "path": "figures/structured_qaoa_sensitivity/structured_qaoa_sensitivity_heatmap.png",
+      "sha256": "40775ee542d5644eb34120fc738052ac0e78ed1fe73bff7ba24926965a299a16",
+      "bytes": 176415
+    },
+    {
       "path": "figures/teacher_feasible/method_comparison.pdf",
       "sha256": "10c7e34a1f3af776fcea8aca5744bad2b089eab02e6a5b7da3af74280ce40a4a",
       "bytes": 14002
@@ -3253,18 +3678,18 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "df453804f2ac411fccce38c6b9e47fbbe36160c2c7c8fa364f24c1e45cddb67d",
-      "bytes": 435712
+      "sha256": "9abfad51c39fee087181d6bfca8d4d2f38439eaefc2d841e62bbaccfb475316b",
+      "bytes": 541192
     },
     {
       "path": "paper/main.tex",
-      "sha256": "fa690e9b7a0cb75a253334898a8c716a25ec37dc340580db4e4fae79bcc90707",
-      "bytes": 73207
+      "sha256": "606a363e15daad85890fb0a74dc59b4668d2b7b0dde51d314de9d28b8fc81eb2",
+      "bytes": 97231
     },
     {
       "path": "paper/references.bib",
-      "sha256": "79c972ec5728bcfd2b357a0aea6358dc20138b01ac356ca2655eae9118630a0c",
-      "bytes": 8855
+      "sha256": "3531af655e386748d22fa296018607d29c8b924ccc095f5bb0e58d243b731a5f",
+      "bytes": 10930
     },
     {
       "path": "paper/supplement.pdf",
@@ -3432,6 +3857,11 @@
       "bytes": 234
     },
     {
+      "path": "scripts/run_online_quantum_search.py",
+      "sha256": "4a2660274ac3af6f2ae183343e9b9793bb33a1865853909f21426c53496c6c46",
+      "bytes": 28629
+    },
+    {
       "path": "scripts/run_qaoa_depth_ablation.py",
       "sha256": "85f6d9b8edf98493ebe23980f66c7b5d95eb030bff051d8e885e1f94c59ee228",
       "bytes": 29677
@@ -3445,6 +3875,21 @@
       "path": "scripts/run_robust_margin_suite.py",
       "sha256": "c3603acab5f70a9908045dbff19ee45b7c7392657d4b7334ad5b713bdcdcf6c4",
       "bytes": 27205
+    },
+    {
+      "path": "scripts/run_structured_grover.py",
+      "sha256": "e4e94b6ae15dea26021caf4bc4cbb09cc9995696c1124754a758e833d9158723",
+      "bytes": 36438
+    },
+    {
+      "path": "scripts/run_structured_qaoa_one_coast.py",
+      "sha256": "fcbc2ba6c455afa2d642990807a663214556bcd2bd208f3626fbfbaf54892bfb",
+      "bytes": 20296
+    },
+    {
+      "path": "scripts/run_structured_qaoa_sensitivity.py",
+      "sha256": "21be6cf66cc64a37a0f0b479ec6b9f4b94e91ac0200687f031b42d7929159731",
+      "bytes": 45985
     },
     {
       "path": "scripts/run_tail_coast_branch_control_replay.py",
@@ -3463,8 +3908,8 @@
     },
     {
       "path": "scripts/verify_submission_snapshot.py",
-      "sha256": "4394007e2bea9d7dca15b82bdab2a85a406fb9e00c1a301c69e9c5f80c771aaa",
-      "bytes": 10134
+      "sha256": "f89bf084eb9a089e60da9b3d885d311da1e76ed12183c68040ed00fbb2a08a89",
+      "bytes": 11955
     },
     {
       "path": "scripts/write_artifact_manifest.py",
@@ -3532,6 +3977,11 @@
       "bytes": 4691
     },
     {
+      "path": "src/qlt/online_quantum_search.py",
+      "sha256": "1eb1ea5fd5a1050db177fc2c40ca7b39e6a2827a6be235007ec919e94ef952f4",
+      "bytes": 23352
+    },
+    {
       "path": "src/qlt/refinement.py",
       "sha256": "2d1485f9c3f9c380b6cbd456f4b3e7b95054e1f1364c0fb06861e48844c64435",
       "bytes": 23219
@@ -3545,6 +3995,16 @@
       "path": "src/qlt/solvers.py",
       "sha256": "ba93930badbf32d61c872c45d21b3286b38b93ae2d2a4ded0fbc4408e0127c38",
       "bytes": 13748
+    },
+    {
+      "path": "src/qlt/structured_grover.py",
+      "sha256": "d7af7c0d2f133847093c3b3a102c75473e8cd41af3605483a0d9c5de7a556b4d",
+      "bytes": 8064
+    },
+    {
+      "path": "src/qlt/structured_qaoa.py",
+      "sha256": "e433a6e85e0b758bdfecd3b90b8dc0b7b2af0a0f3e50122cce8a43431ae6c546",
+      "bytes": 8510
     },
     {
       "path": "src/qlt/surrogate.py",
@@ -3752,6 +4212,16 @@
       "bytes": 332
     },
     {
+      "path": "tables/online_quantum_search/online_quantum_search_statistics_table.tex",
+      "sha256": "7f49bbd674dd3029de1978056dfff1cb9f2d8ccfe6e50dfbb92f5bbe3f93d7ee",
+      "bytes": 6217
+    },
+    {
+      "path": "tables/online_quantum_search/online_quantum_search_table.tex",
+      "sha256": "7e3651301e9459a27135cbee98fc28a58e3c4dc41628ed426631316535a04db1",
+      "bytes": 14682
+    },
+    {
       "path": "tables/phase_shift/ablation_table.tex",
       "sha256": "0daae9a3bbc1874c933d2b09682c8b14ae3a1cd11d3b2316350fbce23536795d",
       "bytes": 894
@@ -3877,6 +4347,66 @@
       "bytes": 1168
     },
     {
+      "path": "tables/structured_grover_k10_full/structured_grover_comparison_table.tex",
+      "sha256": "2d904cd3c9c0e9aeeb582b8c1fbd275209c575d20a65ed8243a1a212ebdfb261",
+      "bytes": 1076
+    },
+    {
+      "path": "tables/structured_grover_k10_full/structured_grover_query_scaling_table.tex",
+      "sha256": "22046228b4ded1c6d62925691a1431d50926f57c0b031a6dd7a962bc1e472503",
+      "bytes": 423
+    },
+    {
+      "path": "tables/structured_grover_k10_full/structured_grover_selection_bias_audit_table.tex",
+      "sha256": "b55f15aed66df921c6458c74d478e11fb9b09fdf1590c90de2ec39155ea97f4a",
+      "bytes": 922
+    },
+    {
+      "path": "tables/structured_grover_k10_full/structured_grover_table.tex",
+      "sha256": "8d1810fdcfef82fc4ef6f0f42c35816327f0c24d4ed6aa337d0b42acbc432ec1",
+      "bytes": 1637
+    },
+    {
+      "path": "tables/structured_grover_one_coast/structured_grover_comparison_table.tex",
+      "sha256": "2096135a71b32f2b1b97efae4ea87d2dbc373f6a318ed878ed4db6f21154fdfe",
+      "bytes": 1184
+    },
+    {
+      "path": "tables/structured_grover_one_coast/structured_grover_query_scaling_table.tex",
+      "sha256": "dc2ef00b030247af32a8772076f14bd5e96ea347bb806334998e517efebd231b",
+      "bytes": 423
+    },
+    {
+      "path": "tables/structured_grover_one_coast/structured_grover_selection_bias_audit_table.tex",
+      "sha256": "3cad1753f0050e800d84745bdf02f22fd4d852670ddd5e447cd22a9863d6ea7d",
+      "bytes": 930
+    },
+    {
+      "path": "tables/structured_grover_one_coast/structured_grover_table.tex",
+      "sha256": "cf12cb709cb752f62c099ce2b6f2c604e44e77ff138f3e594acb9979240a3b57",
+      "bytes": 1765
+    },
+    {
+      "path": "tables/structured_qaoa_k10_full/structured_qaoa_sensitivity_table.tex",
+      "sha256": "e3775e5572facb240c11cc2b5c5a4a9aeda52350c986432e58a0d260a02b2932",
+      "bytes": 3932
+    },
+    {
+      "path": "tables/structured_qaoa_one_coast/structured_qaoa_one_coast_table.tex",
+      "sha256": "c728adeca9811f158c5a9ade1e99f15f2d30cb70b023661ca23fcf4e1d969642",
+      "bytes": 1017
+    },
+    {
+      "path": "tables/structured_qaoa_one_coast/structured_vs_generic_qaoa_table.tex",
+      "sha256": "3074a82a8c6c37acbd769d2d916f4dd3111cab9d7335fd1c883c76794ce2192c",
+      "bytes": 770
+    },
+    {
+      "path": "tables/structured_qaoa_sensitivity/structured_qaoa_sensitivity_table.tex",
+      "sha256": "1da98f6072342ca6ca8581d6e8e83e85c6086d825ade2de00e0b9d7fe6766bd5",
+      "bytes": 3927
+    },
+    {
       "path": "tables/teacher_feasible/ablation_table.tex",
       "sha256": "63145f085a27b55d4f960a9467fdd5ca4480b40408fd70eee06060931ea2348e",
       "bytes": 678
@@ -3972,6 +4502,11 @@
       "bytes": 13630
     },
     {
+      "path": "tests/test_online_quantum_search.py",
+      "sha256": "9066aff1826c5997bfa0f48865f6bda36fcd40fdad405087f42fb323778fed1d",
+      "bytes": 7686
+    },
+    {
       "path": "tests/test_replay_stress_validation.py",
       "sha256": "f54c111b4d60072cf36a378f29d9dc864930144d62a69738fe6083f1cfefcfab",
       "bytes": 5057
@@ -3980,6 +4515,11 @@
       "path": "tests/test_smoke.py",
       "sha256": "ab901a2ed984a8e59d051afbda0747abac3e4c229a6439f8482c891950fe1bd6",
       "bytes": 141421
+    },
+    {
+      "path": "tests/test_structured_grover.py",
+      "sha256": "e9ea3785dfc48520744c2c948e590a1ba6838ff2735d9635f50626de60f5eca4",
+      "bytes": 2919
     },
     {
       "path": "tests/test_tail_coast_recovery.py",

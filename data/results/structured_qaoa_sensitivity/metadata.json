@@ -1,0 +1,135 @@
+{
+  "command": "C:\\Users\\alavi\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_structured_qaoa_sensitivity.py",
+  "python": "py -3.11",
+  "packages": {
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3"
+  },
+  "git_head": "e3f028019249d455d248eb3adfe14ef11e8531b2",
+  "git_status_short": "M paper/main.pdf\n M paper/main.tex\n M paper/references.bib\n?? data/results/structured_qaoa_k10_full/\n?? data/results/structured_qaoa_one_coast/\n?? data/results/structured_qaoa_sensitivity/\n?? figures/structured_qaoa_k10_full/\n?? figures/structured_qaoa_one_coast/\n?? figures/structured_qaoa_sensitivity/\n?? scripts/run_structured_qaoa_one_coast.py\n?? scripts/run_structured_qaoa_sensitivity.py\n?? src/qlt/structured_qaoa.py\n?? tables/structured_qaoa_k10_full/\n?? tables/structured_qaoa_one_coast/\n?? tables/structured_qaoa_sensitivity/",
+  "tracked_file_count": 792,
+  "untracked_file_count": 51,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 168,
+  "project_manifest_total_bytes": 5132292,
+  "project_manifest_hash": "4f26db71ebb76b7d039c5809aa751e49b4c63b6dc193a2d29d6bfb14ab1c503e",
+  "cardinality_source": "data\\results\\phase_shift_cardinality_ablation\\cardinality_refinements.csv",
+  "cardinality_group": "one_coast_k11_full",
+  "states_in_subspace": 12,
+  "generic_qaoa_summary_source": "data\\results\\phase_shift_cardinality_30seed\\summary.csv",
+  "feasible_subspace": "the 12 schedules in cardinality group one_coast_k11_full from the phase-shift cardinality benchmark",
+  "constraint_preservation": "all probability mass remains on the selected feasible cardinality subspace; no penalty terms or infeasible bitstrings are used",
+  "cost_column": "refined_selected_worst_error",
+  "cost_normalization": {
+    "offset": 0.0832614239111052,
+    "scale": 0.010813105181177188,
+    "formula": "(selected_worst_error - offset) / scale"
+  },
+  "restart_grid": [
+    1,
+    4,
+    8
+  ],
+  "depths": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "topologies": [
+    "path",
+    "cycle",
+    "complete"
+  ],
+  "warm_start_modes": [
+    "inverse",
+    "exponential"
+  ],
+  "baseline_rows": [
+    "uniform_feasible",
+    "warm_start_only_inverse",
+    "warm_start_only_exponential",
+    "uniform_match_complete_p4_r8"
+  ],
+  "strongest_configuration": {
+    "method": "structured_inverse_complete_p4_r8",
+    "mixer_topology": "complete",
+    "warm_start_mode": "inverse",
+    "depth": 4,
+    "best_restart_count": 8,
+    "expected_selected_worst_error": 0.08353137638550197,
+    "probability_best_state": 0.6530736335387194,
+    "probability_best_one_coast": 0.6530736335387194,
+    "probability_pareto_frontier": 0.7563153226469529,
+    "top_schedule": "111111111110",
+    "best_schedule": "111111111110"
+  },
+  "restart_grid_spread_for_strongest_configuration": {
+    "method": "structured_inverse_complete_p4_r8",
+    "restart_expected_selected_worst_error_min": 0.08353137638550197,
+    "restart_expected_selected_worst_error_max": 0.08367991640628493,
+    "restart_probability_best_one_coast_min": 0.5555942605711792,
+    "restart_probability_best_one_coast_max": 0.6530736335387194
+  },
+  "matched_uniform_effect_summary": {
+    "family_row_count": 24,
+    "structured_better_count": 23,
+    "structured_minus_matched_uniform_selected_worst_error_min": -0.003177055990890118,
+    "structured_minus_matched_uniform_selected_worst_error_median": -0.0006741921160609982,
+    "structured_minus_matched_uniform_selected_worst_error_max": 5.508708613571889e-05,
+    "absolute_selected_worst_error_difference_min": 1.714825872649317e-05,
+    "absolute_selected_worst_error_difference_median": 0.0006741921160609982,
+    "absolute_selected_worst_error_difference_max": 0.003177055990890118,
+    "structured_restart_grid_expected_selected_worst_error_spread_min": 0.0,
+    "structured_restart_grid_expected_selected_worst_error_spread_median": 2.2074444110932456e-05,
+    "structured_restart_grid_expected_selected_worst_error_spread_max": 0.0011099451419731843
+  },
+  "structured_vs_generic_qaoa": [
+    {
+      "structured_method": "structured_inverse_complete_p4_r8",
+      "generic_method": "qaoa_statevector",
+      "comparison_scope": "descriptive_not_like_for_like",
+      "comparison_basis": "structured expected selected-worst error versus generic 30-seed median selected-worst error",
+      "structured_expected_selected_worst_error": 0.08353137638550197,
+      "generic_median_selected_worst_error": 0.1208303741178268,
+      "structured_minus_generic_selected_worst_error": -0.037298997732324826,
+      "structured_probability_best_one_coast": 0.6530736335387194,
+      "structured_probability_pareto_frontier": 0.7563153226469529,
+      "structured_top_schedule": "111111111110",
+      "structured_top_schedule_probability": 0.6530736335387194,
+      "generic_refinement_success_rate": 0.4333333333333333,
+      "generic_runs": 30
+    }
+  ],
+  "runtime_seconds": 32.186624499969184,
+  "interpretation_limits": [
+    "This is a statevector simulation over the selected feasible cardinality subspace, not hardware evidence.",
+    "The cost oracle uses already persisted branch-refined selected-worst errors from the cardinality ablation.",
+    "The all-windows continuous row is outside the selected feasible subspace and remains the lower-error dense-control baseline where applicable.",
+    "The restart grid shows sensitivity to optimizer initialization count, not a guarantee of global optimality."
+  ],
+  "artifact_paths": {
+    "summary_csv": "data\\results\\structured_qaoa_sensitivity\\summary.csv",
+    "summary_json": "data\\results\\structured_qaoa_sensitivity\\summary.json",
+    "restart_grid_csv": "data\\results\\structured_qaoa_sensitivity\\restart_grid.csv",
+    "restart_grid_json": "data\\results\\structured_qaoa_sensitivity\\restart_grid.json",
+    "distribution_csv": "data\\results\\structured_qaoa_sensitivity\\distribution.csv",
+    "distribution_json": "data\\results\\structured_qaoa_sensitivity\\distribution.json",
+    "matched_uniform_restart_grid_csv": "data\\results\\structured_qaoa_sensitivity\\matched_uniform_restart_grid.csv",
+    "matched_uniform_restart_grid_json": "data\\results\\structured_qaoa_sensitivity\\matched_uniform_restart_grid.json",
+    "structured_vs_matched_uniform_csv": "data\\results\\structured_qaoa_sensitivity\\structured_vs_matched_uniform.csv",
+    "structured_vs_matched_uniform_json": "data\\results\\structured_qaoa_sensitivity\\structured_vs_matched_uniform.json",
+    "structured_vs_matched_uniform_family_csv": "data\\results\\structured_qaoa_sensitivity\\structured_vs_matched_uniform_family.csv",
+    "structured_vs_matched_uniform_family_json": "data\\results\\structured_qaoa_sensitivity\\structured_vs_matched_uniform_family.json",
+    "figure_pdf": "figures\\structured_qaoa_sensitivity\\structured_qaoa_sensitivity_heatmap.pdf",
+    "figure_png": "figures\\structured_qaoa_sensitivity\\structured_qaoa_sensitivity_heatmap.png",
+    "table_tex": "tables\\structured_qaoa_sensitivity\\structured_qaoa_sensitivity_table.tex"
+  }
+}

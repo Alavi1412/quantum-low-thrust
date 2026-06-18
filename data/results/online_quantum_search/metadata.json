@@ -1,0 +1,134 @@
+{
+  "command": "C:\\Users\\alavi\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_online_quantum_search.py",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "packages": {
+    "numpy": "2.4.6",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3",
+    "pyyaml": "6.0.3"
+  },
+  "git_head": "e3f028019249d455d248eb3adfe14ef11e8531b2",
+  "git_status_short": "M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M paper/main.pdf\n M paper/main.tex\n M paper/references.bib\n M scripts/verify_submission_snapshot.py\n?? data/results/online_quantum_search/\n?? data/results/structured_grover_k10_full/\n?? data/results/structured_grover_one_coast/\n?? data/results/structured_qaoa_k10_full/\n?? data/results/structured_qaoa_one_coast/\n?? data/results/structured_qaoa_sensitivity/\n?? figures/online_quantum_search/\n?? figures/structured_grover_k10_full/\n?? figures/structured_grover_one_coast/\n?? figures/structured_qaoa_k10_full/\n?? figures/structured_qaoa_one_coast/\n?? figures/structured_qaoa_sensitivity/\n?? scripts/run_online_quantum_search.py\n?? scripts/run_structured_grover.py\n?? scripts/run_structured_qaoa_one_coast.py\n?? scripts/run_structured_qaoa_sensitivity.py\n?? src/qlt/online_quantum_search.py\n?? src/qlt/structured_grover.py\n?? src/qlt/structured_qaoa.py\n?? tables/online_quantum_search/\n?? tables/structured_grover_k10_full/\n?? tables/structured_grover_one_coast/\n?? tables/structured_qaoa_k10_full/\n?? tables/structured_qaoa_one_coast/\n?? tables/structured_qaoa_sensitivity/\n?? tests/test_online_quantum_search.py\n?? tests/test_structured_grover.py",
+  "tracked_file_count": 792,
+  "untracked_file_count": 108,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 166,
+  "project_manifest_total_bytes": 5011188,
+  "project_manifest_hash": "5e88602605efacf6d5a44bf1797fbc564aa65ce7bc6d27ba1e8a58a0a4b76783",
+  "seeds": {
+    "count": 200,
+    "first": 0,
+    "last": 199
+  },
+  "budget_policy": "ceil(sqrt(M)), 2ceil(sqrt(M)), 4ceil(sqrt(M)), and M total oracle calls",
+  "query_accounting": {
+    "online_quantum": "total_oracle_calls = incumbent/candidate cost evaluations + threshold-oracle calls used by Grover iterations",
+    "classical_baselines": "deployable classical baselines receive the same numeric budget as direct finite-subspace schedule cost evaluations; no trajectory regeneration occurs beyond the subspace cost vector construction"
+  },
+  "baseline_semantics": {
+    "deployable": {
+      "uniform_random_without_replacement": "uniform finite-subspace sampling without replacement",
+      "simulated_annealing_baseline": "seeded finite-subspace simulated annealing using schedule Hamming-swap neighbors when schedules are available and index-neighbor proposals otherwise",
+      "cross_entropy_baseline": "seeded finite-subspace cross-entropy method using repaired Bernoulli schedule models when schedules are available and smoothed finite-index categorical models otherwise",
+      "genetic_baseline": "seeded finite-subspace genetic search using schedule crossover/mutation/repair when schedules are available and index-level genetic operators otherwise"
+    },
+    "diagnostic": {
+      "surrogate_ranked_baseline": "optimistic ranked screening ceiling; retained in raw/summary but excluded from deployable paired-comparison claims"
+    }
+  },
+  "statistics": {
+    "success_interval": "Wilson 95% confidence interval for global-optimum hit rate per case/budget/method",
+    "paired_comparisons": "online threshold AA versus each deployable classical baseline at matched case/budget/seed",
+    "paired_success_delta": "online success flag minus baseline success flag; positive favors online",
+    "best_cost_diff": "online best_cost minus baseline best_cost; negative favors online",
+    "best_cost_sign_test": "two-sided exact sign test after excluding exact ties (|diff| <= 1e-12)",
+    "bootstrap_ci": {
+      "statistic": "mean best_cost_diff_online_minus_baseline",
+      "samples": 20000,
+      "seed": 20260618,
+      "confidence": 0.95
+    }
+  },
+  "evidence_tiers": {
+    "recorded_branch_refined": "uses recorded branch-refined selected-worst costs for M=12 and M=66",
+    "feedback_screening": "uses CR3BP feedback propagation objective/terminal errors only; no continuous branch refinement"
+  },
+  "cases": [
+    {
+      "case_id": "one_coast_k11_full",
+      "evidence_tier": "recorded_branch_refined",
+      "n_segments": 12,
+      "active_windows": 11,
+      "M": 12,
+      "cost_column": "refined_selected_worst_error",
+      "score_column": "feedback_worst_error",
+      "source": "data\\results\\phase_shift_cardinality_ablation\\cardinality_refinements.csv"
+    },
+    {
+      "case_id": "k10_full",
+      "evidence_tier": "recorded_branch_refined",
+      "n_segments": 12,
+      "active_windows": 10,
+      "M": 66,
+      "cost_column": "refined_selected_worst_error",
+      "score_column": "feedback_worst_error",
+      "source": "data\\results\\phase_shift_cardinality_ablation\\cardinality_refinements.csv"
+    },
+    {
+      "case_id": "feedback_N16_k12",
+      "evidence_tier": "feedback_screening",
+      "n_segments": 16,
+      "active_windows": 12,
+      "M": 1820,
+      "cost_column": "feedback_objective",
+      "score_column": "feedback_worst_error",
+      "source": "configs\\q1_phase_shift_cardinality.yaml"
+    },
+    {
+      "case_id": "feedback_N20_k16",
+      "evidence_tier": "feedback_screening",
+      "n_segments": 20,
+      "active_windows": 16,
+      "M": 4845,
+      "cost_column": "feedback_objective",
+      "score_column": "feedback_worst_error",
+      "source": "configs\\q1_phase_shift_cardinality.yaml"
+    }
+  ],
+  "skipped_cases": [
+    {
+      "case_id": "feedback_N24_k20",
+      "evidence_tier": "feedback_screening",
+      "reason": "not requested in bounded default run; pass --include-largest to attempt it"
+    }
+  ],
+  "runtime_seconds": 1047.4877903999877,
+  "artifact_paths": {
+    "raw_results": "data\\results\\online_quantum_search\\raw_results.csv",
+    "summary_csv": "data\\results\\online_quantum_search\\summary.csv",
+    "summary_json": "data\\results\\online_quantum_search\\summary.json",
+    "paired_comparisons_csv": "data\\results\\online_quantum_search\\paired_comparisons.csv",
+    "paired_comparisons_json": "data\\results\\online_quantum_search\\paired_comparisons.json",
+    "table_tex": "tables\\online_quantum_search\\online_quantum_search_table.tex",
+    "statistics_table_tex": "tables\\online_quantum_search\\online_quantum_search_statistics_table.tex",
+    "figure_pdf": "figures\\online_quantum_search\\online_quantum_search_success.pdf",
+    "subspace_costs": {
+      "one_coast_k11_full": "data\\results\\online_quantum_search\\one_coast_k11_full_subspace_costs.csv",
+      "k10_full": "data\\results\\online_quantum_search\\k10_full_subspace_costs.csv",
+      "feedback_N16_k12": "data\\results\\online_quantum_search\\feedback_N16_k12_subspace_costs.csv",
+      "feedback_N20_k16": "data\\results\\online_quantum_search\\feedback_N20_k16_subspace_costs.csv"
+    }
+  },
+  "claim_limits": [
+    "The online protocol does not know a top-k set; it uses only current-incumbent threshold comparisons.",
+    "Classical deployable baselines are matched-budget finite-subspace searches over the same precomputed constrained cost vectors, not continuous trajectory regeneration.",
+    "The surrogate-ranked row is a diagnostic ceiling and is excluded from deployable paired-comparison claims.",
+    "The feedback-screening cases are trajectory-backed screening costs, not branch-refined trajectory evidence.",
+    "No hardware evidence, quantum advantage, high-fidelity validation, or operational flight-design claim is made."
+  ]
+}

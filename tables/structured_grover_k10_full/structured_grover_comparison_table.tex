@@ -1,0 +1,11 @@
+\begin{tabular}{llrlrrrr}
+\toprule
+comparison & grover\_method & grover\_expected\_selected\_worst\_error & baseline\_method & baseline\_expected\_selected\_worst\_error & delta\_selected\_worst\_error & grover\_probability\_best\_state & baseline\_probability\_best\_state \\
+\midrule
+best\_grover\_warm\_minus\_uniform\_feasible & grover\_warm\_top\_2\_r1 & 0.1056 & uniform\_feasible & 0.1138 & -0.0082 & 0.5142 & 0.0152 \\
+best\_grover\_warm\_minus\_warm\_start\_only & grover\_warm\_top\_2\_r1 & 0.1056 & warm\_start\_only & 0.1087 & -0.0031 & 0.5142 & 0.1201 \\
+best\_grover\_warm\_minus\_matched\_uniform\_grover & grover\_warm\_top\_2\_r1 & 0.1056 & grover\_uniform\_top\_2\_r1 & 0.1119 & -0.0063 & 0.5142 & 0.1256 \\
+best\_grover\_warm\_minus\_best\_structured\_qaoa & grover\_warm\_top\_2\_r1 & 0.1056 & structured\_inverse\_complete\_p4\_r8 & 0.1062 & -0.0006 & 0.5142 & 0.1800 \\
+best\_grover\_warm\_minus\_generic\_qaoa\_median & grover\_warm\_top\_2\_r1 & 0.1056 & qaoa\_statevector\_30seed\_median & 0.1208 & -0.0152 & 0.5142 & NaN \\
+\bottomrule
+\end{tabular}

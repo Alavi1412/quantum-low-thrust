@@ -1,0 +1,18 @@
+[
+  {
+    "protocol":"dual_candidate_warm_amplification",
+    "M":12,
+    "marked_count":2,
+    "initial_good_probability":0.6388030841,
+    "selected_iterations":2,
+    "oracle_calls_per_sample":2,
+    "state_preparation_count":5,
+    "exact_dense_statevector_dimension":12,
+    "probability_best_state":0.7423423742,
+    "expected_selected_worst_error":0.083385488,
+    "classical_exhaustive_M":12,
+    "warm_start_random_samples_to_match_p_best":3.0,
+    "amplitude_amplification_scaling_note":"O(sqrt(M\/g)) query scaling for known marked set; this row is exact simulation",
+    "minimum_finding_scaling_note":"O(sqrt(M)) theoretical minimum-finding scaling; not implemented here"
+  }
+]

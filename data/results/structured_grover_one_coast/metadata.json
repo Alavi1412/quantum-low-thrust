@@ -1,0 +1,274 @@
+{
+  "command": "C:\\Users\\alavi\\AppData\\Local\\Programs\\Python\\Python311\\python.exe scripts/run_structured_grover.py",
+  "python": "py -3.11",
+  "packages": {
+    "numpy": "2.4.6",
+    "matplotlib": "3.10.9",
+    "pandas": "3.0.3"
+  },
+  "git_head": "e3f028019249d455d248eb3adfe14ef11e8531b2",
+  "git_status_short": "M paper/main.pdf\n M paper/main.tex\n M paper/references.bib\n?? data/results/structured_grover_k10_full/\n?? data/results/structured_grover_one_coast/\n?? data/results/structured_qaoa_k10_full/\n?? data/results/structured_qaoa_one_coast/\n?? data/results/structured_qaoa_sensitivity/\n?? figures/structured_grover_k10_full/\n?? figures/structured_grover_one_coast/\n?? figures/structured_qaoa_k10_full/\n?? figures/structured_qaoa_one_coast/\n?? figures/structured_qaoa_sensitivity/\n?? scripts/run_structured_grover.py\n?? scripts/run_structured_qaoa_one_coast.py\n?? scripts/run_structured_qaoa_sensitivity.py\n?? src/qlt/structured_grover.py\n?? src/qlt/structured_qaoa.py\n?? tables/structured_grover_k10_full/\n?? tables/structured_grover_one_coast/\n?? tables/structured_qaoa_k10_full/\n?? tables/structured_qaoa_one_coast/\n?? tables/structured_qaoa_sensitivity/\n?? tests/test_structured_grover.py",
+  "tracked_file_count": 792,
+  "untracked_file_count": 91,
+  "project_manifest_roots": [
+    "src",
+    "scripts",
+    "configs",
+    "tests"
+  ],
+  "project_manifest_file_count": 118,
+  "project_manifest_total_bytes": 2379896,
+  "project_manifest_hash": "0fb70e636e3f79e4a559ddb0db8361d471fd102973557bef4c0571a668bcb66c",
+  "cardinality_source": "data\\results\\phase_shift_cardinality_ablation\\cardinality_refinements.csv",
+  "cardinality_group": "one_coast_k11_full",
+  "states_in_subspace": 12,
+  "cost_column": "refined_selected_worst_error",
+  "cost_normalization": {
+    "offset": 0.0832614239111052,
+    "scale": 0.010813105181177188,
+    "formula": "(selected_worst_error - offset) / scale"
+  },
+  "warm_start": {
+    "mode": "inverse",
+    "epsilon": 0.02,
+    "beta": 3.0,
+    "probability_best_state": 0.47742489298267526,
+    "expected_selected_worst_error": 0.0842841487476258
+  },
+  "oracle_sweep": {
+    "analysis_stage": "exploratory_sweep",
+    "threshold_quantiles": [
+      0.0,
+      0.1,
+      0.25,
+      0.5
+    ],
+    "threshold_values": [
+      0.0832614239111052,
+      0.0836849565091918,
+      0.0846623615241569,
+      0.0876302659683052
+    ],
+    "top_ks": [
+      1,
+      2,
+      3,
+      5,
+      8
+    ],
+    "iterations": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ]
+  },
+  "predeclared_protocol": {
+    "analysis_stage": "predeclared_protocol",
+    "name": "dual_candidate_warm_amplification",
+    "good_rule": "top_2_recorded_selected_worst_error_or_all_states_if_M_lt_2",
+    "iteration_rule": "argmax_r_in_0..cap sin^2((2r+1)asin(sqrt(a0))) with smaller-r tie break",
+    "iteration_cap": 12,
+    "oracle": "top_2",
+    "marked_count": 2,
+    "initial_good_probability": 0.6388030841472769,
+    "selected_iterations": 2,
+    "predicted_good_probability": 0.9932674335443775,
+    "simulated_good_probability": 0.9932674335443776,
+    "expected_selected_worst_error": 0.0833854880397595,
+    "probability_best_state": 0.7423423742484173,
+    "best_schedule": "111111111110"
+  },
+  "strongest_configuration": {
+    "analysis_stage": "exploratory_sweep",
+    "method": "grover_warm_thresholdle0p0836849565092_r2",
+    "oracle": "threshold<=0.0836849565092",
+    "iterations": 2,
+    "expected_selected_worst_error": 0.0833854880397595,
+    "probability_best_state": 0.7423423742484173,
+    "probability_good_set": 0.9932674335443776,
+    "top_schedule": "111111111110",
+    "best_schedule": "111111111110"
+  },
+  "comparisons": [
+    {
+      "comparison": "best_grover_warm_minus_uniform_feasible",
+      "grover_method": "grover_warm_thresholdle0p0836849565092_r2",
+      "grover_expected_selected_worst_error": 0.0833854880397595,
+      "baseline_method": "uniform_feasible",
+      "baseline_expected_selected_worst_error": 0.0874612047385159,
+      "delta_selected_worst_error": -0.004075716698756407,
+      "grover_probability_best_state": 0.7423423742484173,
+      "baseline_probability_best_state": 0.08333333333333333
+    },
+    {
+      "comparison": "best_grover_warm_minus_warm_start_only",
+      "grover_method": "grover_warm_thresholdle0p0836849565092_r2",
+      "grover_expected_selected_worst_error": 0.0833854880397595,
+      "baseline_method": "warm_start_only",
+      "baseline_expected_selected_worst_error": 0.0842841487476258,
+      "delta_selected_worst_error": -0.0008986607078663028,
+      "grover_probability_best_state": 0.7423423742484173,
+      "baseline_probability_best_state": 0.47742489298267526
+    },
+    {
+      "comparison": "best_grover_warm_minus_matched_uniform_grover",
+      "grover_method": "grover_warm_thresholdle0p0836849565092_r2",
+      "grover_expected_selected_worst_error": 0.0833854880397595,
+      "baseline_method": "grover_uniform_thresholdle0p0836849565092_r2",
+      "baseline_expected_selected_worst_error": 0.0847040588917434,
+      "delta_selected_worst_error": -0.0013185708519839051,
+      "grover_probability_best_state": 0.7423423742484173,
+      "baseline_probability_best_state": 0.3713991769547326
+    },
+    {
+      "comparison": "best_grover_warm_minus_best_structured_qaoa",
+      "grover_method": "grover_warm_thresholdle0p0836849565092_r2",
+      "grover_expected_selected_worst_error": 0.0833854880397595,
+      "baseline_method": "warm_start_xy_qaoa_p4",
+      "baseline_expected_selected_worst_error": 0.0835313763779103,
+      "delta_selected_worst_error": -0.0001458883381508097,
+      "grover_probability_best_state": 0.7423423742484173,
+      "baseline_probability_best_state": 0.653075051576728
+    },
+    {
+      "comparison": "best_grover_warm_minus_generic_qaoa_median",
+      "grover_method": "grover_warm_thresholdle0p0836849565092_r2",
+      "grover_expected_selected_worst_error": 0.0833854880397595,
+      "baseline_method": "qaoa_statevector_30seed_median",
+      "baseline_expected_selected_worst_error": 0.1208303741178268,
+      "delta_selected_worst_error": -0.0374448860780673,
+      "grover_probability_best_state": 0.7423423742484173,
+      "baseline_probability_best_state": null
+    }
+  ],
+  "selection_bias_audit": [
+    {
+      "row_type": "predeclared_protocol",
+      "method": "predeclared_protocol_dual_candidate_warm_amplification",
+      "oracle": "top_2",
+      "iterations": 2,
+      "expected_selected_worst_error": 0.0833854880397595,
+      "delta_vs_predeclared": 0.0,
+      "probability_best_state": 0.7423423742484173,
+      "predeclared_equals_best_warm_sweep": true,
+      "comparison_scope": "like_for_like"
+    },
+    {
+      "row_type": "best_warm_start_sweep_row",
+      "method": "grover_warm_thresholdle0p0836849565092_r2",
+      "oracle": "threshold<=0.0836849565092",
+      "iterations": 2,
+      "expected_selected_worst_error": 0.0833854880397595,
+      "delta_vs_predeclared": 0.0,
+      "probability_best_state": 0.7423423742484173,
+      "predeclared_equals_best_warm_sweep": true,
+      "comparison_scope": "like_for_like"
+    },
+    {
+      "row_type": "uniform_feasible",
+      "method": "uniform_feasible",
+      "oracle": "none",
+      "iterations": 0,
+      "expected_selected_worst_error": 0.0874612047385159,
+      "delta_vs_predeclared": 0.004075716698756407,
+      "probability_best_state": 0.08333333333333333,
+      "predeclared_equals_best_warm_sweep": true,
+      "comparison_scope": "like_for_like"
+    },
+    {
+      "row_type": "warm_start_only",
+      "method": "warm_start_only",
+      "oracle": "none",
+      "iterations": 0,
+      "expected_selected_worst_error": 0.0842841487476258,
+      "delta_vs_predeclared": 0.0008986607078663028,
+      "probability_best_state": 0.47742489298267526,
+      "predeclared_equals_best_warm_sweep": true,
+      "comparison_scope": "like_for_like"
+    },
+    {
+      "row_type": "matched_uniform_grover_same_oracle_r",
+      "method": "grover_uniform_top_2_r2",
+      "oracle": "top_2",
+      "iterations": 2,
+      "expected_selected_worst_error": 0.0847040588917434,
+      "delta_vs_predeclared": 0.0013185708519839051,
+      "probability_best_state": 0.3713991769547326,
+      "predeclared_equals_best_warm_sweep": true,
+      "comparison_scope": "like_for_like"
+    },
+    {
+      "row_type": "best_structured_qaoa",
+      "method": "warm_start_xy_qaoa_p4",
+      "oracle": "not_applicable",
+      "iterations": 0,
+      "expected_selected_worst_error": 0.0835313763779103,
+      "delta_vs_predeclared": 0.0001458883381508097,
+      "probability_best_state": 0.653075051576728,
+      "predeclared_equals_best_warm_sweep": true,
+      "comparison_scope": "like_for_like"
+    },
+    {
+      "row_type": "generic_qaoa_median_descriptive_only",
+      "method": "qaoa_statevector_30seed_median_descriptive_only",
+      "oracle": "not_applicable",
+      "iterations": 0,
+      "expected_selected_worst_error": 0.1208303741178268,
+      "delta_vs_predeclared": 0.0374448860780673,
+      "probability_best_state": null,
+      "predeclared_equals_best_warm_sweep": true,
+      "comparison_scope": "descriptive_not_like_for_like"
+    }
+  ],
+  "query_scaling": {
+    "protocol": "dual_candidate_warm_amplification",
+    "M": 12,
+    "marked_count": 2,
+    "initial_good_probability": 0.6388030841472769,
+    "selected_iterations": 2,
+    "oracle_calls_per_sample": 2,
+    "state_preparation_count": 5,
+    "exact_dense_statevector_dimension": 12,
+    "probability_best_state": 0.7423423742484173,
+    "expected_selected_worst_error": 0.0833854880397595,
+    "classical_exhaustive_M": 12,
+    "warm_start_random_samples_to_match_p_best": 3.0,
+    "amplitude_amplification_scaling_note": "O(sqrt(M/g)) query scaling for known marked set; this row is exact simulation",
+    "minimum_finding_scaling_note": "O(sqrt(M)) theoretical minimum-finding scaling; not implemented here"
+  },
+  "runtime_seconds": 7.388296499964781,
+  "interpretation_limits": [
+    "This is an exact feasible-subspace statevector simulation, not hardware evidence.",
+    "The phase oracle marks states using already recorded branch-refined selected-worst errors.",
+    "The matched uniform comparator uses the same feasible subspace, oracle, and Grover iteration count.",
+    "The sweep is finite and descriptive; it does not claim asymptotic advantage or universal dominance."
+  ],
+  "artifact_paths": {
+    "summary_csv": "data\\results\\structured_grover_one_coast\\summary.csv",
+    "summary_json": "data\\results\\structured_grover_one_coast\\summary.json",
+    "distribution_csv": "data\\results\\structured_grover_one_coast\\distribution.csv",
+    "distribution_json": "data\\results\\structured_grover_one_coast\\distribution.json",
+    "comparisons_csv": "data\\results\\structured_grover_one_coast\\comparisons.csv",
+    "comparisons_json": "data\\results\\structured_grover_one_coast\\comparisons.json",
+    "selection_bias_audit_csv": "data\\results\\structured_grover_one_coast\\selection_bias_audit.csv",
+    "selection_bias_audit_json": "data\\results\\structured_grover_one_coast\\selection_bias_audit.json",
+    "query_scaling_csv": "data\\results\\structured_grover_one_coast\\query_scaling.csv",
+    "query_scaling_json": "data\\results\\structured_grover_one_coast\\query_scaling.json",
+    "figure_pdf": "figures\\structured_grover_one_coast\\structured_grover_sweep.pdf",
+    "figure_png": "figures\\structured_grover_one_coast\\structured_grover_sweep.png",
+    "table_tex": "tables\\structured_grover_one_coast\\structured_grover_table.tex",
+    "comparison_table_tex": "tables\\structured_grover_one_coast\\structured_grover_comparison_table.tex",
+    "selection_bias_audit_table_tex": "tables\\structured_grover_one_coast\\structured_grover_selection_bias_audit_table.tex",
+    "query_scaling_table_tex": "tables\\structured_grover_one_coast\\structured_grover_query_scaling_table.tex"
+  }
+}

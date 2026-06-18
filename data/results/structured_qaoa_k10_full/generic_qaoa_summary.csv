@@ -1,0 +1,2 @@
+method,runs,refinement_success_rate,refined_selected_worst_error_median,refined_selected_worst_error_iqr,refined_nominal_error_median,solver_true_evaluations_median,shared_qubo_training_evaluations_median,total_true_evaluations_including_training_median
+qaoa_statevector,30,0.4333333333333333,0.1208303741178268,0.033397784038663,0.0948407207313246,24.0,96.0,120.0
