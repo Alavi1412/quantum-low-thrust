@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-17T16:40:42Z",
+  "generated_utc": "2026-06-18T00:17:46Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "6f79a476fa004393b796d98e97fde8fdf00b799c",
+  "git_head_at_generation": "37495d54bddc0359cea9f0ac48d2595eea50b0c2",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M REPRODUCIBILITY.md\n M data/results/artifact_manifest.json\n M data/results/claim_evidence_ledger/claim_evidence_ledger.csv\n M data/results/claim_evidence_ledger/claim_evidence_ledger_metadata.json\n M data/results/evidence_synthesis/evidence_synthesis.csv\n M data/results/evidence_synthesis/evidence_synthesis_metadata.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_000_mask_000_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_001_mask_001_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_002_mask_002_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_003_mask_003_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_004_mask_004_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_005_mask_007_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_006_mask_006_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_branch_007_mask_005_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/ihs_all_single_p04_amax02_polish_from_p04_nominal_casadi_ipopt_refined_controls.json\n M data/results/independent_hs_casadi_ipopt_bridge/controls/independent_hs_casadi_ipopt_bridge_control_manifest.json\n M data/results/independent_hs_casadi_ipopt_bridge/independent_hs_casadi_ipopt_bridge_metadata.json\n M paper/main.pdf\n M paper/main.tex\n M paper/supplement.pdf\n M paper/supplement.tex\n M scripts/run_claim_evidence_ledger.py\n M scripts/run_evidence_synthesis.py\n M scripts/run_independent_hs_casadi_ipopt_bridge.py\n M tables/claim_evidence_ledger/claim_evidence_ledger_table.tex\n M tables/evidence_synthesis/evidence_synthesis_table.tex\n M tables/evidence_synthesis/practitioner_lessons_table.tex\n M tests/test_claim_evidence_ledger.py\n M tests/test_evidence_synthesis.py\n M tests/test_independent_hs_casadi_ipopt_bridge.py\n?? main.aux\n?? main.fdb_latexmk\n?? main.fls\n?? main.log\n?? main.out\n?? main.spl\n?? supplement.aux\n?? supplement.fdb_latexmk\n?? supplement.fls\n?? supplement.log\n?? supplement.out\n?? supplement.toc",
+  "working_tree_status_at_generation": "",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -34,7 +34,7 @@
       "data/results/artifact_manifest.json"
     ]
   },
-  "file_count": 790,
+  "file_count": 791,
   "files": [
     {
       "path": ".gitignore",
@@ -50,6 +50,11 @@
       "path": "CITATION.cff",
       "sha256": "028296499fdf3ef8d8b23d2d50c831efce387d27087efd4261158873ff45f251",
       "bytes": 1123
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "1eb85fc97224598dad1852b5d6483bbcf0aa8608790dcc657a5a2a761ae9c8c6",
+      "bytes": 11558
     },
     {
       "path": "README.md",
