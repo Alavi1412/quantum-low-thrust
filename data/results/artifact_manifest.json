@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-18T21:15:36Z",
+  "generated_utc": "2026-06-18T21:20:39Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "bb935caccc0c47e3bbaea0f4a08c59fc33fb91a0",
+  "git_head_at_generation": "f8db8a72c9c25da410a7f2e3d86a2dceda8c8fac",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "M paper/main.pdf\n M paper/main.tex",
+  "working_tree_status_at_generation": "",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
