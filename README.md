@@ -73,11 +73,15 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 
 See `REPRODUCIBILITY.md` for the artifact map, expected outputs, known expensive
 runs, and commands used for the paper evidence. `ARCHIVAL_RELEASE.md` records
-that the latest GitHub release/package is `v1.0.2` at commit
-`551eab6a4a616bf24768b6e260f487ac608e5b8b`, while the current external Zenodo
-DOI `10.5281/zenodo.20746480` archives the older `v1.0.1` snapshot at commit
-`af8443871bae7e0adbbe906c117ddbfe011bf207`. If Zenodo later mints a `v1.0.2`
-DOI, update the DOI fields and documentation then. A machine-readable
+that the prepared/latest GitHub release/package is `v1.0.4`
+<https://github.com/Alavi1412/quantum-low-thrust/releases/tag/v1.0.4>. The
+latest known prior Zenodo version archive is `v1.0.3` at
+<https://zenodo.org/records/20768438> with DOI `10.5281/zenodo.20768438`,
+concept DOI `10.5281/zenodo.20739419`, and tag commit
+`70736b06174e6764b96371a0754e4a090dc4ae95`; that version DOI is not a
+`v1.0.4` DOI. If Zenodo later mints a `v1.0.4` DOI, the DOI fields and
+documentation can be updated in a later metadata-only patch if desired. A
+machine-readable
 SHA-256 manifest is written to `data/results/artifact_manifest.json` with:
 
 ```powershell

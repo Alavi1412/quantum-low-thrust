@@ -1,27 +1,35 @@
 # Archival Release Metadata
 
 This document records the current GitHub release/package and the separate
-external Zenodo archive DOI. The latest GitHub release is `v1.0.2`, while the
-current Zenodo DOI archives the older `v1.0.1` snapshot. Do not treat the
-Zenodo DOI below as a `v1.0.2` DOI unless Zenodo later mints one for that
-release.
+external Zenodo archive DOI. The prepared/latest GitHub release package is
+`v1.0.4`. The latest known prior Zenodo version archive is `v1.0.3`; do not
+treat its DOI as a `v1.0.4` DOI unless Zenodo later mints a DOI for the
+`v1.0.4` release.
 
 ## Release Identifiers
 
-- Latest GitHub release tag: `v1.0.2`
-- Latest GitHub release URL: <https://github.com/Alavi1412/quantum-low-thrust/releases/tag/v1.0.2>
-- Latest GitHub tagged commit: `551eab6a4a616bf24768b6e260f487ac608e5b8b`
-- Current Zenodo archive tag: `v1.0.1`
-- Current Zenodo archive commit: `af8443871bae7e0adbbe906c117ddbfe011bf207`
-- Current Zenodo archive DOI: `10.5281/zenodo.20746480`
-- DOI URL: <https://doi.org/10.5281/zenodo.20746480>
-- Zenodo record URL: <https://zenodo.org/records/20746480>
+- Prepared/latest GitHub release tag: `v1.0.4`
+- Prepared/latest GitHub release URL: <https://github.com/Alavi1412/quantum-low-thrust/releases/tag/v1.0.4>
+- Prepared/latest GitHub tagged commit: the release commit that contains these
+  metadata updates
+- Latest known prior Zenodo archive tag: `v1.0.3`
+- Latest known prior Zenodo archive commit: `70736b06174e6764b96371a0754e4a090dc4ae95`
+- Latest known prior Zenodo archive DOI: `10.5281/zenodo.20768438`
+- Zenodo concept DOI: `10.5281/zenodo.20739419`
+- DOI URL: <https://doi.org/10.5281/zenodo.20768438>
+- Zenodo record URL: <https://zenodo.org/records/20768438>
+- Related GitHub tag URL recorded for the prior Zenodo archive:
+  <https://github.com/Alavi1412/quantum-low-thrust/tree/v1.0.3>
 
-Note: the Zenodo `v1.0.1` source archive was created from commit
-`af8443871bae7e0adbbe906c117ddbfe011bf207`; later metadata edits and the
-`v1.0.2` GitHub release are not covered by DOI `10.5281/zenodo.20746480`. If
-Zenodo later mints a `v1.0.2` DOI, update this file, `CITATION.cff`, the README,
-and manuscript availability text then.
+Note: the Zenodo `v1.0.3` source archive was created from commit
+`70736b06174e6764b96371a0754e4a090dc4ae95` and still contains stale
+`CITATION.cff` text from earlier metadata. The `v1.0.4` GitHub release package
+is prepared to correct that metadata. DOI `10.5281/zenodo.20768438` is the
+version DOI for `v1.0.3`, not `v1.0.4`; the concept DOI
+`10.5281/zenodo.20739419` remains the stable Zenodo concept DOI across versions.
+If Zenodo later mints a `v1.0.4` DOI, this file, `CITATION.cff`, the README, and
+manuscript availability text can be updated in a later metadata-only patch if
+desired.
 
 ## Archive Scope
 
