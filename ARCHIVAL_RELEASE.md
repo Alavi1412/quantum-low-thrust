@@ -1,21 +1,27 @@
 # Archival Release Metadata
 
-Zenodo has assigned the external archive DOI below. This document records the
-release identifiers associated with that archive record.
+This document records the current GitHub release/package and the separate
+external Zenodo archive DOI. The latest GitHub release is `v1.0.2`, while the
+current Zenodo DOI archives the older `v1.0.1` snapshot. Do not treat the
+Zenodo DOI below as a `v1.0.2` DOI unless Zenodo later mints one for that
+release.
 
 ## Release Identifiers
 
-- Release tag: `v1.0.1`
-- Tagged commit: `af8443871bae7e0adbbe906c117ddbfe011bf207`
-- Archive DOI: `10.5281/zenodo.20746480`
+- Latest GitHub release tag: `v1.0.2`
+- Latest GitHub release URL: <https://github.com/Alavi1412/quantum-low-thrust/releases/tag/v1.0.2>
+- Latest GitHub tagged commit: `551eab6a4a616bf24768b6e260f487ac608e5b8b`
+- Current Zenodo archive tag: `v1.0.1`
+- Current Zenodo archive commit: `af8443871bae7e0adbbe906c117ddbfe011bf207`
+- Current Zenodo archive DOI: `10.5281/zenodo.20746480`
 - DOI URL: <https://doi.org/10.5281/zenodo.20746480>
 - Zenodo record URL: <https://zenodo.org/records/20746480>
 
-Note: this file revision is a post-deposit metadata update. The Zenodo
-`v1.0.1` source archive was created from the tagged commit above, so the
-DOI-bearing updates to this file and other metadata files are not inside that
-source archive. A later release is needed if those DOI-bearing metadata files
-themselves must be archived.
+Note: the Zenodo `v1.0.1` source archive was created from commit
+`af8443871bae7e0adbbe906c117ddbfe011bf207`; later metadata edits and the
+`v1.0.2` GitHub release are not covered by DOI `10.5281/zenodo.20746480`. If
+Zenodo later mints a `v1.0.2` DOI, update this file, `CITATION.cff`, the README,
+and manuscript availability text then.
 
 ## Archive Scope
 

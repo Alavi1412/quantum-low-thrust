@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "generated_utc": "2026-06-18T21:20:39Z",
+  "generated_utc": "2026-06-20T01:08:40Z",
   "note": "Scoped-file artifact manifest for paper reproducibility. File hashes and byte counts are authoritative for the working tree at generated_utc.",
-  "git_head_at_generation": "f8db8a72c9c25da410a7f2e3d86a2dceda8c8fac",
+  "git_head_at_generation": "551eab6a4a616bf24768b6e260f487ac608e5b8b",
   "git_head_semantics": "Records HEAD when this manifest was generated. If the manifest is committed, this value necessarily points to the commit before the final manifest commit; use file hashes for artifact identity.",
-  "working_tree_status_at_generation": "",
+  "working_tree_status_at_generation": "M ARCHIVAL_RELEASE.md\n M CITATION.cff\n M README.md\n M paper/main.pdf\n M paper/main.tex",
   "working_tree_status_semantics": "Status is an audit snapshot only and may include manuscript, table, PDF, or manifest-refresh changes intentionally present during generation.",
   "file_hash_semantics": "Each listed sha256 and byte count is computed from the working-tree file content at generation time. The manifest file itself is excluded.",
   "exclusions": {
@@ -43,13 +43,13 @@
     },
     {
       "path": "ARCHIVAL_RELEASE.md",
-      "sha256": "e85016a75a6b8eb9b520c1efbced933848fd31953a6200f24f2c1c52733e0587",
-      "bytes": 6439
+      "sha256": "d99066d22aa4bbefedebc5318fcad2542176c4f727e6d85a472e8a9de1c173e2",
+      "bytes": 6876
     },
     {
       "path": "CITATION.cff",
-      "sha256": "e8d2f732414fe6361146cdf25ad11cd7a97f562fab2db00e1d1fbe2f493f76e4",
-      "bytes": 1161
+      "sha256": "004a847f0b74460328058319423dd07a502f1fd5d8ccc2e20d45509e36f96918",
+      "bytes": 1346
     },
     {
       "path": "LICENSE",
@@ -58,8 +58,8 @@
     },
     {
       "path": "README.md",
-      "sha256": "615c7b0fa2ee2c389269ba9c22617ce50461ad74022a5f7977daa0b721ecc755",
-      "bytes": 41835
+      "sha256": "0534652d597611b0a5a370d27575053799c02ee6a0dcaa3cb2be5789abb64e0f",
+      "bytes": 41969
     },
     {
       "path": "REPRODUCIBILITY.md",
@@ -3688,13 +3688,13 @@
     },
     {
       "path": "paper/main.pdf",
-      "sha256": "0da5a40f808b084b876379c24bd47cc9d174e923e7486c6319ac3d5f7029e46a",
-      "bytes": 577447
+      "sha256": "da056b629f1e309f57b5a723ff194863adb0fad4b44375916682b0dfc0e23814",
+      "bytes": 577256
     },
     {
       "path": "paper/main.tex",
-      "sha256": "f67683e656b6e06d8db5952176809800a9b9b0525502e8b1440300d5d43316c3",
-      "bytes": 104662
+      "sha256": "ecf81fce0ad64b6fcd558efbc862e53bca00995b55440ceb54e7422807283cf6",
+      "bytes": 104852
     },
     {
       "path": "paper/references.bib",

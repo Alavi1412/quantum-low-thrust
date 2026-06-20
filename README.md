@@ -73,9 +73,11 @@ review artifacts are `paper/main.pdf`, `paper/supplement.pdf`,
 
 See `REPRODUCIBILITY.md` for the artifact map, expected outputs, known expensive
 runs, and commands used for the paper evidence. `ARCHIVAL_RELEASE.md` records
-that the external `v1.0.1` repository/artifact snapshot is archived at Zenodo
-with DOI `10.5281/zenodo.20746480`, and notes that post-deposit DOI metadata
-updates on `main` are not part of that source archive. A machine-readable
+that the latest GitHub release/package is `v1.0.2` at commit
+`551eab6a4a616bf24768b6e260f487ac608e5b8b`, while the current external Zenodo
+DOI `10.5281/zenodo.20746480` archives the older `v1.0.1` snapshot at commit
+`af8443871bae7e0adbbe906c117ddbfe011bf207`. If Zenodo later mints a `v1.0.2`
+DOI, update the DOI fields and documentation then. A machine-readable
 SHA-256 manifest is written to `data/results/artifact_manifest.json` with:
 
 ```powershell
